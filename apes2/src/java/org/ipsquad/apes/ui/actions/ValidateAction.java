@@ -32,7 +32,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Validate the current project
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ValidateAction extends ApesAction
 {

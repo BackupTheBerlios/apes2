@@ -75,7 +75,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Application tree view
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {

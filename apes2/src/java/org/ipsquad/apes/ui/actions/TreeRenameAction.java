@@ -32,7 +32,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Rename the currently selected element from the tree
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class TreeRenameAction extends AbstractAction
 {

@@ -73,7 +73,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {

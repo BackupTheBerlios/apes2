@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a Component cell
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
  
 public class ComponentView extends ApesVertexView

@@ -33,7 +33,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * This adapter allows to display a responsability diagram in a JGraph
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ResponsabilityGraphAdapter extends SpemGraphAdapter 
 {

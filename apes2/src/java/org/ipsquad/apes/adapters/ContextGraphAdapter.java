@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * This adapter allows to display a context diagram in a JGraph
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {

@@ -31,7 +31,7 @@ import org.jgraph.JGraph;
 
 /**
  *
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class ApesClipboardManager
 {

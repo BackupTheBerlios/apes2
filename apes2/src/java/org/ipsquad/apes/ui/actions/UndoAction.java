@@ -32,7 +32,7 @@ import org.jgraph.JGraph;
 /**
  * Undo the last modification
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class UndoAction extends ApesAction
 {

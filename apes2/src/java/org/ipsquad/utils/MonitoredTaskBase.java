@@ -23,7 +23,7 @@ package org.ipsquad.utils;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class MonitoredTaskBase
 {

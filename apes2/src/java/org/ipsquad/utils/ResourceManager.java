@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  * Helper class for application localization.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ResourceManager
 {

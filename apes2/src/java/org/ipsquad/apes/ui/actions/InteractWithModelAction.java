@@ -33,7 +33,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Call the correponding action to an element of the model
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class InteractWithModelAction extends AbstractAction
 {

@@ -37,7 +37,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * Flow graph editing internal frame
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class FlowGraphFrame extends GraphFrame
 {

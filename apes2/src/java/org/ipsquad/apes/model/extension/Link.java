@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * Class for represent a link in a diagram
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Link implements Serializable, Cloneable
 {

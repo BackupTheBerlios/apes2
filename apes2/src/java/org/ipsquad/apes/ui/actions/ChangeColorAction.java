@@ -32,7 +32,7 @@ import org.ipsquad.apes.ui.ApesFrame;
 /**
  * 
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *
  */
 public class ChangeColorAction extends ApesAction

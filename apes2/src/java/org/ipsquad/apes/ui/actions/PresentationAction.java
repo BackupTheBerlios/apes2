@@ -33,7 +33,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class PresentationAction extends ApesAction
 {

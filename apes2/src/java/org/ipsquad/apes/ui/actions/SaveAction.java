@@ -28,7 +28,7 @@ import java.awt.event.ActionEvent;
 /**
  * Save the current project
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class SaveAction extends ProjectManagementAction
 {

@@ -45,7 +45,7 @@ import org.jgraph.graph.PortView;
  * This tool allows to create edges in the graph
  * It use the prototype design pattern to clone edges
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class EdgeTool extends Tool
 {

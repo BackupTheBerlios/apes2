@@ -54,7 +54,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
  
 class NoteView extends VertexView 

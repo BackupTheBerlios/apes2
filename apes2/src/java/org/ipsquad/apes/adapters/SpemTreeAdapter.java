@@ -53,7 +53,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesModelListener
 {

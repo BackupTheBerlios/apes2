@@ -36,7 +36,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {

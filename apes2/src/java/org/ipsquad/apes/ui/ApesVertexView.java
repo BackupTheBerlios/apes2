@@ -45,7 +45,7 @@ import org.jgraph.graph.VertexView;
 
 /**
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ApesVertexView extends VertexView
 {

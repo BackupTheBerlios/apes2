@@ -75,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesModelListener
 {

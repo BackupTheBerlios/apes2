@@ -32,7 +32,7 @@ import org.jgraph.JGraph;
 /**
  * Redo the last undone modification
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class RedoAction extends ApesAction
 {

@@ -34,7 +34,7 @@ import javax.swing.JProgressBar;
  *
  * 
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ProgressBar extends JFrame
 {

@@ -48,7 +48,7 @@ import org.ipsquad.utils.ConfigManager;
  *
  * This class represent a project in the application
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class Project implements Serializable
 {

@@ -28,7 +28,7 @@ import org.jgraph.JGraph;
 /**
  * Base class for tools
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class Tool
 {

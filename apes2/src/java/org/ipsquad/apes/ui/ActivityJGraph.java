@@ -40,7 +40,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for an ActivityDiagram
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ActivityJGraph extends JGraph
 {

@@ -34,7 +34,7 @@ import javax.swing.ImageIcon;
  * Easily create Icon resources from an image.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class IconManager
 {

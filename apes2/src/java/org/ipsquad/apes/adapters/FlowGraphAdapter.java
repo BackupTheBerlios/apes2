@@ -35,7 +35,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * This adapter allows to display a flow diagram in a JGraph
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class FlowGraphAdapter extends SpemGraphAdapter
 {

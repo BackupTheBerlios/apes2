@@ -29,7 +29,7 @@ import java.util.Properties;
 
 /**
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ConfigManager
 {

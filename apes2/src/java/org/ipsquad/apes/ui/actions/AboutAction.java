@@ -34,7 +34,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Displays the about box
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class AboutAction extends ApesAction
 {

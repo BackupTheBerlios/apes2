@@ -32,7 +32,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Interface required to be the main frame of the application
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public interface MainFrameInterface
 {

@@ -39,7 +39,7 @@ import org.jgraph.graph.GraphConstants;
  * This tool allows to create cells in the graph
  * It use the prototype design pattern to clone cells
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class CellTool extends Tool
 {

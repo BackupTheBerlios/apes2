@@ -34,7 +34,7 @@ import java.io.PrintStream;
  *
  * Compilers automatically optimize the code if Debug.enabled is set to false
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class Debug
 {

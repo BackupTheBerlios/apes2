@@ -34,7 +34,7 @@ import org.ipsquad.utils.ResourceManager;
  * Base class for the action of the application
  * Provides convenient constructors and a pointer to the context
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class ApesAction extends AbstractAction
 {

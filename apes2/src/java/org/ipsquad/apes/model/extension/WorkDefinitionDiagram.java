@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 

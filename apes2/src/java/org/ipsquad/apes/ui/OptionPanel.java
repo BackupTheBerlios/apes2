@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 
 /**
  * 
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class OptionPanel extends JPanel 
 {

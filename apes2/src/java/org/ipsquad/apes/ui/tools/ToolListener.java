@@ -24,7 +24,7 @@ package org.ipsquad.apes.ui.tools;
 /**
  * Interface for an observer to register to receive notifications of usage of a Tool
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public interface ToolListener
 {

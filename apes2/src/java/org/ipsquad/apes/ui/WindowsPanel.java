@@ -40,7 +40,7 @@ import org.ipsquad.utils.ConfigManager;
 
 /**
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class WindowsPanel extends OptionPanel 
 {
