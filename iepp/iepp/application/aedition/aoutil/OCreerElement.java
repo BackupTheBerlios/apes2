@@ -61,6 +61,7 @@ public class OCreerElement extends Outil {
         //ajouterEditionDiagramme(new AjouterElement(diagramme, element));
         this.diagramme.ajouterFigure(element);
         Application.getApplication().getProjet().getFenetreEdition().setOutilSelection();
+        Application.getApplication().getProjet().setModified(true);
     }
 
     /**

@@ -68,11 +68,16 @@ public class DefinitionProcessus extends ObjetModele
 	 */
 	private String ficContenu = "";
 	
+	/**
+	 * Liste des éléments à générer
+	 */
+	private Vector listeAGenerer;
 	
 
 	public DefinitionProcessus ()
 	{
 		this.listeComp = new Vector() ;
+		this.listeAGenerer = new Vector();
 		this.nomDefinition = Application.getApplication().getTraduction("nomDefinitionDefaut");
 		this.idDefProc = new IdObjetModele(this);
 		this.repertoireGeneration = new String(Application.getApplication().getConfigPropriete("repertoire_generation"));
@@ -85,19 +90,27 @@ public class DefinitionProcessus extends ObjetModele
 			this.listeComp.add (comp.getIdComposant()) ;
 			// indiquer à tous les observeurs que la définition a change
 			this.maj("COMPOSANT_INSERTED");
+			// l'ajouter dans la liste à generer
+			this.listeAGenerer.add(comp.getIdComposant());
 		}
 	}
 	
 	public void retirerComposantTous()
 	{
 		if (listeComp != null)
+		{
 			this.listeComp.removeAllElements();
+			this.listeAGenerer.removeAllElements();
+		}
 	}
 	
 	public void retirerComposant(IdObjetModele compo)
 	{
 		if (listeComp != null)
+		{
 			this.listeComp.removeElement(compo);
+			this.listeAGenerer.removeElement(compo);
+		}
 	}
 	
 	//------------------------------------------------------------------//
@@ -108,7 +121,6 @@ public class DefinitionProcessus extends ObjetModele
 	{
 		return this.nomDefinition ;
 	}
-	
 	public void setNomDefProc(String nom)
 	{
 		if (! this.nomDefinition.equals(nom))
@@ -118,7 +130,6 @@ public class DefinitionProcessus extends ObjetModele
 			this.maj("CHANGED");
 		}
 	}
-	
 	public void setFicContenu(String fichier)
 	{
 		if (! this.ficContenu.equals(fichier))
@@ -127,22 +138,18 @@ public class DefinitionProcessus extends ObjetModele
 			this.maj("CHANGED");
 		}
 	}
-	
 	public String getFichierContenu()
 	{
 		return this.ficContenu;
 	}
-
 	public String getAuteur()
 	{
 		return this.auteur;
 	}
-
 	public String getCommentaires()
 	{
 		return this.commentaires;
 	}
-
 	public void setAuteur(String auteur)
 	{
 		if (! this.auteur.equals(auteur))
@@ -151,7 +158,6 @@ public class DefinitionProcessus extends ObjetModele
 			this.maj("CHANGED");
 		}
 	}
-
 	public void setCommentaires(String string)
 	{
 		if (! this.commentaires.equals(string))
@@ -160,18 +166,22 @@ public class DefinitionProcessus extends ObjetModele
 			this.maj("CHANGED");
 		}
 	}
-
 	public IdObjetModele getIdDefProc()
 	{
 		return this.idDefProc;
-	}
-		
+	}	
 	public Vector getListeComp()
 	{
 		return this.listeComp ;
 	}
-	
-	
+	public Vector getListeAGenerer()
+	{
+		return this.listeAGenerer;
+	}
+	public void setListeAGenerer(Vector liste)
+	{
+		this.listeAGenerer = liste;
+	}
 	public String getRepertoireGeneration()
 	{
 		if ( this.repertoireGeneration.equals(""))
@@ -183,7 +193,6 @@ public class DefinitionProcessus extends ObjetModele
 			return this.repertoireGeneration; 
 		} 
 	}
-
 	public void setRepertoireGeneration(String string)
 	{
 		if (! this.repertoireGeneration.equals(string))
@@ -192,18 +201,27 @@ public class DefinitionProcessus extends ObjetModele
 			this.maj("CHANGED");
 		}
 	}
-	
 	public String toString()
 	{
 		return this.nomDefinition;
 	}
-	
 	public void maj(String code)
 	{
 		this.setChanged();
 		this.notifyObservers(code);
 	}
-
+	public String getEmailAuteur() {
+		return emailAuteur;
+	}
+	public void setEmailAuteur(String string) 
+	{
+		if (! this.emailAuteur.equals(string))
+		{
+			this.emailAuteur = string;
+			this.maj("CHANGED");
+		}
+	}
+	
 	//--------------------------------------------------------------------------//
 	// Implementation de l'interface ObjetModele								//
 	//--------------------------------------------------------------------------//
@@ -245,23 +263,6 @@ public class DefinitionProcessus extends ObjetModele
 			this.maj("CHANGED");
 		}
 	}
-	/**
-	 * @return
-	 */
-	public String getEmailAuteur() {
-		return emailAuteur;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setEmailAuteur(String string) 
-	{
-		if (! this.emailAuteur.equals(string))
-		{
-			this.emailAuteur = string;
-			this.maj("CHANGED");
-		}
-	}
+	
 
 }

@@ -8,35 +8,27 @@ import iepp.application.areferentiel.Referentiel;
 import iepp.domaine.DefinitionProcessus;
 import iepp.domaine.IdObjetModele;
 import iepp.domaine.PaquetagePresentation;
-
+import iepp.ui.VueDPArbre;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
@@ -52,7 +44,7 @@ public class PanneauDPGeneration extends PanneauOption
 	private DefinitionProcessus defProc;
 	
 	private ComposantsListModel ComposantsListModel = new ComposantsListModel();
-	private PPListModel PPListModel = new PPListModel();
+	private PPListModel ppListModel = new PPListModel();
 	
 	private JList LS_referentiel = new JList();
 	private JList LS_arbre = new JList();
@@ -66,7 +58,7 @@ public class PanneauDPGeneration extends PanneauOption
 	private JScrollPane scrollPaneArbre = new JScrollPane();
 	
 	
-	public static final String DP_GENERATION_PANEL_KEY = "GenerationTitle";
+	public static final String DP_GENERATION_PANEL_KEY = "ContenuTitle";
 	
 	public PanneauDPGeneration(String name)
 	{
@@ -124,44 +116,40 @@ public class PanneauDPGeneration extends PanneauOption
 
 	private void initPanelArbre(GridBagConstraints c, GridBagLayout gridbag)
 	{
-		GridBagLayout g = new GridBagLayout();
-		JPanel p = new JPanel(g);
-		GridBagConstraints c2 = new GridBagConstraints();
-		p.setBackground(Color.blue);
-//		this.LS_referentiel.setPreferredSize(new Dimension(100,100));
-		this.LS_referentiel.setBackground(Color.gray);
-		this.LS_referentiel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.LS_referentiel.setModel(this.PPListModel);
 		
-		this.LS_arbre.setVisibleRowCount(5);
+		Vector liste = new Vector();
+		Vector listePaquetage = Application.getApplication().getReferentiel().getListeNom(ElementReferentiel.PRESENTATION);
+		for (int i = 0;i<listePaquetage.size();i++)
+		{
+			liste.add(listePaquetage.elementAt(i)) ;
+		}
+		this.ppListModel.setListe(liste);
+		this.LS_referentiel = new JList(this.ppListModel);
+		this.LS_referentiel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		MyListeRenderer rendu = new MyListeRenderer();
 		this.LS_arbre.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.LS_arbre.setModel(this.ComposantsListModel);
+		this.LS_arbre.setCellRenderer(rendu);
 		this.LS_arbre.addListSelectionListener(new ListSelectionListener()
 		{	
 			public void valueChanged(ListSelectionEvent e) 
 			{
-				//System.out.println("le listener est bien ajouté");
 				int indexSelect = LS_arbre.getSelectedIndex();
 				if((indexSelect != -1) && (indexSelect < ComposantsListModel.getSize()))
 				{	
-					//System.out.println("bp enable");
 					BP_retirer.setEnabled(true);
 					
 					Object a_verifier = (Object)ComposantsListModel.getListe().elementAt(indexSelect);
 					if (a_verifier instanceof IdObjetModele)
 					{
-						
-						//System.out.println("bp disable");
 						BP_retirer.setEnabled(false);
-					
 					}
-					
 				}
 				LS_arbre.setSelectedIndex(indexSelect);
 			}
 		});
-
-		this.BP_ajouter.setText(Application.getApplication().getTraduction("ajouter_referentiel"));
+		//this.BP_ajouter.setText(Application.getApplication().getTraduction("ajouter_referentiel"));
 		this.BP_ajouter.setIcon(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "flecheDroite.jpg"));
 		this.BP_ajouter.setHorizontalTextPosition(SwingConstants.LEFT);
 		this.BP_ajouter.addActionListener(new ActionListener()
@@ -171,9 +159,7 @@ public class PanneauDPGeneration extends PanneauOption
 				ajouter(e);
 			}
 		});
-		
-		p.add(this.BP_ajouter);
-		this.BP_retirer.setText(Application.getApplication().getTraduction("retirer_referentiel"));
+		//this.BP_retirer.setText(Application.getApplication().getTraduction("retirer_referentiel"));
 		this.BP_retirer.setIcon(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "flecheGauche.jpg"));
 		this.BP_retirer.setHorizontalTextPosition(SwingConstants.RIGHT);
 		this.BP_retirer.addActionListener(new ActionListener()
@@ -183,8 +169,6 @@ public class PanneauDPGeneration extends PanneauOption
 				retirer(e);
 			}
 		});
-
-		p.add(this.BP_retirer);
 		this.BP_monter.setIcon(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "flecheHaut.jpg"));
 		this.BP_monter.addActionListener(new ActionListener()
 		{
@@ -193,8 +177,6 @@ public class PanneauDPGeneration extends PanneauOption
 				monter(e);
 			}
 		});
-		
-		p.add(this.BP_monter);
 		this.BP_descendre.setIcon(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "flecheBas.jpg"));
 		this.BP_descendre.addActionListener(new ActionListener()
 		{
@@ -203,33 +185,79 @@ public class PanneauDPGeneration extends PanneauOption
 				descendre(e);
 			}
 		});
-		p.add(this.BP_descendre);
-		
 		this.scrollPaneRef.setViewportView(this.LS_referentiel);
 		this.scrollPaneArbre.setViewportView(this.LS_arbre);
-		p.add(this.scrollPaneArbre);
-		p.add(this.scrollPaneRef);
+	
+		c.gridx = 0; c.gridy = 2;
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridwidth = 2;
+		c.gridheight = 5;
+		this.scrollPaneRef.setPreferredSize(new Dimension(150,100));
+		mPanel.add(this.scrollPaneRef, c);
 		
+		c.gridx = 6; c.gridy = 2;
 		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 100;
-		mPanel.add(p, c);
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		this.BP_ajouter.setPreferredSize(new Dimension(40,40));
+		mPanel.add(this.BP_ajouter, c);
+		
+		c.gridx = 6; c.gridy = 3;
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		this.BP_retirer.setPreferredSize(new Dimension(40,40));
+		mPanel.add(this.BP_retirer, c);
+		
+		c.gridx = 6; c.gridy = 4;
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		this.BP_monter.setPreferredSize(new Dimension(40,40));
+		mPanel.add(this.BP_monter, c);
+		
+		c.gridx = 6; c.gridy = 5;
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		this.BP_descendre.setPreferredSize(new Dimension(40,40));
+		mPanel.add(this.BP_descendre, c);
+		
+		c.gridx = 6; c.gridy = 5;
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		c.fill = GridBagConstraints.VERTICAL;
+		this.makeLabel(" ", gridbag, c);
+		
+		
+		c.gridx = 7; c.gridy = 2;
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.gridheight = 5;
+		c.fill = GridBagConstraints.VERTICAL;
+		this.scrollPaneArbre.setPreferredSize(new Dimension(150,100));
+		mPanel.add(this.scrollPaneArbre, c);
+		
+		// initialiser
+		if (this.defProc != null)
+		{
+			this.ComposantsListModel.setListe(this.defProc.getListeAGenerer());
+		}
 	}
 	
 	
 	public void save ()
 	{
-		
+		if (this.defProc != null)
+		{
+			this.defProc.setListeAGenerer(this.ComposantsListModel.getListe());
+		}
 	}
 	
 	private void ajouter(ActionEvent e)
 	{
 		int indexSelect = this.LS_referentiel.getSelectedIndex();
 		
-		// TODO 7 = taille de la liste du ref
-		if((indexSelect != -1) && (indexSelect < PPListModel.getSize()))
+		if((indexSelect != -1) && (indexSelect < LS_referentiel.getModel().getSize()))
 		{
 			PPListModel listeRef = (PPListModel)LS_referentiel.getModel();
-			Object a_inserer = listeRef.getListe().elementAt(indexSelect);
+			Object a_inserer = LS_referentiel.getSelectedValue();
 			
 			Referentiel ref = Application.getApplication().getReferentiel() ;
 			String nomPaqPre = a_inserer.toString();
@@ -283,41 +311,6 @@ public class PanneauDPGeneration extends PanneauOption
 		}
 	}
 	
-
-	private class ComboStylesModel extends DefaultComboBoxModel
-	{
-		private ArrayList fichiersStyles = new ArrayList();
-		
-		public ComboStylesModel()
-		{
-			File repStyles = new File(Application.getApplication().getConfigPropriete("styles"));
-			File[] lesFichiersCss = repStyles.listFiles(new FileFilter()
-			{	
-				String fileExtension = Application.getApplication().getConfigPropriete("extensionFeuilleStyle").toString();
-				public boolean accept(File fich)
-				{	
-					String nom = fich.getName();
-					String extension = nom.substring((nom.lastIndexOf(".")+1));
-					return extension.equals(this.fileExtension);
-				}
-			});
-			for(int i = 0 ; i < lesFichiersCss.length ; i++)
-			{
-				fichiersStyles.add(lesFichiersCss[i]);
-			}
-		}
-			
-		public Object getElementAt(int index)
-		{
-			return (File)fichiersStyles.get(index);
-		} 
-		
-		public int getSize()
-		{
-			return fichiersStyles.size();
-		}
-		
-	}
 	private abstract class ListModel extends AbstractListModel
 	{
 		public Vector liste = new Vector();
@@ -364,39 +357,49 @@ public class PanneauDPGeneration extends PanneauOption
 		{
 			return(this.liste);
 		}
-	}
-	private class ComposantsListModel extends ListModel
-	{
-		private Vector listeComp = new Vector();
-		public ComposantsListModel()
-		{
-			liste = new Vector();
-			for (int i = 0;i<Application.getApplication().getProjet().getDefProc().getListeComp().size();i++)
-			{
-				liste.add(Application.getApplication().getProjet().getDefProc().getListeComp().elementAt(i)) ;
-			}
-		}
-		public void verifier_supprimer(ListSelectionEvent e,int i)
-		{
-			
-			
-		}
 		
-	}
-	private class PPListModel extends ListModel
-	{
-		private Vector listeComp = new Vector();
-		public PPListModel()
+		public void setListe(Vector liste)
 		{
-			liste = new Vector();
-			Vector listePaquetage = Application.getApplication().getReferentiel().getListeNom(ElementReferentiel.PRESENTATION);
-			for (int i = 0;i<listePaquetage.size();i++)
-			{
-				liste.add(listePaquetage.elementAt(i)) ;
-			}
+			this.liste = liste;
 		}
 	}
-
+	private class ComposantsListModel extends ListModel{}
+	private class PPListModel extends ListModel{}
+	
+	private class MyListeRenderer extends DefaultListCellRenderer
+	{
+			public MyListeRenderer() 
+			{
+				setOpaque(true);
+				setHorizontalAlignment(CENTER);
+				setVerticalAlignment(CENTER);
+			}
+			
+			/*
+			* This method finds the image and text corresponding
+			* to the selected value and returns the label, set up
+			* to display the text and image.
+			*/
+			public Component getListCellRendererComponent(
+			                    JList list,
+			                    Object value,
+			                    int index,
+			                    boolean isSelected,
+			                    boolean cellHasFocus)
+			{
+				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (value instanceof PaquetagePresentation)
+				{
+					this.setIcon(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + VueDPArbre.iconeDefProc));
+				}
+				else
+				{
+					this.setIcon(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + VueDPArbre.iconeComposant));
+				}
+				return this;
+			}
+	}
+	
 	private class ManagerButton implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)

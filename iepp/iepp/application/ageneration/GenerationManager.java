@@ -115,7 +115,7 @@ public class GenerationManager
 		{
 			if (Application.getApplication().getProjet().getDefProc() != null)
 			{
-				GenerationManager.cheminGeneration = Application.getApplication().getProjet().getDefProc().getRepertoireGeneration();
+				//GenerationManager.cheminGeneration = Application.getApplication().getProjet().getDefProc().getRepertoireGeneration();
 			}
 			else
 			{

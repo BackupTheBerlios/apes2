@@ -31,8 +31,10 @@ import iepp.application.COuvrirDP;
 import iepp.application.COuvrirReferentiel;
 import iepp.application.aedition.CImprimerDiagramme;
 import iepp.application.aedition.CZoomer;
+import iepp.application.ageneration.TacheGeneration;
 import iepp.application.areferentiel.Referentiel;
 import iepp.application.averification.CVerification;
+import iepp.ui.igeneration.DialogueGenererSite;
 import iepp.ui.ireferentiel.VueReferentielArbre;
 import iepp.ui.iverification.PanneauVerification;
 import iepp.ui.preferences.FenetrePreference;
@@ -66,6 +68,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 import util.IconManager;
+import util.TaskMonitorDialog;
 
 /**
  * Classe permettant de créer et d'afficher la fenêtre principale de l'outil
@@ -614,6 +617,9 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 			 // génération
 			 else if ((source == this.generer )||(source == this.bgenerer))
 			 {
+			 	JDialog dialogueGen = new FenetrePreference(this, FenetrePreference.TYPE_GENERATION);
+				
+			 	/*
 				CGenererSite c = new CGenererSite() ;
 				if (c.executer())
 				{
@@ -621,6 +627,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 					 				Application.getApplication().getTraduction("Generation_site_titre"),
 									JOptionPane.INFORMATION_MESSAGE);
 				}
+				*/			 	
 			 }
 			 
 			else if ((source == this.propriete ) || source == this.bpreferences)
