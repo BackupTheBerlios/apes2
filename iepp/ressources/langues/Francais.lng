@@ -306,3 +306,4 @@ RepositoryTitle=Référentiel
 LanguageTitle=Langue
 CheminReferentiel=Répertoire par défaut :
 ReferentielDefaut=Référentiel à charger au démarrage :
+RepComposantDefaut=Repertoire par défaut des composants à importer :

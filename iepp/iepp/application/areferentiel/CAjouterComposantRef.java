@@ -22,7 +22,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.ipsquad.utils.SimpleFileFilter;
-import org.ipsquad.utils.SmartChooser;
 
 import iepp.Application ;
 import iepp.application.* ;
@@ -44,7 +43,7 @@ public class CAjouterComposantRef extends CommandeNonAnnulable
 		String cheminComp ;	// Chemin du composant à charger
 
 		// Demander à l'utilisateur de choisir un composant
-		JFileChooser chooser = SmartChooser.getChooser();
+		JFileChooser chooser = new JFileChooser(Application.getApplication().getConfigPropriete("rep_composant"));
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileFilter(new SimpleFileFilter
 			(new String[]{"pre"}, Application.getApplication().getTraduction("Composants_Publiables"))) ;

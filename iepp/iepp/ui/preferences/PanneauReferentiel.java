@@ -27,10 +27,12 @@ public class PanneauReferentiel extends PanneauOption
 	private JButton browseButton;
 	private JTextField mDefaultRef;
 	private JButton browseButton2;
+	private JTextField mDefaultComp;
+	private JButton browseButton3;
 	
 	public static final String REPOSITORY_PANEL_KEY = "RepositoryTitle";
 	
-	private SimpleFileFilter filter = new SimpleFileFilter("ref", "Référentiel") ;
+	private SimpleFileFilter filter = new SimpleFileFilter("ref", "Referentiel") ;
 	
 	public PanneauReferentiel(String name)
 	{
@@ -108,7 +110,33 @@ public class PanneauReferentiel extends PanneauOption
 		gridbag.setConstraints(browseButton2, c);
 		mPanel.add(browseButton2);		
 		
-
+		//linefeed
+		c.weighty = 0;      		
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		
+		
+		// rep des composant à importer
+		c.weighty = 0;
+		c.weightx = 0 ;
+		c.fill = GridBagConstraints.BOTH;
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		JLabel label3 = new JLabel(Application.getApplication().getTraduction("RepComposantDefaut"));
+		gridbag.setConstraints(label3, c);
+		mPanel.add(label3);
+		c.weightx = 3 ;
+		c.gridwidth = GridBagConstraints.RELATIVE;
+		mDefaultComp = new JTextField(25);
+		mDefaultComp.setText(Application.getApplication().getConfigPropriete("rep_composant"));
+		mPanel.add(mDefaultComp);
+		gridbag.setConstraints(mDefaultComp, c);
+		c.weightx = 0 ;
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		this.browseButton3 = new JButton(Application.getApplication().getTraduction("Parcourir"));
+		browseButton3.addActionListener(man);
+		gridbag.setConstraints(browseButton3, c);
+		mPanel.add(browseButton3);		
+		
 		c.fill = GridBagConstraints.VERTICAL;
 		c.weighty = 2.0; 
 		// linefeed     		
@@ -131,6 +159,7 @@ public class PanneauReferentiel extends PanneauOption
 	{
 		Application.getApplication().setConfigPropriete("chemin_referentiel", mDefaultPath.getText());
 		Application.getApplication().setConfigPropriete("referentiel_demarrage", mDefaultRef.getText());
+		Application.getApplication().setConfigPropriete("rep_composant", mDefaultComp.getText());
 	}
 	
 	private class ManagerButton implements ActionListener
@@ -149,7 +178,7 @@ public class PanneauReferentiel extends PanneauOption
 				if(res == JFileChooser.APPROVE_OPTION)
 					PanneauReferentiel.this.mDefaultPath.setText(fileChooser.getSelectedFile().getAbsolutePath());
 			}
-			if (source == PanneauReferentiel.this.browseButton2)
+			else if (source == PanneauReferentiel.this.browseButton2)
 			{
 				JFileChooser fileChooser;
 				if (PanneauReferentiel.this.mDefaultPath.getText() != "")
@@ -164,6 +193,15 @@ public class PanneauReferentiel extends PanneauOption
 				int res = fileChooser.showDialog(PanneauReferentiel.this, Application.getApplication().getTraduction("OK"));
 				if(res == JFileChooser.APPROVE_OPTION)
 					PanneauReferentiel.this.mDefaultRef.setText(fileChooser.getSelectedFile().getAbsolutePath());
+			}
+			else if (source == PanneauReferentiel.this.browseButton3)
+			{
+				JFileChooser fileChooser = new JFileChooser(PanneauReferentiel.this.mDefaultComp.getText());
+				fileChooser.setDialogTitle(Application.getApplication().getTraduction("titre_choix_rep"));
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int res = fileChooser.showDialog(PanneauReferentiel.this, Application.getApplication().getTraduction("OK"));
+				if(res == JFileChooser.APPROVE_OPTION)
+					PanneauReferentiel.this.mDefaultComp.setText(fileChooser.getSelectedFile().getAbsolutePath());
 			}
 		}
 	}
