@@ -40,7 +40,7 @@ import org.jgraph.graph.GraphConstants;
  * This tool allows to create cells in the graph
  * It use the prototype design pattern to clone cells
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class CellTool extends Tool
 {
@@ -92,7 +92,6 @@ public class CellTool extends Tool
 			
 			mGraph.clearSelection();
 			Point pt = mGraph.fromScreen(e.getPoint());
-
 			DefaultGraphCell vertex = (DefaultGraphCell) mPrototype.clone();
 
 			Map view = new HashMap(), 

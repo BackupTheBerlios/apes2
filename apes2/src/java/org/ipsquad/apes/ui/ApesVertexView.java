@@ -36,6 +36,7 @@ import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellView;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphCell;
 import org.jgraph.graph.GraphCellEditor;
 import org.jgraph.graph.GraphConstants;
@@ -44,7 +45,7 @@ import org.jgraph.graph.VertexView;
 
 /**
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesVertexView extends VertexView
 {
@@ -53,6 +54,15 @@ public class ApesVertexView extends VertexView
 	{
 		super(cell, graph, cm);
 		GraphConstants.setVerticalAlignment(attributes, 3); // 3 => BOTTOM
+		
+		Rectangle r = GraphConstants.getBounds(allAttributes);
+		if( r != null && r.getSize() != calculateSize() && cell instanceof DefaultGraphCell )
+		{
+			Map apply = GraphConstants.createMap();
+			r.setSize(calculateSize());
+			GraphConstants.setBounds(apply,r);
+			((DefaultGraphCell)cell).changeAttributes(apply);
+		}
 	}
 
 	protected Dimension calculateSize()

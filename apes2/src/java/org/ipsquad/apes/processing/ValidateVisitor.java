@@ -50,7 +50,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -294,7 +294,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		
 		WorkProduct wp;
 		WorkDefinition wd;
-		boolean isUsed;
+		boolean isUsed, isProvided;
 		
 		for( int i = 0; i < diagram.getTransitionCount(); i++ )
 		{
@@ -302,6 +302,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			
 			if( diagram.getTransition(i).getInputModelElement() instanceof WorkProduct )
 			{
+				isProvided = false;
 				wp = (WorkProduct)diagram.getTransition(i).getInputModelElement();
 				wd = (WorkDefinition)diagram.getTransition(i).getOutputModelElement();
 				
@@ -309,15 +310,19 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				{
 					if( wd.getSubWork(j).containsOutputWorkProduct(wp) )
 					{	
-						ErrorManager.getInstance().println(
-							ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByWorkDefinition")
-								+" : "+diagram.getName()+" "+wp.getName()+" "+wd.getName());
-						mHasErrors = true;
+						isProvided = true;
 					}
 					if( wd.getSubWork(j).containsInputWorkProduct(wp) )
 					{
 						isUsed = true;
 					}
+				}
+				if( isProvided && !isUsed )
+				{
+					ErrorManager.getInstance().println(
+							ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByWorkDefinition")
+								+" : "+diagram.getName()+" "+wp.getName()+" "+wd.getName());
+						mHasErrors = true;
 				}
 			}
 			else

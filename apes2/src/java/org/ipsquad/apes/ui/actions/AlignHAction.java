@@ -28,17 +28,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ipsquad.apes.Context;
-import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.jgraph.JGraph;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 
 
 /**
  * Align the centers of selected objects horizontally
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class AlignHAction extends ApesAction
 {
@@ -65,7 +65,7 @@ public class AlignHAction extends ApesAction
 	//Perform horizontal alignment
 	public void alignV(Object [] listCells)
 	{
-		ApesGraphCell c;
+		DefaultGraphCell c;
 		Rectangle newRect, oldRect = null;
 		JGraph mGraph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Map attr, myMap = new HashMap();
@@ -75,10 +75,9 @@ public class AlignHAction extends ApesAction
 		
 		for( int i = 0; i < listCells.length; i++)
 		{
-			if(listCells[i] instanceof ApesGraphCell)
+			if(listCells[i] instanceof DefaultGraphCell)
 			{	
-				c=(ApesGraphCell)listCells[i];
-				
+				c=(DefaultGraphCell)listCells[i];
 				if( oldRect == null )
 				{
 					oldRect = GraphConstants.getBounds(c.getAttributes());
