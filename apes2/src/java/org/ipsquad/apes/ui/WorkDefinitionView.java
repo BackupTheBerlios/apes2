@@ -59,8 +59,8 @@ public class WorkDefinitionView extends ApesVertexView
 	protected Dimension calculateSize()
 	{
 		int width=calculateLabelLength();
-		if(width<45)
-			width=45;
+		if(width<70)
+			width=70;
 		return new Dimension(width, 70);
 	}
 	
