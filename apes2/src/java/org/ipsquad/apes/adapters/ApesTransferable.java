@@ -56,8 +56,11 @@ public class ApesTransferable implements Transferable
 	
 	public ApesTransferable( Project p, Object[] list )
 	{
-		mElements = new Vector(Arrays.asList(list));
-		mElements.add(0, new Integer(p.hashCode()));
+		if(p != null && list != null)
+		{
+			mElements = new Vector(Arrays.asList(list));
+			mElements.add(0, new Integer(p.hashCode()));
+		}
 	}
 	
 	public DataFlavor[] getTransferDataFlavors()

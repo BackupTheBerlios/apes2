@@ -36,12 +36,13 @@ import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.ui.GraphFrame;
+import org.ipsquad.utils.Debug;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultPort;
 
 /**
  *
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class ApesClipboardManager
 {
@@ -98,7 +99,7 @@ public class ApesClipboardManager
 		// Make sure the clipboard is not empty.
 		if (t == null)
 		{
-			System.out.println("The clipboard is empty.");
+			if(Debug.enabled) Debug.print(Debug.VIEW, "(ApesClipboardManager) -> paste No available data");
 			return;
 		}
 		try 
@@ -116,7 +117,9 @@ public class ApesClipboardManager
 				    Element element = (Element) cell.getUserObject();
 				    if( Context.getInstance().getProject().hashCode() != projectHashCode )
 					{
-						cell.setUserObject(element.clone());
+				    	Element tmpElement = (Element)element.clone();
+				    	tmpElement.setName(element.getName());
+						cell.setUserObject(tmpElement);
 					}
 				    else
 				    {
@@ -131,14 +134,20 @@ public class ApesClipboardManager
 				}
 			}
 						
-			adapter.insert(cells.toArray(), attributes, null, null, null);				
+			adapter.insert(cells.toArray(), attributes, null, null, null);	
+			cb.setContents(new ApesTransferable(null, null), null) ;
 		} 
+		catch (NullPointerException e)
+		{
+			if(Debug.enabled) Debug.print(Debug.VIEW, "(ApesClipboardManager) -> paste No available data");
+		}
 		catch (IOException e) 
 		{
-			System.out.println("Données non disponible");
+			if(Debug.enabled) Debug.print(Debug.VIEW, "(ApesClipboardManager) -> paste No available data");
 		} 
-		catch (UnsupportedFlavorException e) {
-			System.out.println("DataFlower de mauvais type");
+		catch (UnsupportedFlavorException e) 
+		{
+			if(Debug.enabled) Debug.print(Debug.VIEW, "(ApesClipboardManager) -> paste Bad flavor type");
 		}
 	}
 
