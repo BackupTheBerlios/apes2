@@ -86,14 +86,17 @@ public class ColorAssociater implements ModelVisitor
 
 	public void visitProvidedInterface(ProvidedInterface pi)
 	{	
-		mForeground = ColorFontPanel.getColor("WorkproductProvidedTitle") ;
-		mFont = ColorFontPanel.getStyle("WorkproductProvidedTitle");
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.PROVIDED_INTERFACE_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.PROVIDED_INTERFACE_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.PROVIDED_INTERFACE_KEY);
 	}
 
 	public void visitRequiredInterface(RequiredInterface ri)
 	{	
-		mForeground = ColorFontPanel.getColor("WorkproductRequiredTitle") ;
-		mFont = ColorFontPanel.getStyle("WorkproductRequiredTitle");
+		
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.REQUIRED_INTERFACE_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.REQUIRED_INTERFACE_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.REQUIRED_INTERFACE_KEY);
 	}
 
 	public void visitProcess(SProcess process)
@@ -111,20 +114,23 @@ public class ColorAssociater implements ModelVisitor
 
 	public void visitProduct(WorkProduct product)
 	{
-		mForeground = ColorFontPanel.getColor("WorkproductTitle") ;
-		mFont = ColorFontPanel.getStyle("WorkproductTitle");
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.WORK_PRODUCT_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.WORK_PRODUCT_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.WORK_PRODUCT_KEY);
 	}
 
 	public void visitRole(ProcessRole role)
 	{
-		mForeground = ColorFontPanel.getColor("RoleTitle") ;
-		mFont = ColorFontPanel.getStyle("RoleTitle");
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.ROLE_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.ROLE_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.ROLE_KEY);
 	}
 
 	public void visitActivity(Activity activity)
 	{
-		mForeground = ColorFontPanel.getColor("ActivityTitle") ;
-		mFont = ColorFontPanel.getStyle("ActivityTitle");
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.ACTIVITY_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.ACTIVITY_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.ACTIVITY_KEY);
 	}
 
 	public void visitExternalDescription(ExternalDescription description)
@@ -157,8 +163,9 @@ public class ColorAssociater implements ModelVisitor
 
 	public void visitStateMachine(StateMachine sm)
 	{
-		mForeground = ColorFontPanel.getColor("StateTitle") ;
-		mFont = ColorFontPanel.getStyle("StateTitle");
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.STATE_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.STATE_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.STATE_KEY);
 	}
 
 	public void visitApesProcess(ApesProcess p){	}
@@ -170,7 +177,8 @@ public class ColorAssociater implements ModelVisitor
 	
 	public void visitTransition(Transition transition)
 	{
-		mForeground = ColorFontPanel.getColor("GuardTitle") ;
-		mFont = ColorFontPanel.getStyle("GuardTitle");
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.GUARD_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.GUARD_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.GUARD_KEY);
 	}
 }

@@ -41,87 +41,95 @@ import javax.swing.border.TitledBorder;
 
 import org.ipsquad.utils.ConfigManager;
 /**
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ColorFontPanel extends OptionPanel
 {
-	private JButton colorButton ;
-	// a voir si on peut faire avec un button group
-	//private ButtonGroup choiceStyle ; 
-	private JCheckBox bold ;
-	private JCheckBox italic ;
-	private String panelkey;
+	private JButton mForegroundColorButton ;
+	private JButton mBackgroundColorButton;
+	private JCheckBox mBold ;
+	private JCheckBox mItalic ;
+	private String mPanelkey;
+	
+	public static final String ACTIVITY_KEY = "ActivityTitle" ;
+	public static final String ROLE_KEY = "RoleTitle" ;
+	public static final String GUARD_KEY = "GuardTitle" ;
+	public static final String STATE_KEY = "StateTitle" ;
+	public static final String WORK_PRODUCT_KEY = "WorkproductTitle" ;
+	public static final String REQUIRED_INTERFACE_KEY = "WorkproductRequiredTitle" ;
+	public static final String PROVIDED_INTERFACE_KEY = "WorkproductProvidedTitle" ;
 	
 	public  ColorFontPanel(String name)
 	{		
-			this.title = new JLabel (name) ;
-			this.setLayout(new BorderLayout());
-			colorButton = new JButton("");
-			panel = new JPanel() ;
-			GridBagLayout gridbag = new GridBagLayout();
-			panel.setLayout(gridbag);
-			GridBagConstraints c = new GridBagConstraints();
-			
-			// Title
-			c.weightx = 1.0;
-			c.weighty = 0 ;
-			c.fill = GridBagConstraints.BOTH;
-			c.gridwidth = GridBagConstraints.REMAINDER; //end row			//	title
-			this.title = new JLabel (name);
-			TitledBorder titleBor = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK));
-			titleBor.setTitleJustification(TitledBorder.CENTER);
-			title.setBorder(titleBor);
-			gridbag.setConstraints(title, c);
-			panel.add(title);
-			
-			// linefeed
-			c.gridwidth = GridBagConstraints.REMAINDER; //end row
-			makeLabel(" ", gridbag, c);
-			
-			
-			// Color
-			c.fill = GridBagConstraints.VERTICAL;
-			c.gridwidth = 3 ;//next-to-last in row
-			makeLabel(PreferencesDialog.resMan.getString("ColorFontPanelLib"), gridbag, c);
-			ManagerButton manageBut = new ManagerButton();
-			colorButton.addActionListener(manageBut);
-			colorButton.setBackground(Color.BLUE);
-			gridbag.setConstraints(colorButton, c);
-			panel.add(colorButton);
-			c.gridwidth = GridBagConstraints.REMAINDER; //end row
-			makeLabel(" ", gridbag, c);
-			
-			
-			// linefeed
-			c.gridwidth = GridBagConstraints.REMAINDER; //end row
-			makeLabel(" ", gridbag, c);
-			
-			//Style
-			c.weightx = 1;
-			c.weighty = 1 ;
-			c.gridheight = 1; //end row
-			c.fill = GridBagConstraints.BOTH;
-			c.anchor = GridBagConstraints.WEST;
-			c.gridwidth = GridBagConstraints.REMAINDER; //end row
-			JPanel style = new JPanel();
-			Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-			TitledBorder titleStyle = BorderFactory.createTitledBorder( loweredetched,
-			PreferencesDialog.resMan.getString("ColorFontPanelSubTitleStyle"));
-			style.setBorder(titleStyle);
-			gridbag.setConstraints(style, c);
-			panel.add(style);
-			this.bold = new JCheckBox (PreferencesDialog.resMan.getString("LibBold"));
-			this.italic = new JCheckBox (PreferencesDialog.resMan.getString("LibItalic"));
-			style.setLayout(new GridLayout(3,1));
-			style.add(bold);
-			style.add(italic);
+		this.mTitleLabel = new JLabel (name) ;
+		this.setLayout(new BorderLayout());
+		mForegroundColorButton = new JButton("");
+		mBackgroundColorButton = new JButton("");
+		mPanel = new JPanel() ;
+		GridBagLayout gridbag = new GridBagLayout();
+		mPanel.setLayout(gridbag);
+		GridBagConstraints c = new GridBagConstraints();
+		
+		// Title
+		c.weightx = 1.0;
+		c.weighty = 0 ;
+		c.fill = GridBagConstraints.BOTH;
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row			
+		this.mTitleLabel = new JLabel (name);
+		TitledBorder titleBor = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK));
+		titleBor.setTitleJustification(TitledBorder.CENTER);
+		mTitleLabel.setBorder(titleBor);
+		gridbag.setConstraints(mTitleLabel, c);
+		mPanel.add(mTitleLabel);
+		
+		// linefeed
+		makeLabel(" ", gridbag, c);
+		
+		// Color
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridwidth = 3 ;//next-to-last in row
+		makeLabel(PreferencesDialog.resMan.getString("ColorFontPanelLibForeground"), gridbag, c);
+		ManagerButton manageBut = new ManagerButton();
+		mForegroundColorButton.addActionListener(manageBut);
+		gridbag.setConstraints(mForegroundColorButton, c);
+		mPanel.add(mForegroundColorButton);
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		makeLabel(" ", gridbag, c);
+		c.gridwidth = 3 ;//next-to-last in row
+		makeLabel(PreferencesDialog.resMan.getString("ColorFontPanelLibBackground"), gridbag, c);
+		mBackgroundColorButton.addActionListener(manageBut);
+		gridbag.setConstraints(mBackgroundColorButton, c);
+		mPanel.add(mBackgroundColorButton);
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		
+		// linefeed
+		makeLabel(" ", gridbag, c);
+		
+		//Style
+		c.weighty = 1 ;
+		c.gridheight = 1; //end row
+		c.fill = GridBagConstraints.BOTH;
+		c.anchor = GridBagConstraints.WEST;
+		JPanel style = new JPanel();
+		Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+		TitledBorder titleStyle = BorderFactory.createTitledBorder( loweredetched,
+		PreferencesDialog.resMan.getString("ColorFontPanelSubTitleStyle"));
+		style.setBorder(titleStyle);
+		gridbag.setConstraints(style, c);
+		mPanel.add(style);
+		this.mBold = new JCheckBox (PreferencesDialog.resMan.getString("LibBold"));
+		this.mItalic = new JCheckBox (PreferencesDialog.resMan.getString("LibItalic"));
+		style.setLayout(new GridLayout(3,1));
+		style.add(mBold);
+		style.add(mItalic);
 
-			c.weighty = 2 ;
-			c.gridwidth = GridBagConstraints.REMAINDER; //end row
-			makeLabel(" ", gridbag, c);
-				
-			this.add(new JLabel("    "),BorderLayout.WEST);
-			this.add(panel,BorderLayout.CENTER);
+		c.weighty = 2 ;
+		makeLabel(" ", gridbag, c);
+			
+		this.add(new JLabel("    "),BorderLayout.WEST);
+		this.add(mPanel,BorderLayout.CENTER);
 	}
 	
 	public static Color getColor(String key)
@@ -136,11 +144,16 @@ public class ColorFontPanel extends OptionPanel
 		
 	public void setColor (String key)
 	{
-		int red = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"red"));
-		int green = Integer.parseInt (ConfigManager.getInstance().getProperty(key+"green"));
-		int blue = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"blue"));
+		int red = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"foregroundred"));
+		int green = Integer.parseInt (ConfigManager.getInstance().getProperty(key+"foregroundgreen"));
+		int blue = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"foregroundblue"));
 		Color color = new Color(red,green,blue);
-		this.colorButton.setBackground(color);
+		this.mForegroundColorButton.setBackground(color);
+		red = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"backgroundred"));
+		green = Integer.parseInt (ConfigManager.getInstance().getProperty(key+"backgroundgreen"));
+		blue = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"backgroundblue"));
+		color = new Color(red,green,blue);
+		this.mBackgroundColorButton.setBackground(color);
 			
 	}
 		
@@ -165,15 +178,16 @@ public class ColorFontPanel extends OptionPanel
 		}	
 		return font ;
 	}
+	
 	public void setStyle(String key)
 	{
-		this.bold.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"bold"))).booleanValue());
-		this.italic.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"italic"))).booleanValue());
+		this.mBold.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"bold"))).booleanValue());
+		this.mItalic.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"italic"))).booleanValue());
 	}
 	
 	public OptionPanel openPanel(String key)
 	{
-		this.panelkey = key;
+		this.mPanelkey = key;
 		this.setName(PreferencesDialog.resMan.getString(key)) ;
 		this.setColor(key);
 		this.setStyle(key) ;
@@ -182,30 +196,44 @@ public class ColorFontPanel extends OptionPanel
 	
 	public void saveTemp ()
 	{
-		Color color = this.colorButton.getBackground() ;
+		Color color = this.mForegroundColorButton.getBackground() ;
 		String red = (new Integer (color.getRed())).toString() ;
 		String green  = (new Integer (color.getGreen())).toString() ;
 		String blue  = (new Integer (color.getBlue())).toString() ;
 		String name = new String(this.getName()) ;
-		PreferencesDialog.propTemp.setProperty(this.panelkey+"red", red);
-		PreferencesDialog.propTemp.setProperty(this.panelkey+"green", green);
-		PreferencesDialog.propTemp.setProperty(this.panelkey+"blue", blue);
-		PreferencesDialog.propTemp.setProperty(this.panelkey+"bold", new Boolean(this.bold.isSelected()).toString());
-		PreferencesDialog.propTemp.setProperty(this.panelkey+"italic",new Boolean(this.italic.isSelected()).toString());
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"foregroundred", red);
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"foregroundgreen", green);
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"foregroundblue", blue);
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"bold", new Boolean(this.mBold.isSelected()).toString());
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"italic",new Boolean(this.mItalic.isSelected()).toString());
+		color = this.mBackgroundColorButton.getBackground() ;
+		red = (new Integer (color.getRed())).toString() ;
+		green  = (new Integer (color.getGreen())).toString() ;
+		blue  = (new Integer (color.getBlue())).toString() ;
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"backgroundred", red);
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"backgroundgreen", green);
+		PreferencesDialog.propTemp.setProperty(this.mPanelkey+"backgroundblue", blue);
 	}
 		
 	public void save()
 	{
-		Color color = this.colorButton.getBackground() ;
+		Color color = this.mForegroundColorButton.getBackground() ;
 		String red = (new Integer (color.getRed())).toString() ;
 		String green  = (new Integer (color.getGreen())).toString() ;
 		String blue  = (new Integer (color.getBlue())).toString() ;
 		String name = new String(this.getName()) ;
-		ConfigManager.getInstance().setProperty(this.panelkey+"red", red);
-		ConfigManager.getInstance().setProperty(this.panelkey+"green", green);
-		ConfigManager.getInstance().setProperty(this.panelkey+"blue", blue);
-		ConfigManager.getInstance().setProperty(this.panelkey+"bold", new Boolean(this.bold.isSelected()).toString());
-		ConfigManager.getInstance().setProperty(this.panelkey+"italic",new Boolean(this.italic.isSelected()).toString());
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"foregroundred", red);
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"foregroundgreen", green);
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"foregroundblue", blue);
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"bold", new Boolean(this.mBold.isSelected()).toString());
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"italic",new Boolean(this.mItalic.isSelected()).toString());
+		color = this.mBackgroundColorButton.getBackground() ;
+		red = (new Integer (color.getRed())).toString() ;
+		green  = (new Integer (color.getGreen())).toString() ;
+		blue  = (new Integer (color.getBlue())).toString() ;
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"backgroundred", red);
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"backgroundgreen", green);
+		ConfigManager.getInstance().setProperty(this.mPanelkey+"backgroundblue", blue);
 		try
 		{
 			ConfigManager.getInstance().save() ;
@@ -225,7 +253,7 @@ public class ColorFontPanel extends OptionPanel
 			{
 				Object o = e.getSource () ;
 				JButton buttonClik = (JButton) o ;
-				Color newColor = JColorChooser.showDialog(ColorFontPanel.this, PreferencesDialog.resMan.getString("ColorFontPanelLib"), buttonClik.getBackground());
+				Color newColor = JColorChooser.showDialog(ColorFontPanel.this, PreferencesDialog.resMan.getString("LibChangeColor"), buttonClik.getBackground());
 				if (newColor != null)
 				{
 					buttonClik.setBackground(newColor);

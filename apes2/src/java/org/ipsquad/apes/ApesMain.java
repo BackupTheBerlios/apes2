@@ -79,7 +79,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ApesMain
 {
@@ -89,39 +89,60 @@ public class ApesMain
 		Properties properties = new Properties();
 		properties.setProperty("Language",Locale.getDefault().getLanguage());
 		properties.setProperty("ErrorPanelTitleyes","true");
-		properties.setProperty("ActivityTitlered","0");
-		properties.setProperty("ActivityTitlegreen","0");
-		properties.setProperty("ActivityTitleblue","0");
+		properties.setProperty("ActivityTitleforegroundred","0");
+		properties.setProperty("ActivityTitleforegroundgreen","0");
+		properties.setProperty("ActivityTitleforegroundblue","0");
+		properties.setProperty("ActivityTitlebackgroundred","255");
+		properties.setProperty("ActivityTitlebackgroundgreen","255");
+		properties.setProperty("ActivityTitlebackgroundblue","255");
 		properties.setProperty("ActivityTitlebold","false");
 		properties.setProperty("ActivityTitleitalic","false");
-		properties.setProperty("RoleTitlered","0");
-		properties.setProperty("RoleTitlegreen","0");
-		properties.setProperty("RoleTitleblue","0");
+		properties.setProperty("RoleTitleforegroundred","0");
+		properties.setProperty("RoleTitleforegroundgreen","0");
+		properties.setProperty("RoleTitleforegroundblue","0");
+		properties.setProperty("RoleTitlebackgroundred","255");
+		properties.setProperty("RoleTitlebackgroundgreen","255");
+		properties.setProperty("RoleTitlebackgroundblue","255");
 		properties.setProperty("RoleTitlebold","false");
 		properties.setProperty("RoleTitleitalic","false");
-		properties.setProperty("GuardTitlered","0");
-		properties.setProperty("GuardTitlegreen","0");
-		properties.setProperty("GuardTitleblue","0");
+		properties.setProperty("GuardTitleforegroundred","0");
+		properties.setProperty("GuardTitleforegroundgreen","0");
+		properties.setProperty("GuardTitleforegroundblue","0");
+		properties.setProperty("GuardTitlebackgroundred","255");
+		properties.setProperty("GuardTitlebackgroundgreen","255");
+		properties.setProperty("GuardTitlebackgroundblue","255");
 		properties.setProperty("GuardTitlebold","false");
 		properties.setProperty("GuardTitleitalic","false");
-		properties.setProperty("StateTitlered","0");
-		properties.setProperty("StateTitlegreen","0");
-		properties.setProperty("StateTitleblue","0");
+		properties.setProperty("StateTitleforegroundred","0");
+		properties.setProperty("StateTitleforegroundgreen","0");
+		properties.setProperty("StateTitleforegroundblue","0");
+		properties.setProperty("StateTitlebackgroundred","255");
+		properties.setProperty("StateTitlebackgroundgreen","255");
+		properties.setProperty("StateTitlebackgroundblue","255");
 		properties.setProperty("StateTitlebold","false");
 		properties.setProperty("StateTitleitalic","false");
-		properties.setProperty("WorkproductTitlered","0");
-		properties.setProperty("WorkproductTitlegreen","0");
-		properties.setProperty("WorkproductTitleblue","0");
+		properties.setProperty("WorkproductTitleforegroundred","0");
+		properties.setProperty("WorkproductTitleforegroundgreen","0");
+		properties.setProperty("WorkproductTitleforegroundblue","0");
+		properties.setProperty("WorkproductTitlebackgroundred","255");
+		properties.setProperty("WorkproductTitlebackgroundgreen","255");
+		properties.setProperty("WorkproductTitlebackgroundblue","255");
 		properties.setProperty("WorkproductTitlebold","false");
 		properties.setProperty("WorkproductTitleitalic","false");
-		properties.setProperty("WorkproductProvidedTitlered","0");
-		properties.setProperty("WorkproductProvidedTitlegreen","0");
-		properties.setProperty("WorkproductProvidedTitleblue","0");
+		properties.setProperty("WorkproductProvidedTitleforegroundred","0");
+		properties.setProperty("WorkproductProvidedTitleforegroundgreen","0");
+		properties.setProperty("WorkproductProvidedTitleforegroundblue","0");
+		properties.setProperty("WorkproductProvidedTitlebackgroundred","255");
+		properties.setProperty("WorkproductProvidedTitlebackgroundgreen","255");
+		properties.setProperty("WorkproductProvidedTitlebackgroundblue","255");
 		properties.setProperty("WorkproductProvidedTitlebold","false");
 		properties.setProperty("WorkproductProvidedTitleitalic","false");
-		properties.setProperty("WorkproductRequiredTitlered","0");
-		properties.setProperty("WorkproductRequiredTitlegreen","0");
-		properties.setProperty("WorkproductRequiredTitleblue","0");
+		properties.setProperty("WorkproductRequiredTitleforegroundred","0");
+		properties.setProperty("WorkproductRequiredTitleforegroundgreen","0");
+		properties.setProperty("WorkproductRequiredTitleforegroundblue","0");
+		properties.setProperty("WorkproductRequiredTitlebackgroundred","255");
+		properties.setProperty("WorkproductRequiredTitlebackgroundgreen","255");
+		properties.setProperty("WorkproductRequiredTitlebackgroundblue","255");
 		properties.setProperty("WorkproductRequiredTitlebold","false");
 		properties.setProperty("WorkproductRequiredTitleitalic","false");
 		properties.setProperty("ToolPresentationTitledefaultPath","");
@@ -136,7 +157,59 @@ public class ApesMain
 		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
 
 		Context context = Context.getInstance();
+
+		initActions(context);
+
+		ApesFrame f = new ApesFrame();
+		context.setTopLevelFrame(f);
 		
+		Project project = new Project();
+		
+		context.setProject(project);
+		
+		ErrorManager.getInstance().setOwner(f.getContentPane());
+		
+		f.show();
+		
+		//Open a file given in parameter
+		if(args.length>0)
+		{
+			if(args[0].endsWith("."+ResourceManager.getInstance().getString("apesFileExtension")) ||
+					args[0].endsWith("."+ResourceManager.getInstance().getString("apesDosFileExtension")))
+			{
+			  try
+			  {
+				
+			  	File mFile = new File(args[0]);
+				
+				LoadProject mMonitor = new LoadProject(mFile);
+				
+				ApesFrame parent = (ApesFrame)Context.getInstance().getTopLevelFrame();
+				
+				TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
+				mTask.setName(ResourceManager.getInstance().getString("titleLoading"));
+				mTask.setLocation(parent.getWidth()/2-mTask.getWidth() / 2,parent.getHeight()/2-mTask.getHeight()/2);
+				
+				mMonitor.setTask(mTask);
+				
+				mTask.show();
+				mTask.hide();
+			 }
+			
+			 catch(Throwable t)
+			 {
+			 	t.printStackTrace();
+				ErrorManager.getInstance().display("errorTitleOpenProcess", "errorOpenProcess");
+		 	 } 
+			}
+			else
+			{
+				ErrorManager.getInstance().println(args[0]+" : "+ResourceManager.getInstance().getString("errorOpenFileNameInvalid"));	
+			}
+		}
+	}
+	public static void initActions(Context context)
+	{
 		context.registerAction("New", new NewAction());
 		context.registerAction("Open", new OpenAction());
 		//context.registerAction("Close", new CloseAction());
@@ -189,54 +262,6 @@ public class ApesMain
 		//context.registerAction("TreeAddExternalElement", new AddExternalElement("treeAddExternalElement"));
 		context.registerAction("SaveAsJpeg",new SaveAsJpegAction("saveAsJpeg"));
 		context.registerAction("PrintDiagram",new PrintDiagramAction("printDiagram"));
-
-		ApesFrame f = new ApesFrame();
-		context.setTopLevelFrame(f);
-		
-		Project project = new Project();
-		
-		context.setProject(project);
-		
-		ErrorManager.getInstance().setOwner(f.getContentPane());
-		
-		f.show();
-		
-		//Open a file given in parameter
-		if(args.length>0)
-		{
-			if(args[0].endsWith("."+ResourceManager.getInstance().getString("apesFileExtension")) ||
-					args[0].endsWith("."+ResourceManager.getInstance().getString("apesDosFileExtension")))
-			{
-			  try
-			  {
-				
-			  	File mFile = new File(args[0]);
-				
-				LoadProject mMonitor = new LoadProject(mFile);
-				
-				ApesFrame parent = (ApesFrame)Context.getInstance().getTopLevelFrame();
-				
-				TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
-				mTask.setName(ResourceManager.getInstance().getString("titleLoading"));
-				mTask.setLocation(parent.getWidth()/2-mTask.getWidth() / 2,parent.getHeight()/2-mTask.getHeight()/2);
-				
-				mMonitor.setTask(mTask);
-				
-				mTask.show();
-				mTask.hide();
-			 }
-			
-			 catch(Throwable t)
-			 {
-			 	t.printStackTrace();
-				ErrorManager.getInstance().display("errorTitleOpenProcess", "errorOpenProcess");
-		 	 } 
-			}
-			else
-			{
-				ErrorManager.getInstance().println(args[0]+" : "+ResourceManager.getInstance().getString("errorOpenFileNameInvalid"));	
-			}
-		}
 	}
 
 }

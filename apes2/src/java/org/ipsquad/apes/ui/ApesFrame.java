@@ -51,12 +51,13 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
 	private JDesktopPane mDesktop = new JDesktopPane();
-	private JTree mTree = new ApesTree();
+	private JTree mTree;
+	private String mFilePath;
 	private JPanel mPanel = new JPanel();
 	private ApesErrorSplitPane mErrorPane = new ApesErrorSplitPane(mPanel);
 	private ToolPalette mToolPalette;
@@ -65,7 +66,19 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 	public ApesFrame()
 	{
 		super(ResourceManager.getInstance().getString("Title"));
+		mTree = new ApesTree();
+		init();
+	}
 
+	public ApesFrame(JTree tree)
+	{
+		super(ResourceManager.getInstance().getString("Title"));
+		mTree = tree;
+		init();	
+	}
+
+	private void init()
+	{
 		addWindowListener(new ApesFrameListener());
 
 		mDefaultToolPalette.setEnabled(false);
@@ -99,10 +112,15 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 
 /// @name Accessors
 //@{
+	public String getFilePath()
+	{
+		return mFilePath;
+	}
 
 	public void setFilePath(String filePath)
 	{
-		if(filePath == null)
+		mFilePath = filePath;
+		if(filePath.equals(""))
 		{
 			setTitle(ResourceManager.getInstance().getString("Title"));
 		}

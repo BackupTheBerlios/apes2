@@ -29,12 +29,12 @@ import javax.swing.JPanel;
 
 /**
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class OptionPanel extends JPanel 
 {
-	protected JPanel panel ;
-	protected JLabel title ;
+	protected JPanel mPanel ;
+	protected JLabel mTitleLabel ;
 	
 	//protected abstract OptionPanel openPanel();
 	
@@ -43,7 +43,7 @@ public abstract class OptionPanel extends JPanel
 	{
 		JButton button = new JButton(name);
 		gridbag.setConstraints(button, c);
-		panel.add(button);
+		mPanel.add(button);
 	}
 	protected void makeLabel(String name,
 							  GridBagLayout gridbag,
@@ -51,14 +51,14 @@ public abstract class OptionPanel extends JPanel
 	{
 		JLabel label = new JLabel(name);
 		gridbag.setConstraints(label, c);
-		panel.add(label);
+		mPanel.add(label);
 	}
 	public String getName ()				
 	{
-			return this.title.getText() ;
+			return this.mTitleLabel.getText() ;
 	}
 	public void setName (String name)				
 	{
-			this.title.setText(name) ;
+			this.mTitleLabel.setText(name) ;
 	}
 }

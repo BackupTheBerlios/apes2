@@ -21,13 +21,17 @@
 package org.ipsquad.apes.ui.actions;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
+import org.ipsquad.apes.Context;
+import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.PreferencesDialog;
 
 
 /**
 *
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 public class PreferencesAction extends ApesAction
 {
@@ -38,11 +42,20 @@ public class PreferencesAction extends ApesAction
 	public void actionPerformed(ActionEvent e)
 	{
 		PreferencesDialog pref = new PreferencesDialog();
-		pref.setBounds(100,50,300,20) ;
+		pref.addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				((PreferencesDialog)e.getWindow()).cancelSave();
+				((PreferencesDialog)e.getWindow()).dispose();
+				
+			}
+		});
+		ApesFrame frame = (ApesFrame)Context.getInstance().getTopLevelFrame();
 		pref.setSize(600,450);
+		pref.setLocation(frame.getX()+(frame.getWidth()-pref.getWidth())/2,frame.getY()+(frame.getHeight()-pref.getHeight())/2);
 		pref.setResizable(false);
 		pref.setVisible (true) ;
-		pref.pack() ;
 
 	}
 }

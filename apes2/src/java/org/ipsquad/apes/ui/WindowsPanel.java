@@ -40,20 +40,23 @@ import org.ipsquad.utils.ConfigManager;
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WindowsPanel extends OptionPanel 
 {
-	private JRadioButton errorPanelYes ;
-	private JRadioButton errorPanelNo ;
-	private String panelkey;
+	private JRadioButton mYesButton ;
+	private JRadioButton mNoButton ;
+	private String mPanelKey;
+	
+	public static final String ERROR_PANEL_KEY = "ErrorPanelTitle" ;
+	
 	public WindowsPanel(String name)
 	{
-		this.title = new JLabel (name) ;
+		this.mTitleLabel = new JLabel (name) ;
 		this.setLayout(new BorderLayout());
-		panel = new JPanel() ;
+		mPanel = new JPanel() ;
 		GridBagLayout gridbag = new GridBagLayout();
-		panel.setLayout(gridbag);
+		mPanel.setLayout(gridbag);
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Title
@@ -61,12 +64,12 @@ public class WindowsPanel extends OptionPanel
 		c.weighty = 0 ;
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row			//	title
-		this.title = new JLabel (name);
+		this.mTitleLabel = new JLabel (name);
 		TitledBorder titleBor = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK));
 		titleBor.setTitleJustification(TitledBorder.CENTER);
-		title.setBorder(titleBor);
-		gridbag.setConstraints(title, c);
-		panel.add(title);
+		mTitleLabel.setBorder(titleBor);
+		gridbag.setConstraints(mTitleLabel, c);
+		mPanel.add(mTitleLabel);
 
 		// linefeed
 		c.weighty = 0;      		
@@ -83,18 +86,18 @@ public class WindowsPanel extends OptionPanel
 		JPanel errorPanel = new JPanel();
 		errorPanel.setBorder(titleStyle);
 		gridbag.setConstraints(errorPanel, c);
-		panel.add(errorPanel);
+		mPanel.add(errorPanel);
 		JLabel label = new JLabel(PreferencesDialog.resMan.getString("ErrorPanelLib"));
-		this.errorPanelYes = new JRadioButton (PreferencesDialog.resMan.getString("LibYes"));
-		this.errorPanelYes.setSelected(true);
-		this.errorPanelNo = new JRadioButton (PreferencesDialog.resMan.getString("LibNo"));
+		this.mYesButton = new JRadioButton (PreferencesDialog.resMan.getString("LibYes"));
+		this.mYesButton.setSelected(true);
+		this.mNoButton = new JRadioButton (PreferencesDialog.resMan.getString("LibNo"));
 		final ButtonGroup choice = new ButtonGroup();
-		choice.add(this.errorPanelYes);
-		choice.add(this.errorPanelNo);
+		choice.add(this.mYesButton);
+		choice.add(this.mNoButton);
 		errorPanel.setLayout(new GridLayout(4,1));
 		errorPanel.add(label);
-		errorPanel.add(this.errorPanelYes);
-		errorPanel.add(this.errorPanelNo);
+		errorPanel.add(this.mYesButton);
+		errorPanel.add(this.mNoButton);
 
 		//		linefeed 
 		c.fill = GridBagConstraints.VERTICAL;
@@ -103,27 +106,29 @@ public class WindowsPanel extends OptionPanel
 		makeLabel(" ", gridbag, c);
    
 		this.add(new JLabel("    "),BorderLayout.WEST);
-		this.add(panel,BorderLayout.CENTER);
+		this.add(mPanel,BorderLayout.CENTER);
 	}
 	
 	public OptionPanel openPanel(String key)
 	{
-		this.panelkey = key;
+		this.mPanelKey = key;
 		this.setName(PreferencesDialog.resMan.getString(key)) ;
-		this.errorPanelYes.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"yes"))).booleanValue());
-		this.errorPanelNo.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"no"))).booleanValue());
+		this.mYesButton.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"yes"))).booleanValue());
+		this.mNoButton.setSelected((new Boolean(ConfigManager.getInstance().getProperty(key+"no"))).booleanValue());
 		return this ;
 	}
 	
 	public void saveTemp ()
 	{
-		PreferencesDialog.propTemp.setProperty(panelkey+"yes", new Boolean(this.errorPanelYes.isSelected()).toString());
+		PreferencesDialog.propTemp.setProperty(mPanelKey+"yes", new Boolean(this.mYesButton.isSelected()).toString());
+		PreferencesDialog.propTemp.setProperty(mPanelKey+"no", new Boolean(this.mYesButton.isSelected()).toString());
 	}
 	
 	public void save ()
 	{
 		String name = new String(this.getName()) ;
-		ConfigManager.getInstance().setProperty(panelkey+"yes", new Boolean(this.errorPanelYes.isSelected()).toString());
+		ConfigManager.getInstance().setProperty(mPanelKey+"yes", new Boolean(this.mYesButton.isSelected()).toString());
+		ConfigManager.getInstance().setProperty(mPanelKey+"no", new Boolean(this.mNoButton.isSelected()).toString());
 		try
 		{
 			ConfigManager.getInstance().save() ;

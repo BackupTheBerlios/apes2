@@ -22,108 +22,57 @@ package org.ipsquad.apes.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-
+import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
+import org.ipsquad.apes.adapters.ApesTreeNode;
+import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.utils.ConfigManager;
+import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PreferencesDialog extends JDialog 
 {
-	private JTree tree ;
-	private ColorFontPanel ColorFontOption ;
-	private DefaultPathPanel DefaultOption ;
-	private WindowsPanel windowsOption ;
-	private DescriptionPanel description ;
-	private JPanel innerPanel ;
+	private ColorFontPanel mColorFontOption ;
+	private DefaultPathPanel mDefaultOption ;
+	private WindowsPanel mWindowsOption ;
+	private DescriptionPanel mDescriptionOption ;
+	private JPanel mInnerPanel ;
+	private LanguagePanel mLanguagePanel;
+	
 	public static ResourceManager resMan = ResourceManager.getInstance();
 	public static Properties propTemp ;
+	
 	public PreferencesDialog()
 	{
 		super((ApesFrame)Context.getInstance().getTopLevelFrame(),resMan.getString("DlgPreferencesTitle"),true) ;
 		this.getContentPane().setLayout(new BorderLayout());
 		// create the tree
-		tree = new JTree();
-		ManagerTree gp = new ManagerTree();
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode(new PreferencesTreeItem
-			("DlgPreferencesTitle",resMan.getString("DlgPreferencesTitle"),0));
-			
-		DefaultMutableTreeNode appearanceTree = new DefaultMutableTreeNode(new PreferencesTreeItem
-				("AppearanceTitle",resMan.getString("AppearanceTitle"),PreferencesTreeItem.DESC_PANEL));
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				("ActivityTitle",resMan.getString("ActivityTitle"),PreferencesTreeItem.COLOR_PANEL)));
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				("RoleTitle",resMan.getString("RoleTitle"),PreferencesTreeItem.COLOR_PANEL)));
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				("GuardTitle",resMan.getString("GuardTitle"),PreferencesTreeItem.COLOR_PANEL)));
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				("StateTitle",resMan.getString("StateTitle"),PreferencesTreeItem.COLOR_PANEL)));	
-			DefaultMutableTreeNode workProductTree = new DefaultMutableTreeNode(new PreferencesTreeItem("WorkproductTitle",resMan.getString("WorkproductTitle"),PreferencesTreeItem.COLOR_PANEL));
-						workProductTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-							("WorkproductProvidedTitle",resMan.getString("WorkproductProvidedTitle"),PreferencesTreeItem.COLOR_PANEL)));	
-						workProductTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-							("WorkproductRequiredTitle",resMan.getString("WorkproductRequiredTitle"),PreferencesTreeItem.COLOR_PANEL)));
-			appearanceTree.add(workProductTree);
-		DefaultMutableTreeNode defaultTree = new DefaultMutableTreeNode(new PreferencesTreeItem
-				("DefaultPathTitle",resMan.getString("DefaultPathTitle"),PreferencesTreeItem.DESC_PANEL));
-			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				("ToolPresentationTitle",resMan.getString("ToolPresentationTitle"),PreferencesTreeItem.PATH_PANEL)));
-			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				("WorkspaceTitle",resMan.getString("WorkspaceTitle"),PreferencesTreeItem.PATH_PANEL)));	
-			
-				
-				//defaultTree.setAllowsChildren(false);
-		DefaultMutableTreeNode windowsTree = new DefaultMutableTreeNode(new PreferencesTreeItem
-					("WindowsTitle",resMan.getString("WindowsTitle"),PreferencesTreeItem.DESC_PANEL));
-				windowsTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-					("ErrorPanelTitle",resMan.getString("ErrorPanelTitle"),PreferencesTreeItem.ERROR_PANEL)));
-				
-		
-		root.add(appearanceTree);
-		root.add(defaultTree);
-		root.add(windowsTree);
-		tree.setRootVisible(false);
-		tree.addTreeSelectionListener(gp);
-		tree.setModel (new DefaultTreeModel(root));
-		tree.setPreferredSize(new Dimension(170,500));
-		
-		
-		propTemp = new Properties() ;
-		Enumeration enum = ConfigManager.getInstance().getProperties().propertyNames();
-		while ( enum.hasMoreElements())
-		{
-			String key = (String) enum.nextElement();
-			String value = ConfigManager.getInstance().getProperty(key) ;
-			propTemp.setProperty(key,value) ;
-						
-		}
-		
+		PreferencesTree tree = new PreferencesTree(this);
+		this.initPreferencesDialog();
 		Container panelMarge = getContentPane();
-		this.innerPanel = new JPanel() ;
-		innerPanel.setLayout(new BorderLayout());
-		innerPanel.add(tree,BorderLayout.WEST) ;
-		// add the buttons ok and cancel
+		this.mInnerPanel = new JPanel() ;
+		mInnerPanel.setLayout(new BorderLayout());
+		mInnerPanel.add(tree,BorderLayout.WEST) ;
+		// add the buttons ok and cancel and apply
 		ManagerButton manageButt = new ManagerButton() ;
 		Box bottom = Box.createHorizontalBox() ;
 		JButton apply = new JButton (resMan.getString("LibApply")) ;
@@ -137,39 +86,124 @@ public class PreferencesDialog extends JDialog
 		bottom.add(ok);
 		bottom.add(cancel);
 		tree.setBorder(BorderFactory.createLoweredBevelBorder());
-
-		innerPanel.add(bottom,BorderLayout.SOUTH);
-		innerPanel.add(description,BorderLayout.CENTER);
+		mInnerPanel.add(bottom,BorderLayout.SOUTH);
+		mInnerPanel.add(mDescriptionOption,BorderLayout.CENTER);
 		// create the panel
-		panelMarge.add(innerPanel,BorderLayout.CENTER);
+		panelMarge.add(mInnerPanel,BorderLayout.CENTER);
 		panelMarge.add(new JLabel(" "),BorderLayout.NORTH);
 		panelMarge.add(new JLabel("   "),BorderLayout.EAST);
 		panelMarge.add(new JLabel("   "),BorderLayout.WEST);
 		panelMarge.add(new JLabel(" "),BorderLayout.SOUTH);
 	}
 	
+	public void initPreferencesDialog ()
+	{
+		this.copyProperties();
+		PreferencesDialog.this.mDescriptionOption = new DescriptionPanel(resMan.getString(DescriptionPanel.APPEARANCE_KEY)) ;
+		PreferencesDialog.this.mDescriptionOption.openPanel(DescriptionPanel.APPEARANCE_KEY);
+		PreferencesDialog.this.mColorFontOption = new ColorFontPanel(resMan.getString(ColorFontPanel.ACTIVITY_KEY));
+		PreferencesDialog.this.mDefaultOption = new DefaultPathPanel(resMan.getString(DefaultPathPanel.TOOL_PRESENTATION_KEY));
+		PreferencesDialog.this.mWindowsOption = new WindowsPanel(resMan.getString(WindowsPanel.ERROR_PANEL_KEY));
+		PreferencesDialog.this.mLanguagePanel = new LanguagePanel(resMan.getString(LanguagePanel.LANGUAGE_PANEL_KEY)); 
+		PreferencesDialog.this.mColorFontOption.setVisible(false);
+		PreferencesDialog.this.mWindowsOption.setVisible(false);
+		PreferencesDialog.this.mDefaultOption.setVisible(false);
+		PreferencesDialog.this.mLanguagePanel.setVisible(false);
+		PreferencesDialog.this.mDescriptionOption.setVisible(true);
+	}
+	
+	public ColorFontPanel getColorFontPanel()
+	{
+		return this.mColorFontOption ;
+	}
+
+	public DefaultPathPanel getDefaultPathPanel()
+	{
+		return this.mDefaultOption ;
+	}
+
+	public WindowsPanel getWindowsPanel()
+	{
+		return this.mWindowsOption ;
+	}
+
+	public DescriptionPanel getDescriptionPanel()
+	{
+		return this.mDescriptionOption ;
+	}
+	public LanguagePanel getLanguagePanel()
+	{
+		return this.mLanguagePanel ;
+	}
+	
 	public void setInnerPanel(int panel,String key)
 	{
 		if (panel == PreferencesTreeItem.COLOR_PANEL)
-		{
-			innerPanel.add(ColorFontOption.openPanel(key),BorderLayout.CENTER);
-		}
+			mInnerPanel.add(mColorFontOption.openPanel(key),BorderLayout.CENTER);
 		if(panel == PreferencesTreeItem.PATH_PANEL)
-		{
-			innerPanel.add(DefaultOption.openPanel(key),BorderLayout.CENTER);
-		}
+			mInnerPanel.add(mDefaultOption.openPanel(key),BorderLayout.CENTER);
 		if(panel == PreferencesTreeItem.ERROR_PANEL)
-		{
-			innerPanel.add(windowsOption.openPanel(key),BorderLayout.CENTER);
-		}
+			mInnerPanel.add(mWindowsOption.openPanel(key),BorderLayout.CENTER);
 		if(panel == PreferencesTreeItem.DESC_PANEL)
-		{
-			innerPanel.add(description.openPanel(key),BorderLayout.CENTER);
-		}
-		
+			mInnerPanel.add(mDescriptionOption.openPanel(key),BorderLayout.CENTER);		
+		if(panel == PreferencesTreeItem.LANGUAGE_PANEL)                                 						
+			mInnerPanel.add(mLanguagePanel.openPanel(key),BorderLayout.CENTER);
 	}
-
-	private void cancelSave()
+	
+	private void copyProperties()
+	{
+		propTemp = new Properties() ;
+		Enumeration enum = ConfigManager.getInstance().getProperties().propertyNames();
+		while ( enum.hasMoreElements())
+		{
+			String key = (String) enum.nextElement();
+			String value = ConfigManager.getInstance().getProperty(key) ;
+			propTemp.setProperty(key,value) ;
+				
+		}
+	}
+	private void changeLanguage()
+	{
+		ApesFrame mainFrame = (ApesFrame)Context.getInstance().getTopLevelFrame(); 
+		JInternalFrame[] frames = mainFrame.getDesktop().getAllFrames();
+		JInternalFrame frameSelected = mainFrame.getDesktop().getSelectedFrame();
+		JTree tree = mainFrame.getTree();
+		String filePath = mainFrame.getFilePath();
+		mainFrame.dispose();
+		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
+		SpemTreeAdapter model = (SpemTreeAdapter)tree.getModel();
+		ApesTreeNode project = (ApesTreeNode)model.getRoot();
+		ApesTreeNode component =  (ApesTreeNode)project.getChildAt(0);
+		model.change(project,resMan.getString("project"));
+		model.change(component,resMan.getString("component"));
+		model.change((ApesTreeNode)project.getChildAt(1),resMan.getString("interface")+resMan.getString("provided"));
+		model.change((ApesTreeNode)project.getChildAt(2),resMan.getString("interface")+resMan.getString("required"));
+		model.change((ApesTreeNode)component.getChildAt(0),resMan.getString("contextDiagram"));
+		Context context = Context.getInstance();
+		
+		ApesMain.initActions(context);
+		ApesFrame f = new ApesFrame(tree);
+		context.setTopLevelFrame(f);
+	
+		ErrorManager.getInstance().setOwner(f.getContentPane());
+		f.setFilePath(filePath);
+		f.show();
+		for(int i = 0; i< frames.length;i++)
+		{		
+			if(!frames[i].equals(frameSelected))
+			{
+				f.openDiagram(((GraphFrame)frames[i]).getGraphModel());
+				f.getDesktop().getAllFrames()[0].setBounds(frames[i].getBounds());
+			}
+		}
+		if(frameSelected != null)
+		{	
+			f.openDiagram(((GraphFrame)frameSelected).getGraphModel());
+			f.getDesktop().getAllFrames()[0].setBounds(frameSelected.getBounds());
+		}
+	}   
+	
+	public void cancelSave()
 	{
 		Properties prop = ConfigManager.getInstance().getProperties();
 		Enumeration enum = prop.propertyNames();
@@ -192,108 +226,42 @@ public class PreferencesDialog extends JDialog
 			
 			}
 		}
-
-	}
-	
-	private class ManagerTree implements TreeSelectionListener
-	{
-			public ManagerTree()
-			{
-				PreferencesDialog.this.description = new DescriptionPanel(resMan.getString("AppearanceTitle")) ;
-				PreferencesDialog.this.description.openPanel("AppearanceTitle");
-				PreferencesDialog.this.ColorFontOption = new ColorFontPanel(resMan.getString("ActivityTitle"));
-				PreferencesDialog.this.DefaultOption = new DefaultPathPanel(resMan.getString("ToolPresentationTitle"));
-				PreferencesDialog.this.windowsOption = new WindowsPanel(resMan.getString("ErrorPanelTitle"));
-				PreferencesDialog.this.ColorFontOption.setVisible(true);
-				PreferencesDialog.this.DefaultOption.setVisible(true);
-			}
-			public void valueChanged (TreeSelectionEvent e)
-			{
-				if (PreferencesDialog.this.windowsOption.isVisible())
-				{
-						PreferencesDialog.this.windowsOption.save() ;
-				}
-				else
-				{
-					if (PreferencesDialog.this.ColorFontOption.isVisible())
-					{
-						PreferencesDialog.this.ColorFontOption.save() ;
-					}
-					else
-					{
-						if (PreferencesDialog.this.DefaultOption.isVisible())
-						{
-							PreferencesDialog.this.DefaultOption.save() ;
-						}
-					}
-				}
-				Object o = e.getSource () ;
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				int panel = ((PreferencesTreeItem)node.getUserObject()).getPanel();		
-				String key = ((PreferencesTreeItem)node.getUserObject()).getKey();
-				if (panel == PreferencesTreeItem.COLOR_PANEL)
-				{
-					PreferencesDialog.this.ColorFontOption.setVisible(true);
-					PreferencesDialog.this.DefaultOption.setVisible(false);
-					PreferencesDialog.this.windowsOption.setVisible(false);
-					PreferencesDialog.this.description.setVisible(false);
-				}
-				if(panel == PreferencesTreeItem.PATH_PANEL)
-				{
-					PreferencesDialog.this.ColorFontOption.setVisible(false);
-					PreferencesDialog.this.DefaultOption.setVisible(true);
-					PreferencesDialog.this.windowsOption.setVisible(false);
-					PreferencesDialog.this.description.setVisible(false);
-				}
-				if(panel == PreferencesTreeItem.ERROR_PANEL)
-				{
-					PreferencesDialog.this.ColorFontOption.setVisible(false);
-					PreferencesDialog.this.DefaultOption.setVisible(false);
-					PreferencesDialog.this.windowsOption.setVisible(true);
-					PreferencesDialog.this.description.setVisible(false);
-				}
-				if(panel == PreferencesTreeItem.DESC_PANEL)
-				{
-					PreferencesDialog.this.ColorFontOption.setVisible(false);
-					PreferencesDialog.this.DefaultOption.setVisible(false);
-					PreferencesDialog.this.windowsOption.setVisible(false);
-					PreferencesDialog.this.description.setVisible(true);
-				}
-			
-				PreferencesDialog.this.setInnerPanel(panel,key);
-			}		
 	}
 	
 	private class ManagerButton implements ActionListener
 	{
-		private ManagerButton ()
-		{
-			
-		}
 		public void actionPerformed(ActionEvent e)
 		{
 			Object o = e.getSource () ;
 			JButton buttonClik = (JButton) o ;
 			if (buttonClik.getText().equals(resMan.getString("LibOK")) || buttonClik.getText().equals(resMan.getString("LibApply")))
 			{
-				if (PreferencesDialog.this.windowsOption.isVisible())
+				if (PreferencesDialog.this.mWindowsOption.isVisible())
 				{
-						PreferencesDialog.this.windowsOption.save() ;
-						PreferencesDialog.this.windowsOption.saveTemp() ;
+						PreferencesDialog.this.mWindowsOption.save() ;
+						PreferencesDialog.this.mWindowsOption.saveTemp() ;
 				}
 				else
 				{
-					if (PreferencesDialog.this.ColorFontOption.isVisible())
+					if (PreferencesDialog.this.mColorFontOption.isVisible())
 					{
-						PreferencesDialog.this.ColorFontOption.save() ;
-						PreferencesDialog.this.ColorFontOption.saveTemp() ;
+						PreferencesDialog.this.mColorFontOption.save() ;
+						PreferencesDialog.this.mColorFontOption.saveTemp() ;
 					}
 					else
 					{
-						if (PreferencesDialog.this.DefaultOption.isVisible())
+						if (PreferencesDialog.this.mDefaultOption.isVisible())
 						{
-							PreferencesDialog.this.DefaultOption.save() ;
-							PreferencesDialog.this.DefaultOption.saveTemp() ;
+							PreferencesDialog.this.mDefaultOption.save() ;
+							PreferencesDialog.this.mDefaultOption.saveTemp() ;
+						}
+						else
+						{
+							if(PreferencesDialog.this.mLanguagePanel.isVisible())
+							{
+								PreferencesDialog.this.mLanguagePanel.save();
+								PreferencesDialog.this.mLanguagePanel.saveTemp();
+							}
 						}
 					}
 				}
@@ -304,11 +272,15 @@ public class PreferencesDialog extends JDialog
 			}
 			else
 			{
-				if (buttonClik.getText().equals(resMan.getString("LibCancel")))
+				if (buttonClik.getText().equals(resMan.getString("LibCancel")));
 				{	
 					PreferencesDialog.this.cancelSave() ;
-					PreferencesDialog.this.dispose();
+					PreferencesDialog.this.dispose();		
 				}
+			}
+			if (mLanguagePanel.hasLanguageChanged())
+			{
+				changeLanguage();
 			}
 		}
 	}

@@ -32,18 +32,23 @@ import javax.swing.border.TitledBorder;
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class DescriptionPanel extends OptionPanel
 {
-	private JLabel description ;
+	private JLabel mDescriptionLabel ;
+	
+	public static final String APPEARANCE_KEY = "AppearanceTitle" ;
+	public static final String DEFAULT_PATH_KEY = "DefaultPathTitle" ;
+	public static final String WINDOWS_KEY = "WindowsTitle" ;
+	
 	public DescriptionPanel(String name)
 	{
-		this.title = new JLabel (name) ;
+		this.mTitleLabel = new JLabel (name) ;
 		this.setLayout(new BorderLayout());
-		panel = new JPanel() ;
+		mPanel = new JPanel() ;
 		GridBagLayout gridbag = new GridBagLayout();
-		panel.setLayout(gridbag);
+		mPanel.setLayout(gridbag);
 		GridBagConstraints c = new GridBagConstraints();
 
 		// Title
@@ -51,12 +56,12 @@ public class DescriptionPanel extends OptionPanel
 		c.weighty = 0 ;
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row			//	title
-		this.title = new JLabel (name);
+		this.mTitleLabel = new JLabel (name);
 		TitledBorder titleBor = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK));
 		titleBor.setTitleJustification(TitledBorder.CENTER);
-		title.setBorder(titleBor);
-		gridbag.setConstraints(title, c);
-		panel.add(title);
+		mTitleLabel.setBorder(titleBor);
+		gridbag.setConstraints(mTitleLabel, c);
+		mPanel.add(mTitleLabel);
 
 		// linefeed
 		c.weighty = 0;      		
@@ -71,10 +76,10 @@ public class DescriptionPanel extends OptionPanel
 		//TitledBorder titleStyle = BorderFactory.createTitledBorder( loweredetched, "Display Error Panel");
 		//JPanel errorPanel = new JPanel();
 		//errorPanel.setBorder(titleStyle);
-		this.description = new JLabel();
+		this.mDescriptionLabel = new JLabel();
 		this.setDescription(name);
-		gridbag.setConstraints(this.description, c);
-		panel.add(this.description);
+		gridbag.setConstraints(this.mDescriptionLabel, c);
+		mPanel.add(this.mDescriptionLabel);
 
 		//		linefeed 
 		c.fill = GridBagConstraints.VERTICAL;
@@ -83,7 +88,7 @@ public class DescriptionPanel extends OptionPanel
 		makeLabel(" ", gridbag, c);
    
 		this.add(new JLabel("    "),BorderLayout.WEST);
-		this.add(panel,BorderLayout.CENTER);
+		this.add(mPanel,BorderLayout.CENTER);
 	}
 	
 	public OptionPanel openPanel(String key)
@@ -95,17 +100,17 @@ public class DescriptionPanel extends OptionPanel
 	
 	public void setDescription(String key)
 	{
-		if (key.equals("AppearanceTitle"))
+		if (key.equals(APPEARANCE_KEY))
 		{
-			this.description.setText(PreferencesDialog.resMan.getString("LibAppearance"));
+			this.mDescriptionLabel.setText(PreferencesDialog.resMan.getString("LibAppearance"));
 		}
-		if (key.equals("DefaultPathTitle"))
+		if (key.equals(DEFAULT_PATH_KEY))
 		{
-			this.description.setText(PreferencesDialog.resMan.getString("LibDefaultPath"));
+			this.mDescriptionLabel.setText(PreferencesDialog.resMan.getString("LibDefaultPath"));
 		}
-		if (key.equals("WindowsTitle"))
+		if (key.equals(WINDOWS_KEY))
 		{
-			this.description.setText(PreferencesDialog.resMan.getString("LibWindows"));
+			this.mDescriptionLabel.setText(PreferencesDialog.resMan.getString("LibWindows"));
 		}
 	}
 

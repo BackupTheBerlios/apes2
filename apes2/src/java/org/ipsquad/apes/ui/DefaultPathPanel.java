@@ -39,19 +39,23 @@ import javax.swing.border.TitledBorder;
 import org.ipsquad.utils.ConfigManager;
 
 /**
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 public class DefaultPathPanel extends OptionPanel
 {
-	private JTextField defaultPath;
-	private String panelkey;
+	private JTextField mDefaultPath;
+	private String mPanelKey;
+	
+	public static final String TOOL_PRESENTATION_KEY = "ToolPresentationTitle" ;
+	public static final String WORKSPACE_KEY = "WorkspaceTitle" ;
+		
 	public  DefaultPathPanel (String name)
 	{
-			this.title = new JLabel (name) ;
+			this.mTitleLabel = new JLabel (name) ;
 			this.setLayout(new BorderLayout());
-			panel = new JPanel() ;
+			mPanel = new JPanel() ;
 			GridBagLayout gridbag = new GridBagLayout();
-			panel.setLayout(gridbag);
+			mPanel.setLayout(gridbag);
 			GridBagConstraints c = new GridBagConstraints();
 
 			// Title
@@ -59,12 +63,12 @@ public class DefaultPathPanel extends OptionPanel
 			c.weighty = 0 ;
 			c.fill = GridBagConstraints.BOTH;
 			c.gridwidth = GridBagConstraints.REMAINDER; //end row			//	title
-			this.title = new JLabel (name);
+			this.mTitleLabel = new JLabel (name);
 			TitledBorder titleBor = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK));
 			titleBor.setTitleJustification(TitledBorder.CENTER);
-			title.setBorder(titleBor);
-			gridbag.setConstraints(title, c);
-			panel.add(title);
+			mTitleLabel.setBorder(titleBor);
+			gridbag.setConstraints(mTitleLabel, c);
+			mPanel.add(mTitleLabel);
 
 			// linefeed
 			c.weighty = 0;      		
@@ -79,18 +83,18 @@ public class DefaultPathPanel extends OptionPanel
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			JLabel label = new JLabel(PreferencesDialog.resMan.getString("DefaultPathEnterLib"));
 			gridbag.setConstraints(label, c);
-			panel.add(label);
+			mPanel.add(label);
 			c.weightx = 3 ;
 			c.gridwidth = GridBagConstraints.RELATIVE;
-			defaultPath = new JTextField(25);
-			panel.add(defaultPath);
-			gridbag.setConstraints(defaultPath, c);
+			mDefaultPath = new JTextField(25);
+			mPanel.add(mDefaultPath);
+			gridbag.setConstraints(mDefaultPath, c);
 			c.weightx = 0 ;
 			c.gridwidth = GridBagConstraints.REMAINDER; //end row
 			JButton browseButton = new JButton(PreferencesDialog.resMan.getString("LibBrowse"));
 			browseButton.addActionListener(new ManagerButton());
 			gridbag.setConstraints(browseButton, c);
-			panel.add(browseButton);			
+			mPanel.add(browseButton);			
 
 			c.fill = GridBagConstraints.VERTICAL;
 			c.weighty = 2.0; 
@@ -99,23 +103,23 @@ public class DefaultPathPanel extends OptionPanel
 			makeLabel(" ", gridbag, c);
            
 			this.add(new JLabel("    "),BorderLayout.WEST);
-			this.add(panel,BorderLayout.CENTER);
+			this.add(mPanel,BorderLayout.CENTER);
                   
 
 
 	}
 	public OptionPanel openPanel(String key)
 	{
-		this.panelkey = key;
+		this.mPanelKey = key;
 		this.setName(PreferencesDialog.resMan.getString(key)) ;
-		this.defaultPath.setText(ConfigManager.getInstance().getProperty(key+"defaultPath"));
+		this.mDefaultPath.setText(ConfigManager.getInstance().getProperty(key+"defaultPath"));
 		return this ;
 	}
 	
 	public void save ()
 	{
 		String name = new String(this.getName()) ;
-		ConfigManager.getInstance().setProperty(this.panelkey+"defaultPath", this.defaultPath.getText());
+		ConfigManager.getInstance().setProperty(this.mPanelKey+"defaultPath", this.mDefaultPath.getText());
 		try
 		{
 			ConfigManager.getInstance().save() ;
@@ -129,7 +133,7 @@ public class DefaultPathPanel extends OptionPanel
 	public void saveTemp ()
 	{
 	
-		PreferencesDialog.propTemp.setProperty(this.panelkey+"defaultPath", this.defaultPath.getText());
+		PreferencesDialog.propTemp.setProperty(this.mPanelKey+"defaultPath", this.mDefaultPath.getText());
 	
 	}
 	private class ManagerButton implements ActionListener
@@ -143,7 +147,7 @@ public class DefaultPathPanel extends OptionPanel
 			int result = chooser.showDialog(DefaultPathPanel.this.getParent(),PreferencesDialog.resMan.getString("LibOK"));
 			if (result == JFileChooser.APPROVE_OPTION )
 			{
-				defaultPath.setText(chooser.getSelectedFile().getAbsolutePath());
+				mDefaultPath.setText(chooser.getSelectedFile().getAbsolutePath());
 			}
 		}
 	}
