@@ -660,6 +660,9 @@ public class Referentiel extends Observable implements TreeModel
 		ComposantProcessus comp = chargeur.getComposantCharge();
 		HashMap presentation = chargeur.getMapPresentation();
 
+		// Reinitialiser le chemin de fichier du composant
+		//comp.setNomFichier(this.chercherElement(this.nomComposantToId(comp.toString()),ElementReferentiel.COMPOSANT).getChemin());
+		
 		// Remplis les HashMap avec la référence du composant en clé et l'id du composant en valeur
 		this.ajouterReferenceMemoire (comp, idComp) ;
 
@@ -738,9 +741,20 @@ public class Referentiel extends Observable implements TreeModel
 				// si c'est un composant vide on ne vérifie pas
 				if (comp.getNomFichier()!= null)
 				{
-					// On cherche dans le référentiel l'id correspondant au nom du composant
-					idCompo = this.nomComposantToId(this.extraireNomFichier(comp.getNomFichier()));
-		
+				    // Reinitialisation du nom de fichier du composant
+				    ElementReferentiel eRef = this.chercherElement(this.nomComposantToId(comp.toString()),ElementReferentiel.COMPOSANT);
+				    if (eRef != null)
+				    {
+				        comp.setNomFichier(eRef.getChemin());
+				        comp.getPaquetage().setNomFichier(eRef.getChemin());
+				        // On cherche dans le référentiel l'id correspondant au nom du composant
+						idCompo = this.nomComposantToId(this.extraireNomFichier(comp.getNomFichier()));
+				    }
+				    else
+				    {
+				        idCompo = -1;
+				    }
+				    
 					// si renvoie -1, on essaye de charger un composant qui a été supprimé du référentiel
 					if (idCompo == -1)
 					{
@@ -760,12 +774,25 @@ public class Referentiel extends Observable implements TreeModel
 					this.ajouterReferenceMemoire (comp, idCompo) ;
 				}
 			}
-			// c'est un paquetage de présentation qu'il faut aussi vérifié
+			// c'est un paquetage de présentation qu'il faut aussi vérifier
 			else
 			{
 				// on récupère le paquetage
 				paquet = (PaquetagePresentation)tab.get(i);
 				
+				// Reinitialisation du nom de fichier du composant
+			    ElementReferentiel eRef = this.chercherElement(this.nomPresentationToId(paquet.toString()),ElementReferentiel.PRESENTATION);
+			    if (eRef != null)
+			    {
+			        paquet.setNomFichier(eRef.getChemin());
+			        // On cherche dans le référentiel l'id correspondant au nom du composant
+					idPresent = this.nomPresentationToId(this.extraireNomFichier(paquet.getNomFichier()));
+			    }
+			    else
+			    {
+			        idPresent = -1;
+			    }
+			    
 				//On cherche dans le référentiel l'id correspondant au paquetage
 				idPresent = this.nomPresentationToId(this.extraireNomFichier(paquet.getNomFichier()));
 	
@@ -807,6 +834,9 @@ public class Referentiel extends Observable implements TreeModel
 		// Remplis les HashMap avec la référence du composant en clé et l'id du composant en valeur
 		PaquetagePresentation paq = chargeur.getPaquetageCharge() ;
 		this.ajouterReferenceMemoire (paq, idPres) ;
+		
+		// Reinitialiser le chemin
+		//paq.setNomFichier(this.chercherElement(this.nomComposantToId(paq.toString()),ElementReferentiel.COMPOSANT).getChemin());
 
 		// Retourne le paquetage de présentation
 		return paq ;
