@@ -66,6 +66,8 @@ public class GProduit extends GElementModele
 										+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 										+ "</p></td></tr></table></center><BR><BR>\n");
 
+		this.ajouterLienRacine(fd);
+		
 		// affiche les activités dont le produit est en entrée
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ENTREE_ACT") + " </div>\n");
 		Vector listeActivites = this.modele.getActiviteEntree();

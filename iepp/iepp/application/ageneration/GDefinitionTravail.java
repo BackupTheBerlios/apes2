@@ -63,6 +63,7 @@ public class GDefinitionTravail extends GElementModele
 					+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 					+ "</p></td></tr></table></center><BR><BR>\n");
 
+		this.ajouterLienRacine(fd);
 
 		//---------------------SELON OPTION-----------------//
 		switch (GenerationManager.getInstance().getTypeDefTravail())

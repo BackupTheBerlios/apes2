@@ -431,5 +431,12 @@ public class IdObjetModele implements Serializable, Cloneable
 	{
 		this.numRang--;		
 	}
+	/**
+	 * @return
+	 */
+	public String getCheminRacine() 
+	{
+		return (((ComposantProcessus)this.getRef()).getChemin(-1, this.numType));
+	}
 
 }

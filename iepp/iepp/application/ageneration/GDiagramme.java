@@ -97,6 +97,8 @@ public class GDiagramme extends GElementModele
 					+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 					+ "</p></td></tr></table></center><BR>\n");
 
+		this.ajouterLienRacine(fd);
+		
 		fd.write("<div align=\"center\" class=\"imgdiagramme\">" + this.modele.getMapImage("../../", "./") + "</div>");
 		String description = this.element.getDescription();
 		if (description != null)

@@ -70,7 +70,8 @@ public class GActivite extends GElementModele
 								+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 								+ "</p></td></tr></table></center><BR><BR>\n");
 
-	
+		this.ajouterLienRacine(fd);
+		
 		// affiche les produits en entrée / sortie
 		fd.write("<div class=\"titreliste\">"+ Application.getApplication().getTraduction("WEB_PROD_ENTREE") +"</div>\n");
 		// affiche la liste des produits entrée de l'activite

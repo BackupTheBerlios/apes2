@@ -63,6 +63,16 @@ public class GElementModele extends GElement
 	}
 	
 	/**
+	 * Renvoie le chemin du fichier html du composant racine
+	 * @return
+	 */
+	public String getCheminRacine()
+	{
+		return (this.modele.getCheminRacine());
+	}
+	
+	
+	/**
 	 * Méthode permettant de traiter les éléments de présentation liés à un élément de modèle
 	 */
 	public void traiterGeneration() throws IOException
@@ -76,6 +86,18 @@ public class GElementModele extends GElement
 			// on crée le fichier correspondant
 			this.creerFichierDescription();
 		}
+	}
+	
+	/**
+	 * Méthode permettant d'ajouter un lien sur la page vers le composant racine
+	 * @param fd
+	 * @throws IOException
+	 */
+	public void ajouterLienRacine(FileWriter fd) throws IOException
+	{
+		fd.write("<br>");
+		fd.write("<a href=\"../../" + this.getCheminRacine() + "\" target=\"_new\" >" + " Page d'accueil du composant" + "</a>");
+		fd.write("<br>");
 	}
 	
 	/**

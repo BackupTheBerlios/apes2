@@ -14,7 +14,7 @@ Sauver=Save Process
 SauverSous=Save Process As
 Exporter=Export Process
 Quitter=Exit
-Affichage=Affichage
+Affichage=Display
 Preferences=Preferences
 Edition=Edition
 Reduire=Zoom out
@@ -45,6 +45,7 @@ BD_SAUV_AVAT_FERMER=Do you want to save the current process before closing?
 Confirmation=Confirmation
 OK=Ok
 Annuler=Cancel
+Appliquer=Apply
 Choisir_Dossier=Choose directory
 msgSauvegarde=Save
 msgConfirmEcrasement=This file already exists, do you want to delete it?
@@ -294,3 +295,13 @@ propos_texte=\n  This program is a free software.
 propos_texte2=\n  You can redistribute it and/or modify it under terms of the
 propos_texte3=\n  GNU General Public License as published by the Free Software Foundation,  
 propos_texte4=\n  either version 2 of the License, or any later version.  \n
+
+
+#Preferences
+GeneralTitleDesc=Les paramètres généraux
+GenerationTitleDesc=Paramètres de génération du site Web
+RepositoryTitleDesc=Paramètres concernant le référentiel
+GeneralTitle=General
+GenerationTitle=Génération
+RepositoryTitle=Référentiel
+LanguageTitle=Language

@@ -70,6 +70,8 @@ public class GPaquetage extends GElementModele
 								+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 								+ "</p></td></tr></table></center><BR><BR>\n");
 		
+		this.ajouterLienRacine(fd);
+		
 		String description = this.element.getDescription();
 		if (description != null)
 		{

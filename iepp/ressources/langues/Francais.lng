@@ -47,6 +47,7 @@ BD_SAUV_AVAT_FERMER=Voulez-vous sauvegarder le processus courant avant de fermer
 Confirmation=Confirmation
 OK=Ok
 Annuler=Annuler
+Appliquer=Appliquer
 Choisir_Dossier=Choisir un dossier
 msgSauvegarde=Sauvegarde
 msgConfirmEcrasement=Le fichier existe deja, voulez-vous l'écraser?
@@ -294,3 +295,12 @@ propos_texte=\n  Ce programme est un logiciel libre.
 propos_texte2=\n  Vous pouvez le redistribuer et/ou le modifier selon les termes de la
 propos_texte3=\n  GNU General Public License telle que publiée par la Free Software Foundation,  
 propos_texte4=\n  à la version 2 de la Licence, ou ultérieure.  \n
+
+#Preferences
+GeneralTitleDesc=Les paramètres généraux
+GenerationTitleDesc=Paramètres de génération du site Web
+RepositoryTitleDesc=Paramètres concernant le référentiel
+GeneralTitle=General
+GenerationTitle=Génération
+RepositoryTitle=Référentiel
+LanguageTitle=Langue

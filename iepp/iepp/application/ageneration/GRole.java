@@ -48,6 +48,8 @@ public class GRole extends GElementModele
 						+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 						+ "</p></td></tr></table></center><BR><BR>\n");
 
+		this.ajouterLienRacine(fd);
+		
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ACTIVITES") + " </div>\n");
 		
 		// affiche la liste des activités dans le role est responsable

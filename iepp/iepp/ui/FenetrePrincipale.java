@@ -35,6 +35,7 @@ import iepp.application.areferentiel.Referentiel;
 import iepp.application.averification.CVerification;
 import iepp.ui.ireferentiel.VueReferentielArbre;
 import iepp.ui.iverification.PanneauVerification;
+import iepp.ui.preferences.FenetrePreference;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -624,7 +625,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 			 
 			else if ((source == this.propriete ) || source == this.bpreferences)
 			{
-				JDialog dialogueProp = new FenetrePreferences(this,"");
+				JDialog dialogueProp = new FenetrePreference(this);
 			}
 			else if (source == this.propos)
 			{

@@ -134,6 +134,9 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	 */
 	private HashMap mapId = null;
 	
+	private HashMap mapApesPresent = null;
+	
+	
 	
 	/**
 	 * Construction d'un composant vide
@@ -146,6 +149,7 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 		this.listeLiens = new Vector();
 		// initialiser la map
 		this.mapId = new HashMap();
+		this.mapApesPresent = new HashMap();
 		this.interfaceIn = new Vector();
 		this.interfaceOut = new Vector();
 		this.activites = new Vector();
@@ -153,7 +157,6 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 		this.listePaquetage = new Vector();
 		this.listeDiagramme = new Vector();
 		this.produits = new Vector();
-		this.mapId = new HashMap();
 		this.listeDefinition = new Vector();
 		this.paquetage = new PaquetagePresentation();
 		this.estComposantVide = false;
@@ -187,7 +190,7 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	
 	public void initialiser(HashMap elementsPresentation)
 	{
-		this.mapId = elementsPresentation;
+		this.mapApesPresent = elementsPresentation;
 		this.parcourir(this.composantAPES);
 		// associer les éléments du modèle à des éléments de présentation
 		// traiter les activités
@@ -198,7 +201,7 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 		this.associerModelePresentation(this.getDefinitionTravail());
 		this.associerModelePresentation(this.getPaquetages());
 		// on associe la présentation au composant courant
-		ElementPresentation elem = (ElementPresentation)this.mapId.get(new Integer(this.idComposant.getID()));
+		ElementPresentation elem = (ElementPresentation)this.mapApesPresent.get(new Integer(this.idComposant.getID()));
 		if ( elem != null )
 		{
 			elem.setElementModele(this.idComposant);
@@ -212,7 +215,7 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 		{
 			IdObjetModele id = (IdObjetModele)listeId.elementAt(i);
 			// récupérer l'élément du
-			ElementPresentation elem = (ElementPresentation)this.mapId.get(new Integer(id.getID()));
+			ElementPresentation elem = (ElementPresentation)this.mapApesPresent.get(new Integer(id.getID()));
 			if ( elem != null )
 			{
 				elem.setElementModele(id);
@@ -1308,21 +1311,32 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 				{
 					mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + this.getChemin(-1,-1)+"\">\n");
 				}
-				// récupérer l'ID de l'élément courant
-				int ID_Apes = ((ApesGraphCell)o[i]).getID();
-				ElementPresentation elem = (ElementPresentation)this.mapId.get(new Integer(ID_Apes));
-				if ( elem != null )
+				else
 				{
-					IdObjetModele id = elem.getElementModele();
-					if (id != null)
+					// récupérer l'ID de l'élément courant
+					int ID_Apes = ((ApesGraphCell)o[i]).getID();
+					ElementPresentation elem = (ElementPresentation)this.mapApesPresent.get(new Integer(ID_Apes));
+					if ( elem != null )
 					{
-						// rajouté: info-bulle contenant la description de l'élément
-						String description = "ALT=\"\"";
-						if (elem.getDescription() != null)
+						IdObjetModele id = elem.getElementModele();
+						if (id != null)
 						{
-							description = "ALT=\"" + elem.getDescription() + "\"";
+							// rajouté: info-bulle contenant la description de l'élément
+							String description = "ALT=\"\"";
+							if (elem.getDescription() != null)
+							{
+								description = "ALT=\"" + elem.getDescription() + "\"";
+							}
+							mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + id.getChemin()+ "\" " + description + ">\n");
 						}
-						mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + id.getChemin()+ "\" " + description + ">\n");
+						else
+						{
+							System.out.println("BOH : " + elem.getNomPresentation());
+						}
+					}
+					else
+					{
+						System.err.println("BouhOU : " + ID_Apes);
 					}
 				}
 			}
