@@ -60,6 +60,15 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 	 */
 	private VueDPGraphe diagramme;
 	
+	/**
+	 * Indicateur d'une suppression totale du produit fusion 
+	 */
+	private boolean suppTout;
+	/**
+	 * Resultat de la suppression globale 
+	 */
+	private boolean resSupp;
+	
 	
 	/**
 	 * Constructeur de la commande
@@ -72,6 +81,10 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 		this.diagramme = d;
 		// lien à supprimer
 		this.leLien = leLien;
+		
+		this.suppTout = false;
+		this.resSupp = true;
+		
 		
 		//Recherche du produit fusion
 		if (leLien.getSource() instanceof FProduitFusion)
@@ -90,6 +103,24 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 			{
 				this.produitFusion = null;
 			}
+		}
+		
+		// Tester s'il reste des produits dans le produit fusion, ou s'il ne reste pas que des produits en sortie
+		if (this.produitFusion.estLienPrimaire(this.leLien))
+		{
+		    this.suppTout = true;
+		    // Tout effacer
+		    for (int i = 0; i<this.produitFusion.getNombreProduits(); i++)
+		    {
+		        if (this.produitFusion.getLienFusion(i) != this.leLien)
+		        {
+		            boolean res = new CSupprimerLienFusion(this.diagramme,this.produitFusion.getLienFusion(i)).executer();
+		            if (resSupp)
+		            {
+		                resSupp = res;
+		            }
+		        }
+		    }
 		}
 	}
 	
@@ -133,8 +164,8 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 			}
 			
 			diagramme.supprimerFigure((FLien)leLien);
-			
-			// Test s'il reste des produits dans le produit fusion
+		
+		
 			if (produitFusion.getNombreProduits() == 1)
 			{
 				FProduit fprod2 = (FProduit)produitFusion.getLastProduit();
@@ -146,7 +177,7 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 				
 				// Suppression du lien dans les composant
 				((ComposantProcessus)(this.leComposant.getModele().getId().getRef())).supprimerLien(leLien);
-
+	
 				if (fprod2.getModele().getId().estProduitSortie())
 				{
 					FElement leComposant2 = produitFusion.getLienFusion(0).getSource();
@@ -164,10 +195,17 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 									   fprod2,
 									   leComposant2,
 									   new Vector()).executer();
-				}
+				}			
 			}
-			
-			return true;
+		}
+		
+		if (suppTout)
+		{
+		    return resSupp;
+		}
+		else
+		{
+		    return true;
 		}
 	}
 	

@@ -21,6 +21,7 @@ package iepp.ui.iedition.dessin.rendu;
 
 
 import iepp.Application;
+import iepp.domaine.IdObjetModele;
 import iepp.domaine.ObjetModele;
 import iepp.ui.FenetreRenommerProduitFusion;
 import iepp.ui.iedition.dessin.rendu.liens.FLienFusion;
@@ -226,7 +227,20 @@ public class FProduitFusion extends FElement
 	public FProduit removeProduit(FLienFusion laClef)
 	{
 		vecteurLienFusion.remove(laClef);
-		return (FProduit)mapFProduits.remove(laClef);
+		FProduit retour = (FProduit)mapFProduits.remove(laClef);
+		
+		/*
+		Normalement la fusion n'a alors plus de sens (plus de prod en entree), donc il faudra la supprimer
+		Code laissé en cas de relaxation des regles de liaison
+		
+		// Si l'id du produit fusion est celle du produit que l'on enleve, on doit le changer
+		if (this.getModele() == retour.getModele() && !this.mapFProduits.isEmpty())
+		{
+		    this.setModele(((FProduit)(mapFProduits.values().toArray()[0])).getModele());
+		}
+		*/
+		
+		return retour;
 	}
 	
 	public FProduit getLastProduit()
@@ -256,4 +270,13 @@ public class FProduitFusion extends FElement
 		return trouve;
 		
 	}
+
+    /**
+     * @param fusion
+     * @return
+     */
+    public boolean estLienPrimaire(FLienFusion fusion)
+    {
+        return (((FProduit)this.mapFProduits.get(fusion)).getModele().getId().estProduitSortie());
+    }
 }
