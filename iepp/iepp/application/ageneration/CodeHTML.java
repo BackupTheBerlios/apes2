@@ -178,9 +178,12 @@ public class CodeHTML
 				io = prod.getId();
 				
 				// Verifier qu'il ne s'agit ni d'un produit exterieur, ni d'un produit fusion de deux elements exterieurs (auquel cas le chemin est vide)
-				if (!GenerationManager.getListeProduitsExterieurs().contains(io) && ! io.getChemin().equals(""))
+				if (!GenerationManager.getListeProduitsExterieurs().contains(io) && io.getChemin() != null)
 				{
-					result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\">\n";
+					if (! io.getChemin().equals(""))
+					{
+						result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\">\n";
+					}
 				}
 			}
 		}

@@ -2,7 +2,10 @@
 package util;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Stack;
+import java.util.zip.ZipInputStream;
 
 
 public class ToolKit 
@@ -147,4 +150,26 @@ public class ToolKit
 	  	}
 	  	return (getSlashTerminatedPath(path) + nomFic);
 	  }
+	  
+	  
+	  public static void dezipper( ZipInputStream zin, FileOutputStream fout) throws IOException
+		{
+			//Copier les flux:
+			synchronized (zin)
+			{
+				synchronized (fout)
+				{
+					  byte[] buffer = new byte[256];
+					  while (true)
+					  {
+						  int bytesRead = zin.read(buffer);
+						  if (bytesRead == -1) break;
+						  fout.write(buffer, 0, bytesRead);
+					  }
+				 }
+			 } 
+			 // Fermer l'entrée et le flux de sortie
+			zin.closeEntry();
+			fout.close();
+		}
 }

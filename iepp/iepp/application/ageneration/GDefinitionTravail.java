@@ -36,13 +36,11 @@ public class GDefinitionTravail extends GElementModele
 	/**
 	 * Constructeur du gestionnaire de génération
 	 * @param elem element de présentation associé à la définition de travail courante
-	 * @param elem2 element de présentation qui suit (dans l'arbre) l'élément de présentation courant
-	 * @param listeIdDossier map contenant la liste des dossiers déjà présents dans l'arbre pour le composant publiable en cours de publication
 	 * @param pwFicTree lien vers le fichier tree.js construit durant la génération du site
 	 */
-	public GDefinitionTravail(ElementPresentation elem, ElementPresentation elem2, HashMap listeIdDossier, PrintWriter pwFicTree)
+	public GDefinitionTravail(ElementPresentation elem, PrintWriter pwFicTree)
 	{
-		super(elem, elem2, listeIdDossier, pwFicTree);
+		super(elem, pwFicTree);
 	}
 
 	/**
@@ -51,11 +49,11 @@ public class GDefinitionTravail extends GElementModele
 	 */
 	public void creerFichierDescription() throws IOException
 	{
-		// création du fichier de contenu
-		File ficHTML = new File (GenerationManager.getInstance().getCheminGeneration() + File.separator + this.construireNom()) ;
+		//création du fichier de contenu
+		File ficHTML = new File (this.cheminAbsolu) ;
 		FileWriter fd = new FileWriter(ficHTML);
 
-		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='../../styles/" + GenerationManager.getInstance().getFeuilleCss() + "'>"
+		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='" + this.getCheminStyle() + "'>"
 					+ "</head>" + "<body><center>\n"
 					+ "<table width=\"84%\" align=\"center\">\n"
 					+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
@@ -63,7 +61,7 @@ public class GDefinitionTravail extends GElementModele
 					+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 					+ "</p></td></tr></table></center><BR>\n");
 
-		this.ajouterLienRacine(fd);
+		fd.write(getBarreNavigation() + "<br>");
 
 		// tableau
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ACTIVITES") + " </div>\n");
@@ -71,15 +69,15 @@ public class GDefinitionTravail extends GElementModele
 		for (int i = 0; i < listeActivites.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 		
-		String description = this.element.getDescription();
-		if (description != null)
-		{
-			fd.write("<br><hr><div class=\"description\">" + description + "</div>\n");
-		}
+		this.ajouterDescription(fd);
 		this.ajouterContenu(fd);
+		this.ajouterMail(fd);
+		this.ajouterVersionDate(fd);
+		fd.write("</BODY></HTML>") ;
+		fd.close();
 	}
 
 }

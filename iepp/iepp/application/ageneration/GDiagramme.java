@@ -21,10 +21,35 @@ package iepp.application.ageneration;
 import iepp.Application;
 import iepp.domaine.ComposantProcessus;
 import iepp.domaine.ElementPresentation;
+import iepp.domaine.IdObjetModele;
+
 import java.io.*;
 import java.util.HashMap;
+import java.util.Vector;
 
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+
+import org.ipsquad.apes.adapters.ActivityCell;
+import org.ipsquad.apes.adapters.ActivityGraphAdapter;
+import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.ContextGraphAdapter;
+import org.ipsquad.apes.adapters.FlowGraphAdapter;
+import org.ipsquad.apes.adapters.ProcessComponentCell;
+import org.ipsquad.apes.adapters.ProcessRoleCell;
+import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionCell;
+import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
+import org.ipsquad.apes.adapters.WorkProductCell;
+import org.ipsquad.apes.adapters.WorkProductStateCell;
+import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.ui.ActivityJGraph;
+import org.ipsquad.apes.ui.ContextJGraph;
+import org.ipsquad.apes.ui.FlowJGraph;
+import org.ipsquad.apes.ui.ResponsabilityJGraph;
+import org.ipsquad.apes.ui.WorkDefinitionJGraph;
+import org.jgraph.JGraph;
 
 import com.sun.image.codec.jpeg.ImageFormatException;
 
@@ -36,34 +61,29 @@ import util.ImageUtil;
 public class GDiagramme extends GElementModele
 {
 
+	private ComposantProcessus cp ;
+	
 	/**
 	 * Constructeur du gestionnaire de génération
 	 * @param elem element de présentation associé au diagramme courant
-	 * @param elem2 element de présentation qui suit (dans l'arbre) l'élément de présentation courant
-	 * @param listeIdDossier map contenant la liste des dossiers déjà présents dans l'arbre pour le composant publiable en cours de publication
 	 * @param pwFicTree lien vers le fichier tree.js construit durant la génération du site
 	 */
-	public GDiagramme(ElementPresentation elem, ElementPresentation elem2, HashMap listeIdDossier, PrintWriter pwFicTree)
+	public GDiagramme(ComposantProcessus cp, ElementPresentation elem, PrintWriter pwFicTree)
 	{
-		super(elem, elem2, listeIdDossier, pwFicTree);
+		super(elem, pwFicTree);
+		this.cp = cp;
 	}
 
 
 	/**
 	 * Méthode permettant de traiter les éléments de présentation liés au diagramme
 	 */
-	public void traiterGeneration() throws IOException
+	public void traiterGeneration(long id) throws IOException
 	{
-		// récupérer le modèle associé
+		super.traiterGeneration(id);
 		if (this.element.getID_Apes() != -1)
 		{
-			this.modele = this.element.getElementModele();
-			// on écrit dans l'arbre
-			this.ecrireArbre();
-			// on génère les fichiers images
 			this.creerFichierImages();
-			// on crée le fichier correspondant
-			this.creerFichierDescription();
 		}
 	}
 	
@@ -72,10 +92,7 @@ public class GDiagramme extends GElementModele
 	 */
 	private void creerFichierImages() throws ImageFormatException, IOException
 	{
-		FileOutputStream fout = new FileOutputStream(GenerationManager.getInstance().getCheminGeneration() 
-				+ File.separator + CodeHTML.normalizeName(((ComposantProcessus)this.modele.getRef()).toString())
-				+ File.separator+ "diagrammes" + File.separator + CodeHTML.normalizeName(this.modele.toString() + this.modele.getID() + ".png"));
-		
+		FileOutputStream fout = new FileOutputStream(this.cheminParent + File.separator  + "diagramme.png");
 		ImageUtil.encoderGrapheImage((SpemGraphAdapter)this.modele.getAdapter(), fout, "png");
 	}
 
@@ -87,10 +104,10 @@ public class GDiagramme extends GElementModele
 	public void creerFichierDescription() throws IOException
 	{
 		// création du fichier de contenu
-		File ficHTML = new File (GenerationManager.getInstance().getCheminGeneration() + File.separator + this.construireNom()) ;
+		File ficHTML = new File (this.cheminAbsolu) ;
 		FileWriter fd = new FileWriter(ficHTML);
 
-		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='../../styles/" + GenerationManager.getInstance().getFeuilleCss() + "'>"
+		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='" + this.getCheminStyle() + "'>"
 					+ "</head>" + "<body><center>\n"
 					+ "<table width=\"84%\" align=\"center\">\n"
 					+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
@@ -98,24 +115,20 @@ public class GDiagramme extends GElementModele
 					+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 					+ "</p></td></tr></table></center><BR>\n");
 
-		this.ajouterLienRacine(fd);
+		fd.write(getBarreNavigation() + "<br>");
 		
 		if (GenerationManager.getInstance().estContenuAvant())
 		{
 		    this.ajouterContenu(fd);
 		}
-		fd.write("<div align=\"center\" class=\"imgdiagramme\">" + this.modele.getMapImage("../../", "./") + "</div>");
-		String description = this.element.getDescription();
-		if (description != null)
-		{
-			fd.write("<br><hr><div class=\"description\">" + description + "</div>\n");
-		}
+		fd.write("<div align=\"center\" class=\"imgdiagramme\">" + this.getMapDiagramme() + "</div>");
 		
 		if (!GenerationManager.getInstance().estContenuAvant())
 		{
 		    this.ajouterContenu(fd);
 		}
 		
+		this.ajouterDescription(fd);
 		this.ajouterMail(fd);
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
@@ -123,29 +136,81 @@ public class GDiagramme extends GElementModele
 	}
 	
 	/**
-	 * Méthode permettant d'ajouter le contenu d'un fichier en bas de la page en train
-	 * d'être construite 
-	 * @param fd lien vers le fichier contenu à construire
-	 * @throws IOException
+	 * Renvoie sous la forme d'une chaine de caractère le code associé à la map du diagramme
 	 */
-	public void ajouterContenu(FileWriter fd ) throws IOException
+	public String getMapDiagramme()
 	{
-		String contenu = this.element.getContenu();
-		if (contenu != null)
+		SpemGraphAdapter mAdapter = cp.getAdapter(this.modele.getNumRang());
+		String mapcode = ("<MAP NAME=\""+ CodeHTML.normalizeName(mAdapter.getName())+"\">\n");
+
+		JGraph mGraph=null;
+		if(mAdapter instanceof ContextGraphAdapter) mGraph=new ContextJGraph(mAdapter);
+		else if(mAdapter instanceof ResponsabilityGraphAdapter) mGraph=new ResponsabilityJGraph(mAdapter);
+		else if(mAdapter instanceof ActivityGraphAdapter) mGraph=new ActivityJGraph(mAdapter);
+		else if(mAdapter instanceof FlowGraphAdapter) mGraph=new FlowJGraph(mAdapter);
+		else if(mAdapter instanceof WorkDefinitionGraphAdapter) mGraph=new WorkDefinitionJGraph(mAdapter);
+
+		JFrame frame = new JFrame();
+		frame.getContentPane().add(new JScrollPane(mGraph));
+		frame.pack();
+		frame.setVisible(false);
+
+		Vector tmp=new Vector();
+		Object o[]=mGraph.getRoots();
+
+		int x1,x2,y1,y2;
+		for(int i=0;i<o.length;i++)
 		{
-			fd.write("<hr></br>");
-			// si le contenu est un fichier html
-			if (contenu.endsWith(".html") || contenu.endsWith(".htm") || contenu.endsWith(".HTML") || contenu.endsWith(".HTM") || contenu.endsWith(".txt")) 
+			if( o[i] instanceof ActivityCell 
+					|| o[i] instanceof WorkProductCell 
+					|| o[i] instanceof ProcessRoleCell 
+					|| o[i] instanceof WorkProductStateCell
+					|| o[i] instanceof ProcessComponentCell 
+					|| o[i] instanceof WorkDefinitionCell )
 			{
-				// recopier le fichier à la suite de la description
-				this.recopierContenu(contenu, fd);
-			}
-			else
-			{
-				fd.write(Application.getApplication().getTraduction("WEB_LINK")+ " : " + "<a href=\"../../contenu/" + this.element.getContenu() + "\" target=\"_new\" >" + this.element.getContenu() + "</a>");
-				fd.write("<hr></br>");
-				this.ajouterMail(fd);
+				x1=(int)mGraph.getCellBounds(o[i]).getX();
+				x2=x1+(int)mGraph.getCellBounds(o[i]).getWidth();
+				y1=(int)mGraph.getCellBounds(o[i]).getY();
+				y2=y1+(int)mGraph.getCellBounds(o[i]).getHeight();
+				// si c'est un composant
+				if (o[i] instanceof ProcessComponentCell)
+				{
+					mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ " " +"\">\n");
+				}
+				else
+				{
+					// récupérer l'ID de l'élément courant
+					int ID_Apes = ((ApesGraphCell)o[i]).getID();
+					ElementPresentation elem = this.cp.getElementPresentation(ID_Apes);
+					if ( elem != null )
+					{
+						IdObjetModele id = elem.getElementModele();
+						if (id != null)
+						{
+							// rajouté: info-bulle contenant la description de l'élément
+							String description = "ALT=\"\"";
+							if (elem.getDescription() != null)
+							{
+								description = "ALT=\"" + elem.getDescription() + "\"";
+							}
+							mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ this.getLienChemin(id)+ "\" " + description + ">\n");
+						}
+					}
+					else
+					{
+						// S'il s'agit d'un produit exterieur (sans element de presentation)
+						if (o[i] instanceof WorkProductCell)
+						{
+							// S'occuper du paquetage special
+						}
+					}
+				}
 			}
 		}
+
+		mapcode += ("</MAP>\n");
+		mapcode += ("<IMG SRC=\"diagramme.png\" USEMAP=\"#"+ CodeHTML.normalizeName(mAdapter.getName())+"\">\n");
+
+		return mapcode;
 	}
 }

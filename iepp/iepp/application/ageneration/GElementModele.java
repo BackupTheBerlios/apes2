@@ -42,45 +42,48 @@ public class GElementModele extends GElement
 
 
 	/**
-	 * Constructeur du gestionnaire de génération
 	 * @param elem element de présentation associé à l'élément courant
-	 * @param elem2 element de présentation qui suit (dans l'arbre) l'élément de présentation courant
-	 * @param listeIdDossier map contenant la liste des dossiers déjà présents dans l'arbre pour le composant publiable en cours de publication
-	 * @param pwFicTree lien vers le fichier tree.js construit durant la génération du site
+	 * @param lien vers le fichier tree.js construit durant la génération du site
 	 */
-	public GElementModele(ElementPresentation elem, ElementPresentation elem2, HashMap listeIdDossier, PrintWriter pwFicTree)
+	public GElementModele(ElementPresentation elem, PrintWriter pwFicTree) 
 	{
-		super(elem, elem2, listeIdDossier, pwFicTree);
+		super(elem, pwFicTree);
+		this.modele = this.element.getElementModele();
 	}
 
 	/**
-	 * Retourne le chemin du fichier html à construire à partir de la racine du site
-	 * @return chemin du fichier html à construire
+	 * Retourne le lien vers un id donné
 	 */
-	public String construireNom()
+	public String getLienChemin(IdObjetModele id)
 	{
-		return (this.modele.getChemin());
+		String res = id.getChemin();
+		if (res != null)
+		{
+			res = res.substring(2);
+		}
+		System.out.println("RES " + id.getChemin() + " : " + id);
+		ArbreGeneration aux = this.arbre;
+		// on remonte jusqu'à la racine
+		while (!aux.isRacine())
+		{
+			res = "../" + res;
+			aux = aux.getArbreParent();
+		}
+		System.out.println("REtour : " + res);
+		return res;
 	}
-	
-	/**
-	 * Renvoie le chemin du fichier html du composant racine
-	 * @return
-	 */
-	public String getCheminRacine()
-	{
-		return (this.modele.getCheminRacine());
-	}
-	
 	
 	/**
 	 * Méthode permettant de traiter les éléments de présentation liés à un élément de modèle
 	 */
-	public void traiterGeneration() throws IOException
+	public void traiterGeneration(long id) throws IOException
 	{
 		// récupérer le modèle associé
 		if (this.element.getID_Apes() != -1)
 		{
-			this.modele = this.element.getElementModele();
+			this.IDParent = id;
+			// créer le répertoire
+			this.creerRep();
 			// on écrit dans l'arbre
 			this.ecrireArbre();
 			// on crée le fichier correspondant
@@ -88,48 +91,4 @@ public class GElementModele extends GElement
 		}
 	}
 	
-	/**
-	 * Méthode permettant d'ajouter un lien sur la page vers le composant racine
-	 * @param fd
-	 * @throws IOException
-	 */
-	public void ajouterLienRacine(FileWriter fd) throws IOException
-	{
-		fd.write("<a href=\"../../" + this.getCheminRacine() + "\" class=\"link_home\">" + " Page d'accueil du composant" + "</a>");
-		fd.write("<br>");
-	}
-	
-	/**
-	 * Méthode permettant d'ajouter le contenu d'un fichier en bas de la page en train
-	 * d'être construite 
-	 * @param fd lien vers le fichier contenu à construire
-	 * @throws IOException
-	 */
-	public void ajouterContenu(FileWriter fd ) throws IOException
-	{
-		String contenu = this.element.getContenu();
-		if (contenu != null)
-		{
-			fd.write("<hr></br>");
-			// si le contenu est un fichier html
-			if (contenu.endsWith(".html") || contenu.endsWith(".htm") || contenu.endsWith(".HTML") || contenu.endsWith(".HTM") || contenu.endsWith(".txt")) 
-			{
-				// recopier le fichier à la suite de la description
-				this.recopierContenu(contenu, fd);
-			}
-			else
-			{
-				fd.write(Application.getApplication().getTraduction("WEB_LINK")+ " : " + "<a href=\"../../contenu/" + this.element.getContenu() + "\" target=\"_new\" >" + this.element.getContenu() + "</a>");
-				fd.write("<hr></br>");
-				this.ajouterMail(fd);
-			}
-		}
-		else
-		{
-			this.ajouterMail(fd);
-		}
-		this.ajouterVersionDate(fd);
-		fd.write("</BODY></HTML>") ;
-		fd.close();
-	}
 }

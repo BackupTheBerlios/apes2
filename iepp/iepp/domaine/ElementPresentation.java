@@ -130,6 +130,30 @@ public class ElementPresentation implements Comparable, Serializable
 	{
 		return this.ID_interne.split("-").length;
 	}
+	
+	/**
+	 * Renvoie sous forme de chaine de caractères le niveau supérieur
+	 * Par exemple si le niveau courant (calculé selon l'id interne) est 1-1-2,
+	 * le niveau supérieur est 1-1
+	 * Ce niveau est utilisé pour récupérer dans la map des liste des dossiers
+	 * l'id du dossier du niveau supérieur
+	 * @return le niveau supérieur de l'élément courant
+	 */
+	public String getNiveauSuperieur()
+	{
+		String[] id = this.getTableauID();
+		String retour = "";
+		int i;
+		
+		if (this.getNiveau() == 1) return "";
+		if (this.getNiveau() == 2) return id[0];  
+		for (i = 0 ; i < this.getNiveau() - 2; i++)
+		{
+			retour += (id[i] + "-");
+		}
+		retour += id[i]; 
+		return retour;
+	}
 
 	/**
 	 * @return

@@ -64,7 +64,7 @@ public class GenerationManager
 	public static final String EXTERIEUR_PATH = "exterieur";
 	public static final String APPLET_PATH = "applet";
 	public static final String STYLES_PATH = "styles";
-
+	public static final String IMAGES_PATH = "images";
     
 	
     

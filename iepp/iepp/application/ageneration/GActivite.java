@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Vector;
 
 
@@ -37,21 +36,17 @@ import java.util.Vector;
  */
 public class GActivite extends GElementModele
 {
-
 	
 	/**
-	 * Constructeur du gestionnaire de génération
-	 * @param elem element de présentation associé à l'activité courante
-	 * @param elem2 element de présentation qui suit (dans l'arbre) l'élément de présentation courant
-	 * @param listeIdDossier map contenant la liste des dossiers déjà présents dans l'arbre pour le composant publiable en cours de publication
-	 * @param pwFicTree lien vers le fichier tree.js construit durant la génération du site
+	 * @param elem
+	 * @param writer
 	 */
-	public GActivite(ElementPresentation elem, ElementPresentation elem2, HashMap listeIdDossier, PrintWriter pwFicTree)
-	{
-		super(elem, elem2, listeIdDossier, pwFicTree);
+	public GActivite(ElementPresentation elem, PrintWriter writer) 
+	{	
+		super(elem,writer);
 	}
-	
-	
+
+
 	/**
 	 * Méthode permettant de créer le contenu de la page associée à l'activité courante
 	 * Affichage des listes de produits et du rôle responsable de l'activité
@@ -59,10 +54,11 @@ public class GActivite extends GElementModele
 	public void creerFichierDescription() throws IOException
 	{
 		// création du fichier de contenu
-		File ficHTML = new File (GenerationManager.getInstance().getCheminGeneration() + File.separator + this.construireNom()) ;
+		File ficHTML = new File (this.cheminAbsolu) ;
+		//System.out.println("Fichier  à créér : " + ficHTML);
 		FileWriter fd = new FileWriter(ficHTML);
 
-		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='../../styles/" + GenerationManager.getInstance().getFeuilleCss() + "'>"
+		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='" + this.getCheminStyle() + "'>"
 								+ "</head>" + "<body><center>\n"
 								+ "<table width=\"84%\" align=\"center\">\n"
 								+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
@@ -70,16 +66,7 @@ public class GActivite extends GElementModele
 								+ "<b>" + this.element.getNomPresentation() + "</b>\n"
 								+ "</p></td></tr></table></center><BR>\n");
 
-		this.ajouterLienRacine(fd);
-		// lien vers la page de la définition de travail
-		// TODO mettre la langue
-		IdObjetModele def = this.modele.getLaDefinitionTravail();
-		if (def != null)
-		{
-			fd.write("<br>");
-			fd.write("<a href=\"../../" + def.getChemin() + "\" class=\"link_home\" >" + " Page d'accueil de la définition de travail" + "</a>");
-			fd.write("<br>");
-		}
+		fd.write(getBarreNavigation() + "<br>");
 		
 		// affiche les produits en entrée / sortie
 		fd.write("<div class=\"titreliste\">"+ Application.getApplication().getTraduction("WEB_PROD_ENTREE") +"</div>\n");
@@ -88,7 +75,7 @@ public class GActivite extends GElementModele
 		for (int i = 0; i < listeProduits.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PROD_SORTIE") + "</div>\n");
@@ -97,7 +84,7 @@ public class GActivite extends GElementModele
 		for (int i = 0; i < listeProduits.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 		
 		// affiche le rôle responsable de l'activité
@@ -105,14 +92,14 @@ public class GActivite extends GElementModele
 		IdObjetModele id = this.modele.getRoleResponsable();
 		if (id != null)
 		{
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 		
-		String description = this.element.getDescription();
-		if (description != null)
-		{
-			fd.write("<br><hr><div class=\"description\">" + description + "</div>\n");
-		}
+		this.ajouterDescription(fd);
 		this.ajouterContenu(fd);
+		this.ajouterMail(fd);
+		this.ajouterVersionDate(fd);
+		fd.write("</BODY></HTML>") ;
+		fd.close();
 	}
 }

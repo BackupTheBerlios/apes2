@@ -33,15 +33,12 @@ public class GGuide extends GElement
 {
 
 	/**
-	 * Constructeur du gestionnaire de génération
 	 * @param elem element de présentation associé à l'activité courante
-	 * @param elem2 element de présentation qui suit (dans l'arbre) l'élément de présentation courant
-	 * @param listeIdDossier map contenant la liste des dossiers déjà présents dans l'arbre pour le composant publiable en cours de publication
-	 * @param pwFicTree lien vers le fichier tree.js construit durant la génération du site
+	 * @param writer lien vers le fichier tree.js construit durant la génération du site
 	 */
-	public GGuide(ElementPresentation elem, ElementPresentation elem2, HashMap listeIdDossier, PrintWriter pwFicTree)
+	public GGuide(ElementPresentation elem, PrintWriter writer) 
 	{
-		super(elem, elem2, listeIdDossier, pwFicTree);
+		super(elem, writer);
 	}
 	
 	

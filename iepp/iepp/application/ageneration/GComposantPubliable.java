@@ -19,12 +19,14 @@
 package iepp.application.ageneration;
 
 
+import iepp.Application;
 import iepp.domaine.ElementPresentation;
 import iepp.domaine.Guide;
 import iepp.domaine.IdObjetModele;
 import iepp.domaine.PaquetagePresentation;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -34,19 +36,9 @@ import java.util.Vector;
 /**
  * Classe permettant de gérer la génération de tout un composant publiable
  */
-public class GComposantPubliable  
+public class GComposantPubliable  extends GElementModele
 {	
-	
-	protected final String DossierActivites = "activites";
-	protected final String DossierProduits = "produits";
-	protected final String DossierRoles = "roles";
-	protected final String DossierProdEntree = "Produits_en_entree";
-	protected final String DossierProdSortie = "Produits_en_sortie";
-	protected final String DossierDiag = "diagrammes";
-	protected final String DossierDiagAct = "Diagrammes_activites";
-	protected final String DossierDiagClasse = "Diagrammes_classes";
-	protected final String DossierDefinition = "definitions_travail";
-	protected final String DossierPaquetages = "paquetages";
+
 	
 	/**
 	 * Lien vers le fichier tree.js à construire durant la génération
@@ -58,10 +50,6 @@ public class GComposantPubliable
 	 */
 	private PaquetagePresentation paquetage ;
 	
-	/**
-	 * Liste des dossiers déjà construits dans l'arbre de navigation
-	 */
-	private HashMap idDossier ;
 	
 	/**
 	 * Id du composant que l'on publie
@@ -75,147 +63,172 @@ public class GComposantPubliable
 	 * @param idComposant id du composant (modèle) à générer
 	 * @param pwFicTree lien vers le fichier tree.js à remplir
 	 */
-	public GComposantPubliable (IdObjetModele idComposant, PrintWriter pwFicTree)
+	public GComposantPubliable (IdObjetModele idComposant, ElementPresentation elem,  PrintWriter pwFicTree)
 	{
+		super (elem, pwFicTree);
 		this.composant = idComposant;
-		this.pwFicTree = pwFicTree ;
 		this.paquetage = this.composant.getPaquetagePresentation();
-		this.paquetage.trierElement();
-		this.idDossier = new HashMap();
-		this.idDossier.put("", "foldersTree");
 	}
 
 	/**
-	 * permet de traiter la génération d'un élément ou d'un guide
-	 */	
-	public void traiterGeneration() throws IOException
-	{
-		// création des répertoires indispensables pour le stockage des fichiers
-		this.creerRep();
-		
-		// récupérer la liste des élément de présentation du composant publiable
-		Vector liste = this.paquetage.getListeElement();
-		if (liste.size() > 0)
-		{
-			int i;
-			ElementPresentation elem;
-			for (i = 0; i < liste.size() - 1; i++)
-			{
-				elem = (ElementPresentation)liste.elementAt(i);
-				ElementPresentation elem2 = (ElementPresentation)liste.elementAt(i + 1);
-				this.traiterElement(elem, elem2);
-			}
-			elem = (ElementPresentation)liste.elementAt(i);
-			this.traiterElement(elem, null);
-		}	
-	}
-
-
-	/**
-	 * Construit les gestionnaires de publication associés au type des éléments à traiter
-	 * @param elem element de présentation qu'il faut traiter en premier
-	 * @param elem2 élément de présentation à traiter ensuite
+	 * Traitement commun à tous les éléments à générer
+	 * ecriture dans l'arbre et création du fichier de contenu
+	 * @param feuille, indique si l'élément courant est une feuille ou non
+	 * @param id
 	 */
-	private void traiterElement(ElementPresentation elem, ElementPresentation elem2) throws IOException
+	public void traiterGeneration(long id) throws IOException
 	{
-		// selon le type de l'élément de présentation
-		if (elem instanceof Guide)
+		this.IDParent = id;
+		// créer le répertoire
+		this.creerRep();
+		// récupérer les icones et les contenuts pour chaque paquetage
+		this.extraireIconeContenu(this.paquetage);
+		// on écrit dans l'arbre
+		this.ecrireArbre();
+		// on crée le fichier correspondant
+		this.creerFichierDescription();
+	}
+	
+	/**
+	 * 
+	 */
+	public void creerRep() 
+	{
+		super.creerRep();
+		// Création du dossier contenu
+		File rep = new File(this.cheminParent + File.separator + GenerationManager.CONTENU_PATH  );
+		rep.mkdirs();
+		
+		// Création du dossier images
+		rep = new File(this.cheminParent + File.separator + GenerationManager.IMAGES_PATH );
+		rep.mkdirs();
+	}
+	
+
+	/**
+	 * Méthode permettant de créer le contenu de la page associée au composant courant
+	 * Affiche selon les options de la génération, des listes ou des diagrammes
+	 */
+	public void creerFichierDescription() throws IOException
+	{
+		// création du fichier HTML
+		File ficHTML = new File (this.cheminAbsolu) ;
+		FileWriter fd = new FileWriter(ficHTML);
+		
+		fd.write("<HTML><head>");
+		fd.write("<link rel='STYLESHEET' type='text/css' href='" + this.getCheminStyle() + "'>");
+		fd.write("</head>" + "<body><center>\n"
+				+ "<table width=\"84%\" align=\"center\">\n"
+				+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
+				+ "<p align=\"center\" class=\"entete\">\n"
+				+ "<b>" + this.modele.toString() + "</b>\n"
+				+ "</p></td></tr></table></center><BR>\n");
+		
+		fd.write(getBarreNavigation() + "<br>");
+		// tableau
+		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ROLES") + " </div>\n");
+		Vector listeRole = this.modele.getRole();
+		for (int i = 0; i < listeRole.size(); i++)
 		{
-			GGuide guide = new GGuide(elem, elem2, this.idDossier, this.pwFicTree);
-			guide.traiterGeneration();		
+			IdObjetModele id = (IdObjetModele) listeRole.elementAt(i);
+			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
-		// on vérifie que l'on ait bien un modèle associé
-		else if(elem.getElementModele() != null)
+		fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
+		Vector listeProduits = this.modele.getProduit();
+		
+		// Separer les produits en deux tableaux
+		fd.write("<TABLE border=\"0\" width=\"100%\">");
+		fd.write("<TR><TH>Produits en entr&eacute;e</TH><TH>Produits internes</TH><TH>Produits en sortie</TH></TR>");
+		
+		String entree = "";
+		String internes = "";
+		String sortie = "";
+		String ajout;
+		
+		boolean trouve;
+		boolean in;
+		
+		// Recuperer la liste des produit exterieurs a ne pas lier
+		Vector externe = GenerationManager.getListeProduitsExterieurs();
+		
+		for (int i = 0; i < listeProduits.size(); i++)
 		{
-			// c'est un élément normal il faut récupérer le type du modèle associé
-			IdObjetModele id = elem.getElementModele();
-			if (id.estActivite())
+			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
+			// Construire les chaines
+			ajout = "<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
+			
+			trouve = false;
+			in = false;
+			
+			// Chercher les produits exterieurs (sans liens)
+			for (int j = 0; j < externe.size() && !trouve ; j++)
 			{
-				// Gactivite 
-				GActivite activite = new GActivite(elem, elem2, this.idDossier, this.pwFicTree ); 
-				activite.traiterGeneration();
+			    if (externe.elementAt(j).toString().equals(id.toString()) && (((IdObjetModele)externe.elementAt(j)).getRef() == id.getRef()))
+			    {
+			        // Le produit est exterieur, il ne faut pas mettre de lien
+			        trouve = true;
+			        ajout = "<div class=\"elementliste\"> " + id.toString() + "</div>\n";
+			        if (((IdObjetModele)externe.elementAt(j)).estProduitEntree())
+			        {
+			            in = true;
+			        }
+			    }
 			}
-			else if (id.estComposant())
+			// S'ils ne sont pas exterieurs, ils n'ont peut etre pas de presentation mais sont des produits en entree lies
+			HashMap listeProduitsChanges = GenerationManager.getListeProduitsChanges();
+			if (listeProduitsChanges.containsKey(id.getRef().toString() +"::"+ id.toString()))
 			{
-				// composant
-				
-				GComposant compo = new GComposant(elem, elem2, this.idDossier, this.pwFicTree ); 
-				compo.traiterGeneration();
+			    trouve = true;
+			    in = true;
+			    ajout = "<div class=\"elementliste\"><a href=\"../" + ((IdObjetModele)listeProduitsChanges.get(id.getRef().toString() + "::"+ id.toString())).getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
 			}
-			else if (id.estProduit())
+			
+			// ou des produits en sortie qui ont une presentation
+			Vector listeProduitsSortie = GenerationManager.getListeProduitsSortie();
+			for (int j = 0; j < listeProduitsSortie.size() && ! trouve; j++)
 			{
-				// produit
-				GProduit produit = new GProduit(elem, elem2, this.idDossier, this.pwFicTree ); 
-				produit.traiterGeneration();
+			    if (listeProduitsSortie.elementAt(j).toString().equals(id.getRef().toString() + "::"+ id.toString()))
+			    {
+			        trouve = true;
+			    }
 			}
-			else if (id.estDefinitionTravail())
+			
+			if (trouve)
 			{
-				// deftravail
-				GDefinitionTravail defTrav = new GDefinitionTravail(elem, elem2, this.idDossier, this.pwFicTree ); 
-				defTrav.traiterGeneration();
-			}
-			else if (id.estDiagramme())
-			{
-				// diagramme
-				GDiagramme diag = new GDiagramme(elem, elem2, this.idDossier, this.pwFicTree ); 
-				diag.traiterGeneration();	
-			}
-			else if (id.estRole())
-			{
-				// role
-				GRole role = new GRole(elem, elem2, this.idDossier, this.pwFicTree ); 
-				role.traiterGeneration();
-			}
-			else if (id.estPaquetage())
-			{
-				GPaquetage gelem = new GPaquetage(elem, elem2, this.idDossier, this.pwFicTree ); 
-				gelem.traiterGeneration();
+			    if (in)
+			    {
+			        entree += ajout;
+			    }
+			    else
+			    {
+				    sortie += ajout;
+				} 
 			}
 			else
 			{
-				GElementModele gelem = new GElementModele(elem, elem2, this.idDossier, this.pwFicTree ); 
-				gelem.traiterGeneration();
+			    // ou enfin des produits internes
+			    internes += ajout;
 			}
 		}
-	}
+		// Ecrire le tableau les liens
+		fd.write("<TR><TD valign=top>"+ entree +"</TD><TD valign=top>"+ internes +"</TD><TD valign=top>"+ sortie +"</TD></TR>");
+		fd.write("</TABLE>");
 		
-	/**
-	 * Méthode permettant de créer tous les répertoires utiles
-	 * pour stocker tous le contenu lié à un composant publiable
-	 */
-	public void creerRep()
-	{
-		File repComp = new File(this.getChemin());
-		repComp.mkdirs();
-	
-		File repProd = new File(this.getChemin() + File.separator + DossierProduits);
-		repProd.mkdirs();
-	
-		File repActivite = new File(this.getChemin() + File.separator + DossierActivites);
-		repActivite.mkdirs();
-	
-		File repRoles = new File(this.getChemin() + File.separator + DossierRoles);
-		repRoles.mkdirs();
-	
-		File repDiag = new File(this.getChemin()+ File.separator + DossierDiag);
-		repDiag.mkdirs();
-	
-		File repDef = new File(this.getChemin()+ File.separator + DossierDefinition);
-		repDef.mkdirs();
-		
-		File repPaq = new File(this.getChemin()+ File.separator + DossierPaquetages);
-		repPaq.mkdirs();
-	}
-	
-	/**
-	 * Méthode permettant de construire le nom du répertoire associé au composant publiable
-	 * courant
-	 * @return chemin à partir de la racine du site répertoire associé au composant publiable
-	 */
-	public String getChemin()
-	{
-		return (GenerationManager.getInstance().getCheminGeneration()
-					+ "/" + CodeHTML.normalizeName(this.composant.toString()));
+		fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_DEFINITIONS") + " </div>\n");
+		Vector listeDefinition = this.modele.getDefinitionTravail();
+		for (int i = 0; i < listeDefinition.size(); i++)
+		{
+			IdObjetModele id = (IdObjetModele) listeDefinition.elementAt(i);
+			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+		}
+
+		// voir pour les diagrammes
+
+		this.ajouterContenu(fd);
+		this.ajouterMail(fd);
+		this.ajouterVersionDate(fd);
+		fd.write("</BODY></HTML>") ;
+		fd.close();
 	}
 
 }

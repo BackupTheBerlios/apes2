@@ -30,55 +30,58 @@ import java.util.Vector;
 /**
  * Classe permettant de gérer la publication d'un paquetage de présentation
  */
-public class GPaquetagePresentation 
+public class GPaquetagePresentation extends GElement
 {
-	/**
-	 * Lien vers le fichier tree.js à remplir lors de la génération
-	 */
-	private PrintWriter pwFicTree ;
-	
+
 	/**
 	 * Paquetage de présentation à publier
 	 */
 	private PaquetagePresentation paquetage ;
 	
-	/**
-	 * Liste des dossiers qui ont déjà été créés dans l'arbre
-	 */
-	private HashMap idDossier ;
 	
 	/**
 	 * Constructeur du gestionnaire de génération
 	 * @param paquetage paquetage de présentation à publier
 	 * @param pwFicTree lien vers le fichier tree.js ) remplir
 	 */
-	public GPaquetagePresentation (PaquetagePresentation paquetage , PrintWriter pwFicTree)
+	public GPaquetagePresentation (ElementPresentation elem, PaquetagePresentation paquetage , PrintWriter pwFicTree)
 	{
-		this.pwFicTree = pwFicTree ;
+		super (elem, pwFicTree);
 		this.paquetage = paquetage ;
-		this.idDossier = new HashMap();
-		this.idDossier.put("", "foldersTree");
+	}
+
+	/**
+	 * Traitement commun à tous les éléments à générer
+	 * ecriture dans l'arbre et création du fichier de contenu
+	 * @param feuille, indique si l'élément courant est une feuille ou non
+	 * @param id
+	 */
+	public void traiterGeneration(long id) throws IOException
+	{
+		this.IDParent = id;
+		// créer le répertoire
+		this.creerRep();
+		// récupérer les icones et les contenuts pour chaque paquetage
+		this.extraireIconeContenu(paquetage);
+		// on écrit dans l'arbre
+		this.ecrireArbre();
+		// on crée le fichier correspondant
+		this.creerFichierDescription();
 	}
 	
 	/**
-	 * Permet de traiter la génération de tous les éléments de présentation
-	 * contenu dans le paquetage
-	 */	
-	public void traiterGeneration() throws IOException
+	 * 
+	 */
+	public void creerRep() 
 	{
-		Vector liste ; // liste en cours de traitement
-		int i;
-
-		liste = this.paquetage.getListeElement();
-		for (i = 0; i < liste.size() - 1; i++)
-		{
-			ElementPresentation elem = (ElementPresentation)liste.elementAt(i);
-			ElementPresentation elem2 = (ElementPresentation)liste.elementAt(i + 1);
-			GElement noeud = new GElement(elem, elem2, this.idDossier, pwFicTree);
-			noeud.traiterGeneration();
-		}
-		ElementPresentation elem = (ElementPresentation)liste.elementAt(i);
-		GElement noeud = new GElement(elem, null, this.idDossier, pwFicTree);
-		noeud.traiterGeneration();
+		super.creerRep();
+		// Création du dossier contenu
+		File rep = new File(this.cheminParent + File.separator + GenerationManager.CONTENU_PATH  );
+		rep.mkdirs();
+		
+		// Création du dossier images
+		rep = new File(this.cheminParent + File.separator + GenerationManager.IMAGES_PATH );
+		rep.mkdirs();
 	}
+
 }

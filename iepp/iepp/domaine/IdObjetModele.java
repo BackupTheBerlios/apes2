@@ -30,16 +30,19 @@ public class IdObjetModele implements Serializable, Cloneable
 	int numRang = -1 ;		// Numéro désignant éventuellement un composant non accessible
 							// mais géré par le composant référencé 
 	int numType = -1 ;		// numéro indiquant le type d'objet pointé par l'id
+	private String chemin ;	// chemin de l'élément du modèle dans le site web
 
 	public IdObjetModele (ObjetModele obj)
 	{
 		this.refObjet = obj ;
+		this.chemin = "";
 	}
 	public IdObjetModele (ObjetModele obj, int numExterne, int numtype)
 	{
 		this.refObjet = obj ;
 		this.numRang = numExterne ;
 		this.numType = numtype ;
+		this.chemin = "";
 	}
 
 	public ObjetModele getRef()
@@ -160,15 +163,6 @@ public class IdObjetModele implements Serializable, Cloneable
 			return (new Vector());
 		}
 		return( ((ComposantProcessus)this.getRef()).getRoles());	
-	}
-	
-	public String getMapImage(String niveauLien, String niveauImage)
-	{
-		if (this.estDiagramme())
-		{
-			return (((ComposantProcessus)this.getRef()).getMapDiagramme(this.numRang, this.numType, niveauLien, niveauImage));
-		}
-		return "";
 	}
 	
 	public Vector getProduitEntree ()
@@ -297,11 +291,12 @@ public class IdObjetModele implements Serializable, Cloneable
 	
 	public String getChemin()
 	{
-		if (this.estDefProc())
-		{
-			return ".";
-		}
-		return (((ComposantProcessus)this.getRef()).getChemin(this.numRang, this.numType));
+		return this.chemin;
+	}
+	
+	public void setChemin(String chemin)
+	{
+		this.chemin = chemin;
 	}
 	
 	public int getIDRole()
@@ -431,13 +426,7 @@ public class IdObjetModele implements Serializable, Cloneable
 	{
 		this.numRang--;		
 	}
-	/**
-	 * @return
-	 */
-	public String getCheminRacine() 
-	{
-		return (((ComposantProcessus)this.getRef()).getChemin(-1, this.numType));
-	}
+
 	/**
 	 * @return
 	 */

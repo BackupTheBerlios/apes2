@@ -39,6 +39,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 	private PrintWriter pwFicTree ;
 	private TaskMonitorDialog mTask = null;
 	private boolean generationReussie = false;
+	private ArbreGeneration arbre = null;
 	
 	protected Object processingTask()
 	{
@@ -57,12 +58,29 @@ public class TacheGeneration extends MonitoredTaskBase {
 			//récupérer l'heure de début de la génération
 			GenerationManager.getInstance().debuterGeneration();
 			
+			this.arbre = new ArbreGeneration();
+			
 			this.recupererProduitsExterieurs();
 			this.preparerGeneration();
+			
+			this.construireArbre();
+			File f = new File(GenerationManager.getInstance().getCheminGeneration());
+			this.arbre.initialiserArbre(ToolKit.removeSlashTerminatedPath(f.getAbsolutePath()));
+			
+			//System.out.println(arbre);
+			// mettre ici les rajouts de page
+			
+			
+			//Création des pages contenues dans la page d'accueil
+			this.creerPageAccueil();
+			this.arbre.genererSite();
+			
+			/*
 			this.creerArbreApes();
-
+			*/
 			// fermeture du fichier tree.dat
 			this.pwFicTree.close();
+			
 			this.generationReussie = true;
 		}
 		catch(Throwable t)
@@ -75,51 +93,69 @@ public class TacheGeneration extends MonitoredTaskBase {
 		}
 	}
 
-	public void setTask(TaskMonitorDialog task)
+	/**
+	 * 
+	 */
+	private void construireArbre() 
 	{
-		this.mTask = task;
+		this.print("Construction arbre en mémoire");
+		Vector liste = GenerationManager.getInstance().getListeAGenerer();
+		PaquetagePresentation paquet ;
+		IdObjetModele idComposant ;
+
+		for (int i = 0; i < liste.size(); i++)
+		{
+			if (liste.elementAt(i) instanceof PaquetagePresentation)
+			{
+				paquet = (PaquetagePresentation)liste.elementAt(i);
+				this.construireArbrePaquetage(this.arbre, paquet);
+			}
+			else
+			{
+				// composant publiable
+				//on recupere l'ID du ième composant de la definition de Processus
+				idComposant = (IdObjetModele)liste.elementAt(i);
+				paquet = idComposant.getPaquetagePresentation();
+				if (paquet != null && !paquet.getNomFichier().equals(""))
+				{
+					this.construireArbreComposant(this.arbre, paquet);
+				}
+			}
+		}
 	}
 	
-	private void print( String msg )
-	{
-		this.setMessage(msg);
-		if(this.mTask != null )
-		{
-			this.mTask.forceRefresh();
-		}
-	}
+
 	private void preparerGeneration() throws Exception
-		{
-			this.print(Application.getApplication().getTraduction("creation_rep"));
-			// Creation du dossier du site
-			File rep = new File(GenerationManager.getInstance().getCheminGeneration());
-			rep.mkdirs();
-				
-			// Création du dossier contenu
-			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.CONTENU_PATH );
-			rep.mkdirs();
-		
-			// Création du dossier description
-			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.DESCRIPTION_PATH );
-			rep.mkdirs();
+	{
+		this.print(Application.getApplication().getTraduction("creation_rep"));
+		// Creation du dossier du site
+		File rep = new File(GenerationManager.getInstance().getCheminGeneration());
+		rep.mkdirs();
 			
-			// Création du dossier pour le contenu extérieur au processus
-			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.EXTERIEUR_PATH );
-			rep.mkdirs();
-				
-			// copie des répertoires ressource (javascript ...)
-			Copie.copieRep(Application.getApplication().getConfigPropriete("site"), GenerationManager.getInstance().getCheminGeneration()+ File.separator + GenerationManager.APPLET_PATH);
+		/*
+		// Création du dossier contenu
+		rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.CONTENU_PATH );
+		rep.mkdirs();
+	*/
 		
-			//copie du répertoire des feuilles de styles
-			Copie.copieRep(Application.getApplication().getConfigPropriete("styles"), GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.STYLES_PATH);
+		// Création du dossier description
+		rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.DESCRIPTION_PATH );
+		rep.mkdirs();
 		
-			//Création des pages contenues dans la page d'accueil
-			this.creerPageAccueil();
-			this.setCurrent(20);
+		// Création du dossier pour le contenu extérieur au processus
+		rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.EXTERIEUR_PATH );
+		rep.mkdirs();
 			
-			//Création du fichier tree.dat
-			this.creerFicTree(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.APPLET_PATH);	
-		}
+		// copie des répertoires ressource (javascript ...)
+		Copie.copieRep(Application.getApplication().getConfigPropriete("site"), GenerationManager.getInstance().getCheminGeneration()+ File.separator + GenerationManager.APPLET_PATH);
+	
+		//copie du répertoire des feuilles de styles
+		Copie.copieRep(Application.getApplication().getConfigPropriete("styles"), GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.STYLES_PATH);
+	
+		//Création du fichier tree.dat
+		System.out.println(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.APPLET_PATH);
+		this.creerFicTree(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.APPLET_PATH);	
+	}
 
 
 		private boolean creerArbreApes() throws FileNotFoundException, IOException
@@ -128,13 +164,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 			Vector liste = GenerationManager.getInstance().getListeAGenerer();
 			PaquetagePresentation paquet ;
 			IdObjetModele idComposant ;
-			/*
-			int part = 80;
-			if (liste.size() != 0)
-			{
-				part = 80 / liste.size() ;
-			}
-			*/
+
 			for (int i = 0; i < liste.size(); i++)
 			{
 				if (liste.elementAt(i) instanceof PaquetagePresentation)
@@ -143,10 +173,12 @@ public class TacheGeneration extends MonitoredTaskBase {
 					this.print(Application.getApplication().getTraduction("traitement_paquetage") + " " + paquet.getNomPresentation());
 					paquet.trierElement();
 					// récupérer les icones et les contenuts pour chaque paquetage
-					extraireIconeContenu(paquet);
+					//extraireIconeContenu(paquet);
 					// on traite la génération de ce paquetage
+					/*
 					GPaquetagePresentation paquetCourant = new GPaquetagePresentation (paquet, pwFicTree);
 					paquetCourant.traiterGeneration();
+					*/
 				}
 				else
 				{
@@ -158,13 +190,14 @@ public class TacheGeneration extends MonitoredTaskBase {
 					{
 						 this.print(Application.getApplication().getTraduction("traitement_comp") + " " + paquet.getNomPresentation());
 						 // récupérer les icones et les contenus pour chaque paquetage
-						 extraireIconeContenu(paquet);
+						 //extraireIconeContenu(paquet);
+						 /*
 						 // on traite la génération de ce composant
 						 GComposantPubliable compCourant = new GComposantPubliable (idComposant, pwFicTree);
 						 compCourant.traiterGeneration();
+						 */
 					}
 				}
-				//this.setCurrent(this.getCurrent() + part);
 			}
 		
 			return true;
@@ -321,89 +354,178 @@ public class TacheGeneration extends MonitoredTaskBase {
 		}
 	
 
+		
+
 		/**
+		 * Construire l'arbre correspondant au paquetage de présentation
+		 */
+		public void construireArbrePaquetage(ArbreGeneration arbre, PaquetagePresentation paquetage) 
+		{
+			Vector liste ; // liste en cours de traitement
+			int i;
+			ArbreGeneration nouvelArbre = null;
+			
+			paquetage.trierElement();
+			liste = paquetage.getListeElement();
+			
+			// le premier élément est la racine du paquetage
+			if (liste.size() >= 1)
+			{
+				ElementPresentation elem = (ElementPresentation)liste.elementAt(0);
+				GElement noeud = new GPaquetagePresentation(elem, paquetage, pwFicTree);
+				nouvelArbre = new ArbreGeneration(noeud);
+				arbre.ajouterSousArbre(nouvelArbre);
+			}
+				
+			for (i = 0; i < liste.size() ; i++)
+			{
+				ElementPresentation elem = (ElementPresentation)liste.elementAt(i);
+				GElement noeud = new GElement(elem, pwFicTree);
+				if (elem.getNiveau() == 2)
+				{
+					// rajoute directement au nouvel arbre
+					ArbreGeneration n = new ArbreGeneration(noeud);
+					nouvelArbre.ajouterSousArbre(n);
+				}
+				else if (elem.getNiveau() >= 2)
+				{
+					String nouvelID = elem.getID_interne().substring(elem.getID_interne().indexOf("-") + 1);
+					nouvelArbre.ajouterSousArbre(noeud, nouvelID);
+				}
+			}
+		}
+		
+		/**
+		 * @param generation
 		 * @param paquet
 		 */
-		private void extraireIconeContenu(PaquetagePresentation paquet) throws FileNotFoundException, IOException
+		public void construireArbreComposant(ArbreGeneration generation, PaquetagePresentation paquetage) 
 		{
-			this.print(Application.getApplication().getTraduction("extraction_icone"));
-			// Créer un flux d'entrée contenant l'archive ZIP à décompresser
-			File f = new File(paquet.getNomFichier());
-			FileInputStream fin = new FileInputStream(f);
-
-			/*
-			int taille = new Long(f.length()).intValue();
-			int avant = 0;
-			*/
+			Vector liste ; // liste en cours de traitement
+			int i;
+			ArbreGeneration nouvelArbre = null;
 			
-			// Mettre ce flux en mémoire tampon
-			BufferedInputStream bis = new BufferedInputStream(fin);
-
-			// Identifier le flux tampon comme flux de compression ZIP
-			ZipInputStream zin = new ZipInputStream(bis);
+			// trier
+			paquetage.trierElement();
+			liste = paquetage.getListeElement();
 			
-
-			// Définir un objet ZipEntry
-			ZipEntry ze = null;
-
-			// Tant que cet objet est différent de nul (tant qu'il y a des fichiers dans l'archive)...
-			while ((ze = zin.getNextEntry()) != null)
+			// le premier élément est la racine du composant
+			if (liste.size() >= 1)
 			{
-				 if (ze.toString().startsWith(paquet.getChemin_icone()) || ze.toString().startsWith(paquet.getChemin_contenu()))
-				 {
-					 String fichier = ze.toString();
-					 fichier = fichier.substring(fichier.indexOf("/") + 1, fichier.length());
-					 fichier = fichier.substring(fichier.indexOf("\\") + 1, fichier.length());
-					 FileOutputStream fout = null;
-					 if (ze.toString().startsWith(paquet.getChemin_icone()))
-					 {
-					 	/*
-						System.out.println(GenerationManager.getInstance().getCheminGeneration() 
-																	+ File.separator + CGenererSite.APPLET_PATH + File.separator + "images" + File.separator + fichier);
-						*/
-					 	
-						 // Créer un flux de sortie pour le fichier de l'entrée courante
-						 fout = new FileOutputStream(GenerationManager.getInstance().getCheminGeneration() 
-												 + File.separator + GenerationManager.APPLET_PATH + File.separator + "images" + File.separator + fichier);
-					 }
-					 else
-					 {
-						/*
-					 	System.out.println(Application.getApplication().getProjet().getDefProc().getRepertoireGeneration() 
-						+ "/" + CGenererSite.CONTENU_PATH + "/" + fichier);
-						*/
-						fout = new FileOutputStream(GenerationManager.getInstance().getCheminGeneration() 
-												+ File.separator + GenerationManager.CONTENU_PATH + File.separator + fichier);
-					 }
-					 dezipper(zin, fout);
-				 }
-				/*
-				 this.setCurrent(this.getCurrent() + (((taille - fin.available()) * part) / taille) - avant); 
-				 avant = ((taille - fin.available()) * part) / taille;
-				 */
-			 }
-			 // Fermer le flux d'entrée
-			 zin.close(); 
-		}
-	
-		private void dezipper( ZipInputStream zin, FileOutputStream fout) throws IOException
-		{
-			//Copier les flux:
-			synchronized (zin)
+				ElementPresentation elem = (ElementPresentation)liste.elementAt(0);
+				GElement noeud = this.getGenerateurCorrepondant(elem);
+				nouvelArbre = new ArbreGeneration(noeud);
+				arbre.ajouterSousArbre(nouvelArbre);
+			}
+				
+			for (i = 0; i < liste.size() ; i++)
 			{
-				synchronized (fout)
+				ElementPresentation elem = (ElementPresentation)liste.elementAt(i);
+				GElement noeud = this.getGenerateurCorrepondant(elem);
+				if (elem.getNiveau() == 2)
 				{
-					  byte[] buffer = new byte[256];
-					  while (true)
-					  {
-						  int bytesRead = zin.read(buffer);
-						  if (bytesRead == -1) break;
-						  fout.write(buffer, 0, bytesRead);
-					  }
-				 }
-			 } 
-			 // Fermer l'entrée et le flux de sortie
-			zin.closeEntry();
-			fout.close();
+					// rajoute directement au nouvel arbre
+					ArbreGeneration n = new ArbreGeneration(noeud);
+					nouvelArbre.ajouterSousArbre(n);
+				}
+				else if (elem.getNiveau() >= 2)
+				{
+					String nouvelID = elem.getID_interne().substring(elem.getID_interne().indexOf("-") + 1);
+					nouvelArbre.ajouterSousArbre(noeud, nouvelID);
+				}
+			}
+		}
+		
+		/**
+		 * Construit les gestionnaires de publication associés au type des éléments à traiter
+		 * @param elem element de présentation qu'il faut traiter
+		 */
+		public GElement getGenerateurCorrepondant(ElementPresentation elem) 
+		{
+			// selon le type de l'élément de présentation
+			if (elem instanceof Guide)
+			{
+				GGuide guide = new GGuide(elem,this.pwFicTree);
+				return guide;		
+			}
+			
+			// on vérifie que l'on ait bien un modèle associé
+			if(elem.getElementModele() != null)
+			{
+				// c'est un élément normal il faut récupérer le type du modèle associé
+				IdObjetModele id = elem.getElementModele();
+				
+				if (id.estComposant())
+				{
+					// composant
+					GComposantPubliable compo = new GComposantPubliable(id, elem, this.pwFicTree ); 
+					return compo;
+				}
+				
+				if (id.estActivite())
+				{
+					// activite 
+					GActivite activite = new GActivite(elem, this.pwFicTree ); 
+					return activite;
+				}
+				
+				if (id.estProduit())
+				{
+					// produit
+					GProduit produit = new GProduit(elem, this.pwFicTree ); 
+					return produit;
+				}
+				
+				if (id.estDefinitionTravail())
+				{
+					// deftravail
+					GDefinitionTravail defTrav = new GDefinitionTravail(elem, this.pwFicTree ); 
+					return defTrav;
+				}
+				
+				if (id.estDiagramme())
+				{
+					// diagramme
+					GDiagramme diag = new GDiagramme((ComposantProcessus)id.getRef(), elem, this.pwFicTree ); 
+					return diag;	
+				}
+				
+				if (id.estRole())
+				{
+					// role
+					GRole role = new GRole(elem, this.pwFicTree ); 
+					return role;
+				}
+				
+				if (id.estPaquetage())
+				{
+					GPaquetage gelem = new GPaquetage(elem, this.pwFicTree ); 
+					return gelem;
+				}
+			
+				else
+				{
+					GElementModele gelem = new GElementModele(elem, this.pwFicTree ); 
+					return gelem;
+				}
+			}
+			return null;
+		}
+		
+		//-------------------------------------------
+		// Extends MonitoredTaskBase
+		//-------------------------------------------
+		public void setTask(TaskMonitorDialog task)
+		{
+			this.mTask = task;
+		}
+		
+		private void print( String msg )
+		{
+			this.setMessage(msg);
+			if(this.mTask != null )
+			{
+				this.mTask.forceRefresh();
+			}
 		}
 }

@@ -1314,86 +1314,6 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 		return listeProduits;
 	}
 	
-	/**
-	 * Renvoie sous la forme d'une chaine de caractère le code associé à la map du diagramme
-	 */
-	public String getMapDiagramme(int numrang, int numtype, String niveauLien,  String niveauImage)
-	{
-		SpemDiagram diag = (SpemDiagram) this.listeDiagramme.elementAt(numrang);
-		SpemGraphAdapter mAdapter = (SpemGraphAdapter) this.mapDiagramme.get(diag);
-		
-		String mapcode = ("<MAP NAME=\""+ CodeHTML.normalizeName(mAdapter.getName())+"\">\n");
-
-		JGraph mGraph=null;
-		if(mAdapter instanceof ContextGraphAdapter) mGraph=new ContextJGraph(mAdapter);
-		else if(mAdapter instanceof ResponsabilityGraphAdapter) mGraph=new ResponsabilityJGraph(mAdapter);
-		else if(mAdapter instanceof ActivityGraphAdapter) mGraph=new ActivityJGraph(mAdapter);
-		else if(mAdapter instanceof FlowGraphAdapter) mGraph=new FlowJGraph(mAdapter);
-		else if(mAdapter instanceof WorkDefinitionGraphAdapter) mGraph=new WorkDefinitionJGraph(mAdapter);
-
-		JFrame frame = new JFrame();
-		frame.getContentPane().add(new JScrollPane(mGraph));
-		frame.pack();
-		frame.setVisible(false);
-
-		Vector tmp=new Vector();
-		Object o[]=mGraph.getRoots();
-
-		int x1,x2,y1,y2;
-		for(int i=0;i<o.length;i++)
-		{
-			if( o[i] instanceof ActivityCell 
-					|| o[i] instanceof WorkProductCell 
-					|| o[i] instanceof ProcessRoleCell 
-					|| o[i] instanceof WorkProductStateCell
-					|| o[i] instanceof ProcessComponentCell 
-					|| o[i] instanceof WorkDefinitionCell )
-			{
-				x1=(int)mGraph.getCellBounds(o[i]).getX();
-				x2=x1+(int)mGraph.getCellBounds(o[i]).getWidth();
-				y1=(int)mGraph.getCellBounds(o[i]).getY();
-				y2=y1+(int)mGraph.getCellBounds(o[i]).getHeight();
-				// si c'est un composant
-				if (o[i] instanceof ProcessComponentCell)
-				{
-					mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + this.getChemin(-1,-1)+"\">\n");
-				}
-				else
-				{
-					// récupérer l'ID de l'élément courant
-					int ID_Apes = ((ApesGraphCell)o[i]).getID();
-					ElementPresentation elem = (ElementPresentation)this.mapApesPresent.get(new Integer(ID_Apes));
-					if ( elem != null )
-					{
-						IdObjetModele id = elem.getElementModele();
-						if (id != null)
-						{
-							// rajouté: info-bulle contenant la description de l'élément
-							String description = "ALT=\"\"";
-							if (elem.getDescription() != null)
-							{
-								description = "ALT=\"" + elem.getDescription() + "\"";
-							}
-							mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + id.getChemin()+ "\" " + description + ">\n");
-						}
-					}
-					else
-					{
-						// S'il s'agit d'un produit exterieur (sans element de presentation)
-						if (o[i] instanceof WorkProductCell)
-						{
-							// S'occuper du paquetage special
-						}
-					}
-				}
-			}
-		}
-
-		mapcode += ("</MAP>\n");
-		mapcode += ("<IMG SRC=\""+ niveauImage + CodeHTML.normalizeName(diag.getName())+ diag.getID()+ ".png\" USEMAP=\"#"+ CodeHTML.normalizeName(mAdapter.getName())+"\">\n");
-
-		return mapcode;
-	}
 	
 	/**
 	 * @param i
@@ -1571,5 +1491,27 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * @param numRang
+	 * @return
+	 */
+	public SpemGraphAdapter getAdapter(int numRang) 
+	{
+		SpemDiagram diag = (SpemDiagram) this.listeDiagramme.elementAt(numRang);
+		SpemGraphAdapter mAdapter = (SpemGraphAdapter) this.mapDiagramme.get(diag);
+		return mAdapter;
+	}
+
+
+	/**
+	 * @param apes
+	 */
+	public ElementPresentation getElementPresentation(int ID_Apes) 
+	{
+		ElementPresentation elem = (ElementPresentation)this.mapApesPresent.get(new Integer(ID_Apes));
+		return elem;
 	}
 }
