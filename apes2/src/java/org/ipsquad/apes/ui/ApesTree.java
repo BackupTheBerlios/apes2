@@ -75,7 +75,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Application tree view
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {
@@ -471,5 +471,12 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 
 			return mPayLoad;
 		}
+	}
+	
+	protected void processMouseEvent(MouseEvent e) 
+	{
+		//catch an exception throws by BasicTreeUI$MouseHandler.handleSelection(BasicTreeUI.java:2815)
+		//the exception is throwed when you editing a TreeNode and stop editing by clicking in the tree
+		try{ super.processMouseEvent(e); }catch(Throwable t){}
 	}
 }
