@@ -101,11 +101,7 @@ public class COuvrirReferentiel extends CommandeNonAnnulable
 		try
 		{
 			CChargerReferentielDemarrage c2 = new CChargerReferentielDemarrage(chooser.getSelectedFile());
-			if (c2.executer())
-			{
-				new FenetreChoixProcessus(Application.getApplication().getFenetrePrincipale());
-			}
-			else
+			if (!c2.executer())
 			{
 				return false;
 			}

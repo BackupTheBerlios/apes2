@@ -246,7 +246,7 @@ public class Application {
 		this.config.put("site","ressources/site/");
 		this.config.put("couleur_fond_diagrmme", "-1");
 		this.config.put("couleur_arbre", "-10053121");
-		this.config.put("feuille_style", "");
+		this.config.put("feuille_style", "Silver");
 		this.config.put("repertoire_generation", "./WebSite/");
 		this.config.put("chemin_referentiel","./Repository/");
 		this.config.put("place_contenu","1");
