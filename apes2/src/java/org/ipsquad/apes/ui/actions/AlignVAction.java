@@ -38,7 +38,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Align the centers of selected objects vertically
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class AlignVAction extends ApesAction
 {
@@ -66,36 +66,31 @@ public class AlignVAction extends ApesAction
 	public void alignV(Object [] listCells)
 	{
 		ApesGraphCell c;
-		Object o;
-		Map attr,myMap;
-		Rectangle oldRect,newRect;
+		Rectangle newRect, oldRect = null;
 		JGraph mGraph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
-		o = (Object)listCells[0];
-		c=(ApesGraphCell)o;
-		attr =c.getAttributes();
-		myMap = new HashMap();
-		oldRect=(Rectangle)attr.get("bounds");
+		Map attr, myMap = new HashMap();
 		
-		for(int i =1;i<listCells.length;i++)
+		for( int i = 0; i < listCells.length; i++)
 		{
-			o = listCells[i];
-			String className=o.getClass().toString();
-			int lastPoint = className.lastIndexOf('.');
-			int end = className.length();
-			if(className.endsWith("Cell"))
+			if(listCells[i] instanceof ApesGraphCell)
 			{	
-				c=(ApesGraphCell)o;
+				c=(ApesGraphCell)listCells[i];
 				
-				attr = GraphConstants.createMap();; 
-				newRect=GraphConstants.getBounds(c.getAttributes()); 
-				newRect.setRect(newRect.getX(),oldRect.getY(),newRect.getWidth(),newRect.getHeight()); 
-				GraphConstants.setBounds(attr,newRect); 
-				myMap.put(c, attr); 
-				
+				if( oldRect == null )
+				{
+					oldRect = GraphConstants.getBounds(c.getAttributes());
+				}
+				else
+				{	
+					attr = GraphConstants.createMap();
+					newRect=new Rectangle(GraphConstants.getBounds(c.getAttributes())); 
+					newRect.setRect(newRect.getX(),oldRect.getY(),newRect.getWidth(),newRect.getHeight()); 
+					GraphConstants.setBounds(attr,newRect); 
+					myMap.put(c, attr); 
+				}
 			}
 		}
 		((SpemGraphAdapter)mGraph.getModel()).edit(myMap,null,null,null);
-		
 	}
 
 }
