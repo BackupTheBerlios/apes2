@@ -34,7 +34,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class PresentationAction extends ApesAction
 {
@@ -63,23 +63,20 @@ public class PresentationAction extends ApesAction
 
 				if(choice==JOptionPane.YES_OPTION)
 				{
-					
+					if(((ProjectManagementAction)context.getAction("Save")).saveProject())
+					{
 						String path = ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath");
 						String s = System.getProperty("os.name") ; 
 						if (s.charAt(0) == 'w' || s.charAt(0) == 'W') 
 						{ 
 							Runtime.getRuntime().exec("java -jar "+ " \""+ path +"\" " + context.getFilePath() ); 
-							
 						} 
 						else 
 						{ 
-							Runtime.getRuntime().exec("java -jar "+ path + context.getFilePath()); 
+							Runtime.getRuntime().exec("java -jar "+ path +" "+ context.getFilePath()); 
 						}
 					}
-				
-				
-				
-				
+				}
             } 
 			catch (Throwable t) 
 			{
