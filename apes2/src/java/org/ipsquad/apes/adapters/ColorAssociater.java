@@ -86,17 +86,10 @@ public class ColorAssociater implements ModelVisitor
 
 	public void visitProvidedInterface(ProvidedInterface pi)
 	{	
-		mForeground = ColorFontPanel.getColor(ColorFontPanel.PROVIDED_INTERFACE_KEY+"foreground") ;
-		mBackground = ColorFontPanel.getColor(ColorFontPanel.PROVIDED_INTERFACE_KEY+"background") ;
-		mFont = ColorFontPanel.getStyle(ColorFontPanel.PROVIDED_INTERFACE_KEY);
 	}
 
 	public void visitRequiredInterface(RequiredInterface ri)
 	{	
-		
-		mForeground = ColorFontPanel.getColor(ColorFontPanel.REQUIRED_INTERFACE_KEY+"foreground") ;
-		mBackground = ColorFontPanel.getColor(ColorFontPanel.REQUIRED_INTERFACE_KEY+"background") ;
-		mFont = ColorFontPanel.getStyle(ColorFontPanel.REQUIRED_INTERFACE_KEY);
 	}
 
 	public void visitProcess(SProcess process)

@@ -37,18 +37,15 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-
 import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
-import org.ipsquad.apes.adapters.ApesTreeNode;
-import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class PreferencesDialog extends JDialog 
 {
@@ -169,25 +166,17 @@ public class PreferencesDialog extends JDialog
 		JInternalFrame[] frames = mainFrame.getDesktop().getAllFrames();
 		JInternalFrame frameSelected = mainFrame.getDesktop().getSelectedFrame();
 		JTree tree = mainFrame.getTree();
-		String filePath = mainFrame.getFilePath();
+		Locale locale = new Locale(ConfigManager.getInstance().getProperty("Language"));
 		mainFrame.dispose();
-		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
-		SpemTreeAdapter model = (SpemTreeAdapter)tree.getModel();
-		ApesTreeNode project = (ApesTreeNode)model.getRoot();
-		ApesTreeNode component =  (ApesTreeNode)project.getChildAt(0);
-		model.change(project,resMan.getString("project"));
-		model.change(component,resMan.getString("component"));
-		model.change((ApesTreeNode)project.getChildAt(1),resMan.getString("interface")+resMan.getString("provided"));
-		model.change((ApesTreeNode)project.getChildAt(2),resMan.getString("interface")+resMan.getString("required"));
-		model.change((ApesTreeNode)component.getChildAt(0),resMan.getString("contextDiagram"));
+		ResourceManager.setResourceFile("resources/Apes", locale);
+		Locale.setDefault(locale);
 		Context context = Context.getInstance();
-		
+
 		ApesMain.initActions(context);
 		ApesFrame f = new ApesFrame(tree);
 		context.setTopLevelFrame(f);
-	
 		ErrorManager.getInstance().setOwner(f.getContentPane());
-		f.setFilePath(filePath);
+		f.setFilePath(context.getFilePath());
 		f.show();
 		for(int i = 0; i< frames.length;i++)
 		{		
@@ -198,7 +187,7 @@ public class PreferencesDialog extends JDialog
 			}
 		}
 		if(frameSelected != null)
-		{	
+		{
 			f.openDiagram(((GraphFrame)frameSelected).getGraphModel());
 			f.getDesktop().getAllFrames()[0].setBounds(frameSelected.getBounds());
 		}

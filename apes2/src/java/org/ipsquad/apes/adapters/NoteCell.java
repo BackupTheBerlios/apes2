@@ -22,18 +22,20 @@
 package org.ipsquad.apes.adapters;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
 
+import org.ipsquad.apes.ui.ColorFontPanel;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.GraphConstants;
 
 /**
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class NoteCell extends DefaultGraphCell
 {
@@ -62,8 +64,9 @@ public class NoteCell extends DefaultGraphCell
 		GraphConstants.setSizeable(map, true);
 		//outline it with a border.
 		GraphConstants.setBorder(map, BorderFactory.createLineBorder(Color.BLACK, 2));
-		//GraphConstants.setBackground(attributes, new Color(235,190,190));
-		
+		GraphConstants.setForeground(map,ColorFontPanel.getColor(ColorFontPanel.NOTES_KEY+"foreground"));
+		GraphConstants.setBackground(map,ColorFontPanel.getColor(ColorFontPanel.NOTES_KEY+"background"));
+		GraphConstants.setFont(map,new Font((String)map.get(GraphConstants.EDITABLE),ColorFontPanel.getStyle(ColorFontPanel.NOTES_KEY),13));
 		changeAttributes(map);
 	}
 	

@@ -39,7 +39,7 @@ import javax.swing.border.TitledBorder;
 import org.ipsquad.utils.ConfigManager;
 
 /**
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 public class DefaultPathPanel extends OptionPanel
 {
@@ -48,6 +48,7 @@ public class DefaultPathPanel extends OptionPanel
 	
 	public static final String TOOL_PRESENTATION_KEY = "ToolPresentationTitle" ;
 	public static final String WORKSPACE_KEY = "WorkspaceTitle" ;
+	public static final String PICTURES_KEY = "PicturesTitle" ;
 		
 	public  DefaultPathPanel (String name)
 	{
@@ -78,8 +79,6 @@ public class DefaultPathPanel extends OptionPanel
 			c.weighty = 0;
 			c.weightx = 0 ;
 			c.fill = GridBagConstraints.BOTH;
-			//c.gridwidth = ;//next-to-last in row
-			//c.gridwidth = GridBagConstraints.RELATIVE;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			JLabel label = new JLabel(PreferencesDialog.resMan.getString("DefaultPathEnterLib"));
 			gridbag.setConstraints(label, c);

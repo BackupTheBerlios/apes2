@@ -79,7 +79,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ApesMain
 {
@@ -87,8 +87,6 @@ public class ApesMain
 	{
 		ResourceManager resManager = ResourceManager.getInstance();
 		Properties properties = new Properties();
-		properties.setProperty("Language",Locale.getDefault().getLanguage());
-		properties.setProperty("ErrorPanelTitleyes","true");
 		properties.setProperty("ActivityTitleforegroundred","0");
 		properties.setProperty("ActivityTitleforegroundgreen","0");
 		properties.setProperty("ActivityTitleforegroundblue","0");
@@ -105,22 +103,6 @@ public class ApesMain
 		properties.setProperty("RoleTitlebackgroundblue","255");
 		properties.setProperty("RoleTitlebold","false");
 		properties.setProperty("RoleTitleitalic","false");
-		properties.setProperty("GuardTitleforegroundred","0");
-		properties.setProperty("GuardTitleforegroundgreen","0");
-		properties.setProperty("GuardTitleforegroundblue","0");
-		properties.setProperty("GuardTitlebackgroundred","255");
-		properties.setProperty("GuardTitlebackgroundgreen","255");
-		properties.setProperty("GuardTitlebackgroundblue","255");
-		properties.setProperty("GuardTitlebold","false");
-		properties.setProperty("GuardTitleitalic","false");
-		properties.setProperty("StateTitleforegroundred","0");
-		properties.setProperty("StateTitleforegroundgreen","0");
-		properties.setProperty("StateTitleforegroundblue","0");
-		properties.setProperty("StateTitlebackgroundred","255");
-		properties.setProperty("StateTitlebackgroundgreen","255");
-		properties.setProperty("StateTitlebackgroundblue","255");
-		properties.setProperty("StateTitlebold","false");
-		properties.setProperty("StateTitleitalic","false");
 		properties.setProperty("WorkproductTitleforegroundred","0");
 		properties.setProperty("WorkproductTitleforegroundgreen","0");
 		properties.setProperty("WorkproductTitleforegroundblue","0");
@@ -129,24 +111,35 @@ public class ApesMain
 		properties.setProperty("WorkproductTitlebackgroundblue","255");
 		properties.setProperty("WorkproductTitlebold","false");
 		properties.setProperty("WorkproductTitleitalic","false");
-		properties.setProperty("WorkproductProvidedTitleforegroundred","0");
-		properties.setProperty("WorkproductProvidedTitleforegroundgreen","0");
-		properties.setProperty("WorkproductProvidedTitleforegroundblue","0");
-		properties.setProperty("WorkproductProvidedTitlebackgroundred","255");
-		properties.setProperty("WorkproductProvidedTitlebackgroundgreen","255");
-		properties.setProperty("WorkproductProvidedTitlebackgroundblue","255");
-		properties.setProperty("WorkproductProvidedTitlebold","false");
-		properties.setProperty("WorkproductProvidedTitleitalic","false");
-		properties.setProperty("WorkproductRequiredTitleforegroundred","0");
-		properties.setProperty("WorkproductRequiredTitleforegroundgreen","0");
-		properties.setProperty("WorkproductRequiredTitleforegroundblue","0");
-		properties.setProperty("WorkproductRequiredTitlebackgroundred","255");
-		properties.setProperty("WorkproductRequiredTitlebackgroundgreen","255");
-		properties.setProperty("WorkproductRequiredTitlebackgroundblue","255");
-		properties.setProperty("WorkproductRequiredTitlebold","false");
-		properties.setProperty("WorkproductRequiredTitleitalic","false");
+		properties.setProperty("StateTitleforegroundred","0");
+		properties.setProperty("StateTitleforegroundgreen","0");
+		properties.setProperty("StateTitleforegroundblue","0");
+		properties.setProperty("StateTitlebackgroundred","255");
+		properties.setProperty("StateTitlebackgroundgreen","255");
+		properties.setProperty("StateTitlebackgroundblue","255");
+		properties.setProperty("StateTitlebold","false");
+		properties.setProperty("StateTitleitalic","false");
+		properties.setProperty("GuardTitleforegroundred","0");
+		properties.setProperty("GuardTitleforegroundgreen","0");
+		properties.setProperty("GuardTitleforegroundblue","0");
+		properties.setProperty("GuardTitlebackgroundred","255");
+		properties.setProperty("GuardTitlebackgroundgreen","255");
+		properties.setProperty("GuardTitlebackgroundblue","255");
+		properties.setProperty("GuardTitlebold","false");
+		properties.setProperty("GuardTitleitalic","false");
+		properties.setProperty("NotesTitleforegroundred","0");
+		properties.setProperty("NotesTitleforegroundgreen","0");
+		properties.setProperty("NotesTitleforegroundblue","0");
+		properties.setProperty("NotesTitlebackgroundred","255");
+		properties.setProperty("NotesTitlebackgroundgreen","255");
+		properties.setProperty("NotesTitlebackgroundblue","204");
+		properties.setProperty("NotesTitlebold","false");
+		properties.setProperty("NotesTitleitalic","false");
 		properties.setProperty("ToolPresentationTitledefaultPath","");
 		properties.setProperty("WorkspaceTitledefaultPath","");
+		properties.setProperty("PicturesTitledefaultPath","");
+		properties.setProperty("ErrorPanelTitleyes","true");
+		properties.setProperty("Language",Locale.getDefault().getLanguage());
 
 		return properties;
 	}
@@ -154,7 +147,9 @@ public class ApesMain
 	public static void main(String[] args)
 	{
 		ConfigManager.init(createDefaultProperties());
-		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
+		Locale locale = new Locale(ConfigManager.getInstance().getProperty("Language"));
+		ResourceManager.setResourceFile("resources/Apes",locale);
+		Locale.setDefault(locale);
 
 		Context context = Context.getInstance();
 

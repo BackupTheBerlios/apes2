@@ -1,22 +1,8 @@
 /*
- * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
- * team@ipsquad.tuxfamily.org
+ * Created on 28 janv. 2004
  *
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * To change the template for this generated file go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 package org.ipsquad.apes.ui;
 
@@ -31,8 +17,10 @@ import javax.swing.tree.DefaultTreeModel;
 import org.ipsquad.utils.ResourceManager;
 
 /**
+ * @author Administrateur
  *
- * @version $Revision: 1.2 $
+ * To change the template for this generated type comment go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class PreferencesTree extends JTree 
 {
@@ -53,24 +41,22 @@ public class PreferencesTree extends JTree
 				(ColorFontPanel.ACTIVITY_KEY,resMan.getString(ColorFontPanel.ACTIVITY_KEY),PreferencesTreeItem.COLOR_PANEL)));
 			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 				(ColorFontPanel.ROLE_KEY,resMan.getString(ColorFontPanel.ROLE_KEY),PreferencesTreeItem.COLOR_PANEL)));
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(ColorFontPanel.GUARD_KEY,resMan.getString(ColorFontPanel.GUARD_KEY),PreferencesTreeItem.COLOR_PANEL)));
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(ColorFontPanel.STATE_KEY,resMan.getString(ColorFontPanel.STATE_KEY),PreferencesTreeItem.COLOR_PANEL)));	
 			DefaultMutableTreeNode workProductTree = new DefaultMutableTreeNode(new PreferencesTreeItem(ColorFontPanel.WORK_PRODUCT_KEY,resMan.getString(ColorFontPanel.WORK_PRODUCT_KEY),PreferencesTreeItem.COLOR_PANEL));
-						workProductTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-							(ColorFontPanel.PROVIDED_INTERFACE_KEY,resMan.getString(ColorFontPanel.PROVIDED_INTERFACE_KEY),PreferencesTreeItem.COLOR_PANEL)));	
-						workProductTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-							(ColorFontPanel.REQUIRED_INTERFACE_KEY,resMan.getString(ColorFontPanel.REQUIRED_INTERFACE_KEY),PreferencesTreeItem.COLOR_PANEL)));
+					workProductTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
+						(ColorFontPanel.STATE_KEY,resMan.getString(ColorFontPanel.STATE_KEY),PreferencesTreeItem.COLOR_PANEL)));	
 			appearanceTree.add(workProductTree);
+			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
+						(ColorFontPanel.NOTES_KEY,resMan.getString(ColorFontPanel.NOTES_KEY),PreferencesTreeItem.COLOR_PANEL)));
+			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
+						(ColorFontPanel.GUARD_KEY,resMan.getString(ColorFontPanel.GUARD_KEY),PreferencesTreeItem.COLOR_PANEL)));
 		DefaultMutableTreeNode defaultTree = new DefaultMutableTreeNode(new PreferencesTreeItem
 				(DescriptionPanel.DEFAULT_PATH_KEY,resMan.getString(DescriptionPanel.DEFAULT_PATH_KEY),PreferencesTreeItem.DESC_PANEL));
 			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 				(DefaultPathPanel.TOOL_PRESENTATION_KEY,resMan.getString(DefaultPathPanel.TOOL_PRESENTATION_KEY),PreferencesTreeItem.PATH_PANEL)));
 			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 				(DefaultPathPanel.WORKSPACE_KEY,resMan.getString(DefaultPathPanel.WORKSPACE_KEY),PreferencesTreeItem.PATH_PANEL)));	
-	
-		
+			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
+				(DefaultPathPanel.PICTURES_KEY,resMan.getString(DefaultPathPanel.PICTURES_KEY),PreferencesTreeItem.PATH_PANEL)));	
 				//defaultTree.setAllowsChildren(false);
 		DefaultMutableTreeNode windowsTree = new DefaultMutableTreeNode(new PreferencesTreeItem
 					(DescriptionPanel.WINDOWS_KEY,resMan.getString(DescriptionPanel.WINDOWS_KEY),PreferencesTreeItem.DESC_PANEL));

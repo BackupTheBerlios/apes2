@@ -54,7 +54,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
  
 class NoteView extends VertexView 
@@ -121,7 +121,6 @@ class NoteView extends VertexView
 					Rectangle cellBounds = GraphConstants.getBounds(map);
 					Rectangle editingBounds = editorComponent.getBounds();
 					GraphConstants.setBounds(map, new Rectangle(cellBounds.x, cellBounds.y, editingBounds.width, editingBounds.height));
-
 					return super.stopCellEditing();
 				}
 
@@ -150,7 +149,10 @@ class NoteView extends VertexView
 				//set the size of an editor to that of a view
 				CellView view = graph.getGraphLayoutCache().getMapping(cell, false);
 				editingComponent.setBounds(view.getBounds());
-
+				Color background = GraphConstants.getBackground(view.getAllAttributes());
+				editingComponent.setBackground((background != null) ? background : graph.getBackground());
+				Color foreground = GraphConstants.getForeground(view.getAllAttributes());
+				editingComponent.setForeground((foreground != null) ? foreground : graph.getForeground());
 				//I have to set a font here instead of in the RealCellEditor.getGraphCellEditorComponent() because
 				//I don't know what cell is being edited when in the RealCellEditor.getGraphCellEditorComponent().
 				Font font = GraphConstants.getFont(view.getAllAttributes());
@@ -205,14 +207,13 @@ class NoteView extends VertexView
 			{
 				setText(view.getCell().toString());
 
-				Map attributes = view.getAllAttributes();
+				Map attributes = view.getAllAttributes(); 
 				installAttributes(graph, attributes);
 				return this;
 			}
 
 			protected void installAttributes(JGraph graph, Map attributes) 
 			{
-				setOpaque(GraphConstants.isOpaque(attributes));
 				Color foreground = GraphConstants.getForeground(attributes);
 				setForeground((foreground != null) ? foreground : graph.getForeground());
 				Color background = GraphConstants.getBackground(attributes);
