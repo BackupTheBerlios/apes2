@@ -45,7 +45,7 @@ public class Application {
 	/**
 	 * Numéro de version de IEPP
 	 */
-	public static String NUMVESION = "1.1.1";
+	public static String NUMVESION = "1.1.2";
 	
 	/**
 	 * Lien vers l'instance courante de l'application
@@ -170,9 +170,8 @@ public class Application {
 	 */
 	private void chargerReferentiel() 
 	{
-		// TODO Auto-generated method stub
 		File ref = new File(Application.getApplication().getConfigPropriete("referentiel_demarrage"));
-		if (ref.exists())
+		if (ref.exists() && ref.isFile())
 		{
 			CChargerReferentielDemarrage c = new CChargerReferentielDemarrage(ref);
 			if (c.executer())
@@ -181,11 +180,15 @@ public class Application {
 			}
 			else
 			{
+				// modifier la configuration
+				this.setConfigPropriete("referentiel_demarrage", "");
 				FenetreChoixReferentiel fcr = new FenetreChoixReferentiel(this.fenetrePpale);
 			}
 		}
 		else
 		{
+			// modifier la configuration
+			this.setConfigPropriete("referentiel_demarrage", "");
 			FenetreChoixReferentiel fcr = new FenetreChoixReferentiel(this.fenetrePpale);
 		}
 	}
@@ -244,9 +247,8 @@ public class Application {
 		this.config.put("couleur_fond_diagrmme", "-1");
 		this.config.put("couleur_arbre", "-10053121");
 		this.config.put("feuille_style", "");
-		this.config.put("repertoire_generation", "./");
-		this.config.put("chemingeneration","./");
-		this.config.put("chemin_referentiel","./Referentiels/");
+		this.config.put("repertoire_generation", "./WebSite/");
+		this.config.put("chemin_referentiel","./Repository/");
 		this.config.put("place_contenu","1");
 		this.sauvegarderConfig();
 	}

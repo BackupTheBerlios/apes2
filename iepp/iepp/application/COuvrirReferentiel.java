@@ -22,6 +22,8 @@ package iepp.application;
 
 
 
+import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -31,6 +33,8 @@ import util.SimpleFileFilter;
 
 import iepp.Application;
 import iepp.application.areferentiel.Referentiel;
+import iepp.ui.FenetreChoixProcessus;
+import iepp.ui.FenetreChoixReferentiel;
 
 
 
@@ -96,9 +100,15 @@ public class COuvrirReferentiel extends CommandeNonAnnulable
 		
 		try
 		{
-			String nomRef = chooser.getSelectedFile().getName();
-			Referentiel nouveau = new Referentiel(nomRef.substring(0, nomRef.lastIndexOf(".")));
-			Application.getApplication().setReferentiel(nouveau);
+			CChargerReferentielDemarrage c2 = new CChargerReferentielDemarrage(chooser.getSelectedFile());
+			if (c2.executer())
+			{
+				new FenetreChoixProcessus(Application.getApplication().getFenetrePrincipale());
+			}
+			else
+			{
+				return false;
+			}
 		}
 		catch(NumberFormatException e)
 		{
