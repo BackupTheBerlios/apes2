@@ -54,7 +54,7 @@ public class CAjouterComposantRef extends CommandeNonAnnulable
 		if(chooser.showOpenDialog(Application.getApplication().getFenetrePrincipale()) != JFileChooser.APPROVE_OPTION )
 			return false;
 
-		// Recuperer le référentiel courantet lui demander de charger un composant
+		// Recuperer le référentiel courant et lui demander de charger un composant
 		Referentiel ref = Application.getApplication().getReferentiel() ;
 		long id = ref.ajouterElement(chooser.getSelectedFile().getAbsolutePath(), ElementReferentiel.COMPOSANT) ;
 		if (id == -2)

@@ -18,6 +18,7 @@
  */
 package iepp.infrastructure.jsx;
 
+import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -331,34 +332,58 @@ public class ChargeurComposant extends MonitoredTaskBase
 	 */
 	public String chercherNomComposant(String projectZip) throws ParserConfigurationException, SAXException, IOException
 	{
-		/*
+		
 		this.componentTrouve = false;
-		ZipEntry zipEntry = projectZip.getNextEntry();
-		while( zipEntry != null && !this.componentTrouve )
+		ZipInputStream zipFile = null ;
+		try
 		{
-			DataInputStream data = new DataInputStream( new BufferedInputStream(projectZip) );
-			if( zipEntry.getName().equals("Component.xml") )
-			{	
-				this.componentTrouve = true;
-				SAXParserFactory factory = SAXParserFactory.newInstance();
-				SAXParser saxparser = factory.newSAXParser();
-				ComponentHandler handler = new ComponentHandler();
-				saxparser.parse( data, handler );
-			}
-			else
+			// récupérer un flux vers le fichier zip
+			zipFile = new ZipInputStream( new FileInputStream (new File(projectZip)));
+			ZipEntry zipEntry = zipFile.getNextEntry();
+			while( zipEntry != null && !this.componentTrouve )
 			{
-				zipEntry = projectZip.getNextEntry();
+				DataInputStream data = new DataInputStream( new BufferedInputStream(zipFile) );
+				if( zipEntry.getName().equals("Presentation.xml") )
+				{	
+					this.componentTrouve = true;
+					SAXParserFactory factory = SAXParserFactory.newInstance();
+					SAXParser saxparser = factory.newSAXParser();
+					ComponentHandler handler = new ComponentHandler();
+					saxparser.parse( data, handler );
+				}
+				else
+				{
+					zipEntry = zipFile.getNextEntry();
+				}
 			}
+			zipFile.close();
 		}
-		projectZip.close();
-		if (! this.componentTrouve )
+		catch (FileNotFoundException e)
 		{
-			// dans le cas d'un composant vide, il n'y a pas de component.xml, 
-			// on se contente du nom du fichier sans extension .apes
-			return null;
+			// ne devrait pas arriver
+			this.componentTrouve = false;
+			this.traiterErreur();
+			ErrorManager.getInstance().display("ERR","ERR_Fichier_Non_Trouve");
+			
 		}
-		System.out.println(this.nomComposant);
-		*/
+		catch (ParserConfigurationException e)
+		{
+			this.componentTrouve = false;
+			e.printStackTrace();
+			ErrorManager.getInstance().displayError(e.getMessage());
+		} 
+		catch (SAXException e) 
+		{
+			this.componentTrouve = false;
+			e.printStackTrace();
+			ErrorManager.getInstance().displayError(e.getMessage());
+		}
+		catch (IOException e) 
+		{
+			this.componentTrouve = false;
+			e.printStackTrace();
+			ErrorManager.getInstance().displayError(e.getMessage());
+		}
 		
 		this.componentTrouve = this.findData("Component.xml",projectZip);
 		this.presentationTrouve = this.findData("Presentation.xml",projectZip);
@@ -368,7 +393,9 @@ public class ChargeurComposant extends MonitoredTaskBase
 		{
 			return null;
 		}	
-		return projectZip;
+		//return projectZip;
+		return  this.nomComposant;
+		
 	}	
 	
 	//-------------------------------------------------------------
@@ -422,6 +449,85 @@ public class ChargeurComposant extends MonitoredTaskBase
 	}
 	
 	//-------------------------------------------------------------
+	// COMPOSANT
+	//-------------------------------------------------------------
+	/**
+	 * Classe permettant de récupérer le nom de présentation d'un composant
+	 */
+	private class ComponentHandler extends DefaultHandler
+	{
+		private boolean isElement = false;
+		private boolean isGuide = false;
+		private boolean isIdentificateur = false;
+		private String baliseCourante ;
+		private String resultat = null;
+		
+		public ComponentHandler()
+		{
+			ChargeurComposant.this.nomComposant = null;
+		}
+		
+		/**
+		 * On récupère l'évènement "je rentre sur une nouvelle balise"
+		 */
+		public void startElement (String uri, String localName, String baliseName, Attributes attributes)
+		{	
+			this.baliseCourante = baliseName ;
+			if(baliseName=="element")
+			{
+				// on trouve un élément de présentation
+				this.isElement = true;
+			}
+			else if(baliseName=="guide")
+			{
+				this.isElement = false;
+			}
+		}
+		
+		public void endElement(String namespace, String name, String raw) 
+		{
+			if(raw == "guide") this.isGuide = false;
+			if(raw == "element") this.isElement = false;
+		}
+	
+		public void characters(char buf[], int offset, int len) throws SAXException
+		{	
+			String valeur = new String(buf, offset, len);
+			if (!valeur.trim().equals(""))
+			{
+				if(this.isElement)
+				{
+					if (this.baliseCourante.equals("nom_presentation"))
+					{
+						// si on se trouve dans la bonne balise
+						if (this.isIdentificateur)
+						{
+								// alors le nom que l'on récupère est le bon 
+								ChargeurComposant.this.nomComposant = valeur;
+								// tout le reste est ignoré
+								this.isIdentificateur = false;
+						}
+					}
+					else if (this.baliseCourante.equals("identificateur_interne"))
+					{
+						try
+						{
+							// l'identificateur interne du composant est 1
+							if ((new Integer(valeur)).intValue() == 1)
+							{
+								// onse trouve dans les bonnes balises
+								this.isIdentificateur = true;
+							}
+						}
+						catch( Exception excep){}
+					}
+				}
+			} 
+		}
+	}
+	
+	
+	//-------------------------------------------------------------
 	// PRESENTATION
 	//-------------------------------------------------------------
 	/**
@@ -442,6 +548,7 @@ public class ChargeurComposant extends MonitoredTaskBase
 		public PresentationHandler(ComposantProcessus cp)
 		{
 			this.cp = cp ;
+			ChargeurComposant.this.nomComposant = null;
 		}
 		
 		/**
@@ -492,7 +599,10 @@ public class ChargeurComposant extends MonitoredTaskBase
 				if(this.isProprietes)
 				{
 					if (this.baliseCourante.equals("nom_presentation"))
+					{
 						ChargeurComposant.this.cp.getPaquetage().setNomPresentation(valeur);
+						ChargeurComposant.this.nomComposant = valeur;
+					}
 					else if (this.baliseCourante.equals("chemin_contenus"))
 					{
 						if ( valeur.endsWith("/") || valeur.endsWith("\\"))						{
@@ -553,37 +663,55 @@ public class ChargeurComposant extends MonitoredTaskBase
 	}
 	
 	//-------------------------------------------------------------
-	// COMPOSANT
+	// Paquetage de présentation
 	//-------------------------------------------------------------
 	/**
-	* Classe permettant de récupérer les évènements survenus lors du parsing d'un fichier component.xml
+	 * Classe permettant de récupérer le nom de présentation d'un composant
 	 */
-	
-	private class ComponentHandler extends DefaultHandler
+	private class PaquetagePresentationHandler extends DefaultHandler
 	{
-		private boolean dejaTrouve = false; 
+		private boolean isProprietes = false;
+		private boolean isElement = false;
+		private boolean isGuide = false;
+		private String baliseCourante ;
 		
-		/**
-		 * Constructeur
-		 */
-		
-		public ComponentHandler()
+		public PaquetagePresentationHandler()
 		{
-			super();
+			ChargeurComposant.this.nomComposant = null;
 		}
-	
+		
 		/**
 		 * On récupère l'évènement "je rentre sur une nouvelle balise"
 		 */
 		public void startElement (String uri, String localName, String baliseName, Attributes attributes)
-		{
-			// agir selon le nom de la balise courante
-			if(baliseName == "java.lang.String" && !this.dejaTrouve)
+		{	
+			this.baliseCourante = baliseName ;
+			if(baliseName=="proprietes")
 			{
-				ChargeurComposant.this.nomComposant = attributes.getValue("valueOf");
-				this.dejaTrouve = true;
-				System.out.println(ChargeurComposant.this.nomComposant);
+				this.isProprietes = true;
 			}
+		}
+		
+		public void endElement(String namespace, String name, String raw) 
+		{
+			if(raw == "proprietes") this.isProprietes = false; 
+		}
+	
+		public void characters(char buf[], int offset, int len) throws SAXException
+		{	
+			String valeur = new String(buf, offset, len);
+			if (!valeur.trim().equals(""))
+			{
+				//System.out.println(valeur);
+				if(this.isProprietes)
+				{
+					if (this.baliseCourante.equals("nom_presentation"))
+					{
+						System.out.println("Nom Paq Pre : " + valeur);
+						ChargeurComposant.this.nomComposant = valeur;
+					}
+				}
+			} 
 		}
 	}
 	

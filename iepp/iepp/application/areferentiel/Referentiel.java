@@ -243,21 +243,26 @@ public class Referentiel extends Observable implements TreeModel
 						{ 
 							try
 							{
+								System.out.println("LIGNE : " + ligne);
+								
 								// Création du chargeur permettant de récupérer le nom de l'élément
 								chargeur = new ChargeurComposant(ligne);
 			
 								// Création du flux permettant de chercher le nom de l'élément 			
 								//ZipInputStream zipFile = new ZipInputStream(new FileInputStream(new File(ligne)));
 							
+								System.out.println("LIGNE : " + ligne);
 								// Chargement du nom de l'élément à partir du fichier .pre pour les composants non vides
 								nomElt = chargeur.chercherNomComposant(ligne);
 								
+								System.out.println("NomELEMENT : " + nomElt);
+								
 								// si c'est un composant vide
-								//if ( nomElt == null )
-								//{
+								if ( nomElt == null )
+								{
 									// Le nom du fichier du composant vide est celui du composant
 									nomElt = this.extraireNomFichier(ligne);
-								//}
+								}
 								
 								this.getNoeudComposants().add(new ElementReferentiel(nomElt, this.extraireIdComposant(ligne), ligne, ElementReferentiel.COMPOSANT));
 							
@@ -269,6 +274,7 @@ public class Referentiel extends Observable implements TreeModel
 							}
 							catch(SAXException e)
 							{
+								System.out.println("LIGNE : " + ligne);
 								e.printStackTrace();
 								ErrorManager.getInstance().displayError(e.getMessage()); 
 							}
@@ -352,31 +358,6 @@ public class Referentiel extends Observable implements TreeModel
 			fic = new File(pathFic);
 			fic.mkdirs();
 			
-			// L'ajout d'une DP ou d'un composant vide ne crée que le répertoire où il sera sauvé plus tard ainsi qu'un fichier vide
-			if ((type != ElementReferentiel.DP) && (type != ElementReferentiel.COMPOSANT_VIDE))
-			{
-				// Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
-				Copie.copieFic(chemin, pathFic);
-
-				// pathFic reçoit le chemin absolu du fichier copié dans le référentiel	
-				pathFic += chemin.substring(chemin.lastIndexOf(File.separator));
-			}
-			else if (type == ElementReferentiel.DP) // Cas des DP
-			{
-				// Création du fichier DP
-				pathFic += File.separator + chemin + ".iepp";
-				CSauvegarderDP c = new CSauvegarderDP(pathFic);
-				c.executer();
-			}
-			else // Cas des composants vides
-			{				 
-				//Création du répertoire où sera copié le fichier de l'élément
-				pathFic += File.separator + chemin + ".apes";
-				//sauvegarderInterface(pathFic);
-				fic = new File(pathFic);
-				fic.createNewFile();
-			}
-			
 			// Ajoute l'élément dans l'arbre
 			switch (type)
 			{
@@ -384,22 +365,39 @@ public class Referentiel extends Observable implements TreeModel
 				case (ElementReferentiel.COMPOSANT):
 					if (type == ElementReferentiel.COMPOSANT)
 					{
-						
-						// Création du chargeur permettant de récupérer le nom de l'élément
-						ChargeurComposant chargeur = new ChargeurComposant(pathFic);
 
-						nomElt = chargeur.chercherNomComposant(pathFic);
+						// Création du chargeur permettant de récupérer le nom de l'élément
+						ChargeurComposant chargeur = new ChargeurComposant(chemin);
+
+						nomElt = chargeur.chercherNomComposant(chemin);
+						
+						System.out.println("NOM COMPOSANT : " + nomElt);
+						
 						// Permet de savoir si le fichier est un composant ou pas
 						// Renvoie -2 si c'est pas le cas
 						if (nomElt == null)
 						{ return -2; }
+						/*
 						else
 						{
-							nomElt = this.extraireNomFichier(pathFic);	
+							nomElt = this.extraireNomFichier(chemin);	
 						}
+						*/
+						
+						//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
+						pathFic += File.separator + nomElt + ".pre";
+						Copie.copieFicCh(chemin, pathFic);
+						
 					}
+					// cas des composants vides
 					else
 					{
+						// Création du répertoire où sera copié le fichier de l'élément
+						pathFic += File.separator + chemin + ".apes";
+						// sauvegarderInterface(pathFic);
+						fic = new File(pathFic);
+						fic.createNewFile();
+						
 						// Le nom du fichier du composant vide est celui du fichier
 						nomElt = this.extraireNomFichier(pathFic);	
 					}
@@ -407,6 +405,12 @@ public class Referentiel extends Observable implements TreeModel
 					break;
 					
 				case (ElementReferentiel.DP):
+					
+					// Création du fichier DP
+					pathFic += File.separator + chemin + ".iepp";
+					CSauvegarderDP c = new CSauvegarderDP(pathFic);
+					c.executer();
+					
 					// On récupère le nom du fichier de l'élément
 					nomElt = this.extraireNomFichier(pathFic);
 					
@@ -414,6 +418,13 @@ public class Referentiel extends Observable implements TreeModel
 					break;
 					
 				case (ElementReferentiel.PRESENTATION):
+					
+					//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
+					Copie.copieFic(chemin, pathFic);
+
+					// pathFic reçoit le chemin absolu du fichier copié dans le référentiel	
+					pathFic += chemin.substring(chemin.lastIndexOf(File.separator));
+					
 					// On récupère le nom du fichier de l'élément
 					nomElt = this.extraireNomFichier(pathFic);
 					

@@ -83,6 +83,7 @@ public class Copie
 	*/
 	public static void copieFic (String ficSource, String repDest) throws Exception
 	{
+		
 		// Recuperer le caractere de separation des repertoires (depend du systeme)
 		String separ = File.separator ;
 			
@@ -91,11 +92,32 @@ public class Copie
 		if (!fSource.exists()) throw new Exception (Application.getApplication().getTraduction("ERR_Rep_Source_Non_Trouve")) ;
 		File fDest = new File (repDest) ;
 		if (!fDest.exists()) throw new Exception (Application.getApplication().getTraduction("ERR_Rep_Dest_Non_Trouve"));
+		Copie.copieFicCh(ficSource, repDest+separ+fSource.getName());
+ 
+	}
+	
+	/**
+	* Recopie un fichier vers un autre répertoire, les noms des fichiers peuvent être différents
+	* Leve une exception si le fichier source ou le repertoire destination n'existe pas
+	* Utilise le caractere de separation de repertoires donne par JAVA (variable suivant systeme)
+	* 
+	*/
+	public static void copieFicCh (String ficSource, String ficDest) throws Exception
+	{
+		// Recuperer le caractere de separation des repertoires (depend du systeme)
+		String separ = File.separator ;
+			
+		// Verifier que le fichier et le repertoire existent
+		File fSource = new File (ficSource) ;
+		if (!fSource.exists()) throw new Exception (Application.getApplication().getTraduction("ERR_Rep_Source_Non_Trouve")) ;
+		File fDest = new File (ficDest) ;
+		File path = fDest.getParentFile();
+		if (!path.exists()) throw new Exception (Application.getApplication().getTraduction("ERR_Rep_Dest_Non_Trouve"));
   
   		// Ouvrir le fichier source en ecriture
 		FileInputStream in = new FileInputStream(ficSource) ;
 		// Ouvrir un fichier en ecriture dans le repertoire destination
-  		FileOutputStream out = new FileOutputStream(repDest+separ+fSource.getName()) ;
+  		FileOutputStream out = new FileOutputStream(ficDest) ;
   
   		// optimise la copie d'un fichier à l'aide d'un buffer
 		BufferedOutputStream bos = new BufferedOutputStream(out);
@@ -121,4 +143,5 @@ public class Copie
 		bis.close();
  
 	}
+	
 }
