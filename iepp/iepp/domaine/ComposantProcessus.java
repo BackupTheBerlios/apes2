@@ -874,6 +874,16 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 				case PAQUETAGE: return (((Element)(this.listePaquetage.elementAt(numrang))).getID());
 				case DIAGRAMME: return (((Element)(this.listeDiagramme.elementAt(numrang))).getID());
 				case DEFINITION_TRAVAIL: return (((Element)(this.listeDefinition.elementAt(numrang))).getID());
+				case PRODUITS_ENTREE:
+				case PRODUITS_SORTIE:
+				    					String nomProd = this.toString(numrang,numtype);
+				    					for (int i = 0; i < produits.size(); i++)
+				    					{
+				    					    if (produits.elementAt(i).toString().equals(nomProd))
+				    					    {
+				    					        return ((WorkProduct)produits.elementAt(i)).getID();
+				    					    }
+				    					}
 			}
 			return -1;
 		}

@@ -176,8 +176,21 @@ public class GDiagramme extends GElementModele
 				y2=y1+(int)mGraph.getCellBounds(o[i]).getHeight();
 				
 				// récupérer l'ID de l'élément courant
-				int ID_Apes = ((ApesGraphCell)o[i]).getID();
-				ElementPresentation elem = this.cp.getElementPresentation(ID_Apes);
+				int ID_Apes;
+				ElementPresentation elem;
+				
+				IdObjetModele nouvelId = GenerationManager.estProduitChange( this.cp.toString()+ "::" + o[i].toString());
+			    if (nouvelId != null)
+			    {
+			        ID_Apes = nouvelId.getID();
+			        elem = ((ComposantProcessus)nouvelId.getRef()).getElementPresentation(ID_Apes);
+			    }
+				else
+				{
+				    ID_Apes = ((ApesGraphCell)o[i]).getID();
+				    elem = this.cp.getElementPresentation(ID_Apes);
+				}
+			    
 				if ( elem != null )
 				{
 					IdObjetModele id = elem.getElementModele();

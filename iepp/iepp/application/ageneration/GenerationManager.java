@@ -655,7 +655,7 @@ public class GenerationManager
 	}
 	
 	/**
-	 * Indique si l'ID passee en parametre en celle d'un produit lie a un autre qui doit etre affiche
+	 * Indique si l'ID passee en parametre est celle d'un produit lie a un autre qui doit etre affiche
 	 * @param id IdObjectModele a controler
 	 * @return l'ID du produit qu'il faut afficher si l'objet est trouve, null sinon
 	 */
@@ -664,6 +664,19 @@ public class GenerationManager
 	    if (listeProduitsChanges.containsKey(id.getRef().toString() +"::"+ id.toString()))
 	    {
 	        return ((IdObjetModele)listeProduitsChanges.get(id.getRef().toString() + "::"+ id.toString()));
+	    }
+	    return null;
+	}
+	/**
+	 * Indique si la chaine representant un produit passee en parametre est celle d'un produit lie a un autre qui doit etre affiche
+	 * @param id IdObjectModele a controler
+	 * @return l'ID du produit qu'il faut afficher si l'objet est trouve, null sinon
+	 */
+	public static IdObjetModele estProduitChange (String id)
+	{
+	    if (listeProduitsChanges.containsKey(id))
+	    {
+	        return (IdObjetModele)listeProduitsChanges.get(id);
 	    }
 	    return null;
 	}
