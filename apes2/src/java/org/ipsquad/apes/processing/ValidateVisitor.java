@@ -51,7 +51,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -417,7 +417,26 @@ public class ValidateVisitor implements RoutedSpemVisitor
 
 	public void visitContextDiagram(ContextDiagram diagram)
 	{ 
-		visitSpemDiagram(diagram);		
+		if( diagram.modelElementCount() == 1 )
+		{
+			ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateEmptyDiagram")+" : "+diagram.getName());
+			mHasErrors = true;
+		}
+		
+		for( int i=0; i < diagram.modelElementCount(); i++ )
+		{
+			if( diagram.getModelElement(i) instanceof WorkProduct )
+			{
+				WorkProduct wp = (WorkProduct)diagram.getModelElement(i);
+				if( wp.getReferences() == WorkProduct.NO_REFERENCES )
+				{
+					ErrorManager.getInstance().println(
+							ResourceManager.getInstance().getString("errorValidateWorkProductAlone")+" : "+wp.getName());
+					mHasErrors = true;
+				}
+			}
+		}
 	}
 
 	public void visitSpemDiagram(SpemDiagram diagram)
