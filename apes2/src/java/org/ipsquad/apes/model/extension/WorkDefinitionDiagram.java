@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -430,24 +430,30 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	
 	
 	public boolean createLinkWorkProductStateWorkDefinition( StateMachine sm, WorkDefinition wd)
-	{
+	{		
 		if( sm.getContext() instanceof WorkProduct 
 				&& containsModelElement(sm) 
 				&& containsModelElement(wd) )
 		{
+			
 			WorkProduct w = (WorkProduct)sm.getContext();
-			if(containsModelElement(wd))
-			{
-				if((!existsLinkWorkProductWorkDefinition(w,wd)) && (!existsLinkWorkProductStateWorkDefinition(sm,wd)))
-				{
-					mTransitions.add(new Transition(w,wd));
-					mTransitions.add(new Transition(sm,wd));
-					return true;
-				}
+			
+			
+			//if((!existsLinkWorkProductWorkDefinition(w,wd)) && (!existsLinkWorkProductStateWorkDefinition(sm,wd)))
+			if(!existsLinkWorkProductStateWorkDefinition(sm,wd))
+			{	
+				
+				
+				mTransitions.add(new Transition(w,wd));
+				
+				mTransitions.add(new Transition(sm,wd));
+				
+				return true;
 			}
 		}
 		return false;
 	}
+	
 	
 	public boolean createLinkWorkDefinitionWorkProductState(WorkDefinition wd,  StateMachine sm)
 	{
@@ -456,14 +462,15 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				&& containsModelElement(wd) )
 		{
 			WorkProduct w = (WorkProduct)sm.getContext();
-			if(containsModelElement(wd))
+			
+			//if((!existsLinkWorkDefinitionWorkProduct(wd,w)) && (!existsLinkWorkDefinitionWorkProductState(wd,sm)))
+			if(!existsLinkWorkDefinitionWorkProductState(wd,sm))
 			{
-				if((!existsLinkWorkDefinitionWorkProduct(wd,w)) && (!existsLinkWorkDefinitionWorkProductState(wd,sm)))
-				{
-					mTransitions.add(new Transition(wd,w));
-					mTransitions.add(new Transition(wd,sm));
-					return true;
-				}
+				
+				mTransitions.add(new Transition(wd,w));
+				
+				mTransitions.add(new Transition(wd,sm));
+				return true;
 			}
 		}
 		return false;
@@ -574,7 +581,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				&& containsModelElement(wd) 
 				&& containsModelElement(sm))
 		{
-			WorkProduct w = (WorkProduct)sm.getParent();
+			WorkProduct w = (WorkProduct)sm.getContext();
 			
 			if(existsLinkModelElements(w, wd))
 			{
@@ -592,7 +599,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				&& containsModelElement(wd) 
 				&& containsModelElement(sm))
 		{
-			WorkProduct w = (WorkProduct)sm.getParent();
+			WorkProduct w = (WorkProduct)sm.getContext();
 			
 			if(existsLinkModelElements(wd, w))
 			{
@@ -740,7 +747,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				&& containsModelElement(wd) 
 				&& containsModelElement(sm))
 		{
-			WorkProduct w = (WorkProduct)sm.getParent();
+			WorkProduct w = (WorkProduct)sm.getContext();
 			if((!existsLinkModelElements(wd,w)) && (!existsLinkModelElements(sm,wd)))
 			{
 				return true;
@@ -840,16 +847,19 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	
 	public boolean existsLinkWorkProductStateWorkDefinition(StateMachine sm, WorkDefinition wd)
 	{
+		
 		if (sm.getContext() instanceof WorkProduct
 				&& containsModelElement(wd) 
 				&& containsModelElement(sm))
 		{
-			WorkProduct w = (WorkProduct)sm.getParent();
+			WorkProduct w = (WorkProduct)sm.getContext(); 
 			
 			if(getTransition(w,wd)!=null)
 			{
+				
 				if (getTransition(sm,wd)!=null)
 				{	
+
 					return true;
 				}
 			}
@@ -863,12 +873,12 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				&& containsModelElement(wd) 
 				&& containsModelElement(sm))
 		{
-			WorkProduct w = (WorkProduct) sm.getParent();
+			WorkProduct w = (WorkProduct) sm.getContext();
 			
 			if(getTransition(wd,w)!=null)
 			{
 				if (getTransition(wd,sm)!=null)
-				{
+				{	
 					return true;
 				}
 			}

@@ -28,6 +28,7 @@ import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 
 public class TestWorkDefinitionDiagram extends TestCase
 {
@@ -45,6 +46,12 @@ public class TestWorkDefinitionDiagram extends TestCase
 	{
 		return new WorkProduct();
 	}
+	
+	private StateMachine createWorkProductState()
+	{
+		return new StateMachine();
+	}
+	
 	
 	public void testAddProcessRole()
 	{
@@ -94,6 +101,7 @@ public class TestWorkDefinitionDiagram extends TestCase
 	{
 		WorkDefinitionDiagram wdd = new WorkDefinitionDiagram();
 		WorkProduct wp = createWorkProduct();
+		StateMachine sm = createWorkProductState();
 		
 		assertTrue(wdd.modelElementCount()==0);
 		
@@ -103,6 +111,12 @@ public class TestWorkDefinitionDiagram extends TestCase
 		
 		wdd.addWorkProduct(wp);
 		assertTrue(wdd.modelElementCount()==1);
+		
+		//
+		//wp.addBehavior(sm);
+		//wdd.addWorkProductState(sm);
+		//assertTrue(wdd.modelElementCount()==1);
+		//
 		
 		for(int i=1; i<100; i++)
 		{
@@ -120,6 +134,8 @@ public class TestWorkDefinitionDiagram extends TestCase
 		WorkDefinition wd2 = createWorkDefinition();
 		WorkProduct wp = createWorkProduct();
 		WorkProduct wp2 = createWorkProduct();
+		StateMachine sm = createWorkProductState();
+		StateMachine sm2 = createWorkProductState();
 		WorkDefinitionDiagram wdd = new WorkDefinitionDiagram();
 		
 		wdd.addProcessRole(pr);
@@ -151,6 +167,17 @@ public class TestWorkDefinitionDiagram extends TestCase
 		wdd.removeModelElement(wp);
 		assertTrue(wdd.modelElementCount()==0);
 		
+		
+		wdd.addWorkProductState(sm);
+		assertTrue(wdd.modelElementCount()==1);
+		
+		wdd.removeModelElement(sm2);
+		assertTrue(wdd.modelElementCount()==1);
+		
+		wdd.removeModelElement(sm);
+		assertTrue(wdd.modelElementCount()==0);
+		
+		
 		for(int i=0; i<100; i++)
 		{
 			pr = createProcessRole();
@@ -178,6 +205,8 @@ public class TestWorkDefinitionDiagram extends TestCase
 		WorkDefinition wd2 = createWorkDefinition();
 		WorkProduct wp;
 		WorkProduct wp2 = createWorkProduct();
+		StateMachine sm;
+		StateMachine sm2 = createWorkProductState();
 		WorkDefinitionDiagram wdd = new WorkDefinitionDiagram();
 		
 		for(int i=0; i<100; i++)
@@ -235,6 +264,26 @@ public class TestWorkDefinitionDiagram extends TestCase
 		}
 		
 		assertTrue(wdd.containsModelElement(wp2));
+		
+		
+		for(int i=0; i<100; i++)
+		{
+			sm = createWorkProductState();
+			wdd.addWorkProductState(sm);
+		}
+		
+		assertFalse(wdd.containsModelElement(sm2));
+		wdd.addWorkProductState(sm2);
+		assertTrue(wdd.containsModelElement(sm2));
+		
+		for(int i=0; i<100; i++)
+		{
+			sm = createWorkProductState();
+			wdd.addWorkProductState(sm);
+		}
+		
+		assertTrue(wdd.containsModelElement(sm2));
+		
 	}
 	
 	
@@ -268,6 +317,7 @@ public class TestWorkDefinitionDiagram extends TestCase
 		ProcessRole pr = createProcessRole();
 		WorkDefinition wd = createWorkDefinition();
 		WorkProduct wp = createWorkProduct();
+		StateMachine sm = createWorkProductState();
 		WorkDefinitionDiagram wdd = new WorkDefinitionDiagram();
 		
 		assertEquals(wdd.modelElementCount(),0);
@@ -290,18 +340,24 @@ public class TestWorkDefinitionDiagram extends TestCase
 		wdd.addWorkProduct(wp);
 		assertEquals(wdd.modelElementCount(),3);
 		
-		wdd.removeModelElement(pr);
-		assertEquals(wdd.modelElementCount(),2);
+		wdd.addWorkProductState(sm);
+		assertEquals(wdd.modelElementCount(),4);
+		
+		wdd.addWorkProductState(sm);
+		assertEquals(wdd.modelElementCount(),4);
 		
 		wdd.removeModelElement(pr);
-		assertEquals(wdd.modelElementCount(),2);
+		assertEquals(wdd.modelElementCount(),3);
+		
+		wdd.removeModelElement(pr);
+		assertEquals(wdd.modelElementCount(),3);
 		
 		for(int i=0;i<100;i++)
 		{
 			pr = createProcessRole();
 			wdd.addProcessRole(pr);
 		}
-		assertEquals(wdd.modelElementCount(),102);
+		assertEquals(wdd.modelElementCount(),103);
 	}
 	
 	public void testCreateLinkProcessRoleWorkDefinition()
@@ -381,6 +437,91 @@ public class TestWorkDefinitionDiagram extends TestCase
 		
 	}
 	
+	
+	public void testCreateLinkWorkDefinitionWorkProductState()
+	{
+		WorkDefinition wd = createWorkDefinition();
+		
+		StateMachine sm = createWorkProductState();
+		StateMachine sm2 = createWorkProductState();
+		WorkDefinitionDiagram wdd = new WorkDefinitionDiagram();
+		
+		assertFalse(wdd.createLinkWorkDefinitionWorkProductState(wd,sm));
+		
+		wdd.addWorkProductState(sm);
+		assertFalse(wdd.createLinkWorkDefinitionWorkProductState(wd,sm));
+		
+		wdd.addWorkDefinition(wd);
+		assertFalse(wdd.createLinkWorkDefinitionWorkProductState(wd,sm2));
+		assertFalse(wdd.createLinkWorkDefinitionWorkProductState(wd,sm));
+		
+		WorkProduct wp = createWorkProduct();
+		//wdd.addWorkProduct(wp);
+		sm.setContext(wp);
+		assertTrue(wdd.createLinkWorkDefinitionWorkProductState(wd,sm));
+		
+		
+		assertEquals(wdd.getTransitionCount(),2);
+		
+		
+		assertFalse(wdd.createLinkWorkDefinitionWorkProductState(wd,sm));
+		
+		WorkDefinition wd2 = createWorkDefinition();
+		wdd.addWorkDefinition(wd2);
+		assertTrue(wdd.createLinkWorkDefinitionWorkProductState(wd2,sm));
+		
+		
+		assertEquals(wdd.getTransitionCount(),4);
+		
+		WorkDefinition wd3 = createWorkDefinition();
+		wdd.addWorkDefinition(wd3);
+		wdd.createLinkWorkProductStateWorkDefinition(sm,wd3);
+		
+		
+		//assertFalse(wdd.createLinkWorkDefinitionWorkProductState(wd3,sm));
+		
+	}
+	
+	public void testCreateLinkWorkProductStateWorkDefinition()
+	{
+		WorkDefinition wd = createWorkDefinition();
+		
+		StateMachine sm = createWorkProductState();
+		StateMachine sm2 = createWorkProductState();
+		WorkDefinitionDiagram wdd = new WorkDefinitionDiagram();
+		
+		assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm,wd));
+		
+		wdd.addWorkProductState(sm);
+		assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm,wd));
+		
+		wdd.addWorkDefinition(wd);
+		assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm2,wd));
+		assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm,wd));
+		
+		WorkProduct wp = createWorkProduct();
+		wdd.addWorkProduct(wp);
+		sm.setContext(wp);
+		assertTrue(wdd.createLinkWorkProductStateWorkDefinition(sm,wd));
+		
+		assertEquals(wdd.getTransitionCount(),2);
+		
+		assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm,wd));
+		
+		WorkDefinition wd2 = createWorkDefinition();
+		wdd.addWorkDefinition(wd2);
+		assertTrue(wdd.createLinkWorkProductStateWorkDefinition(sm,wd2));
+		
+		assertEquals(wdd.getTransitionCount(),4);
+		
+		WorkDefinition wd3 = createWorkDefinition();
+		wdd.addWorkDefinition(wd3);
+		wdd.createLinkWorkDefinitionWorkProductState(wd3,sm);
+		
+		//assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm,wd3));
+		
+	}
+	
 	public void testRemoveLinkProcessRoleWorkDefinition()
 	{
 		ProcessRole pr = createProcessRole();
@@ -453,6 +594,8 @@ public class TestWorkDefinitionDiagram extends TestCase
 
 		assertFalse(wdd.removeLinkWorkDefinitionWorkProduct(wd,wp));
 	}
+	
+	
 	
 	public void testAreLinkableProcessRoleWorkDefinition()
 	{
@@ -753,4 +896,5 @@ public class TestWorkDefinitionDiagram extends TestCase
 		wdd.removeLinkModelElements(wd,wp);
 		assertFalse(wdd.existsLinkModelElements(wd,wp));
 	}
+	
 }
