@@ -46,7 +46,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class PreferencesDialog extends JDialog 
 {
@@ -161,8 +161,10 @@ public class PreferencesDialog extends JDialog
 				
 		}
 	}
+	
 	private void changeLanguage()
 	{
+		
 		ApesFrame mainFrame = (ApesFrame)Context.getInstance().getTopLevelFrame(); 
 		JInternalFrame[] frames = mainFrame.getDesktop().getAllFrames();
 		JInternalFrame frameSelected = mainFrame.getDesktop().getSelectedFrame();
