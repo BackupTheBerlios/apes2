@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -53,7 +53,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesMediator.Listener
 {

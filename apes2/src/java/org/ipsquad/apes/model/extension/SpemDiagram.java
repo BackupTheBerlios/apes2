@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -26,7 +26,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 /**
  * Base class for diagrams
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class SpemDiagram extends ModelElement
 {

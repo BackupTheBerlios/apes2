@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -43,7 +43,7 @@ import org.ipsquad.utils.SmartChooser;
 /**
  * Save the selected diagram in a jpeg file
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SaveAsJpegAction extends AbstractAction
 {

@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -81,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public class ApesMain
 {

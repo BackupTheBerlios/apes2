@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -40,7 +40,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for an ActivityDiagram
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ActivityJGraph extends JGraph
 {

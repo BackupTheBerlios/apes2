@@ -2,7 +2,7 @@
  * APES is a Process Engineering Software
  * This file was part of : cameleon
  * Copyright (C) 2003 Nathalie Aussenac-Gilles (CNRS)
- * Copyright (C) 2004 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -43,7 +43,7 @@ import javax.swing.Timer;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class TaskMonitorDialog extends JDialog
 {

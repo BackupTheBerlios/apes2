@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -29,7 +29,7 @@ import org.ipsquad.apes.model.spem.core.PresentationElement;
 /**
  * Describe presentation elements that are external to the model
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ExternalDescription extends PresentationElement
 {

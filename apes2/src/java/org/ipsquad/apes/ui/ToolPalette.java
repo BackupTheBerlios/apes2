@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -39,7 +39,7 @@ import org.jgraph.JGraph;
 /**
  * Base class for the graph editing toolpalettes
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ToolPalette extends JToolBar implements ToolListener
 {

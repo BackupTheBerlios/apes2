@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -46,7 +46,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Interface for visiting SPEM models
  * For more details see the visitor design pattern
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public interface SpemVisitor
 {

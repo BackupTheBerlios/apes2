@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 
 /**
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class WorkProduct extends ModelElement implements IPackage
 {

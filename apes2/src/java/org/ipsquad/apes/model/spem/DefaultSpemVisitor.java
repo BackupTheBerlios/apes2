@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -50,7 +50,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Default visitor implementation that does nothing.
  * Its only work is to follow the inheritance tree.
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class DefaultSpemVisitor implements SpemVisitor
 {

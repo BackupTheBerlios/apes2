@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -24,7 +24,7 @@ package org.ipsquad.apes.ui.tools;
 /**
  * Interface for an observer to register to receive notifications of usage of a Tool
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface ToolListener
 {

@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -34,7 +34,7 @@ import org.jgraph.graph.CellView;
  * Allows to move, resize, select and edit portion of the graph
  * You can use the marquee handler.
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class DefaultTool extends Tool
 {

@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  * Helper class for application localization.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ResourceManager
 {

@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -75,7 +75,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Application tree view
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {
@@ -97,6 +97,7 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 		mDragSource.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
 		new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true);
 		setExpandsSelectedPaths(true);
+		setInvokesStopCellEditing(true);
 		
 		final ApesTree local_tree = this;
 		MouseListener ml = new MouseAdapter()

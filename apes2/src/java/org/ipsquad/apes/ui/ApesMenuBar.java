@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -35,7 +35,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Application menu bar
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesMenuBar extends JMenuBar
 {

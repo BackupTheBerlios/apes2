@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -45,7 +45,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This visitor associates an element with a popup menu.
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class PopupMenuAssociater extends DefaultModelVisitor
 {

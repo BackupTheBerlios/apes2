@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -37,7 +37,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This adapter allows to display an activity diagram in a JGraph
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ActivityGraphAdapter extends SpemGraphAdapter
 {

@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -32,7 +32,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * This is a convenient class which correct problems in the clone method
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class TransitionEdge extends DefaultEdge
 {

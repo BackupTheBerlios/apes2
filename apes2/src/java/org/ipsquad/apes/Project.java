@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2002-2003 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -48,7 +48,7 @@ import org.ipsquad.utils.ResourceManager;
  *
  * This class represent a project in the application
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class Project implements Serializable
 {

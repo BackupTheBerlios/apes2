@@ -1,6 +1,6 @@
 /*
  * APES is a Process Engineering Software
- * Copyright (C) 2004 IPSquad
+ * Copyright (C) 2003-2004 IPSquad
  * team@ipsquad.tuxfamily.org
  *
  *
@@ -23,7 +23,7 @@ package org.ipsquad.apes;
 /**
  * 
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 public interface Identity
