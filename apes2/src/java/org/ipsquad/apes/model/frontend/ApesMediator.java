@@ -38,6 +38,7 @@ import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.core.ModelElement;
@@ -53,7 +54,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -545,6 +546,12 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				if( diagram instanceof FlowDiagram && ( me instanceof WorkProduct || me instanceof ProcessRole ) )
 				{
 					((ModelElement)diagram.getParent()).getParent().addModelElement( me );
+				}
+				else if( diagram instanceof WorkDefinitionDiagram )
+				{
+					extraActions.add(createInsertCommand(me,diagram.getParent(),null));
+					extraActions.add(new InsertEvent( diagram, me, null, true, attr ));
+					return;
 				}
 				else
 				{

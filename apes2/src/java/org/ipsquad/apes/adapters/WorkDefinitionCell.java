@@ -22,16 +22,17 @@
 
 package org.ipsquad.apes.adapters;
 
+import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 
 /**
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WorkDefinitionCell extends ApesGraphCell
 {
 	public WorkDefinitionCell()
 	{
-		super(new WorkDefinition(""));
+		super(new ApesWorkDefinition(""));
 	}
 	
 	public WorkDefinitionCell(WorkDefinition c)
