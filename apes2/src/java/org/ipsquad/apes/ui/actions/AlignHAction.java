@@ -29,8 +29,12 @@ import java.util.Map;
 
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.DecisionCell;
+import org.ipsquad.apes.adapters.FinalPointCell;
+import org.ipsquad.apes.adapters.InitialPointCell;
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.adapters.SynchroCell;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultGraphCell;
@@ -40,7 +44,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Align the centers of selected objects horizontally
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class AlignHAction extends ApesAction
 {
@@ -84,6 +88,10 @@ public class AlignHAction extends ApesAction
 				{
 					oldRect = GraphConstants.getBounds(c.getAttributes());
 					oldX=oldRect.getCenterX();
+					if(listCells[i] instanceof InitialPointCell ||listCells[i] instanceof FinalPointCell )
+						oldX=oldX+2;
+					if(listCells[i] instanceof DecisionCell || listCells[i] instanceof SynchroCell )
+						oldX=oldX+1;
 				}
 				else
 				{	
@@ -91,8 +99,11 @@ public class AlignHAction extends ApesAction
 					newRect=new Rectangle(GraphConstants.getBounds(c.getAttributes())); 
 					newX=newRect.getCenterX();
 					newX=oldX-newRect.getWidth()/2;
+					if(listCells[i] instanceof InitialPointCell ||listCells[i] instanceof FinalPointCell )
+						newX=newX-2;
 					if(newX<0)
 						newX=0;
+					
 					newRect.setRect(newX,newRect.getY(),newRect.getWidth(),newRect.getHeight()); 
 					GraphConstants.setBounds(attr,newRect); 
 					myMap.put(c, attr); 
