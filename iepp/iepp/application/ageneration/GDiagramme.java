@@ -183,9 +183,12 @@ public class GDiagramme extends GElementModele
 					{
 						// rajouté: info-bulle contenant la description de l'élément
 						String description = "ALT=\"\"";
-						if (elem.getDescription() != null)
+						if (GenerationManager.getInstance().estInfoBulle())
 						{
-							description = "ALT=\"" + elem.getDescription() + "\"";
+							if (elem.getDescription() != null)
+							{
+								description = "ALT=\"" + elem.getDescription() + "\"";
+							}
 						}
 						mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ this.getLienChemin(id)+ "\" " + description + ">\n");
 					}

@@ -158,11 +158,24 @@ public class CodeHTML
 				
 				io = comp.getId();
 				
-				
 				// Verifier s'il ne s'agit pas d'un composant vide, auquel cas il ne faut pas creer de zone
 				if (!io.estComposantVide())
 				{
-					result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\">\n";
+					ComposantProcessus cp = (ComposantProcessus)io.getRef();
+					ElementPresentation elem = cp.getElementPresentation(io.getID());
+					
+					if (elem != null)
+					{
+						String description = "ALT=\"\"";
+						if (GenerationManager.getInstance().estInfoBulle())
+						{
+							if (elem.getDescription() != null)
+							{
+								description = "ALT=\"" + elem.getDescription() + "\"";
+							}
+						}
+						result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\"" + description +  ">\n";
+					}
 				}
 			}
 			else if ( aux instanceof MDProduit )

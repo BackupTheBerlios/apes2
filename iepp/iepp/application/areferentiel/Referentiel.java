@@ -575,17 +575,29 @@ public class Referentiel extends Observable implements TreeModel
 				// Copie du fichier sans la ligne désirée dans un autre fichier
 				source = new RandomAccessFile(cheminReferentiel + File.separator + nomReferentiel + ".ref", "rw");
 				dest = new RandomAccessFile(cheminReferentiel + File.separator + nomReferentiel + "2.ref", "rw");
-								
+						
+				// ne pas prendre en compte la premiere ligne
 				ligne = source.readLine();
-					
+				
+				String aux = "";
+				
 				// On recopie le fichier en omettant la ligne contenant le path de l'élément à effacer	
 				while(ligne != null)
 				{
-					if (!ligne.equals(feuille.getChemin()))
-					{ dest.writeBytes(ligne + "\n"); }
+					if (!aux.equals("./" + ToolKit.removeSlashTerminatedPath(ToolKit.getRelativePathOfAbsolutePath(
+							feuille.getChemin(), this.cheminReferentiel))))
+					{ 
+						dest.writeBytes(ligne + "\n"); 
+					}
 					
 					// On passe à la ligne suivante
 					ligne = source.readLine();
+					
+					if (ligne != null)
+					{
+						//	 enlever les DP: ou CP: ou PP:
+						aux  = ligne.substring(3);
+					}
 				}
 		
 				source.close();
@@ -796,7 +808,6 @@ public class Referentiel extends Observable implements TreeModel
 		
 		// On sauve la définition processus à l'endroit où elle est stockée dans le référentiel
 		CSauvegarderDP saveDp = new CSauvegarderDP(feuille.getChemin());
-		System.out.println("Chemin de sauvegarde : " + feuille.getChemin());
 		saveDp.executer();
 		
 	}
@@ -818,8 +829,6 @@ public class Referentiel extends Observable implements TreeModel
 		
 		// On va chercher le composant vide correspondant dans l'arbre
 		feuille = this.chercherElement(idElt, ElementReferentiel.COMPOSANT_VIDE);
-		
-		System.out.println("Feuille : " + feuille);
 		
 		// On sauve la définition processus à l'endroit où elle est stockée dans le référentiel
 		CEnregistrerInterface saveCp = new CEnregistrerInterface(cp.getIdComposant());

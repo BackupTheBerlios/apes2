@@ -307,6 +307,7 @@ public class GElement
 								
 		fd.write(getBarreNavigation() + "<br>");
 		
+		this.ajouterDescription(fd);
 		this.ajouterContenu(fd);
 		this.ajouterMail(fd);
 		this.ajouterVersionDate(fd);
@@ -374,11 +375,13 @@ public class GElement
 	 */
 	public void ajouterDescription(FileWriter fd) throws IOException
 	{
-		//TODO verifier si besoin d'écrire la description
-		String description = this.element.getDescription();
-		if (description != null)
+		if (!GenerationManager.getInstance().estInfoBulle())
 		{
-			fd.write("<br><hr><div class=\"description\">" + description + "</div>\n");
+			String description = this.element.getDescription();
+			if (description != null)
+			{
+				fd.write("<br><div class=\"description\">" + description + "</div>\n");
+			}
 		}
 	}
 	

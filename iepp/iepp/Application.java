@@ -253,6 +253,7 @@ public class Application {
 		this.config.put("repertoire_generation", "./WebSite/");
 		this.config.put("chemin_referentiel","./Repository/");
 		this.config.put("place_contenu","1");
+		this.config.put("info_bulle", "1");
 		this.sauvegarderConfig();
 	}
 	

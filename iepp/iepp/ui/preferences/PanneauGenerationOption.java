@@ -189,8 +189,8 @@ public class PanneauGenerationOption extends PanneauOption
 		
 		// Info bulles sur les diagrammes
 		this.bInfoBulles = new JCheckBox("Info-bulle sur les diagrammes");
+		this.bInfoBulles.setSelected(Application.getApplication().getConfigPropriete("info_bulle").equals(GenerationManager.PRESENT));
 		c.gridwidth = 6 ;//next-to-last in row
-		
 		gridbag.setConstraints(bInfoBulles, c);
 		mPanel.add(bInfoBulles);
 		
@@ -202,7 +202,6 @@ public class PanneauGenerationOption extends PanneauOption
 		// Statistiques sur la génération
 		this.bstatistique = new JCheckBox("Générer une page de statistiques");
 		c.gridwidth = 6 ;//next-to-last in row
-		
 		gridbag.setConstraints(bstatistique, c);
 		mPanel.add(bstatistique);
 		
@@ -259,6 +258,11 @@ public class PanneauGenerationOption extends PanneauOption
 			    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.AVANT_CONTENU);
 			else if (this.mApres.isSelected())
 			    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.APRES_CONTENU);
+		
+			if (this.bInfoBulles.isSelected())
+				Application.getApplication().setConfigPropriete("info_bulle", GenerationManager.PRESENT);
+			else
+				Application.getApplication().setConfigPropriete("info_bulle", GenerationManager.NON_PRESENT);	
 		}
 	}
 	

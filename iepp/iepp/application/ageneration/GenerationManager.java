@@ -58,6 +58,7 @@ public class GenerationManager
 	private static HashMap listeProduitsChanges;
     private static Vector listeProduitsSortie;
 	private static String place_contenu;
+	private static String info_bulle;
 	
 	// mettre tous les autres attributs en private static
 
@@ -74,6 +75,8 @@ public class GenerationManager
 	public static final String STYLES_PATH = "styles";
 	public static final String IMAGES_PATH = "images";
     
+	public static final String PRESENT = "1";
+	public static final String NON_PRESENT = "0";
 	
     
 
@@ -225,6 +228,11 @@ public class GenerationManager
 	{
 		GenerationManager.place_contenu = place;
 	}
+	
+	public void setInfoBulle( String info)
+	{
+		GenerationManager.info_bulle = info;
+	}
 	/**
 	 * Indique si le contenu doit être placé avant ou après le diagramme
 	 * @return
@@ -232,6 +240,15 @@ public class GenerationManager
 	public boolean estContenuAvant()
 	{
 	    return (GenerationManager.place_contenu.equals(GenerationManager.AVANT_CONTENU));
+	}
+	
+	/**
+	 * Indique si les info-bulles doivent être affichées
+	 * @return
+	 */
+	public boolean estInfoBulle()
+	{
+	    return (GenerationManager.info_bulle.equals(GenerationManager.PRESENT));
 	}
 	
 	/**
