@@ -89,7 +89,7 @@ public class FenetrePropos extends JDialog {
 		//Création de la version
 		STC_Version.setFont(new java.awt.Font("MS_SansSerif", 0, 12));
 		//TODO Changer le numéro de version
-		STC_Version.setText("Version " + Application.NUMVESION);
+		STC_Version.setText("Version " + Application.NUMVERSION);
 		//Ajout aux panels
 		SC_Titre.add(SIC_Icone, null);
 		SC_Titre.add(SC_TitreInfo, null);

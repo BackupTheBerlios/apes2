@@ -95,7 +95,7 @@ public class CExporterProcessus extends CommandeNonAnnulable
 			 FileOutputStream outstream = new FileOutputStream( new File( filePath ) );
 			OutputStreamWriter data = new OutputStreamWriter(outstream, "UTF-16");	
 
-			data.write("<?iepp version=\"0.1\"?>\n");
+			data.write("<?iepp version=\""+Application.NUMVERSION+"\"?>\n");
 			data.write("<exportExecution>\n");
 			data.write("\t<cheminGeneration>");
 			data.write(GenerationManager.getInstance().getCheminGeneration());
