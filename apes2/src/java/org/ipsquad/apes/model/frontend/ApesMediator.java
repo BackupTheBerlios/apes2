@@ -73,7 +73,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1086,20 +1086,72 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			return;
 		
 		ApesModelEdit edit =
-			createMoveEdit(moves, extras);		
+			createMoveEdit(moves, extras);
+		
+		//retrieve extra edits, for example when you move an activity, you must remove it from its work definition 
+		//before insert it in the new work definition
+		Collection extraEdits = getSpecialMoveEdits(moves,extras);
 		
 		if(edit != null)
 		{
-			Context.getInstance().getUndoManager().save();				
+			Context.getInstance().getUndoManager().save();
+			
+			boolean postEdit = false;
+			//execute the edit
 			if(edit.execute())
 			{
 				fireModelChanged(null, edit);
-				postEdit(edit, Context.getInstance().getUndoManager().restore());
+				postEdit = true;
+			}
+			//execute the extra edits
+			for (Iterator it = extraEdits.iterator(); it.hasNext();) 
+			{
+			    ApesEdit tmpEdit = (ApesEdit) it.next();
+			    if(tmpEdit.execute())
+			    {
+			        fireModelChanged(null, tmpEdit);					
+			    }
+			    postEdit = true;
+			}
+			//if edit or extra edits execution is true, create a post edit
+			if(postEdit)
+			{
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+				postEdit(edit, extraEdits);
 			}
 			else Context.getInstance().getUndoManager().restore();
    		}
+		
 		/****NEWLINE*****/
 		System.err.println();
+	}
+	
+	protected Collection getSpecialMoveEdits(Map moves, Map extras)
+	{
+	    Vector activities = new Vector();
+	    Vector newParents = new Vector();
+	    
+	    Iterator it = moves.entrySet().iterator();
+	    while(it.hasNext())
+	    {
+	        Map.Entry entry = (Map.Entry) it.next();
+	        if(entry.getKey() instanceof Activity)
+	        {
+	            System.out.println("ADD EXTA "+entry.getKey());
+	            activities.add(entry.getKey());
+	            newParents.add(entry.getValue());
+	        }
+	    }
+
+	    Vector edits = new Vector();
+	    ApesEdit edit = createRemoveModelEdit(activities.toArray(),extras);
+	    edit.end();
+        edits.add(edit);
+        edit = createInsertModelEdit(activities.toArray(), newParents.toArray(), extras);
+        edit.end();
+        edits.add(edit);
+        
+        return !edits.isEmpty()?edits:null;
 	}
 	
 	/**
@@ -1497,7 +1549,8 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		while(it.hasNext())
 		{
 			Map.Entry entry = (Map.Entry)it.next();
-			if(entry.getKey() instanceof ModelElement && entry.getValue() instanceof IPackage)
+			if(entry.getKey() instanceof ModelElement && !(entry.getKey() instanceof Activity)
+			        && entry.getValue() instanceof IPackage)
 			{
 				ModelElement me = (ModelElement)entry.getKey();
 				IPackage parent = (IPackage)entry.getValue();

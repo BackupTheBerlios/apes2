@@ -25,7 +25,6 @@ import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -41,7 +40,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Create a new project in the application
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class NewAction extends ProjectManagementAction
 {
@@ -133,6 +132,12 @@ public class NewAction extends ProjectManagementAction
 					}
 
 				}
+				else if(choice==JOptionPane.NO_OPTION)
+				{
+					Project newProject=new Project();
+					context.setProject(newProject);
+					context.setFilePath(null);
+				}
 
 			}
 		}
@@ -141,9 +146,6 @@ public class NewAction extends ProjectManagementAction
 			t.printStackTrace();
 			ErrorManager.getInstance().display("errorTitleOpenProcess", "errorOpenProcess");
 		}
-	/////////////
-		/*Project newProject=new Project();
-		context.setProject(newProject);
-		context.setFilePath(null);*/
+		
 	}
 }
