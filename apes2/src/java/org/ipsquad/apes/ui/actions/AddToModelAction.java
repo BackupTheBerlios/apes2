@@ -35,7 +35,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Add an element into the currently selected element
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class AddToModelAction extends AbstractAction
 {
@@ -59,6 +59,7 @@ public class AddToModelAction extends AbstractAction
 		
 		try
 		{
+			tree.setSelectionPath(new TreePath(node.getPath()));
 			tree.startEditingAtPath(new TreePath(node.getPath()));
 		}
 		catch(Exception ex)

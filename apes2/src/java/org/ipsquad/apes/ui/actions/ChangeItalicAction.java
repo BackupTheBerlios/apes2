@@ -27,7 +27,7 @@ import java.util.Vector;
 /**
  * 
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 public class ChangeItalicAction extends ApesAction
@@ -37,7 +37,7 @@ public class ChangeItalicAction extends ApesAction
 	
 	public ChangeItalicAction(String name)
 	{
-		super(name, "icons/FileNew.gif", 'I', Event.CTRL_MASK);
+		super(name, "icons/Italic.gif", 'I', Event.CTRL_MASK);
 		setEnabled(false);
 	}
 	

@@ -35,7 +35,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Application menu bar
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ApesMenuBar extends JMenuBar
 {
@@ -62,10 +62,10 @@ public class ApesMenuBar extends JMenuBar
 		menu.add(context.getAction("Undo"));
 		menu.add(context.getAction("Redo"));
 		menu.addSeparator();
-		/*menu.add(context.getAction("Cut"));
+		menu.add(context.getAction("Cut"));
 		menu.add(context.getAction("Copy"));
 		menu.add(context.getAction("Paste"));
-		menu.addSeparator();*/
+		menu.addSeparator();
 		menu.add(context.getAction("Remove"));
 
 		menu = getMenu(ResourceManager.getInstance().getString("menuDisplay"));

@@ -76,7 +76,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Application tree view
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {
@@ -301,7 +301,7 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 		private Color mInitBackground = null;
 		private Color mCurrentBackground = null;
 		
-		private Font mInitFont = null;
+		private Font mInitFont = new Font("Default",Font.PLAIN,13);
 		private Font mCurrentFont = null;
 		
 		private ChangeColorAction mActionForeground = (ChangeColorAction)Context.getInstance().getAction("ChangeForeground");
@@ -428,8 +428,10 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 					mCurrentNode = node;
 					mInitForeground = GraphConstants.getForeground(node.getAttributes());
 					mInitBackground = GraphConstants.getBackground(node.getAttributes());
-					mInitFont = GraphConstants.getFont(node.getAttributes());
-					mCurrentFont = mInitFont;
+					mCurrentFont = GraphConstants.getFont(node.getAttributes());
+					
+					mActionItalic.setItalic(mCurrentFont.isItalic());
+					mActionBold.setBold(mCurrentFont.isBold());
 				}
 			}
 			return canEdit;
@@ -440,7 +442,7 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 			mCurrentNode = null;
 			mCurrentForeground = null;
 			mCurrentBackground = null;
-			mCurrentFont = null;
+			mCurrentFont = mInitFont;
 			
 			mActionForeground.setEnabled(false);
 			mActionBackground.setEnabled(false);
@@ -480,7 +482,7 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 			
 				mCurrentForeground = null;
 				mCurrentBackground = null;
-				mCurrentFont = null;
+				mCurrentFont = mInitFont;
 				
 				mActionForeground.setEnabled(false);
 				mActionBackground.setEnabled(false);

@@ -78,11 +78,6 @@ public class ApesTreeNode extends DefaultMutableTreeNode implements Identity, Se
 		return undo;
 	}
 	
-	public void setAttributes(Map attr)
-	{System.out.println("setArrt");
-		mAttributes = attr;
-	}
-	
 	public int getID()
 	{
 		if( getUserObject() instanceof Identity )
@@ -107,6 +102,7 @@ public class ApesTreeNode extends DefaultMutableTreeNode implements Identity, Se
 		Object o = ((Element)userObject).clone();
 		ApesTreeNode node = (ApesTreeNode) super.clone();
 		node.setUserObject(o);
+		node.mAttributes = GraphConstants.createMap();
 		node.init();
 		
 		return node;

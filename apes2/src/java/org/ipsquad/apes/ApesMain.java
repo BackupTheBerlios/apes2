@@ -46,9 +46,12 @@ import org.ipsquad.apes.ui.actions.BiggerAction;
 import org.ipsquad.apes.ui.actions.ChangeBoldAction;
 import org.ipsquad.apes.ui.actions.ChangeColorAction;
 import org.ipsquad.apes.ui.actions.ChangeItalicAction;
+import org.ipsquad.apes.ui.actions.CopyAction;
+import org.ipsquad.apes.ui.actions.CutAction;
 import org.ipsquad.apes.ui.actions.InteractWithModelAction;
 import org.ipsquad.apes.ui.actions.NewAction;
 import org.ipsquad.apes.ui.actions.OpenAction;
+import org.ipsquad.apes.ui.actions.PasteAction;
 import org.ipsquad.apes.ui.actions.PreferencesAction;
 import org.ipsquad.apes.ui.actions.PrintDiagramAction;
 import org.ipsquad.apes.ui.actions.QuitAction;
@@ -71,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ApesMain
 {
@@ -139,9 +142,9 @@ public class ApesMain
 		context.registerAction("Undo", new UndoAction());
 		context.registerAction("Redo", new RedoAction());		
 
-		//context.registerAction("Cut", new CutAction());
-		//context.registerAction("Copy", new CopyAction());
-		//context.registerAction("Paste", new PasteAction());
+		context.registerAction("Cut", new CutAction());
+		context.registerAction("Copy", new CopyAction());
+		context.registerAction("Paste", new PasteAction());
 		context.registerAction("Remove", new RemoveAction());
 		
 		context.registerAction("Bigger", new BiggerAction());
@@ -151,8 +154,8 @@ public class ApesMain
 		context.registerAction("Validate", new ValidateAction());
 		//context.registerAction("Generate", new GenerateWebSiteAction());
 		
-		context.registerAction("ChangeForeground", new ChangeColorAction("changeForeground"));
-		context.registerAction("ChangeBackground", new ChangeColorAction("changeBackground"));
+		context.registerAction("ChangeForeground", new ChangeColorAction("changeForeground","ChangeForeground"));
+		context.registerAction("ChangeBackground", new ChangeColorAction("changeBackground","ChangeBackground"));
 		context.registerAction("ChangeItalic", new ChangeItalicAction("changeItalic"));
 		context.registerAction("ChangeBold", new ChangeBoldAction("changeBold"));
 		

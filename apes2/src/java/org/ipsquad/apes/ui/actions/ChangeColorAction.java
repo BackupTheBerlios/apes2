@@ -32,7 +32,7 @@ import org.ipsquad.apes.ui.ApesFrame;
 /**
  * 
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 public class ChangeColorAction extends ApesAction
@@ -40,9 +40,9 @@ public class ChangeColorAction extends ApesAction
 	private Color mColor = Color.black;
 	private Vector mListeners = new Vector();
 	
-	public ChangeColorAction(String name)
+	public ChangeColorAction(String name, String icon)
 	{
-		super(name, "icons/FileNew.gif", 'C', Event.CTRL_MASK);
+		super(name,"icons/"+icon+".gif", 'C', Event.CTRL_MASK);
 		setEnabled(false);
 	}
 	

@@ -33,7 +33,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * This is a convenient class which correct problems in the clone method
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class TransitionEdge extends DefaultEdge
 {
@@ -56,7 +56,7 @@ public class TransitionEdge extends DefaultEdge
 		GraphConstants.setLineEnd(map , arrow);
 		GraphConstants.setEndFill(map, true);
 		GraphConstants.setForeground(map, ColorFontPanel.getColor("GuardTitle"));
-		GraphConstants.setBackground(map, Color.white);
+		GraphConstants.setBackground(map, Color.GREEN);
 		
 		changeAttributes(map);	
 	}
