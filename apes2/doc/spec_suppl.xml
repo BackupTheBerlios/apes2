@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Spécifications supplémentaires</subtitle>
+    <author>Isabelle Cassagneau</author>
+    <language>french</language>
+
+    <version>2.0</version>
+    
+    <revhistory>
+    <revision>
+        <revnumber>2.0</revnumber>
+        <date>18/11/2003</date>
+        <author>Isabelle Cassagneau</author>
+	<revdescription>Modification suite à la revue de l'IT0</revdescription>
+      </revision>
+	<revision>
+        <revnumber>1.0</revnumber>
+        <date>11/11/2003</date>
+        <author>Isabelle Cassagneau</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+  
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+   <p>Les spécifications supplémentaires recueillent les exigences qui ne peuvent pas être associées au modèle des cas d'utilisation. Parmi ces exigences :</p>
+      <list>
+		<item>les besoins non fonctionnels : utilisabilité, fiabilité, performance et  supportabilité</item>
+		<item>les contraintes liées à l'environnement, au système d'exploitation, à la compatibilité, au choix de conception</item>
+		<item>les standards applicables</item>
+	</list>
+    </sect1>
+    
+    <sect1 title="Portée">
+	<p>Les rôles ou ensembles de rôles suivants utilisent les spécifications supplémentaires :</p> 
+      <list>
+		<item>les analystes créent et maintiennent à jour les spécifications supplémentaires, qui servent de moyen de communication entre analystes, clients, et développeurs.</item>
+		<item>les développeurs utilisent les spécifications supplémentaires en tant que référence lorsqu'ils définissent les responsabilités, les opérations, et attributs des classes, et lorsqu'ils ajustent les classes pour l'environnement d'implémentation.</item>
+		<item>le chef de projet se sert des spécifications supplémentaires comme une entrée de la planification des itérations.</item>
+		<item>les testeurs utilisent les spécifications supplémentaires pour vérifier la conformité du système.</item>
+	  </list>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Document de vision</item>
+	  <item>Glossaire</item>
+      </list>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Utilisabilité">
+    
+    <sect1 title="Installation">
+<p>La procédure d'installation et de paramétrage du logiciel doit être automatique, sans écriture dans le registre. Le logiciel doit être fourni sous forme de fichier jar et sa mise en place doit pouvoir être effectuée directement, sans l'aide de l'équipe de développement.</p>
+    </sect1>
+
+    <sect1 title="Convivialité">
+	<p>L'application s'adresse à des concepteurs connaissant la gestion de processus. Le manuel d'utilisation ne doit pas être nécessaire pour une première prise en main du logiciel. Les interfaces vont respecter les standards des interfaces graphiques Java.</p>
+    </sect1>
+
+<!--  ##########  
+    <sect1 title="Temps de réponse">
+<p>La réponse produite sera immédiate à toute action qui nécessite ou risque de nécessiter un temps important. Le maximum supportable par un utilisateur est fixé à 3 secondes.</p>
+    </sect1>
+-->
+
+  </chapter>
+
+  <chapter title="Fiabilité">
+
+<!--  ##########  
+    <sect1 title="Bugs">
+<p>On ne peut ni spécifier le pourcentage de temps disponible, ni le temps moyen des pannes car l'application est locale à une machine et dépend des performances de celle-ci. Mais toute erreur survenant lors de l'utilisation du logiciel doit dans toute la mesure possible tenter de garder le diagramme en cours d'utilisation afin de permettre à l'utilisateur de ne pas perdre son travail.</p>
+    </sect1>
+-->
+
+    <sect1 title="Pourcentage de défauts">
+<p>L'application devra être testée au maximum afin d'éviter les bugs critiques comme la perte complète de données, impossibilité totale d'utiliser l'outil, impossibilité totale d'utiliser certaines fonctionnalités du système. 
+
+<!--  ##########  
+On prévoira une sauvegarde automatique des données pour limiter la perte des informations.
+-->
+
+</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Performance">
+
+    <sect1 title="Temps de réponse">
+<p>L'utilisateur sera immédiatement averti qu'un traitement est en cours pour toute action qui nécessite ou risque de nécessiter un temps important (ex. : Vérification de la consistance d'un processus). La durée maximale d'attente supportable par un utilisateur dans le cas d'un long traitement est fixée à 3 secondes. Le langage Java étant gourmand et exigeant en ressources, on n'imposera pas de contraintes au niveau des flux.</p>
+    </sect1>
+
+    <sect1 title="Capacité">
+<p>L'application étant personnelle, seul un utilisateur à la fois l'utilisera. Il n'y aura donc pas de problème de capacité.</p>
+    </sect1>
+
+    <sect1 title="Mode de dégradation">
+<p>Etant donné qu'à une version du logiciel ne correspond qu'une personne, l'utilisateur est responsable de ses actions. Toute dégradation du logiciel par l'utilisateur ne sera donc pas pris en compte. 
+
+<!--  ##########  
+Il lui restera toutefois la possibilité de réinstaller le logiciel.
+-->
+
+</p>
+    </sect1>
+
+    <sect1 title="Utilisation des ressources">
+<p>L'utilisateur devra réserver un espace disque d'environ 15Mo pour l'application et le moteur Java. Il devra également tenir compte des sauvegardes qu'il voudra effectuer.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Supportabilité">
+
+    <sect1 title="Maintenabilité">
+<p>Les années à venir, les bureaux d'études pourront avoir pour but de compléter le logiciel. Le code source sera mis à disposition des futurs développeurs. L'utilisateur pourra avoir accès à une version de mise à jour après la maintenance des bureaux d'études à venir.</p>
+    </sect1>
+
+    <sect1 title="Portabilité">
+<p>Le logiciel pourra être utilisé au moins sur Unix et Windows.</p>
+    </sect1>
+
+    <sect1 title="Evolutivité">
+<p>Il faudra tenir compte du fait que le modèle SPEM, fourni pour la vérification de la conformité du processus, pourra évoluer. Il faudra donc prévoir une implémentation de ce modèle pouvant être adaptée aisément.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Contraintes de conception">
+
+    <sect1 title="Langage de programmation">
+<p>L'application devra obligatoirement être codée en Java ce qui obligera l'équipe de développeurs d'être doté d'un moteur Java.</p>
+    </sect1>
+
+    <sect1 title="Bibliothèques utilisées">
+<p>Il devra être exécutable à partir des bibliothèques d'exécution Java 2 version 1.4 et plus. Java étant supporté sur la plupart des systèmes d'exploitation. Il suffira au système d'avoir les bibliothèques Java « RunTime » installées.</p>
+    </sect1>
+
+    <sect1 title="Format d'échange">
+<p>Utilisation du XML format exportable pour la persistance des données.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Documentation utilisateur et exigences de système d'aide">
+<p>La distribution de l'application sera accompagnée d'un manuel d'utilisation.
+
+<!--  ##########  
+ De plus, une aide en ligne sera disponible sur le logiciel.
+-->
+
+</p>
+
+  </chapter>
+
+  <chapter title="Exigence de licence, loi, copyright">
+
+    <sect1 title="Licences">
+<p>Tous les éléments logiciels doivent être distribués sous licence GNU GPL (GNU General Public License) version 2. Toute la documentation doit être livrée sous la licence GNU FDL (GNU Free Documentation License) version 1.1.</p>
+<p>Des informations sont disponibles sur  le site de la Free Software Foundation (FSF) :</p>
+<list>
+<item>http://www.fsf.org/copyleft/gpl.html (licence GNU GPL)</item>
+<item>http://www.fsf.org/copyleft/fdl.html (licence GNU FDL)</item>
+</list>
+<p>Les informations de licence doivent être citées dans la rubrique à propos.</p>
+    </sect1>
+
+  </chapter>
+	
+</ipbook>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<project name="Apes2" default="run" basedir=".">
+    <description>
+        Apes build-file
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="java" location="src/java"/>
+  <property name="units" location="src/units"/>
+  <property name="build" location="build"/>
+  <property name="resources" location="resources"/>
+  <property name="MAINCLASS" location="org.ipsquad.apes.ApesMain"/>
+  
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <echo message="Generation"/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="resources" depends="init" 
+  		description ="Create ressources">
+  
+  	<mkdir dir="${build}/resources"/>
+  	<copy todir="${build}/resources">
+  		<fileset dir="${src}/resources">
+  		</fileset>
+  	</copy>
+ 
+  	<mkdir dir="${build}/icons"/>
+  	<copy todir="${build}/icons">
+  		<fileset dir="${src}/icons">
+  		</fileset>
+  	</copy>
+  </target>
+  
+  <target name="build" depends="init"
+        description="build the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${java}" destdir="${build}" >
+    	<classpath>
+    		<pathelement location="${src}/lib/jgraph.jar"/>
+    		<pathelement location="${src}/lib/JSX.jar"/>    		
+    	</classpath>
+    </javac>
+  </target>
+
+  <target name="run" depends="build,resources"
+  	description="run Apes">
+  	<!--Run Apes-->
+  	<java classname="org.ipsquad.apes.ApesMain" fork="true">
+    	<classpath>
+    		<pathelement path="${build}"/>
+    		<pathelement location="${src}/lib/jgraph.jar"/>
+    		<pathelement location="${src}/lib/JSX.jar"/>    		
+    	</classpath>
+  	</java>
+  </target>
+  
+  <target name="jar" depends="build,resources"
+    description="make apes2.jar">
+    <!--Make apes.jar-->
+    <unjar src="${src}/lib/JSX.jar" dest="${build}"/>
+    <unjar src="${src}/lib/jgraph.jar" dest="${build}"/>
+  	<jar destfile="apes2.jar" basedir="${build}">
+    	<manifest>
+	    	<attribute name="Main-Class" value="org.ipsquad.apes.ApesMain"/>
+    	</manifest>
+  	</jar>  
+  </target>
+  
+  <target name="docs" description="generate documentation">
+  	<!--Generate documentation-->
+  	<exec executable="doxygen"/>
+	<mkdir dir="docs/javadoc"/>
+  	<javadoc sourcepath="${java}" destdir="docs/javadoc" author="true" version="true" 
+  	use="true" packagenames="org.ipsquad.utils,org.ipsquad.apes org.ipsquad.apes.ui,
+org.ipsquad.apes.ui.actions,org.ipsquad.apes.ui.tools,
+org.ipsquad.apes.adapters,org.ipsquad.apes.spem,
+org.ipsquad.apes.spem.basic,org.ipsquad.apes.spem.core,
+org.ipsquad.apes.spem.diagram,org.ipsquad.apes.spem.modelmanagement,
+org.ipsquad.apes.spem.process.components,org.ipsquad.apes.spem.process.structure,
+org.ipsquad.apes.processing">
+  		<classpath>
+    		<pathelement location="${src}/lib/jgraph.jar"/>
+    		<pathelement location="${src}/lib/JSX.jar"/>    		
+    	</classpath>
+    </javadoc>
+  </target>
+  
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="docs"/>
+    <delete file="apes.jar"/>
+  </target>
+</project>

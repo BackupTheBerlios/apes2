@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Document d'Architecture Logicielle</subtitle>
+    <author>Lionel Petit</author>
+
+    <language>french</language>
+
+    <version>2.0</version>
+
+    <revhistory>
+      <revision>
+        <revnumber>2.0</revnumber>
+        <date>29/11/2003</date>
+        <author>Lionel Petit</author>
+		<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+
+  <chapter title="Introduction">
+    <sect1 title="Objectif">
+      <p>Ce document a pour but de dégager et expliquer l'organisation et la conception interne du logiciel.</p>
+    </sect1>
+
+    <sect1 title="Portée">
+      <p>Le document d'architecture logicielle est destiné aux membres de l'équipe et aux superviseurs du projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+		<item>Document Vision</item>
+       	<item>Document des cas d'utilisation</item>
+		<item>Glossaire</item>
+		<item>Document d'architecture de la version précédente d'Apes</item>
+	  </list>
+    </sect1>
+  </chapter>
+
+  <chapter title="Structure">
+
+    <sect1 title="Présentation générale">
+      <p>La structure globale de l'application est une organisation du type MVC (Modèle/Vue/Contrôleur). Le principal but de cette architecture est le découplage entre le modèle et la présentation de ce modèle dans l'application.</p>
+      <p>De plus, nous essayons de nous focaliser sur une extension aisée des traitements effectués sur le modèle et des interactions possibles entre l'utilisateur et l'application.</p>
+    </sect1>
+
+    <sect1 title="Vue des couches">
+
+      <p>Cette section présente l'organisation en couches du logiciel. La figure <ref name="archi_couches"/> montre les dépendances entre ces couches. Elles sont au nombre de quatre et seront détaillées dans les sections suivantes. On explicitera leur rôle et les raisons de leur présence.</p>
+
+      <figure legend="Organisation en couches">
+        <label name="archi_couches"/>
+        <graphic href="images/archi_couches.eps"/>
+      </figure>
+
+      <sect2 title="Interface">
+        <p>Cette couche a pour but la présentation des données à l'utilisateur. Elle lui permet aussi d'agir sur le modèle sous-jacent. Grâce à elle, il peut éditer le processus et lancer les opérations disponibles dans la couche Application.</p>
+	<p>La couche Interface est entièrement couverte par nos classes personnalisées de l'IHM (classes dérivées de l'API Swing).</p>
+      </sect2>
+      
+      <sect2 title="Application">
+        <p>Cette couche est responsable de la prise en compte des règles de cohérence de l'application et du pilotage de l'application.</p>
+	<p>La couche Application comporte :</p>
+	<list>
+	  <item>la validation du modèle</item>
+	  <item>les classes nécessaires à l'application des interactions utilisateurs sur le modèle</item>
+	  <item>les actions accessibles depuis la couche Interface (ouverture, sauvegarde...)</item>
+	</list>
+	<p>C'est cette couche qui est la plus liée aux cas d'utilisation du projet.</p>
+      </sect2>
+      
+      <sect2 title="Domaine">
+        <p>Cette couche regroupe les classes métiers de l'application et l'implantation des règles de gestion spécifiques.</p>
+	<p>La couche Domaine est entièrement couverte par notre implémentation du métamodèle SPEM. L'étendue de notre implémentation (par rapport au SPEM complet) est pondérée par les cas d'utilisation de l'application. Plus le client prend en compte d'entités différentes dans ses cas d'utilisation, plus il est nécessaire d'étendre notre modèle.</p>
+      </sect2>
+      
+      <sect2 title="Infrastructure">
+        <p>Cette couche concerne les composants réutilisés. Elle facilite le développement de trois aspects importants du projet :</p>
+	<list>
+	  <item>l'affichage et l'interaction avec le diagramme, grâce à JGraph</item>
+	  <item>l'accès et le stockage des données persistantes, grâce à JSX (qui dérive l'API de sérialisation Java).</item>
+	  <item>l'importation de composant, grâce à SAX</item>
+	</list>
+      </sect2>
+      
+    </sect1>
+
+    <sect1 title="Sous systèmes et paquetages">
+
+      <sect2 title="Organisation des paquetages et composants">
+        
+	<p>Pour chaque couche on trouve un ou plusieurs paquetages :</p>
+
+	<table>
+	  <col name="Couche"/>
+	  <col name="Paquetages" width="3*"/>
+	  <row> <c>Interface</c>      <c>apes.ui</c> </row>
+	  <row> <c>Application</c>    <c>utils, apes, apes.ui.tools, apes.ui.actions, apes.processing, apes.adapters</c> </row>
+	  <row> <c>Domaine</c>        <c>apes.model (et tout ses sous paquetages)</c> </row>
+	  <row> <c>Infrastructure</c> <c>jgraph, JSX, SAX</c> </row>
+	</table>
+
+	<p>Chacun de ces paquetages présente des dépendances, elles sont représentées dans la figure <ref name="archi_dependences"/>.</p>
+	
+	<figure legend="Dépendances des paquetages">
+          <label name="archi_dependences"/>
+          <graphic href="images/archi_dependences.eps"/>
+	</figure>
+	
+	<p><e>N.B. :</e> Parallèlement aux dépendances présentes sur la figure <ref name="archi_dependences"/>, tous les paquetages de la couche Application sont dépendants du paquetage utils.</p>
+      </sect2>
+      
+      <sect2 title="Paquetages développés">
+
+	<sect3 title="utils">
+          <p>Ce paquetage fournit des classes utilitaires non spécifiques à l'application. En conséquence, l'ensemble des classes présentes pourront être réutilisées dans d'autres applications.</p>
+	  
+	  <glossary>
+	    <def term="Debug">Classe permettant de conserver des messages de déverminage dans l'application. Elle permet à la compilation, d'activer ou non ses fonctions d'analyse.</def>
+	    
+	    <def term="ResourceManager">Classe facilitant l'internationalisation. Elle permet de charger automatiquement un fichier de messages adapté à la langue de l'utilisateur. Elle dispose d'une instance unique dans l'application, c'est pourquoi le modèle de conception du Singleton est particulièrement indiqué dans son cas.</def>
+
+	    <def term="IconManager">Classe facilitant le chargement et la manipulation de ressources graphiques. Elle dispose d'une instance unique dans l'application, c'est pourquoi le modèle de conception du Singleton est particulièrement indiqué dans son cas.</def>
+	  </glossary>
+	</sect3>
+
+
+	<sect3 title="apes">
+          <p>Ce paquetage fournit deux classes importantes.</p>
+	  
+	  <glossary>
+	    <def term="Context">Classe représentant à tout instant l'état interne de l'application (principalement l'interface). Elle dispose d'une instance unique dans l'application, c'est pourquoi le modèle de conception du Singleton est particulièrement indiqué dans son cas.</def>
+	    <def term="Project">Classe représentant un projet complet de l'application. C'est elle qui permet de faire le lien entre le modèle SPEM et la vue de ce modèle au travers des diagrammes.</def>
+	  </glossary>
+	</sect3>
+	
+
+	<sect3 title="apes.ui">
+          <p>Ce paquetage concerne l'IHM de l'application. Il contient les classes organisant l'aspect graphique de l'application et les interactions de l'utilisateur avec celle-ci.</p>
+	  
+	  <glossary>
+	    <def term="ApesFrame">Fenêtre principale de l'application.</def>
+	    <def term="GraphFrame">Fenêtre affichant un graphe. Elle dispose de deux méthodes suivants le modèle de conception de la fabrication pour la construction de la palette d'outils associée et de la zone d'affichage du graphe. Elle est donc dérivable suivant les types de graphes affichés.</def>
+	    <def term="ApesTree">Zone d'affichage du modèle complet sous forme d'arbre (seule la structure des paquetages est affichée ici, les autres relations entre éléments seront visibles dans des GraphFrame).</def>
+	    <def term="ToolPalette">Palette d'outils de manipulation d'un graphe.</def>
+	  </glossary>
+	</sect3>
+
+
+	<sect3 title="apes.ui.tools">
+          <p>Ce paquetage contient tout ce qui est nécessaire à la manipulation des outils utilisés pour l'édition des diagrammes.</p>
+	  <glossary>
+	    <def term="Tool">Classe de base pour tous les outils de l'application. Elle implémente les opérations nécessaires à la gestion des observateurs ToolListener.</def>
+	    <def term="ToolListener">Interface observateur adaptée à la classe Tool.</def>
+	    <def term="DefaultTool">Outil par défaut de l'application. Il permet le déplacement des noeuds du graphe, la suppression d'éléments du graphe...</def>
+	    <def term="CellTool">Outil dédié à l'ajout de noeuds dans un graphe. Il n'est pas nécessaire de le dériver car il fonctionne par prototypage.</def>
+	    <def term="EdgeTool">Outil dédié à l'ajout d'arcs dans un graphe. Il n'est pas nécessaire de le dériver car il fonctionne par prototypage.</def>
+	  </glossary>
+	</sect3>
+	
+
+	<sect3 title="apes.ui.actions">
+          <p>Ce paquetage contient l'implémentation des actions accessibles depuis l'IHM. Cela concerne toutes les opérations du type <q>"ouvrir un fichier"</q>, <q>"quitter"</q>, <q>"copier"</q>... Pour chacune de ces actions, on peut associer un icône et un raccourci clavier.</p>
+	  <p>La totalité des cas d'utilisation nécessitant l'appui d'un simple bouton ou l'utilisation d'un raccourci clavier, ont une classe dans ce paquetage.</p>
+	</sect3>
+
+
+	<sect3 title="apes.processing">
+	  <p>Ce paquetage contient les classes nécessaires aux traitements sur le modèle SPEM. On trouve deux familles de classes dans ce paquetage, chacune étant inspirée par un modèle de conception :</p>
+	  <list>
+	    <item>les stratégies qui déterminent comment le parcours du modèle sera effectué</item>
+	    <item>les visiteurs qui fixent les opérations effectuées pour chaque type d'éléments du modèle traité</item>
+	  </list>
+	  <p>Par combinaisons d'objets de ces deux familles, on peut simplement obtenir de nouveaux traitements à effectuer sur le modèle.</p>
+	</sect3>
+
+	<sect3 title="apes.adapters">
+	  <p>Ce paquetage contient simplement les classes nécessaires pour adapter le modèle aux besoins de la couche Interface.</p>
+	  <glossary>
+	    <def term="SpemTreeAdapter">Classe mettant en avant la structure arborescente du modèle (paquetages et éléments de modèle).</def>
+	    <def term="SpemGraphAdapter">Classe de base nécessaire à l'adaptation du modèle vers un type de diagramme.</def>
+	  </glossary>
+	</sect3>
+
+
+	<sect3 title="apes.model">
+
+	<sect4 title="apes.model.spem">
+	  <p>Ce paquetage contient des sous paquetages conformes au standard SPEM et deux classes suivant le modèle de conception du Visiteur. Les deux classes sont tout d'abord présentées, les sous paquetages de apes.model.spem seront détaillés ensuite.</p>
+
+	  <glossary>
+	    <def term="SpemVisitor"></def>
+	    <def term="DefaultSpemVisitor"></def>
+	  </glossary>
+
+	  <sect5 title="apes.model.spem.basic">
+	    <glossary>
+	      <def term="ExternalDescription">Classe représentant la description externe d'un élément de modèle.</def>
+	      <def term="Guidance">Classe dont les instances représentent les guides du modèle.</def>
+	      <def term="GuidanceKind">Classe permettant de définir des familles de guides.</def>
+	    </glossary>
+	  </sect5>
+
+	  <sect5 title="apes.model.spem.core">
+	    <glossary>
+	      <def term="Element">Toutes les classes du métamodèle sont filles de cette classe. Elle définit un point d'entrée pour visiteur.</def>
+	      <def term="ModelElement">Cette classe regroupe tous les objets internes au modèle.</def>
+	      <def term="PresentationElement">Cette classe regroupe tous les objets documentant des objets du modèle.</def>
+	    </glossary>
+	  </sect5>
+
+	  <sect5 title="apes.model.spem.modelmanagement">
+	    <glossary>
+	      <def term="Package">Classe permettant de créer des paquetages et permettant donc de regrouper des éléments du modèle.</def>
+	    </glossary>
+	  </sect5>
+
+	  <sect5 title="apes.model.spem.process.components">
+	    <glossary>
+	      <def term="ProcessComponent">Classe permettant de représenter des composants de processus.</def>
+	      <def term="Process">Classe dont les instances représentent un processus complet.</def>
+	    </glossary>
+	  </sect5>
+
+	  <sect5 title="apes.model.spem.process.structure">
+	    <glossary>
+	      <def term="Activity">Classe permettant de représenter les activités du modèle.</def>
+	      <def term="ProcessPerformer">Classe permettant de représenter les exécutants de processus du modèle.</def>
+	      <def term="ProcessRole">Classe permettant de représenter les rôles de processus du modèle.</def>
+	      <def term="WorkDefinition">Classe permettant de représenter les définitions de travail du modèle.</def>
+	      <def term="WorkProduct">Classe permettant de représenter les produits de travail du modèle.</def>
+	    </glossary>
+	  </sect5>
+
+	</sect4>
+
+    <sect4 title="apes.model.extension">
+		<p>Ce paquetage contient l'ensemble des classes qui permettent d'étendre le SPEM.
+			Nous y trouvons les classes permettant de représenter des diagrammes adaptés au SPEM.</p>
+	    <glossary>
+	      <def term="SpemDiagram">Classe de base des diagrammes adaptés au SPEM.</def>
+	      <def term="ClassDiagram">Classe permettant de représenter des diagrammes de classes permettant de modéliser les relations entre activités, produits de travail et rôles.</def>
+	      <def term="ActivityDiagram">Classe permettant de représenter des diagrammes d'activités permettant de modéliser le déroulement des activités et du processus.</def>
+	    </glossary>
+	</sect4>
+
+	<sect4 title="apes.model.frontEnd">
+		<p>Ce paquetage sert à la mise en place d'un médiateur qui centralise les appels de la couche contrôleur vers la couche modèle.</p>
+
+		<glossary>
+			<def term="ApesMediator">Médiateur qui réceptionne les appels provenant des adapteurs, modifie la couche modèle et envoie une réponse aux objects l'écoutant.</def>
+		</glossary>
+	</sect4>
+
+	</sect3>
+      </sect2>
+
+
+      <sect2 title="Composants réutilisés">
+
+	<sect3 title="JGraph">
+	  <p>C'est le composant en charge de l'affichage et de l'édition des graphes du modèle. Il est réutilisé tel quel. Aucune adaptation n'est nécessaire, il suffit d'implémenter nos propres classes personnalisées conformes aux interfaces spécifiées dans le composant.</p>
+	  <glossary>
+	    <def term="JGraph">Zone d'affichage d'un graphe. C'est la classe centrale du composant (d'où son nom).</def>
+	    <def term="GraphModel">Interface définissant un modèle compatible pour un JGraph.</def>
+	    <def term="GraphView">Interface définissant une vue compatible pour un JGraph. Elle permet l'association entre les éléments du modèle et leurs représentants affichés dans le JGraph.</def>
+	    <def term="BasicMarqueeHandler">Implémentation simple pour gérer les interactions de l'utilisateur avec un JGraph. Il s'agit d'un accès privilégié aux interactions avec la souris.</def>
+	  </glossary>
+	</sect3>
+
+
+        <sect3 title="JSX">
+	  <p>C'est la librairie en charge de la sérialisation en XML. Elle est basée sur la sérialisation présente dans l'API Java. Elle est donc directement utilisable pour enregister n'importe quel objet Java sérialisable sans modification préalable.</p>
+	  <glossary>
+	    <def term="ObjOut">Classe permettant la sérialisation XML. Elle pourrait être nommée XMLObjectOutputStream.</def>
+	    <def term="ObjIn">Classe permettant la désérialisation XML. Elle pourrait être nommée XMLObjectInputStream.</def>
+	  </glossary>
+	</sect3>
+
+		<sect3 title="SAX">
+		<p>Cette librairie permet d'expoiter le contenu d'un fichier xml.</p>
+		</sect3>
+      </sect2>
+
+    </sect1>
+
+  </chapter>
+
+  
+  <chapter title="Mécanismes">
+    <label name="mecanismes"/>
+    <sect1 title="Visiteur généalogiste">
+      
+      <sect2 title="Motivation">
+        <p>Supposons que l'on dispose à l'écran d'une liste d'éléments apparentés. Lorsque l'utilisateur clique sur un des éléments de la liste, on doit afficher un menu contextuel.</p>
+	<p>Si deux éléments diffèrent uniquement par leur profondeur dans l'arbre d'héritage, les menus résultant doivent avoir un nombre d'entrées communes. En effet, les opérations réalisables sur un objet d'une classe sont aussi réalisables sur les objets d'une de ses filles.</p>
+	<p>On peut donc utiliser un visiteur pour remplir cette tâche puisqu'il permet une identification de type à l'exécution. Mais en tenant compte en plus des particularités de l'arbre d'héritage, on peut factoriser une partie du comportement du visiteur.</p>
+      </sect2>
+
+      <sect2 title="Indications d'utilisation">
+        <p>On utilise le modèle du visiteur généalogiste dans les cas suivants :</p>
+	<list>
+	  <item>un visiteur classique est applicable, et</item>
+	  <item>l'ensemble des classes connues de ce visiteur forment un arbre d'héritage complet aux classes abstraites prêt</item>
+	</list>
+      </sect2>
+
+      <sect2 title="Implémentation">
+        <p>On part d'une implémentation classique du visiteur. Il suffit simplement d'ajouter un visiteur concret implémenté comme suit :</p>
+	<list>
+	  <item>on ajoute pour chaque classe abstraite de l'arbre d'héritage complet une méthode de visite protégée</item>
+	  <item>toutes les méthodes du visiteur ne font qu'une seule chose, appeler la méthode correspondant à la classe parent, sauf la méthode correspondant à la racine de l'arbre d'héritage qui ne fait rien.</item>
+	</list>
+	<p>Ainsi il suffit de dériver la classe obtenue et surcharger les méthodes ad hoc pour obtenir le comportement attendu, c'est à dire factoriser des comportements en fonction de la branche d'héritage.</p>
+      </sect2>
+
+      <sect2 title="Exemple de code">
+        <p>Voici un exemple en Java de ce modèle.</p>
+	<p>Supposons que nous disposons des classes suivantes :</p>
+	<verbatim>
+abstract class Element
+{
+	public abstract void accept(Visitor v);
+}
+
+class ElementA extends Element
+{
+	public void accept(Visitor v) { v.visitElementA(this); }
+}
+
+class ElementB extends Element
+{
+	public void accept(Visitor v) { v.visitElementB(this); }
+}
+
+class ElementC extends ElementB
+{
+	public void accept(Visitor v) { v.visitElementC(this); }
+}
+
+	</verbatim>
+	<p>Alors l'implémentation d'un visiteur généalogiste donnera ceci :</p>
+	<verbatim>
+interface Visitor
+{
+	public void visitElementA(ElementA a);
+	public void visitElementB(ElementB b);
+	public void visitElementC(ElementC c);
+}
+
+class GenealogistVisitor implements Visitor
+{
+	public void visitElement(Element e) { }
+	public void visitElementA(ElementA a) { visitElement(a); }
+	public void visitElementB(ElementB b) { visitElement(b); }
+	public void visitElementC(ElementC c) { visitElementB(c); }
+}
+	</verbatim>
+      </sect2>
+
+      <sect2 title="Utilisations remarquables dans APES">
+        <p>La classe <l>DefaultSpemVisitor</l> du paquetage <l>apes.spem</l> est conforme à ce modèle. Ses filles sont notamment utilisées dans l'arbre pour afficher les icônes associés à ses noeuds et pour associer un menu contextuel à chaque noeud.</p>
+      </sect2>
+
+
+    </sect1>
+  </chapter>
+
+
+  <!--
+  <chapter title="Comportements">  
+
+    <sect1 title="Réalisation des cas d'utilisation">
+      <p><q>pour chaque cas d'utilisation identifié comme important pour l'architecture, présenter sa réalisation. On prendra un ou plusieurs scénarios du cas d'utilisation et on le décrira par un diagramme d'interaction. Les objets apparaissant dans les diagrammes doivent être clairement identifiés dans la partie structure. Ajouter si nécessaire des explications pour qu'on comprenne bien comment les éléments structurels contribuent au scénario.</q></p>
+    </sect1>
+    
+    <sect1 title="Mécanismes">
+      <p></p>
+      <p><q>Présenter les mécanismes et patterns du logiciel. Pour chacun décrire son mode d'emploi pour qu'un concepteur puisse l'utiliser facilement. Ajouter éventuellement des diagrammes d'interaction. Tracer avec les besoins non fonctionnels.</q></p>
+    </sect1>
+  </chapter>
+  -->
+  
+  <chapter title="Qualité de l'architecture">
+    
+    <sect1 title="Avantages">
+      <p>Le principal avantage de cette architecture est une réutilisation forte de composants éprouvés dans leur domaine. De plus, ces composants sont activement maintenus, et sont utilisés dans d'autres applications.</p>
+      <p>Il est important de noter la constitution d'un patrimoine des classes réutilisables par le biais du paquetage utils.</p>
+      <p>Ensuite, de nouveaux traitements sur le modèle peuvent être écrits facilement grâce à l'organisation du paquetage apes.processing et à l'utilisation du modèle de conception du visiteur dans notre implémentation du SPEM.</p>
+      <p>Enfin, un des principaux atouts de notre architecture est le couplage faible entre notre implémentation du SPEM et le reste de l'application.</p>
+    </sect1>
+
+    <sect1 title="Inconvénients">
+      <p>Cette architecture présente quelques inconvénients. Le plus flagrant provient d'une limitation du composant JGraph. En effet, ce dernier impose une relation 1/1 entre les éléments du GraphModel et les éléments affichés dans le JGraph. Notre modèle SPEM ne peut donc pas implémenter directement l'interface GraphModel. Toutefois, cet inconvénient a une importance limitée puisque l'implémentation directe de l'interface GraphModel augmenterait le couplage entre notre modèle et JGraph.</p>
+      <p>Ensuite, il nous faut écrire des adaptateurs entre le modèle SPEM et JGraph d'une part, et entre le modèle SPEM et JTree d'autre part. Ces adaptateurs sont un travail important de l'architecture et sont lourds à écrire si le modèle sous jacent est éloigné de l'interface à obtenir.</p>
+      <p>Enfin, l'utilisation du modèle de conception du visiteur dans le paquetage apes.processing peut provoquer l'apparition de classes fastidieuses à écrire si le modèle SPEM implémenté devient trop étendu.</p>
+    </sect1>
+    
+    <sect1 title="Extensions possibles">
+      <p>Le modèle SPEM implémenté dans APES peut être étendu et modifié. Il peut être important de le rendre observable (en plus de visitable), afin de réduire encore plus son couplage avec le reste de l'application. Il faudra, toutefois, évaluer l'impact d'un tel remaniement sur les performances globales de l'application (le fait que les adaptateurs du modèle soient eux même observables devrait normalement suffire).</p>
+      <p>L'utilisation du prototypage dans les classes EdgeTool et CellTool ainsi que la présence de méthodes fabrications dans GraphFrame permettent de facilement augmenter le nombre de types de diagrammes différents.</p>
+    </sect1>
+    
+  </chapter>
+
+  <chapter title="Principales évolutions">
+  		<p>Ce chapitre présente les évolutions majeures effectuées sur l'architecture d'Apes.</p>
+		<sect1 title="JGraph">
+			<p>La version utilisée de JGraph est passée de la 1.* à la 3. Ceci a engendré de nombreux changements au niveau de l'utilisation des graphes.</p>
+		</sect1>
+		<sect1 title="Communication entre les couches contrôleur et modèle">
+			<p>Pour simplifier les communications entre l'arbre, les graphes et le modèle, un médiateur a été mis en place.
+			Pour effectuer une action sur le modèle, l'adapteur doit envoyer une commande contenant sa requête au médiateur.
+			Celui-ci vérifie que l'action est possible et, le cas échéant, envoie un message aux différents objets qui sont à son écoute.</p>
+			<p>Il en résulte que les adapteurs ne peuvent modifier le modèle directement.</p>
+			<p>Les avantages :
+			<list>
+				<item>découplage entre l'arbre et les graphes</item>
+				<item>centralisation des actions</item>
+				<item>clarification de la communication</item>
+			</list>
+			<p>Inconvénients :</p>
+			<list>
+				<item>une mauvaise implémentation pourrait rendre la maintenance du médiateur difficile</item>
+			</list>
+			</p>
+		</sect1>
+  </chapter>
+</ipbook>

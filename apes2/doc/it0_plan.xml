@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Plan d'itération IT0</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>1.0</version>
+    
+    <revhistory>
+      <revision>
+        <revnumber>1.0</revnumber>
+        <date>27/10/2003</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+    
+  </info>
+  
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente le plan détaillé pour la première itération du projet APES. Cette itération fait partie de la phase de lancement. Elle est appelée IT0.</p>
+    </sect1>
+    
+    <sect1 title="Portée">
+      <p>Le plan d'itération est destiné aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Document Vision</item>
+	<item>Plan de développement</item>
+      </list>
+    </sect1>
+
+  </chapter>
+
+
+  <chapter title="Plan">
+        
+    <p>L'IT0 permettra de spécifier les principaux cas d'utilisation, de définir les plans de projet et de mettre en place l'environnement. Cette itération est la seule de la phase de lancement.</p>
+  
+    <sect1 title="Disciplines de l'itération">
+
+	<table>
+	  <col name="Discipline" width="2*"/>
+	  <col name="Début"/>
+	  <col name="Fin"/>
+	  <row> <c>Expression des exigences (EE)</c> <c>03/11/2003</c> <c>14/11/2003</c> </row>
+	  <row> <c>Analyse et Conception (AC)</c>    <c>03/11/2003</c> <c>14/11/2003</c> </row>
+	  <row> <c>Gestion de projet (GP)</c>        <c>03/11/2003</c> <c>14/11/2003</c> </row>
+	</table>
+
+
+    </sect1>
+
+    <sect1 title="Planning">
+      <table>
+	  <col name="Groupe d'activités" width="2*"/>
+	  <col name="Début"/>
+	  <col name="Fin"/>
+	  <col name="Participants" width="2*"/>
+          <row> <c>EE : Définir les besoins</c>        		  	<c>03/11/2003</c> <c>10/11/2003</c> <c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+          <row> <c>EE : Spécifier le logiciel</c>      			<c>03/11/2003</c> <c>14/11/2003</c> <c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+
+	    <row> <c>GP : Gérer l'itération</c>            			<c>03/11/2003</c> <c>14/11/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Définir le plan de l'iteration suivante</c> 	<c>07/11/2003</c> <c>12/11/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Gérer et contrôler le projet</c> 			<c>03/11/2003</c> <c>14/11/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Finir l'itération</c>            			<c>12/11/2003</c> <c>14/11/2003</c> <c>Delphine De Rosso</c> </row>
+	  
+	    <row> <c>GS : Gérer le processus pour une itération</c> 	<c>05/11/2003</c> <c>14/11/2003</c> <c>Isabelle Cassagneau</c> </row>
+	  
+      </table>
+    </sect1>
+
+    <sect1 title="Produits de l'itération">
+      <table>
+        <col name="Produit"/>
+	<col name="Responsables" width="2*"/>
+	<row> <c>Glossaire</c>					<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+	<row> <c>Vision</c>                 		<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+	<row> <c>Modèle des cas d'utilisation</c> 	<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+	<row> <c>Spécifications supplémentaires</c> 	<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+	<row> <c>Plan de développement</c>           	<c>Delphine De Rosso</c> </row>
+	<row> <c>Liste des risques</c>                  <c>Delphine De Rosso</c> </row>
+  	<row> <c>Evaluation de l'itération IT0</c>      <c>Delphine De Rosso</c> </row>
+  	<row> <c>Plan d'itération IT1</c>               <c>Delphine De Rosso</c> </row>
+  	<row> <c>Plan de cycle de vie</c>               <c>Isabelle Cassagneau</c> </row>
+  </table>    
+    </sect1>
+
+  </chapter>
+  
+
+  <chapter title="Ressources">
+  
+    <sect1 title="Ressources humaines">
+      <table>
+        <col name="Rôles"/>
+	  <col name="Personnes affectées" width="3*"/>
+	  <row> <c>Analystes</c>      	<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c></row>
+        <row> <c>Spécialistes outils</c>  <c>Aurélien Defossez, Lionel Petit</c></row>
+        <row> <c>Architecte</c>      	<c>Lionel Petit</c></row>
+        <row> <c>Ingénieur processus</c>  <c>Isabelle Cassagneau</c></row>
+	  <row> <c>Chef de projet</c>       <c>Delphine De Rosso</c></row>
+      </table>
+    </sect1>
+
+    <sect1 title="Ressources d'équipement">
+      <p>Le matériel et les logiciels suivants sont nécessaires :</p>
+      <list>
+        <item>cinq PCs</item>
+	  <item>une imprimante</item>
+	  <item>un accès CVS</item>
+	  <item>un éditeur de texte, IPSDoc et FOP (rédaction des documents)</item>
+	  <item>JDK 1.3 ou supérieur</item>
+	  <item>Eclipse 3.0</item>
+      </list>
+    </sect1>
+  
+  </chapter>
+
+  <chapter title="Cas d'utilisation">
+    <p>Au cours de cette itération, tous les acteurs et tous les cas d'utilisation significatifs doivent être identifiés. Les scénarios de succès doivent être documentés dans les spécifications de cas d'utilisation.</p>
+    <p>La conception et la réalisation des cas d'utilisation commenceront dans la prochaine itération.</p>
+  </chapter>
+
+  <chapter title="Critères d'évaluation">
+    <p>L'objectif de cette première itération est d'avoir un bon niveau de description des besoins logiciel.</p>
+    <p>L'itération coïncide avec la fin de la phase de Lancement. Par rapport à la phase décrite dans le processus, il n'y a pas de travaux sur l'architecture : il n'y a pas de difficulté technique particulière.</p>
+  </chapter>
+
+
+</ipbook>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Evaluation de l'itération IT2</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>3.0</version>
+    <revhistory>
+      <revision>
+        <revnumber>3.0</revnumber>
+        <date>10/12/2003</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente l'évaluation pour la troisième itération du projet APES. Cette itération est la dernière de la phase d'élaboration. Elle est appelée IT2.</p>
+    </sect1>
+
+    <sect1 title="Portée">
+      <p>L'évaluation de l'itération est destinée aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Plan d'itération IT2</item>
+	    <item>Modèle des cas d'utilisation</item>
+	    <item>Plan de développement logiciel</item>
+      </list>
+    </sect1>
+
+    <sect1 title="Contenu du document">
+	<p>Ce document vérifie que les objectifs fixés dans le plan d'itération soient atteints. Cela permet ainsi de réévaluer les activités à réaliser dans les itérations suivantes (en plus ou en moins).</p>
+	<p>Il permet aussi d'analyser les charges prévisionnelles afin de réévaluer les estimations futures si nécessaire.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Concordance avec le plan d'itération">
+    <sect1 title="Objectifs atteints">
+
+		<sect2 title="Spécification">
+	  	  <p>Réalisation de la spécification des cas d'utilisation ouvrir/fermer un composant, ajouter/supprimer un élément ou une interface à un composant, ajouter/supprimer un produit ou un rôle dans une interface, ajouter/supprimer une définition de travail, ajouter/supprimer une activité dans une définition de travail.</p>
+		</sect2>
+
+		<sect2 title="Prototype de l'outil">
+	  	  <p>Codage des cas d'utilisation ouvrir/fermer un composant, ajouter/supprimer un élément ou une interface à un composant, ajouter/supprimer un produit ou un rôle dans une interface, ajouter/supprimer une définition de travail, ajouter/supprimer une activité dans une définition de travail.</p>
+		</sect2>
+
+		<sect2 title="Architecture">
+	  	  <p>Stabilisation de l'architecture, choix définitif des techniques de réalisation et donc de l'architecture générale.</p>
+		</sect2>
+
+	</sect1>
+
+    <sect1 title="Objectifs non atteints">
+		<p>Lors de cette itération, nous avions prévu de présenter le sujet à l'équipe de 2ème année. Les associations 2ème année / 3ème année n'étant pas encore réalisées, cette étape sera donc effectuée à l'itération suivante (IT3).</p>
+	</sect1>
+
+    <sect1 title="Concordance charges évaluées / charges effectives (en heures)">
+
+      <table>
+
+	  <col name="Groupe d'activités" width="2*" align="center"/>
+	  <col name="Isabelle Cassagneau" width="1.5*" align="center"/>
+	  <col name="Delphine De Rosso" align="center"/>
+	  <col name="Aurélien Defossez" align="center"/>
+	  <col name="Nicolas Delmas" align="center"/>
+	  <col name="Lionel Petit" align="center"/>
+	  <col name="Total réel (par activité)" align="center"/>
+	  <col name="Total estimé (par activité)" align="center"/>
+
+		<row> <c>EE : Spécifier le logiciel</c> 						<c>8</c>	<c>1</c>		<c></c>	<c></c>		<c>1</c>		<c>10</c>				<c>12</c>			</row>
+		<row> <c>AC : Affiner l'architecture</c>      				<c></c>		<c></c>			<c></c>		<c></c>		<c>18</c>	<c>18</c>				<c>6</c>			</row>
+		<row> <c>GS : Vérifier le fonctionnement des outils</c> 			<c></c>	<c></c>			<c>5</c>		<c></c>		<c></c>		<c>5</c>				<c>3</c>			</row>
+		<row> <c>GS : Promouvoir le plan de cycle de vie</c> 			<c>2</c>	<c></c>			<c></c>		<c></c>		<c></c>		<c>2</c>				<c>4</c>			</row>
+		<row> <c>IM : Réaliser des cas d'utilisation</c> 			<c>3</c>	<c>2</c>			<c>1</c>		<c></c>		<c>16</c>		<c>22</c>				<c>40</c>			</row>
+		<row> <c>GP : Accueillir de nouvelles personnes</c> 			<c></c>	<c></c>			<c></c>		<c></c>		<c></c>		<c>0</c>				<c>8</c>			</row>
+        <row> <c>GP : Gérer et contrôler le déroulement du  projet</c>	<c></c>		<c>3</c>		<c></c>		<c></c>		<c></c>		<c>3</c>				<c>4</c>			</row>
+	    <row> <c>GP : Gérer l'itération</c>            				<c></c>		<c>2</c>		<c></c>		<c></c>		<c></c>		<c>2</c>				<c>2</c>			</row>
+	    <row> <c>GP : Evaluer l'itération</c>            				<c></c>		<c>1</c>		<c></c>		<c></c>		<c></c>		<c>1</c>				<c>1</c>			</row>
+	    <row> <c>GP : Développer le plan de l'itération suivante</c>  	<c></c>		<c>2</c>		<c></c>		<c></c>		<c></c>		<c>2</c>				<c>2</c>			</row>
+	    <row> <c>GP : Préparer la fin de la phase</c>  				<c></c>	<c>1</c>		<c></c>		<c></c>		<c></c>		<c>1</c>				<c>1</c>			</row>
+	    <row> <c>GP : Préparer la revue d'itération</c>  				<c></c>	<c>2</c>		<c></c>		<c></c>		<c></c>		<c>2</c>				<c>2</c>			</row>
+	    <row> <c><e>Total réel (par personne)</e></c>		 			<c>13</c>	<c>14</c>	<c>6</c>	<c></c>		<c>35</c>	<c><e>68</e></c>	<c>-</c>			</row>
+	    <row> <c><e>Total estimé (par personne)</e></c>		 		<c>21</c>	<c>25</c>		<c>18</c>	<c></c>	<c>21</c>	<c>-</c>				<c><e>85</e></c>	</row>
+
+      </table>
+
+    </sect1>
+
+  </chapter>
+	
+</ipbook>

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+	<info>
+		<title>APES (APES is a Process Engineering 
+Software)</title>
+		<subtitle>Vision</subtitle>
+		<author>Nicolas Delmas</author>
+		<language>french</language>
+
+		<version>3.0</version>
+    
+		<revhistory>
+			<revision>
+				<revnumber>3.0</revnumber>
+				<date>07/12/2003</date>
+				<author>Nicolas Delmas</author>
+				<revdescription>Mises à jour suite à la revue de fin d'IT1.</revdescription>
+			</revision>
+			<revision>
+				<revnumber>1.1</revnumber>
+				<date>12/11/2003</date>
+				<author>Nicolas Delmas</author>
+				<revdescription>Ajout de deux nouvelles 
+fonctionnalités.</revdescription>
+			</revision>
+			<revision>
+				<revnumber>1.0</revnumber>
+				<date>26/10/2003</date>
+				<author>Nicolas Delmas</author>
+				<revdescription>Création du document.</revdescription>
+			</revision>
+		</revhistory>
+    
+	</info>
+  
+	<chapter title="Introduction">
+		<sect1 title="Objectif">
+      	<p>Ce document a pour but de collecter, analyser, et 
+définir les besoins et fonctionnalités de haut-niveau du 
+projet APES. Il se concentre sur les besoins des utilisateurs 
+finaux. Les détails sur les moyens mis en oeuvre par APES 
+pour remplir ces besoins sont exposés dans les cas 
+d'utilisation.</p>
+    	</sect1>
+    
+    	<sect1 title="Portée">
+      	<p>Le document vision est destiné aux membres de 
+l'équipe et aux superviseurs du projet.</p>
+    	</sect1>
+    
+    	<sect1 title="Références">
+      	<list>
+        		<item>SPEM</item>
+				<item>Glossaire</item>
+      	</list>
+    	</sect1>
+    
+  	</chapter>
+  
+
+	<chapter title="Positionnement">
+    
+   	<sect1 title="Position du problème">
+      	<table>
+        		<col width="1*" align="center"/>
+				<col width="2*" align="center"/>
+				<row> <c>Le problème d'</c> <c>enrichir un processus 
+dont le modèle est conforme au SPEM, en se basant sur la notion 
+de composant de processus.</c> </row>
+				<row> <c>affecte</c> <c>les ingénieurs processus, les 
+ingénieurs qualité et les chefs de projet.</c> </row>
+				<row> <c>L'impact du problème est</c> <c>que la notion 
+de composant de processus n'étant pas actuellement prise en 
+compte par APES, représente une nécessité dans le domaine du 
+Génie Logiciel.</c> </row>
+				<row> <c>Une solution réussie permettrait</c> <c>de gérer des composants réutilisables, de créer un modèle éditable pour les composants et d'avoir un système permettant de vérifier la conformité du composant.
+				</c> </row>
+      	</table>
+    	</sect1>
+    
+    	<sect1 title="Position du produit">
+
+      	<table>
+        		<col width="1*" align="center"/>
+				<col width="2*" align="center"/>
+				<row> <c>Pour</c> <c>les ingénieurs processus, les 
+ingénieurs qualité et les chefs de projet</c> </row>
+				<row> <c>qui</c> <c>désirent produire des composants de processus</c> 
+</row>
+				<row> <c>APES</c> <c>est un outil d'ingénierie de 
+processus</c> </row>
+				<row> <c>qui</c> <c>permet l'édition et la validation 
+de modèles de processus et de composants réutilisables.</c> 
+</row>
+				<row> <c>à la différence de</c> <c>Rose, Rational 
+Process Workbench et Iris</c> </row>
+				<row> <c>notre produit</c> <c>est libre, gratuit et 
+simple d'utilisation.</c> </row>
+	      </table>
+  		</sect1>
+        
+  	</chapter>
+
+
+  	<chapter title="Descriptions des utilisateurs">
+    
+    	<sect1 title="Les utilisateurs">
+
+      	<table>
+        		<col name="Nom" align="center"/>
+				<col name="Représente" align="center"/>
+				<col name="Rôle" align="center"/>
+				<row> <c>Exploitant</c> <c>Administrateur de 
+l'environnement du produit</c> <c>Il s'assure que le déploiement de 
+APES est aisé.</c> </row>
+				<row> <c>Modélisateur de processus</c> <c>Utilisateur final 
+du logiciel APES, ingénieur processus, ingénieur qualité ou 
+chef de projet</c> <c>Il s'assure que l'édition des modèles 
+de processus est abordable et conforme au SPEM.</c> </row>
+	      </table>
+    	</sect1>
+    
+    	<sect1 title="Environnement utilisateur">
+			<p>Le logiciel sera monoutilisateur. Une seule personne 
+pourra travailler sur un fichier. Il y aura un modèle par 
+fichier. Le travail de deux utilisateurs, ou plus, sur un 
+même fichier se fera à leurs risques et périls.</p>
+			<p>Les tâches effectuées seront assez longues puisqu'il 
+s'agit d'un atelier de modélisation de processus. 
+L'utilisateur sera donc amené à manipuler l'outil sur de longues 
+périodes pour supporter sa réflexion.</p>
+			<p>Afin de réaliser un processus le modélisateur de processus dispose 
+d'une plateforme informatique de type PC, ou Mac en accès 
+local ou via un terminal vers un serveur, le système 
+d'exploitation peut être de type UNIX, Windows ou MacOS.</p>
+    	</sect1>
+
+		<sect1 title="Profils des utilisateurs">
+      	<sect2 title="Exploitant">
+        		<glossary>
+				  <!-- <def term="Représentant"></def> -->
+				  <def term="Description">Personne s'occupant de 
+l'administration de l'environnement du produit.</def>
+				  <def term="Type">Administrateur système gérant un 
+parc informatique, il est capable de déployer différents 
+logiciels.</def>
+				  <def term="Responsabilités">Installation du produit 
+sur la plateforme des utilisateurs.</def>
+				  <def term="Critères de succès">L'installation prend 
+moins de 5 minutes.</def>
+				  <!-- <def term="Implication"></def> -->
+				  <!-- <def term="Fournitures"></def> -->
+				  <!-- <def term="Commentaires"></def> -->
+				</glossary>
+	      </sect2>
+      
+      	<sect2 title="Modélisateur de processus">
+	    		<glossary>
+	  			<!-- <def term="Représentant"></def> -->
+			  <def term="Description">Personne qui veut produire un 
+composant de processus réutilisable.</def>
+			  <def term="Type">Personne ayant de bonnes 
+connaissances sur les processus, ayant de l'expérience en conduite de 
+projet et modélisation.</def>
+			  <def term="Responsabilités">Editer les modèles de 
+processus.</def>
+			  <def term="Critères de succès">Une lecture du manuel 
+utilisateur permet une utilisation complète du logiciel en 
+moins d'une heure. La modélisation est graphique et 
+aisée.</def>
+			  <!-- <def term="Implication"></def> -->
+			  <!-- <def term="Fournitures"></def> -->
+			  <def term="Commentaires">On désigne ici par modélisateur de 
+processus toute personne utilisant le logiciel pour faire 
+des modifications sur un composant de processus 
+réutilisable. Cette fonction peut donc concerner des 
+ingénieurs processus, des ingénieurs qualité, ou des chefs de 
+projet.</def>
+			</glossary>
+      </sect2>
+	</sect1>
+
+  </chapter>
+  
+  <chapter title="Vue d'ensemble du produit">
+  
+    <!-- Néant : nous ne développons pas un sous-système
+    <sect1 title="Perspectives du produit">
+      <p></p>
+    </sect1>
+    -->
+
+    <sect1 title="Hypothèses">
+      <p>APES sera développé pour s'exécuter sur une 
+machine virtuelle java.</p>
+    </sect1>
+
+    <sect1 title="Licence et Installation">
+      <p>La licence choisie pour ce logiciel est la <q>GNU 
+General Public License</q>, ce qui permettra une meilleure 
+diffusion du logiciel et lui assurera une plus grande 
+pérennité.</p>
+      <p>Plusieurs facteurs vont attirer des utilisateurs. 
+D'une part la gratuité du logiciel sera une motivation 
+suffisante pour le considérer avant les alternatives dont le 
+prix peut s'avérer prohibitif. D'autre part l'accés aux 
+sources, comme but éducatif, permettra de voir une 
+implémentation d'un sous ensemble du SPEM.</p>
+      <p>En tant que logiciel libre, APES pourra benéficier 
+d'une maintenance continue et facilitée, grâce, encore une 
+fois, à l'accés aux sources. De plus APES pourra être 
+diffusé gratuitement a travers les infrastructures du logiciel 
+libre.</p>
+      <p>Enfin le caractère libre de APES en ferait un 
+terrain propice pour un Bureau d'Etude de maintenance. En 
+effet, les étudiants travailleraient sur un logiciel en 
+évolution continue plutôt que sur un projet abandonné ou interne 
+figé depuis sa réalisation.</p>
+    </sect1>
+
+  </chapter>
+  
+  <chapter title="Fonctionnalités du produit">
+  
+    <sect1 title="Editer le contenu d'un composant de processus">
+      <p>Le système doit permettre l'édition du contenu 
+statique d'un composant de processus. Cela concerne notamment les éléments 
+suivants de la terminologie SPEM : les rôles, les produits 
+de travail et les activités. Cette édition pourra être 
+faite de manière graphique afin de simplifier le plus possible 
+cette activité et d'avoir un retour visuel immédiat du composant de
+processus en cours de modélisation. De plus, un certain nombre 
+de fonctions seront accessibles à l'utilisateur, telles que 
+l'impression, le copier/coller, l'ajout de notes et 
+commentaires dans les diagrammes, la gestion du texte et des 
+couleurs.</p>
+    </sect1>
+    
+	<sect1 title="Gérer des composants de processus 
+réutilisables">
+      <p>Le système devra permettre de réutiliser tout ou partie des éléments d'un 
+processus précédemment modélisé. Cette notion permettra de 
+définir des composants de processus réutilisables.</p>
+    </sect1>
+
+	<sect1 title="Gérer des définitions de travail">
+      <p>Le système devra permettre de prendre en compte 
+des définitions de travail, décrivant l'exécution, les 
+opérations réalisées, et les transformations opérées sur les 
+produits de travail. Un diagramme d'activité (montrant l'ordre d'exécution des activités) et un diagramme de flots d'objet (montrant les produits en entrée/sortie des activités)
+sont associés à la définition de travail.</p>
+    </sect1>
+	
+    <sect1 title="Associer un guide (type de guide) à un 
+élément du modèle">
+      <p>Cette fonctionnalité devra permettre à 
+l'utilisateur d'associer un élément de modèle qui contient des 
+descriptions supplémentaires, aux éléments principaux de 
+définition de processus.</p>
+    </sect1>
+
+<sect1 title="Associer des états à un produit">
+      <p>Cette fonctionnalité devra permettre à 
+l'utilisateur d'associer aux produits un attribut permettant de 
+définir leur état. L'utilisateur pourra également définir les 
+valeurs des états de chaque produit et choisir d'afficher ou 
+non l'état du produit dans les diagrammes, 
+en plus du nom du produit.</p>
+    </sect1>
+    
+	<sect1 title="Vérifier la consistance d'un composant de processus">
+      <p>Après modélisation du composant de 
+processus, le système doit permettre de vérifier la 
+conformité au SPEM du travail réalisé. Dans l'éventualité 
+d'erreurs présentes dans le modèle, l'outil se devra de les 
+signaler à l'utilisateur. Ces informations devront être aussi 
+précises que possible afin de guider au mieux l'utilisateur 
+vers une correction.</p>
+    </sect1>
+    
+    <sect1 title="Importer un processus sauvegardé à l'aide 
+d'une version précédente d'APES">
+      <p>Le système devra être capable de charger un modèle 
+de processus sauvegardé avec une version antérieure 
+d'APES.</p>
+    </sect1>
+    
+  </chapter>
+  
+  <chapter title="Autres Exigences Produit">
+
+    <sect1 title="Standards Applicables">
+      <p>Le SPEM est le standard choisi pour les modèles de 
+processus produits par APES. Dans un premier temps, un sous 
+ensemble du SPEM sera utilisé.</p>
+      <p>XML sera le format de sauvegarde des modèles 
+édités avec APES.</p>
+      <p>XSLT pourra être utilisé pour l'exportation et la 
+conversion des sauvegardes vers d'autres formats.</p>
+    </sect1>
+    
+    <sect1 title="Exigences Système">
+      <p>La plateforme d'exploitation doit disposer d'une 
+machine virtuelle Java.</p>
+    </sect1>
+    
+    <!-- Incompatible avec une machine virtuelle... on est 
+pas là pour recompiler du bytecode!
+    <sect1 title="Exigences de Performances">
+      <p></p>
+    </sect1>
+    -->
+    
+  </chapter>
+
+  <chapter title="Logiciels existants">
+
+    <sect1 title="Iris">
+    	<p>Iris est un logiciel développé par osellus qui 
+permet d'avoir un suivi automatique d'un processus.</p>
+		<p>Ses points forts :</p>
+		<list>
+			<item>implémentation du standard SPEM</item>
+			<item>utilisation de l'outil par le web</item>
+			<item>une librairie de processus et de modèles de 
+processus est disponible</item>
+			<item>suivi automatique du déroulement du processus 
+modélisé</item>
+		</list>
+		<p>Cependant Iris est un logiciel non libre et 
+payant.</p>
+    </sect1>
+  </chapter>
+</ipbook>

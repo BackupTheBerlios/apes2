@@ -1,0 +1,1283 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering 
+Software)</title>
+    <subtitle>Plan du Cycle de Vie</subtitle>
+    <author>Isabelle Cassagneau</author>
+    <language>french</language>
+
+    <version>1.0</version>
+    
+    <revhistory>
+		<revision>
+        	<revnumber>2.0</revnumber>
+        	<date>18/11/2003</date>
+        	<author>Isabelle Cassagneau</author>
+			<revdescription>Regroupement des disciplines 
+"Implémentation", "Test" et "Déploiement", et description 
+de cette 
+nouvelle discipline.</revdescription>
+      </revision>
+      <revision>
+        	<revnumber>1.0</revnumber>
+        	<date>05/11/2003</date>
+        	<author>Isabelle Cassagneau</author>
+			<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+    
+  </info>
+  
+  <chapter title="Introduction">
+  	Le plan du cycle de vie décrit le processus de 
+développement adopté pour conduire le projet APES.
+	
+    <sect1 title="Objectif">
+      <p>L'objectif du plan de cycle de vie est de définir 
+la configuration du processus pour le projet APES. Ce 
+processus est inspiré du processus RUP-F. Ce document 
+présente 
+les parties du processus RUP-F qui sont prises en compte 
+pour le projet, les parties qui ne le sont pas, et les 
+parties adaptées.</p>
+    </sect1>
+    
+    <sect1 title="Portée">
+      <p>Le plan de cycle de vie est destiné aux membres de 
+l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+    
+    <sect1 title="Références">
+    <list>
+      <item>RUP-F</item>
+      <item>L'eXtreme Programming (XP)</item>
+      <item>Glossaire</item>
+    </list>
+    </sect1>
+
+  </chapter>
+  
+  <chapter title="Vue d'ensemble du Plan de cycle de vie">
+
+    <sect1 title="Modèle de cycle de vie">
+      <p>Le cycle de vie utilisé est conforme à celui 
+décrit dans le RUP-F. Il est composé de quatre phases et 
+chacune 
+d'entre elles se termine par un jalon.</p>
+      
+      <sect2 title="Phase de lancement"> 
+        <p>C'est la phase initiale du projet. Elle a pour 
+objectif de définir une solution au problème et de détecter 
+les risques qui peuvent en découler. Dans cette optique, il 
+y sera écrit la liste des risques, le document vision, 
+définissant les principales fonctionnalités du projet, le 
+plan 
+de développement logiciel, et le plan de cycle de vie.</p>
+      </sect2>
+      
+      <sect2 title="Phase d'élaboration">
+        <p>Le but essentiel de cette phase est de produire 
+une architecture stable du système pour avoir une base 
+solide pour la phase de construction. Les cas d'utilisation 
+les 
+plus importants y sont définis et un prototype de 
+l'architecture est réalisé.</p>
+      </sect2>
+      
+      <sect2 title="Phase de construction">
+        <p>Elle a pour objectif de réaliser un logiciel 
+utilisable basé sur l'architecture précédemment définie. Le 
+découpage en itérations permet de répartir le 
+travail et de le valider au fur et à mesure de l'avancement 
+du 
+projet. Chaque itération définit les cas d'utilisation à 
+réaliser et comporte une partie de conception, une partie 
+de 
+tests unitaires, une partie de tests fonctionnels et une 
+partie de codage.</p>
+     	<p>A intervalles réguliers, des versions du logiciel 
+(incomplètes mais utilisables) sont livrées au client, qui 
+fournira ainsi un retour d'expérience. </p>
+	  </sect2> 
+	  
+	  <sect2 title="Phase de transition">
+        <p>Le but de cette phase est de s'assurer que le 
+logiciel est disponible pour les utilisateurs finaux. Cette 
+phase peut s'étaler sur plusieurs itérations, inclure le 
+test du produit avant sa sortie et les ajustements mineurs 
+basés sur les remarques faites par les utilisateurs. A ce 
+stade du cycle de vie, les remarques faites par les 
+utilisateurs ne doivent viser qu'à de petites améliorations 
+du 
+produit, concernant la configuration, l'installation et les 
+problèmes d'utilisation ; les problèmes de structure ayant 
+été 
+revus beaucoup plus tôt. </p>
+	  </sect2> 
+    </sect1>
+
+	<sect1 title="Disciplines">
+		<!--<p>Dans cette version du plan du cycle de vie, seules 
+quatre disciplines du processus APES2 sont représentées. 
+Les 
+disciplines prévues mais non encore gérées apparaissent en 
+italique dans le tableau ci-dessous :</p>
+		<p> </p>-->
+		<table>
+			<col name="Configuration de la discipline (du PCDV)"/>
+			<col name="Discipline de base (ce qui est prévu dans le 
+RUP-F)"/>
+			<col name="Commentaires"/>
+			
+			<row> 
+				<c>Expression des exigences</c>
+				<c>Discipline RUP-F : Expression des exigences</c>
+				<c>Comme défini dans le RUP-F</c>
+			</row>
+			
+			<row> 
+				<c>Analyse et conception</c>
+				<c>Discipline RUP-F : Analyse et conception</c>
+				<c>Production d'un sous-ensemble</c>
+			</row>
+			
+			<row> 
+				<c>Gestion de projet</c>
+				<c>Discipline RUP-F : Gestion de projet</c>
+				<c>Production d'un sous-ensemble</c>
+			</row>
+			
+			<row> 
+				<c>Gestion de processus</c>
+				<c>Discipline RUP-F : Gestion de processus</c>
+				<c>L'adaptation fait l'objet de ce plan du cycle de 
+vie</c>
+			</row>
+			
+			<row> 
+				<c>Implémentation</c>
+				<c>Pas dans le RUP-F</c>
+				<c>Regroupe les disciplines Implémentation, Test et 
+Déploiement</c>
+			</row>
+		</table>		
+	</sect1>
+	
+	<sect1 title="Configuration des disciplines">
+		<p>Ce chapitre présente les produits de travail utilisés 
+dans chaque discipline du processus. Les tableaux 
+ci-dessous précisent comment ces disciplines et leurs 
+produits 
+associés seront décrits dans ce document.</p>
+	
+		<sect2 title="Produits de travail">
+			<p>Chaque produit est représenté par une ligne du 
+tableau suivant : </p>
+			<p> </p>
+			<table>
+        		<col name="Produit"/>
+				<col name="Lanc."/>
+				<col name="Elab."/>
+				<col name="Const."/>
+				<col name="Trans."/>
+				<col name="Statut"/>
+				<col name="Outils employés"/>
+				<col name="Plans types / Exemples"/>
+				
+				<row> 
+					<c> </c>
+					<c> </c>
+					<c> </c>
+					<c> </c>
+					<c> </c>
+					<c> </c>
+					<c> </c>
+					<c> </c>
+				</row>
+	
+			</table>
+		
+			<p>Voici la description de chacune de ses colonnes : 
+ </p>
+			<p> </p>
+			
+			<table>
+				<col name="Nom de la colonne" width="1*"/>
+				<col name="Objectif" width="1*"/>
+				<col name="Contenu / Commentaires" width="1.5*"/>
+				
+				<row>
+					<c>Produit</c>
+					<c>Le nom du produit de travail.</c>
+					<c>Une référence au produit de travail dans le 
+processus.</c>
+				</row>
+				
+				<row>
+					<c>Comment l'utiliser ?</c>
+					<c>Décrire comment le produit est utilisé tout au long 
+du cycle de vie.</c>
+					<c>Décider de l'utilisation du produit au cours de la 
+phase :  
+						<list>
+						<item>Doit (impérativement être utilisé)</item>
+						<item>Peut (impérativement être utilisé)</item>
+						<item>Case vide (ne sera pas utilisé)</item>
+						</list>
+					</c>
+				</row>
+				
+				<row>
+					<c>Statut</c>
+					<c>Décider du statut du produit de travail.</c>
+					<c>	<list>
+						<item>Formel-Externe</item>
+						<item>Formel-Interne</item>
+						<item>Informel</item>
+						<item>Aucun</item>
+						</list>
+					</c>
+				</row>
+				
+				<row>
+					<c>Outils employés</c>
+					<c>Définition de l'outil utilisé pour créer le 
+produit.</c>
+					<c>Références aux détails des outils utilisés pour 
+créer et maintenir les produits de travail.</c>
+				</row>
+				
+				<row>
+					<c>Plans types / Exemples</c>
+					<c>Les plans types à utiliser et les exemples de 
+produits construits à partir de ces plans types.</c>
+					<c>Références aux plans types et exemples du RUP-F ou 
+aux plans types et exemples locaux. Cette colonne peut 
+également contenir des références à des produits de travail 
+courants qui peuvent fournir une aide complémentaire aux 
+membres du projet.</c>
+				</row>
+				
+			</table>
+		
+		</sect2>
+		
+		<sect2 title="Notes sur les produits de travail">
+			<p>Le tableau ci-dessous est donné pour chaque 
+discipline : il contient d'une part la liste de tous les 
+produits 
+proposés par le processus RUP-F et non utilisés dans le 
+cycle 
+de vie, d'autre part des modifications ou des 
+renseignements supplémentaires sur des produits utilisés. 
+Ces choix sont 
+tous justifiés dans la colonne <q>Raison</q>.</p>
+			<p> </p>
+			<table>
+				<col name="Produit"/>
+				<col name="Notes"/>
+				<col name="Raison"/>
+				
+				<row>
+					<c> </c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+			</table>
+		</sect2>
+	</sect1>
+	
+	<sect1 title="Classification des produits de travail">
+		<p>Un produit de travail est une fourniture du processus. 
+Il est souvent produit dans le cadre d'une discipline, bien 
+qu'il existe des exceptions. Les produits de travail sont 
+organisés dans la discipline où ils sont crées. Pour 
+décrire 
+comment un produit de travail sera utilisé, on emploie le 
+schéma de classification suivant :  </p>
+		<p> </p>
+		<table>
+			<col name="Classification" width="1*"/>
+			<col name="Explication" width="2*"/>
+			
+			<row>
+				<c>Doit</c>
+				<c>Ce produit est obligatoirement utilisé. C'est un 
+produit clé. Cela peut causer des problèmes plus tard dans 
+le 
+développement s'il n'est pas produit.</c>
+			</row>
+			
+			<row>
+				<c>Peut</c>
+				<c>Ce produit n'a pas à être utilisé et produit. Il est 
+produit seulement dans les cas où cela apporte de l'intérêt 
+et s'il y a assez de temps.</c>
+			</row>
+			
+			<row>
+				<c>Case vide</c>
+				<c>Ce produit ne sera pas utilisé.</c>
+			</row>
+			
+		</table>
+	</sect1>
+	
+	<sect1 title="Procédures de revues">
+		<p>Le projet utilise les niveaux de revue suivants 
+: </p>
+		<p> </p>
+		<table>
+			<col name="Classification" width="1*"/>
+			<col name="Explication" width="2*"/>
+			<col name="Commentaires" width="2*"/>
+			
+			<row>
+				<c>Formel - Externe</c>
+				<c>Le produit arrivé à un jalon spécifique est une 
+partie de la distribution finale et nécessite l'approbation 
+du 
+client.</c>
+				<c>Par exemple, le document Vision est un produit 
+formel-externe, car il doit être présenté et approuvé par 
+le 
+client lors de la revue de fin de phase d'élaboration.</c>
+			</row>
+			
+			<row>
+				<c>Formel - Interne</c>
+				<c>Le produit est approuvé par les membres du projet 
+lors d'une revue interne.</c>
+				<c>Par exemple, le modèle de conception est un produit 
+formel-interne.</c>
+			</row>
+			
+			<row>
+				<c>Informel</c>
+				<c>Le produit est utilisé lors de revues internes, mais 
+n'a pas besoin d'être approuvé formellement par les membres 
+du projet.</c>
+				<c>Le produit est créé puis mis à jour tout au long du 
+projet. Il s'agit le plus souvent d'un produit inclus dans 
+un produit formel plus important. Le sous-système de 
+conception est un exemple typique d'un produit qui n'est 
+pas 
+approuvé formellement.</c>
+			</row>
+			
+			<row>
+				<c>Aucun</c>
+				<c>Le produit n'est pas forcément utilisé lors de 
+revues, et il n'a pas besoin d'être approuvé.</c>
+				<c>Le produit est utilisé comme support de travail. Il 
+est souvent temporaire et aide à une meilleure 
+compréhension par les membres du projet de certains autres 
+produits.</c>
+			</row>
+			
+		</table>
+	</sect1>
+</chapter>
+
+<chapter title="Disciplines">
+	<sect1 title="Expression des exigences">
+		<sect2 title="Objectifs de la discipline">
+			<list>
+				<item>Se mettre d'accord avec le client et les autres 
+intervenants sur les principales fonctionnalités du 
+logiciel,</item>
+				<item>Fournir aux développeurs une bonne définition des 
+besoins du logiciel,</item>
+				<item>Définir les limites du projet,</item>
+				<item>Fournir une base pour la planification du contenu 
+technique des itérations,</item>
+				<item>Fournir une base à l'estimation des coûts et 
+délais pour le développement du logiciel,</item>
+				<item>Définir l'interface utilisateur, en se 
+concentrant sur les besoins des utilisateurs.</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Produits de travail">
+			<table>
+        		<col name="Produit"/>
+				<col name="Lanc."/>
+				<col name="Elab."/>
+				<col name="Const."/>
+				<col name="Trans."/>
+				<col name="Statut"/>
+				<col name="Outils employés"/>
+				<col name="Plans types / Exemples"/>
+				
+				<row>
+					<c>Vision</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c>IPSdoc</c>
+					<c>rup_vision- -.dot</c>
+				</row>
+				
+				<row> 
+					<c>Modèle de cas d'utili- -sation</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Peut</c>
+					<c> </c>
+					<c>Formel - Externe</c>
+					<c>IPSdoc</c>
+					<c> </c>
+				</row>
+				
+				<!--
+				<row>
+					<c>Spécifi- -cation de cas d'utili- -sation</c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c> </c>
+					<c>Formel - Externe</c>
+					<c>IPSdoc</c>
+					<c>rup_ucspec- -.dot</c>
+				</row>
+				-->
+				
+				<row> 
+					<c>Spécifi- -cations supplé- -mentaires</c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c>IPSdoc</c>
+					<c>rup_sspec- -.dot</c>
+				</row>
+				
+				<row> 
+					<c>Maquette de l'IHM</c>
+					<c> </c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c> </c>
+					<c>Formel - Externe</c>
+					<c>JAVA, Eclipse</c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Glossaire</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Formel - Interne</c>
+					<c>IPSdoc</c>
+					<c>rup_gloss- -.dot, Glossaire (APES1)</c>
+				</row>
+				
+				<row> 
+					<c>Acteur</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Modèle objet du domaine</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c> </c>
+					<c> </c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Classe d'interface</c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+				
+			</table>
+		</sect2>
+		
+		<sect2 title="Notes sur les produits de travail">
+			<table>
+				<col name="Produit"/>
+				<col name="Notes"/>
+				<col name="Raison"/>
+				
+				<row>
+					<c>Modèle de cas d'utilisation</c>
+					<c>On ne fera pas apparaître de diagrammes, mais 
+simplement une liste des cas d'utilisation et leurs 
+descriptions.</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Paquetage de cas d'utilisation</c>
+					<c>Inclus dans le produit "Modèle de cas 
+d'utilisation".</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Spécifications des cas d'utilisation</c>
+					<c>Inclus dans le produit "Modèle de cas 
+d'utilisation".</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Scénarios des cas d'utilisation</c>
+					<c>Inclus dans le produit "Modèle de cas 
+d'utilisation".</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Maquette de l'IHM</c>
+					<c>L'interface est implémentée par le prototype.</c>
+					<c> </c>
+				</row>
+			</table>
+		</sect2>
+		
+	</sect1>
+
+	<sect1 title="Analyse et conception">
+		<sect2 title="Objectifs de la discipline">
+			<list>
+				<item>Transformer les exigences exprimées en conception 
+du système à réaliser,</item>
+				<item>Elaborer une architecture robuste,</item>
+				<item>Adapter la conception pour tenir compte de 
+l'environnement d'implémentation.</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Produits de travail">
+			<table>
+        		<col name="Produit" width="1.5*"/>
+				<col name="Lanc." width="1*"/>
+				<col name="Elab." width="1*"/>
+				<col name="Const." width="1*"/>
+				<col name="Trans." width="1*"/>
+				<col name="Statut" width="1*"/>
+				<col name="Outils employés" width="1*"/>
+				<col name="Plans types / Exemples" width="1.5*"/>
+				
+				<row> 
+					<c>Document d'architecture logicielle</c>
+					<c> </c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c>IPSdoc</c>
+					<c>rup_sad.dot, Document d'architecture logicielle 
+(APES1)</c>
+				</row>
+				
+				<!--
+				<row> 
+					<c>Modèle de conception</c>
+					<c> </c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Interne</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				-->
+				
+				<row> 
+					<c>Sous-système de conception</c>
+					<c> </c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Paquetage de conception</c>
+					<c> </c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Classe d'interface</c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Classe de conception</c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+				
+				<row> 
+					<c>Réalisation de cas d'utilisation</c>
+					<c> </c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Informel</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+			</table>
+		</sect2>
+		
+		<sect2 title="Notes sur les produits de travail">
+			<table>
+				<col name="Produit"/>
+				<col name="Notes"/>
+				<col name="Raison"/>
+				
+				<row>
+					<c>Modèle de conception</c>
+					<c>Inclus dans le produit "Document d'architecture 
+logicielle".</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Modèle d'analyse</c>
+					<c>Inclus dans le produit "Modèle de conception".</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Classe d'analyse</c>
+					<c>Inclus dans le produit "Classe de conception".</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Modèle de données</c>
+					<c>Non utilisé.</c>
+					<c>Pas de base de données</c>
+				</row>
+				
+				<row>
+					<c>Modèle de déploiement</c>
+					<c>Non utilisé.</c>
+					<c>Le système est simple et sans distribution des 
+traitements.</c>
+				</row>
+			</table>
+		</sect2>
+		
+	</sect1>
+	
+	
+	
+
+	<sect1 title="Gestion de projet">
+		<sect2 title="Objectifs de la discipline">
+			<list>
+				<item>Fournir des guides pratiques pour planifier, 
+former les équipes, exécuter et contrôler les 
+projets,</item>
+				<item>Prévoir les risques et les maîtriser s'ils 
+apparaissent,</item>
+				<item>Contrôler l'avancement des itérations.</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Produits de travail">
+			<table>
+        		<col name="Produit" width="1.5*"/>
+				<col name="Lanc." width="1*"/>
+				<col name="Elab." width="1*"/>
+				<col name="Const." width="1*"/>
+				<col name="Trans." width="1*"/>
+				<col name="Statut" width="1*"/>
+				<col name="Outils employés" width="1*"/>
+				<col name="Plans types / Exemples" width="1.5*"/>
+
+				<row>
+					<c>Plan de développement logiciel</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c>IPSdoc</c>
+					<c>rup_sdpln.dot</c>
+				</row>
+				
+				<row> 
+					<c>Liste des risques</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Formel - Interne</c>
+					<c>IPSdoc</c>
+					<c>rup_rsklst.dot</c>
+				</row>
+				
+				<row> 
+					<c>Liste des problèmes</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Formel - Interne</c>
+					<c>IPSdoc</c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Plan d'itération</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Interne</c>
+					<c>IPSdoc</c>
+					<c>rup_itpln.dot</c>
+				</row>
+				
+				<row> 
+					<c>Compte-rendu de revue</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Interne</c>
+					<c>IPSdoc</c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Evaluation de l'itération</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Informel</c>
+					<c>IPSdoc</c>
+					<c>rup_itass.dot</c>
+				</row>
+			</table>
+		</sect2>
+		
+		<sect2 title="Notes sur les produits de travail">
+			<table>
+				<col name="Produit"/>
+				<col name="Notes"/>
+				<col name="Raison"/>
+				
+				<row>
+					<c>Liste des problèmes</c>
+					<c>Ce produit ne doit être créé qu'en cas d'apparition 
+de problèmes importants, d'ordre humain ou technique.</c>
+					<c>Allègement du processus</c>
+				</row>
+				
+				<row>
+					<c>Plan d'itération</c>
+					<c>Un nouveau produit est créé pour chaque 
+itération.</c>
+					<c>Ce produit ne concerne qu'une itération.</c>
+				</row>
+				
+				<row>
+					<c>Compte-rendu de revue</c>
+					<c>Un nouveau produit est créé pour chaque 
+itération.</c>
+					<c>Ce produit ne concerne qu'une itération.</c>
+				</row>
+				
+				<row>
+					<c>Evaluation de l'itération</c>
+					<c>Un nouveau produit est créé pour chaque 
+itération.</c>
+					<c>Ce produit ne concerne qu'une itération.</c>
+				</row>
+			</table>
+		</sect2>
+		
+	</sect1>
+	
+	<sect1 title="Gestion de processus">
+		<sect2 title="Objectifs de la discipline">
+			<list>
+				<item>Définir le processus qui va être utilisé sur le 
+projet,</item>
+				<item>Préparer l'environnement de développement du 
+projet,</item>
+				<item>Evaluer le processus en vue de son 
+amélioration.</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Produits de travail">
+			<table>
+        		<col name="Produit" width="1.5*"/>
+				<col name="Lanc." width="1*"/>
+				<col name="Elab." width="1*"/>
+				<col name="Const." width="1*"/>
+				<col name="Trans." width="1*"/>
+				<col name="Statut" width="1*"/>
+				<col name="Outils employés" width="1*"/>
+				<col name="Plans types / Exemples" width="1.5*"/>
+				
+				<row> 
+					<c>Plan du cycle de vie</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c>IPSdoc</c>
+					<c>rup_devcs.dot</c>
+				</row>
+				
+				<row> 
+					<c>Plans types spécifiques au projet</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Peut</c>
+					<c>Informel</c>
+					<c>IPSdoc</c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Guides de programmation</c>
+					<c> </c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c> </c>
+					<c>Informel</c>
+					<c>IPSdoc</c>
+					<c>java codingstandard</c>
+				</row>
+			</table>
+		</sect2>
+		
+	</sect1>
+	
+	<sect1 title="Implémentation">
+		<sect2 title="Objectifs de la discipline">
+		<p>Cette discipline regroupe les disciplines 
+Implémentation, Test et Déploiement. L'objectif est de mettre en oeuvre 
+l'implémentation du logiciel et d''élaborer des procédures 
+de test afin de valider cette implémentation.</p>	
+		</sect2>
+		
+		<sect2 title="Produits de travail">
+			<table>
+        		<col name="Produit" width="1.5*"/>
+				<col name="Lanc." width="1*"/>
+				<col name="Elab." width="1*"/>
+				<col name="Const." width="1*"/>
+				<col name="Trans." width="1*"/>
+				<col name="Statut" width="1*"/>
+				<col name="Outils employés" width="1*"/>
+				<col name="Plans types / Exemples" width="1.5*"/>
+				
+				<row> 
+					<c>Prototype et versions</c>
+					<c></c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Peut</c>
+					<c>Formel - Externe</c>
+					<c>Java, Eclipse</c>
+					<c>APES 1.0</c>
+				</row>
+				
+				<row> 
+					<c>Tests unitaires</c>
+					<c> </c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c>JUnit</c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Tests fonctionnels</c>
+					<c> </c>
+					<c>Peut</c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c>Abbot</c>
+					<c> </c>
+				</row>
+				
+				<row> 
+					<c>Manuel utilisateur</c>
+					<c></c>
+					<c></c>
+					<c>Doit</c>
+					<c>Doit</c>
+					<c>Formel - Externe</c>
+					<c> </c>
+					<c> </c>
+				</row>
+				
+			</table>
+		</sect2>
+		
+		<sect2 title="Notes sur les produits de travail">
+			<table>
+				<col name="Produit" width="1*"/>
+				<col name="Notes" width="2*"/>
+				<col name="Raison" width="1*"/>
+				
+				<row>
+					<c>Prototype et versions</c>
+					<c>Les différentes versions de APES doivent être 
+développées à partir du code du prototype ou de la version 
+précédente.</c>
+					<c>Réutilisation</c>
+				</row>
+
+				<row>
+					<c>Tests fonctionnels</c>
+					<c>Les tests fonctionnels doivent être automatisés 
+grâce à l'outil Abbot. Toutefois si cela s'avère 
+préférable, 
+on réalisera plutôt des plans de test, comprenant tous les 
+jeux d'essais à suivre pour chaque cas d'utilisation, et 
+les 
+résultats obtenus (on utilisera alors simplement 
+IPSdoc).</c>
+					<c>Trop faible connaissance de l'outil Abbot à ce
+stade du projet.</c>
+				</row>
+				
+			</table>
+		</sect2>
+		
+	</sect1>
+	
+	
+</chapter>
+	
+<chapter title="Rôles">
+	<p>Quatre catégories de rôles apparaissent dans le RUP-F : 
+les analystes, les développeurs, les testeurs et les 
+gestionnaires.</p>
+
+	<sect1 title="Analystes">
+		<p>Les analystes sont principalement impliqués dans 
+l'expression des exigences. 
+		Ils conduisent et coordonnent le recueil des 
+exigences et la modélisation des cas d'utilisation en 
+définissant 
+les fonctionnalités et les limites du système. Par exemple, 
+ils établissent quels sont les acteurs et les cas 
+d'utilisation, 
+et comment ils sont liés les uns aux autres.</p>
+
+	</sect1>
+	
+	<sect1 title="Développeurs">
+		<p>Les développeurs comptent le concepteur, l'architecte 
+et les codeurs.</p>
+		<p>Le concepteur est la personne qui définit les 
+responsabilités, les opérations, les attributs, et les 
+relations 
+d'une ou plusieurs classes, et détermine comment elle(s) 
+va(vont) être ajustée(s) à l'environnement 
+d'implémentation.</p>
+		<p>De plus, le concepteur peut avoir la responsabilité de 
+création des paquetages de conception, ou sous-systèmes de 
+conception, incluant toutes classes du paquetage ou 
+sous-système.</p>
+		<p>L'architecte logiciel a la responsabilité de mener et 
+coordonner les activités techniques et les produits de 
+travail tout au long du projet. L'architecte logiciel 
+établit 
+la structure globale pour chauqe vue de l'architecture : la 
+décomposition de la vue, le regroupement des éléments, et 
+les interfaces entre ces différents regroupements.</p>
+		<p>Les codeurs doivent réaliser la partie codage en 
+respectant les exigences déterminées par le concepteur et 
+l'architecte.</p>	
+	</sect1>
+	
+	<sect1 title="Testeurs">
+		<p>Les testeurs sont chargés de tester l'application et 
+de veiller à ce qu'elle réponde bien aux exigences du 
+projet.</p>
+	</sect1>
+	
+	<sect1 title="Gestionnaires">
+		<p>Il existe quatre types de gestionnaires :  </p>
+		<list>
+			<item>Le chef de projet alloue les ressources, définit 
+les priorités, coordonne les actions entre clients et 
+utilisateurs, et généralement s'assure que l'équipe projet 
+reste 
+concentrée sur le véritable objectif. Il établit également 
+un ensemble de pratiques pour garantir l'intégrité et la 
+qualité des produits de travail du projet.</item>
+			<item>L'ingénieur processus est responsable de la 
+gestion du processus lui-même. Cela inclut la configuration 
+du 
+processus avant le démarrage du projet et l'amélioration 
+constante du processus au cours de l'effort de 
+développement.</item>
+			<item>Le spécialiste outils est responsable du support 
+pour les outils utilisés au cours du projet. Il configure 
+les outils et vérifie leur bon fonctionnement.</item>
+			<item>Le superviseur de projet est responsable de 
+l'évaluation des produits de travail au cours des revues 
+majeures 
+du cycle de vie du projet. Ces revues de projet sont des 
+points très importants dans la mesure où elles peuvent 
+aboutir à la décision d'abandonner le projet si la 
+planification 
+est inadéquate ou si la progression est trop faible.</item>
+		</list>
+	</sect1>
+	<!--
+	<sect1 title="Récapitulatif">
+		<p>Le tableau récapitulatif ci-dessous assigne ces 
+différents rôles aux personnes effectives du projet : 
+ </p>
+		<table>
+			<col name="Catégorie de rôles" width="1*"/>
+			<col name="Rôle" width="1*"/>
+			<col name="Personne(s) qui le représente(nt)" 
+width="1.5*"/>
+				
+			<row>
+				<c>Analystes</c>
+				<c>Analyste</c>
+				<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien 
+Defossez, Nicolas Delmas, Lionel Petit</c>
+			</row>
+			
+			<row>
+				<c>Développeurs</c>
+				<c>Concepteur</c>
+				<c>Aurélien Defossez</c>
+			</row>
+			
+			<row>
+				<c> </c>
+				<c>Architecte</c>
+				<c>Lionel Petit</c>
+			</row>
+			
+			<row>
+				<c> </c>
+				<c>Codeurs - Développeurs</c>
+				<c>Les 2 groupes ISI 2A + ISI 3A</c>
+			</row>
+			
+			<row>
+				<c>Testeurs</c>
+				<c>Testeur</c>
+				<c>Isabelle Cassagneau</c>
+			</row>
+			
+			<row>
+				<c>Gestionnaires</c>
+				<c>Chef de projet</c>
+				<c>Delphine De Rosso</c>
+			</row>
+			
+			<row>
+				<c> </c>
+				<c>Ingénieur processus</c>
+				<c>Isabelle Cassagneau</c>
+			</row>
+			
+			<row>
+				<c> </c>
+				<c>Spécialistes outil</c>
+				<c>Aurélien Defossez, Lionel Petit</c>
+			</row>
+			
+			<row>
+				<c> </c>
+				<c>Superviseurs du projet</c>
+				<c>Claude Aubry, Henri Massié</c>
+			</row>
+		</table>
+	</sect1>
+	-->
+</chapter>
+
+<chapter title="Pratiques XP">
+	<p>L'eXtreme Programming (XP) est une méthode de 
+développement dédiée à de petites équipes confrontées à un 
+environnement changeant ou des besoins mal connus.</p>
+	<p>Les pratiques XP sont pour la plupart des pratiques de 
+"bon sens" et certaines, concernant la qualité du design et 
+du code et le travail en équipe, pourront être appliquées 
+au processus APES.</p>
+	
+	<sect1 title="Qualité du design et du code">
+		<sect2 title="Conception simple">
+			<p>Le développeur devra réfléchir à la conception la 
+plus simple possible, et pas forcément la plus facile, pour 
+résoudre la tâche qui lui est affectée. Il ne devra pas 
+perdre de vue que son architecture doit être aisément 
+testable.</p>
+			<p>Par ailleurs, on ne fait de conception que pour les 
+fonctionnalités existantes, pas pour les fonctionnalités 
+futures. On n'introduit donc pas d'optimisations si elles 
+ne 
+sont pas demandées par le client.</p>
+			<p>En somme, plutôt que de préparer le logiciel pour le 
+futur, on s'assure que le travail actuel soit bien fait 
+(lisibilité du code, simplicité, tests) pour que les 
+changements restent faciles et rapides.</p>
+		</sect2>
+		
+		<sect2 title="Remaniement">
+        	<p>Un des principes de base d'XP est la lisibilité 
+du code, le remaniement est une pratique qui aide à cela. 
+Quand, à force de fonctionnalités ajoutées au logiciel, le 
+code devient trop illisible, ou que par exemple plusieurs 
+fonctions réalisent la même tâche, il est du devoir des 
+programmeurs de remanier le code pour le rendre plus 
+lisible et 
+plus simple. </p>
+			<p>Les remaniements consistent par exemple à renommer 
+les variables, les méthodes, les classes, déplacer des 
+attributs ou des méthodes vers d'autres classes, décomposer 
+les 
+grosses méthodes en des méthodes plus petites, factoriser 
+des parties de code, etc. </p>
+			<p>C'est un moyen de faire émerger un design aussi 
+adapté que possible aux besoins de l'application, en 
+supprimant 
+au fur et à mesure tout ce qui nuit à sa simplicité.</p>
+      	</sect2>
+		
+		<sect2 title="Tests fonctionnels">
+        	<p>Ils sont définis par le client, au moyen de cas 
+d'utilisation, puis codés et automatisés par le testeur. 
+Ils servent à définir si le logiciel remplit bien les 
+fonctionnalités demandées par le client. Les tests 
+fonctionnels 
+sont réalisés pour les premières fonctionnalités durant la 
+phase d'élaboration, puis tout au long de la phase de 
+construction.</p>
+      	</sect2>
+	</sect1>
+
+	<sect1 title="Travail en équipe">
+		<sect2 title="Programmation en binôme">
+        	<p>Les programmeurs travaillent en binôme, ceci a 
+pour but d'améliorer la qualité du code. En effet, pendant 
+qu'un des deux développeurs code, l'autre relie 
+immédiatement le code, ce qui permet une forte réduction du 
+nombre 
+d'erreurs de codage. Ensuite cela permet d'obtenir une 
+conception simple plus propre, basée sur deux avis plutôt 
+qu'un 
+seul. Les binômes ont pour vocation de changer fréquemment, 
+ce qui a pour objectif d'améliorer la cohésion de l'équipe 
+de développement et de faciliter un partage des 
+connaissances.</p>
+      	</sect2>
+		
+		<sect2 title="Responsabilité collective du code">
+    	    <p>Chaque programmeur travaille sur l'ensemble du 
+logiciel, et est donc responsable de l'ensemble du code. 
+L'application n'est pas découpée en zones réservées à 
+chaque 
+développeur : chacun est susceptible de travailler sur 
+toutes les parties de l'application. Chacun a donc la 
+responsabilité d'écrire un code aussi clair que possible, 
+sachant 
+que d'autres y travailleront peu après. </p>
+			<p>D'autre part le fait qu'une même portion de code soit 
+visitée par plusieurs développeurs diminue les risques 
+d'erreur et augmente sa qualité. Cette pratique est 
+encouragé 
+par la programmation en binôme, qui fait varier les tâches 
+sur lesquelles chacun travaille, et le remaniement.</p>
+      	</sect2>
+		
+		<sect2 title="Règles de codage">
+        	<p>Dans l'optique de rendre le code lisible par 
+tous, les programmeurs doivent respecter des règles de 
+codage 
+afin de rendre le code homogène dans tout le logiciel. 
+Cette pratique est encouragée par le remaniement : si un 
+programmeur voit une partie de code ne respectant pas les 
+règles 
+de codage, il doit le remanier pour qu'il les suive. Ainsi, 
+naturellement, les programmeurs en viendront à tous 
+utiliser les règles de codage.</p>
+      	</sect2>
+
+		<sect2 title="Intégration quasi-continue">
+        	<p>Dès qu'un développeur finit une tâche, il met à 
+jour la version d'intégration en s'assurant que tous les 
+tests de non-régression de l'application passent à 100%. La 
+version "livrable" du logiciel évolue donc chaque jour, en 
+reflétant fidèlement l'état d'avancement des 
+développements. 
+</p>
+			<p>Cela permet à l'équipe de développement d'être 
+continuellement sûre de la fiabilité du logiciel, cela 
+réduit le 
+risque de problème d'intégration et cela permet à l'équipe 
+d'avoir une bonne perception de l'avancée du projet, ce qui 
+peut être très stimulant.</p>
+      	</sect2>
+	</sect1>
+	
+</chapter>
+	
+</ipbook>
+

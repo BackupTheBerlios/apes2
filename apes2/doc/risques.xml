@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Liste des Risques</subtitle>
+    <author>Delphine De Rosso</author>
+   <language>french</language>
+
+    <version>1.0</version>
+    
+    <revhistory>
+      <revision>
+        <revnumber>1.1</revnumber>
+        <date>13/11/2003</date>
+    	  <author>Delphine De Rosso</author>
+    	<revdescription>Un risque a été rencontré</revdescription>
+      </revision>
+	  <revision>
+        <revnumber>1.0</revnumber>
+        <date>23/10/2003</date>
+    	  <author>Delphine De Rosso</author>
+    	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+  
+  <chapter title="Introduction">
+    <sect1 title="Objectif">
+      <p>Ce document a pour but de collecter, analyser, et définir les risques pouvant engendrer des problèmes lors des évolutions du projet APES. Il consigne aussi les stratégies employées afin d'éviter que ces risques deviennent des faits, et les actions entreprises si cette prévention échoue.</p>
+    </sect1>
+    
+    <sect1 title="Portée">
+      <p>La liste des risques est destinée aux membres de l'équipe et aux superviseurs du projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Glossaire</item>
+      </list>
+    </sect1>
+
+    <sect1 title="Définitions">
+      <p>La liste des risques attribue à chaque risque une probabilité d'occurrence, et un impact. Cette section explicite les notations utilisées sur ce sujet.</p>
+
+      <sect2 title="Probabilité d'occurrence">
+        <glossary>
+	    <def term="Faible">Le risque a peu de chances de se transformer en fait. La mise en place de mesures préventives devraient suffire à s'en prémunir.</def>
+	    <def term="Moyenne">Il est incertain que le risque se transforme en fait. La mise en place de mesures préventives et un suivi régulier des indicateurs devraient suffire à s'en prémunir.</def>
+	    <def term="Forte">Le risque peut d'un moment à l'autre devenir un fait. Les mesures préventives doivent être scrupuleusement mises en place, et les indicateurs contrôlés très fréquemment.</def>
+	    <def term="Très forte">Le risque se transformera en fait presque inévitablement. Les mesures préventives et les indicateurs permettront peut-être de retarder le phénomène et de limiter les dégâts.</def>
+	  </glossary>
+      </sect2>
+
+      <sect2 title="Impact">
+        <glossary>
+	    <def term="Négligeable">Si le risque se transforme en fait, il n'aura que très peu de répercussions sur le projet. Il prendra peut-être un peu de retard mais sa bonne marche n'est pas remise en cause.</def>
+	    <def term="Important">Si le risque se transforme en fait, il aura des répercussions visibles sur le projet. Il prendra du retard, et son déroulement sera plus difficile.</def>
+	    <def term="Critique">Si le risque se transforme en fait, il aura des répercussions graves sur le projet. Il prendra beaucoup de retard, et il faudra faire des efforts importants pour que le projet se déroule correctement.</def>
+	  </glossary>
+      </sect2>
+      
+    </sect1>
+    
+  </chapter>
+  
+  <chapter title="Risques">
+
+    <sect1 title="Disponibilités et performances des ressources informatiques">
+      
+      <sect2 title="Exposition au Risque">
+        <p>Il s'agit d'un risque critique, puisqu'il est susceptible de ralentir le développement du projet. Il a une forte probabilité d'occurrence si l'on considère les choix effectués pour le développement et le matériel informatique mis à notre disposition.</p>
+      </sect2>
+      
+      <sect2 title="Description">
+        <p>Le recours à Eclipse pour le développement nécessite du matériel disposant de performances adaptées. Par conséquent, l'utilisation des salles de terminaux X est compromise. Nous serons donc dépendants de la disponibilité des salles Windows à accès limité.</p>
+      </sect2>
+      
+      <sect2 title="Impacts">
+        <p>En cas de faible disponibilité des salles Windows, il peut en résulter plusieurs conséquences :</p>
+	<list>
+	  <item>manque de cohésion au sein de l'équipe, car chacun sera amené à travailler sur une machine personnelle (sûrement au sein de son propre logement)</item>
+	  <item>pour les gens ne disposant pas d'un accès Internet chez eux, de gros problèmes de mise en référentiel de leur travail</item>
+	  <item>ralentissement du développement lors de l'attente d'un complément apporté par un membre de l'équipe</item>
+	</list>
+      </sect2>
+      
+      <!-- Néant
+      <sect2 title="Indicateurs">
+        <p></p>
+      </sect2>
+      -->
+      
+      <sect2 title="Mesures Préventives">
+        <p>La principale mesure préventive consistera à utiliser au mieux les créneaux de BE dont nous disposons. Toutefois, cette mesure n'a d'intérêt que si la majorité de ces créneaux est en commun avec ceux du groupe de 2ème année.</p>
+      </sect2>
+      
+      <sect2 title="Plan de Secours">
+        <p>Un protocole de "guichet" nécessitant la collaboration d'une personne ayant un accès Internet peut permettre de contourner certains des effets néfastes mais au prix d'une perte de temps, même limitée.</p>
+	  <p>Les membres de l'équipe disposant de matériel informatique personnel pourront être amenés à travailler à leur domicile.</p>
+      </sect2>
+      
+    </sect1>
+
+
+    <sect1 title="Difficulté à s'approprier le sujet">
+
+      <sect2 title="Exposition au Risque">
+        <p>Il s'agit d'un risque critique puisqu'il conditionne pour une bonne part la réussite du projet.</p>
+	  <p>Il a une probabilité d'occurrence faible.</p>
+      </sect2>
+
+      <sect2 title="Description">
+        <p>Le sujet demandé présente une technicité élevée et réclame une forte capacité d'abstraction. En effet, il s'agit ici de travailler sur des modèles de processus qui sont des notions que nous avons abordées l'an dernier mais pour lesquelles l'équipe présente encore un certain nombre de lacunes.</p>
+	  <p>Ensuite, on remarquera que l'équipe de programmeurs n'a aucune formation sur la notion de processus elle-même.</p>
+      </sect2>
+
+      <sect2 title="Impacts">
+        <p>Il peut en résulter plusieurs conséquences :</p>
+	<list>
+	  <item>stagnation en phases de lancement et/ou d'élaboration</item>
+	  <item>produits fournis ne répondant pas aux besoins du client</item>
+	  <item>dépassement des délais</item>
+	</list>
+      </sect2>
+
+      <sect2 title="Indicateurs">
+        <p>C'est le client contractuel qui pourra nous indiquer que le projet ne va pas dans la bonne direction. Il disposera de moments opportuns pour faire ses remarques :</p>
+	<list>
+	  <item>lors des revues de livraison</item>
+	  <item>lors de retours par mail après utilisation du produit partiel livré</item>
+	</list>
+      </sect2>
+
+      <sect2 title="Mesures Préventives">
+        <p>La principale mesure préventive provient du processus employé. Ce dernier étant fortement inspiré du RUP/F, il dispose des caractéristiques d'un processus agile ce qui nous permettra d'ajuster en permanence la conduite du projet avec les besoins des superviseurs de projet (même si ces derniers réclament des changements en cours de développement).</p>
+	  <p>Afin de mieux se familiariser avec le standard utilisé (SPEM), il sera profitable à l'équipe de suivre une formation (effectuée par M. Claude Aubry).</p>
+	  <p>Le dernier aspect de ce risque concerne la répercussion des informations sur l'équipe de programmeurs. C'est pourquoi, il sera important de les former à certains des aspects du projet mais aussi à les impliquer dans le projet au plus tôt. La phase d'élaboration semble adéquate pour leur mettre le pied à l'étrier, et les faire participer à certaines réflexions.</p>
+      </sect2>
+
+      <!-- Néant : Si on en arrive là, on a plus qu'à prier...
+      <sect2 title="Plan de Secours">
+        <p></p>
+      </sect2>
+      -->
+
+    </sect1>
+
+
+    <sect1 title="Difficulté à appliquer le processus">
+
+      <sect2 title="Exposition au Risque">
+        <p>Il s'agit d'un risque important, car il conditionne la cohésion et la vélocité du développement.</p>
+	  <p>Sa probabilité d'occurrence est moyenne.</p>
+      </sect2>
+
+      <sect2 title="Description">
+        <p>Lors du développement de ce projet, le processus employé (le RUP/F) est un processus que nous découvrons au travers des cours, mais que nous n'avons encore jamais utilisé. Il se peut qu'il soit mal compris (voire mal perçus) par l'ensemble de l'équipe, notamment par les développeurs.</p>
+      </sect2>
+
+      <sect2 title="Impacts">
+        <p>Ce risque engendrera principalement des ralentissements dans le déroulement du projet.</p>
+	  <p>De plus, une mauvaise compréhension ou application du RUP/F peut également entraîner des problèmes de communication avec les superviseurs de projet.</p>
+      </sect2>
+
+      <sect2 title="Indicateurs">
+        <p>Nous disposons de deux indicateurs liés à ce risque :</p>
+	<list>
+	  <item>inquiétude des superviseurs de projet lors des revues de livraison</item>
+	  <item>difficulté à achever l'ensemble des points importants d'une itération</item>
+	</list>
+      </sect2>
+
+      <sect2 title="Mesures Préventives">
+        <p>La première mesure préventive sera de former l'équipe de programmeurs et de les sensibiliser aux différentes notions du RUP/F.</p>
+	  <p>La seconde mesure sera d'intégrer l'équipe de programmeurs au plus tôt. Cela nous permettra de garder du temps pour les former avant qu'ils ne débutent leur travail effectif de programmeurs.</p>
+	  <p>Enfin, il sera nécessaire de mettre en place une transparence totale afin de rassurer les superviseurs de projet sur le déroulement du projet. Pour cela, il sera important de maintenir une bonne communication avec les superviseurs de projet et que ces derniers puissent avoir un suivi constant du travail effectué.</p>
+      </sect2>
+
+      <!-- Néant: XP powered! On ne peut faillir!
+      <sect2 title="Plan de Secours">
+        <p></p>
+      </sect2>
+      -->
+
+    </sect1>
+
+
+    <sect1 title="Mauvaise coopération entre étudiants de 2ème et 3ème année">
+
+      <sect2 title="Exposition au Risque">
+        <p>C'est un risque important du fait du processus mis en place qui nécessite de fortes coopérations et synergies pour fonctionner au mieux.</p>
+	  <p>En revanche il a une probabilité d'occurrence moyenne.</p>
+      </sect2>
+
+      <sect2 title="Description">
+        <p>Il risque d'être compliqué de générer un effort de groupe, et d'obtenir une réelle cohésion de l'équipe du fait de nos horaires.</p>
+      </sect2>
+
+      <sect2 title="Impacts">
+        <p>Plusieurs phénomènes seront engendrés par un tel problème :</p>
+	<list>
+	  <item>baisse de la capacité de travail de l'équipe</item>
+	  <item>manque de visibilité sur le travail effectué par les programmeurs</item>
+	  <item>dépassement des délais</item>
+	</list>
+      </sect2>
+
+      <sect2 title="Indicateurs">
+        <p>Le révélateur d'un problème sera le décalage entre les décisions prises en réunion de conceptions et le travail réalisé.</p>
+	  <p>Ce problème pourra aussi se traduire par une difficulté à correctement suivre le groupe de programmeurs.</p>
+      </sect2>
+
+      <sect2 title="Mesures Préventives">
+        <p>L'accent devra être mis sur la communication entre étudiants de 2ème et 3ème année, notamment en ayant recours à des outils tels que le chat, la liste de diffusion ou le courriel.</p>
+	  <p>Mobilisation d'au moins deux heures par semaine pendant lesquelles les deux équipes travailleront ensemble.</p>
+      </sect2>
+      <sect2 title="Plan de Secours">
+        <p>Si le problème survient, il advient aux étudiants de 3ème année de renforcer le suivi du travail effectué par les programmeurs et d'informer ces derniers des remaniements à mener.</p>
+	  <p>Si le problème se réitère trop fréquemment, il sera envisageable d'organiser une réunion exceptionnelle.</p>
+      </sect2>
+
+    </sect1>
+
+    <sect1 title="Mauvaise communication entre les groupes de 3ème année">
+
+      <sect2 title="Exposition au Risque">
+         <p>C'est un risque important, car il pourrait freiner le déroulement des projets des groupes dépendants de nos résultats.</p>
+         <p>En revanche, il a une probalité d'occurrence faible.</p>
+      </sect2>
+
+      <sect2 title="Description">
+        <p>Il est possible que la communication s'avère difficile entre les groupes de 3ème année, et que les résultats produits par notre projet ne soient pas conformes aux attentes des groupes directement concernés.</p>
+      </sect2>
+
+      <sect2 title="Impacts">
+        <p>Le problème peut engendrer les effet suivant :</p>
+	<list>
+	  <item>ralentissement du développement de nombreux projets</item>
+	  <item>dépassement des délais</item>
+	</list>
+      </sect2>
+
+      <sect2 title="Indicateurs">
+        <p>Ce sont les autres groupes de 3ème année qui pourront nous indiquer que les résultats fournis par notre projet ne correspondent pas à ce qui a été convenu.</p>
+      </sect2>
+
+      <sect2 title="Mesures Préventives">
+        <p>Ce risque pourra être prévenu en rencontrant au plus tôt les groupes concernés, afin de définir les formats d'échange à utiliser.</p>
+	  <p>De plus, il sera profitable de conserver une bonne communication avec les différents groupes.</p>
+      </sect2>
+      
+      <!--
+      <sect2 title="Plan de Secours">
+        <p></p>
+      </sect2>
+      -->
+      
+    </sect1>
+
+    <sect1 title="Indisponibilité d'un membre de l'équipe">
+
+      <sect2 title="Exposition au Risque">
+        <p>C'est un risque qui peut aller de négligeable à important suivant le moment du développement auquel le problème survient et le rôle concerné.</p>
+	  <p>Il a une probabilité d'occurrence faible.</p>
+      </sect2>
+
+      <sect2 title="Description">
+        <p>Il est possible que lors du développement une personne soit indisponible pour des raisons de santé ou familiales.</p>
+      </sect2>
+
+      <sect2 title="Impacts">
+        <p>Le principal impact sera un amoindrissement de la capacité de travail du groupe. Toutefois cette réduction de la vélocité sera plus ou moins importante suivant la personne touchée et le moment.</p>
+	  <p>En particulier, une indisponibilité du chef de projet, de l'architecte ou de l'ingénieur processus lors des premières phases pourrait poser des problèmes pour la suite du projet.</p>
+      </sect2>
+
+      <!-- Néant : Il dit que tu vas crever...
+      <sect2 title="Indicateurs">
+        <p></p>
+      </sect2>
+      -->
+
+      <sect2 title="Mesures Préventives">
+        <p>Tout d'abord, chaque membre de l'équipe de 3ème année doit avoir une bonne connaissance des différents rôles décrits par le RUF/F afin de pouvoir remplacer temporairement une personne du groupe devenue indisponible.</p>
+	  <p>De plus, imposer le travail en binôme aux programmeurs permettrait de conserver une connaissance globale du code en cas de défaillance de l'un d'entre eux.</p>
+      </sect2>
+      
+      <!-- Néant : C'est pas grave, c'est nous qui héritons...
+      <sect2 title="Plan de Secours">
+        <p></p>
+      </sect2>
+      -->
+
+    </sect1>
+    
+    <sect1 title="Manque de retour sur l'utilisation du logiciel">
+
+      <sect2 title="Exposition au Risque">
+        <p>C'est un risque important puisque, les retours sur utilisation garantissent que le logiciel avance bien dans le sens voulu par les superviseurs de projet.</p>
+	  <p>Il a une probabilité d'occurrence moyenne.</p>
+      </sect2>
+
+      <sect2 title="Description">
+        <p>Il est possible que les superviseurs de projet, les professeurs, aient trop de travail pour permettre une utilisation et un retour sur utilisation régulier.</p>
+      </sect2>
+
+      <sect2 title="Impacts">
+        <p>Le principal résultat de ce risque est un éloignement entre les fonctionnalités attendues par les superviseurs de projet et celles fournies par le logiciel, ce qui produirait une perte de temps sur l'implémentation des fonctionnalités réellement importantes.</p>
+      </sect2>
+
+      <!-- Néant
+      <sect2 title="Indicateurs">
+        <p></p>
+      </sect2>
+      -->
+
+      <sect2 title="Mesures Préventives">
+        <p>Il est laissé un délai de 15 jours aux superviseurs de projet pour fournir leurs remarques. Ainsi, ces remarques peuvent être prises en compte pour l'itération suivante et être intégrées à la livraison de celle-ci.</p>
+      </sect2>
+      
+      <!-- Néant
+      <sect2 title="Plan de Secours">
+        <p></p>
+      </sect2>
+      -->
+
+    </sect1>
+
+  </chapter>
+  
+  <chapter title="Synthèse des Risques">
+  
+  <table>
+    <col name="Risque"/>
+    <col name="Criticité"/>
+    <col name="Probabilité d'occurrence"/>
+    <col name="Commentaire"/>
+    <row> <c>Disponibilités et performances des ressources informatiques</c>  <c>Critique</c>                          <c>Forte</c>      <c>Non rencontré.</c></row>
+    <row> <c>Difficulté à s'approprier le sujet</c>                    		<c>Critique</c>                          <c>Faible</c>     <c>Non rencontré.</c></row>
+    <row> <c>Difficulté à appliquer le processus</c>      		           	<c>Important</c>                         <c>Moyenne</c>    <c>Non rencontré.</c></row>
+    <row> <c>Mauvaise coopération entre étudiants de 2ème et 3ème année</c> 	<c>Important</c>                         <c>Moyenne</c>    <c>Non rencontré.</c></row>
+    <row> <c>Mauvaise communication entre les groupes de 3ème année</c> 	<c>Important</c>                         <c>Faible</c>    <c>Non rencontré.</c></row>
+    <row> <c>Manque de retour sur l'utilisation du logiciel</c>         	<c>Important</c>                         <c>Moyenne</c>    <c>Non rencontré.</c></row>
+    <row> <c>Indisponibilité d'un membre de l'équipe</c>                	<c>Variable, négligeable à important</c> <c>Faible</c>     <c>Rencontré.</c></row>
+    <row> <c>Réutilisation de composants inadaptés ou mal maîtrisés</c> 	<c>Négligeable</c>                       <c>Faible</c>     <c>Non rencontré.</c></row>
+  </table>
+  
+  </chapter>
+  
+</ipbook>
+

@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>IPSquad : The Way Of The Code</title>
+    <subtitle>Java Coding Standard</subtitle>
+    <author>Kévin Ottens</author>
+    <language>english</language>
+
+    <version>1.1</version>
+    
+    <revhistory>
+      <revision>
+        <revnumber>1.0</revnumber>
+        <date>06/10/2002</date>
+        <author>Kévin Ottens</author>
+	<revdescription>Document writing (mostly based on our C++ coding standard)</revdescription>
+      </revision>
+      <revision>
+        <revnumber>1.1</revnumber>
+        <date>08/10/2002</date>
+        <author>Kévin Ottens</author>
+	<revdescription>Little corrections (references to C++)</revdescription>
+      </revision>
+
+    </revhistory>
+    
+  </info>
+  
+  <preface>
+    <p>This document explains the Java coding style we've adopted and lists a number of best practices that should be followed when contributing to our Java projects.</p>
+  </preface>
+
+  <part title="Make Names Fit">
+
+    <chapter title="Selecting names">
+      <p>A name is the result of a long deep thought process about the ecology it lives in. Only a programmer who understands the system as a whole can create a name that "fits" with the system. If the name is appropriate everything fits together naturally, relationships are clear, meaning is derivable, and reasoning from common human expectations works as expected.</p>
+      <p>If you find all your names could be <l>Thing</l> and <l>DoIt</l> then you should probably revisit your design.</p>
+	  
+      <sect1 title="Class Names">
+        <list>
+	  
+	  <item>Name the class after what it is. If you can't think of what it is that is a clue you have not thought through the design well enough.</item>
+	  
+	  <item>Compound names of over three words are a clue your design may be confusing various entities in your system. Revisit your design.</item>
+	  
+	  <item>Avoid the temptation of bringing the name of the class a class derives from into the derived class's name. A class should stand on its own. It doesn't matter what it derives from.</item>
+	  
+          <item>Suffixes are sometimes helpful. For example, if your system uses agents then naming something <l>DownloadAgent</l> conveys real information.</item>
+	
+	</list>
+      </sect1>
+
+      <sect1 title="Method and Function Names">
+        <p>Usually every method and function performs an action, so the name should make clear what it does: <l>checkForErrors()</l> instead of <l>errorCheck()</l>, <l>dumpDataToFile()</l> instead of <l>dataFile()</l>. This will also make functions and data objects more distinguishable. Classes are often nouns. By making function names verbs and following other naming conventions programs can be read more naturally.</p>
+	  
+        <p>Suffixes are sometimes useful:</p>
+        <list>
+	  <item><l>Max</l> - to mean the maximum value something can have.</item>
+          <item><l>Cnt</l> - the current count of a running count variable.</item>
+          <item><l>Key</l> - key value.</item>
+        </list>
+
+        <p>For example: <l>retryMax</l> to mean the maximum number of retries, <l>retryCnt</l> to mean the current retry count.</p>
+
+        <p>Prefixes are sometimes useful:</p>
+        <list>
+          <item><l>is</l> - to ask a question about something. Whenever someone sees Is they will know it's a question.</item>
+          <item><l>get</l> - get a value.</item>
+          <item><l>set</l> - set a value.</item>
+        </list>
+
+        <p>For example: <l>isHitRetryLimit</l>.</p>
+      </sect1>
+      
+      <sect1 title="Variable Names">
+        <p>Make every variable name descriptive, limit the use of abbreviations or letter-words. It's worth writing words completely since it makes the code much more readable. Beware however that when trying to find a good name, you don't end up with with something like '<l>the_variable_for_the_loop</l>', use a proper English word for it like '<l>counter</l>' or '<l>iterator</l>'. English is a rich language and trying to find a correctly fitting word is important for code brevety, cleanness and variation. Whenever in doubt, just use a thesaurus like Merriam-Webster (<l>http://www.m-w.com</l>) or a rhyming dictionary like Rhyme (<l>http://rhyme.sourceforge.net/</l>).</p>
+        
+	<sect2 title="Exceptions">
+          <p>Some standard variables are used for often recurring tasks. Below is a list of those that are accepted:</p>
+          <list>
+	    <item><l>i</l>: integer counter</item>
+	    <item><l>it</l>: iterator</item>
+            <item><l>[type]_it</l>: iterator of a certain type for differentiation amongst types</item>
+	    <item><l>tmp_[type]</l>: eg. <l>tmp_string</l>, <l>tmp_int</l>, <l>tmp_float</l> for variables that are solely used for the storage of temporary intermediate values</item>
+	  </list>
+	</sect2>
+	  
+      </sect1>
+      
+      <sect1 title="No All Upper Case Abbreviations">
+        <p>When confronted with a situation where you could use an all upper case abbreviation instead use an initial upper case letter followed by all lower case letters. No matter what.</p>
+	
+	<sect2 title="Justification">
+	  <p>People seem to have very different intuitions when making names containing abbreviations. It's best to settle on one strategy so the names are absolutely predictable.</p>
+	  <p>Take for example <l>NetworkABCKey</l>. Notice how the C from ABC and K from key are confused. Some people don't mind this and others just hate it so you'll find different policies in different code so you never know what to call something.</p>
+	</sect2>
+      </sect1>
+    </chapter>
+	
+
+    <chapter title="Naming scheme">
+      <p>A standard naming scheme is important to ensure that all code looks similar and that every developer can understand new code immediately without have to grasp a new naming scheme first.</p>
+      <p>One of the main aspects of this naming scheme is that all names should contain key information about the type of language construct is refers to. Additionally, certain prefixes will be used to prevent common error in the use of basic Java concepts such as scope. This however doesn't involve into a full-blown and difficult to understand and maintain Hongarian notation.</p>
+      
+      <sect1 title="Class Names">
+        <list>
+	  <item>Use upper case letters as word separators, lower case for the rest of a word</item>
+	  <item>First character in a name is upper case</item>
+	  <item>No underbars ('_')</item>
+	</list>
+	
+	<example title="Class Names Example">
+	  <verbatim>
+class NameOneTwo
+class Name
+          </verbatim>
+        </example>
+      </sect1>
+      
+      <sect1 title="Method Names">
+        <list>
+	  <item>Use upper case letters as word separators, lower case for the rest of a word</item>
+	  <item>First character in a name is lower case</item>
+	  <item>No underbars ('_')</item>
+	</list>
+	
+	<sect2 title="Justification">
+	  <list>
+	    <item>Differentiates the first word part, which is often a verb. This makes it very clear what a method does.</item>
+	    <item>Not exactly similar to class names and thus makes <l>Class.doSomething()</l> much more readable as <l>Class.DoSomething()</l>, cleanly indicating through case which is which.</item>
+	  </list>
+	
+	  <example title="Method Names Example">
+	    <verbatim>
+public class NameOneTwo
+{
+	public int doIt()
+	{
+		...
+	}
+	
+	public void handleError()
+	{
+		...
+	}
+}
+            </verbatim>
+	  </example>
+	</sect2>
+      </sect1>
+      
+      <sect1 title="Class Member Names">
+        <list>
+	  <item>Member names should be prepended with the character '<l>m</l>'.</item>
+	  <item>Member the '<l>m</l>' use the same rules as for class names.</item>
+	</list>
+	
+	<sect2 title="Justification">
+	  <list>
+	    <item>Prepending '<l>m</l>' prevents any conflict with method names. Often your methods and attribute names will be similar, especially for accessors.</item>
+	  </list>
+	
+	  <example title="Class Member Names Example">
+	    <verbatim>
+public class NameOneTwo
+{
+	private int mVarAbc;
+	private int mErrorNumber;
+	private String mName;
+
+	public int varAbc()
+	{
+		...
+	}
+	
+	public int errorNumber()
+	{
+		...
+	}
+}
+            </verbatim>
+	  </example>
+	</sect2>
+      </sect1>
+
+     <sect1 title="Method Argument Names">
+	<list>
+	  <item>The first character should be lower case.</item>
+	  <item>All word beginnings after the first letter should be upper case as with class names.</item>
+	</list>
+	<sect2 title="Justification">
+	  <list>
+	    <item>You can always tell which variables are passed in variables.</item>
+	    <item>You can use names similar to class names without conflicting with class names.</item>
+	  </list>
+	  
+	  <example title="Method Argument Names Example">
+            <verbatim>
+class NameOneTwo
+{
+	public int startYourEngines(Engine someEngine, boolean autoRestart)
+	{
+		...
+	}
+}
+            </verbatim>
+	  </example>
+	</sect2>
+      </sect1>
+
+      <sect1 title="Variable Names on the Stack">
+	<list>
+	  <item>Use all lower case letters</item>
+	  <item>Use '_' as the word separator.</item>
+	</list>
+	
+	<sect2 title="Justification">
+	  <list>
+	    <item>With this approach the scope of the variable is clear in the code.</item>
+	    <item>Now all variables look different and are identifiable in the code.</item>
+	  </list>
+	  <example title="Variable Names on the Stack Example">
+            <verbatim>
+class NameOneTwo
+{
+	public int handleError(int errorNumber)
+	{
+		int error = osErr();
+		Time time_of_error;
+		ErrorProcessor error_processor;
+		String tmpstring;
+	}
+}
+            </verbatim>
+	  </example>
+	</sect2>
+      </sect1>
+
+      <sect1 title="Static Variables">
+	<list>
+	  <item>Static variables should be prepended with '<l>s</l>'.</item>
+	</list>
+	<sect2 title="Justification">
+	  <list>
+	    <item>It's important to know the scope of a variable.</item>
+	  </list>
+	  <example title="Static Variables Example">
+	    <verbatim>
+class Test
+{
+	private static StatusInfo msStatus;
+}
+            </verbatim>
+	  </example>
+	</sect2>
+      </sect1>
+
+
+      <sect1 title="Static Constants">
+	<list>
+	  <item>Static constants should be all caps with '_' separators.</item>
+	</list>
+	<example title="Static Constants Example">
+	  <verbatim>
+class Test
+{
+	public static final int A_STATIC_CONSTANT = 5;
+}
+	  </verbatim>
+	</example>
+      </sect1>
+      
+    </chapter>
+  </part>
+
+
+
+  <part title="Code Formatting">
+
+    <chapter title="Braces and parenthesis">
+      
+      <sect1 title="Braces Policy">
+	<p>Place braces under and inline with keywords, like this:</p>
+	<example title="Braces Policy Example">
+	  <verbatim>
+if(condition)         while(condition)
+{                     {
+...                   ...
+}                     }
+          </verbatim>
+	</example>
+	
+	<sect2 title="Justification">
+	  <list>
+	    <item>If you use an editor (such as vi) that supports brace matching, this is a much better style than the default unix style where braces aren't vertically aligned. Why? Let's say you have a large block of code and want to know where the block ends. You move to the first brace hit a key and the editor finds the matching brace.</item>
+	  </list>
+	  
+	  <example title="Braces Policy Justification">
+	    <verbatim>
+if(very_long_condition &amp;&amp; second_very_long_condition)
+{
+...
+}
+else if(...)
+{
+...
+}
+            </verbatim>
+	  </example>
+	  
+	  <p>To move from block to block you just need to use cursor down and your brace matching key. No need to move to the end of the line to match a brace then jerk back and forth.</p>
+	</sect2>
+      </sect1>
+      
+      
+      <sect1 title="Braces Usage">
+	<p>All if, while and do statements must either have braces or be on a single line.</p>
+	<p>Always Uses Braces Form, even if there is only a single statement within the braces.</p>
+	<sect2 title="Justification">
+	  <list>
+	    <item>Easier to read, you just have to scan for one form.</item>
+	    <item>Uniform idiom for scope blocks since they are all enclosed in braces.</item>
+	    <item>It provides a more consistent look.</item>
+	    <item>This doesn't affect execution speed and it's easy to apply.</item>
+	    <item>It ensures that when someone adds a line of code later there are already braces and they don't forget.</item>
+	  </list>
+
+	  <example title="Brace Usage Example">
+	    <verbatim>
+if(somevalue == 1)
+{
+	somevalue = 2;
+}
+            </verbatim>
+	  </example>
+	</sect2>
+      </sect1>
+
+      <sect1 title="Parenthesis Policy">
+	<list>
+	  <item>Do put parens next to keywords.</item>
+	  <item>Do put parens next to function names.</item>
+	  <item>Do not use parens in return statements when it's not necessary.</item>
+	</list>
+
+        <example title="Parenthesis Policy Example">
+	  <verbatim>
+if(condition)
+{
+}
+
+while(condition)
+{
+}
+
+s1 = s.clone();
+
+return 1;
+          </verbatim>
+	</example>
+      </sect1>
+      
+    </chapter>
+    
+
+    <chapter title="Class Design">
+      <sect1 title="Required Class Methods">
+	<p>To be good citizens almost all classes should implement the following methods. If you don't have to define and implement any of the "required" methods they should still be represented in your class definition as comments. If you just let the compiler generate them without indicating through comments that you know that this is the intended behaviour, people might wonder about the possibility of an omission or oversight.</p>
+
+	<sect2 title="Details">
+	
+	  <sect3 title="Default Constructor">
+	    <p>If your class needs a constructor, make sure to provide one. You need one if during the operation of the class it creates something. This includes creating memory, opening file descriptors, opening transactions etc.</p>
+	    <p>If the default constructor is sufficient add a comment indicating that the compiler-generated version will be used.</p>
+	    <p>If your default constructor has one or more optional arguments, add a comment indicating that it still functions as the default constructor.</p>
+	  </sect3>
+	  
+	  <sect3 title="Copy constructor">
+	    <p>If your class is copyable, define a copy constructor.</p>
+	  </sect3>
+	  
+	</sect2>
+
+	<sect2 title="Justification">
+	  <p>A default constructor allows an object to be used in an array.</p>
+	  <p>A copy constructor ensure an object is always properly constructed.</p>
+
+	  <example title="Required Class Methods Example">
+	    <verbatim>
+class Planet
+{
+	public Planet()
+	{
+		this(5);
+	}
+	
+	public Planet(int radius)
+	{
+		...
+	}
+
+	public Planet(Planet from)
+	{
+		...
+	}
+	
+	
+};
+            </verbatim>
+	  </example>
+	</sect2>
+      </sect1>
+
+      <sect1 title="Accessor Style">
+	<p>Accessor methods provide access to the attibutes of an object. Accessing an object's attributes directly, as is commonly done in C structures, is greatly discouraged in Java. It exposes implementation details of the object and degrades encapsulation.</p>
+	<p>The way to implement accessors accepted is the standard in Java API, it's the <l>get/set</l> couple of methods.</p>
+	  <example title="get/set accessor style">
+	    <verbatim>
+class X
+{
+	private int mAge;
+
+	public int getAge()
+	{
+		return mAge;
+	}
+	
+	public void setAge(int age)
+	{
+		mAge = age;
+	}
+}
+            </verbatim>
+	  </example>
+	  <p>Using this approach, it's possible to include some checks about the value provided to the <l>setAge()</l> method.</p>
+	  <p>The huge drawback here is that objects aren't treated in their own right and that encapsulation somewhat fails. We have chosen this style only to be conform to the standard Java coding style.</p>
+      </sect1>
+
+    </chapter>
+
+
+    <chapter title="Class and file organization">
+
+      <sect1 title="File Header">
+	<p>A common file header for the whole project is important from a legal point of view and quickly find file version.</p>
+	<p>Following is the template that should be used to organize each file header for a project using the GPL.</p>
+	<example title="File header for a project using the GPL">
+	  <verbatim>
+/*
+ * $Id
+ *
+ *
+ *                  [Project Name]
+ *
+ * Copyright (C) 2001,2002 [Main developers names]
+ * IPSquad team@ipsquad.tuxfamily.org
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program; if not, write to the Free Software
+ *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+          </verbatim>
+	</example>
+      </sect1>
+
+      <sect1 title="Class Documentation">
+	<p>For the creation of developer API documentation we're using Doxygen. Since Doxygen understand javadoc syntax too, it's better to document as if we used javadoc to interact easily with other Java projects. The only exception to this rule is the use of the <q>grouping members</q> tags (which do not exist in javadoc).</p>
+	<p>For more information on javadoc comment, please refer to javadoc documentation itself. Now we'll focus on the <q>grouping members</q> feature.</p>
+
+	<p>If a class has many members, it is often desired to group them together. Doxygen already automatically groups things together on type and protection level, but maybe you feel that this is not enough or that that default grouping is wrong. For instance, because you feel that members of different (syntactic) types belong to the same (semantic) group.</p>
+
+        <p>A member group is defined by a</p>
+	<verbatim>
+//@{ 
+...
+//@}
+        </verbatim>
+        <p>block. Note that the members of the group should be physically inside the member group's body.</p>
+
+        <p>Before the opening marker of a block a separate comment block may be placed. This block should contain the <l>@name</l> command and is used to specify the header of the group. Optionally, the comment block may also contain more detailed information about the group.</p>
+
+	<example title="Class with groups">
+	  <verbatim>
+/** A class. Details */
+class Test
+{
+      /// @name First group
+      //@{
+	      public void func1InGroup1();
+	      public void func2InGroup1();
+      //@}
+
+      /** Function without group. Details. */
+      public void ungroupedFunction();
+
+      /// @name Second group
+      //@{
+	      protected void func1InGroup2();
+	      protected void func2InGroup2();
+      //@}
+};
+
+          </verbatim>
+	</example>
+
+      </sect1>
+
+
+      <sect1 title="Class Layout">
+	<p>A common class layout is critical from a code comprehension point of view and for automatically generating documentation.</p>
+	<p>Following is the template that should be used to organize each class. Please notice that we use one <l>import</l> line for each class used, we use the <l>*</l> only if <e>all</e> the package content is used in the class.</p>
+  	<example title="Class Declaration Template">
+	  <verbatim>
+
+// JAVA API IMPORTS
+//
+
+// REUSED COMPONENTS IMPORTS
+
+
+// PROJECT IMPORTS
+//
+
+
+package PP;
+
+class XX
+{
+	// MEMBER VARIABLES
+	//
+	private int mName;
+
+
+
+	/// @name Constructors
+	//@{
+
+	// CONSTRUCTORS
+
+	/**
+	 * Default constructor.
+	 */
+	public XX()
+	{
+		...
+	}
+
+	//@}
+
+
+
+	// OPERATIONS                       
+	
+
+
+	/// @name Accessors
+	//@{
+
+	// ACCESS
+
+	//@}
+
+
+
+	/// @name Inquiries
+	//@{
+
+	// INQUIRY
+
+	//@}
+
+};
+          </verbatim>
+	</example>
+      </sect1>
+
+    </chapter>
+
+  </part>
+
+
+  <part title="Language Directives and Best Practices">
+
+    <chapter title="Uses Of The Constructor">
+	
+	<sect1 title="Only initialize member variables">
+	  <p>The constructor should only initialize the member variables. Also, explicitely initialize all member variables even if you're just calling their default constructor. It's better to be clear from the beginning than in doubt later.</p>
+	</sect1>
+	
+	<sect1 title="Delegate all logic">
+	  <p>No real action should be done in the constructor, delegate everything to a seperate <l>initialize()</l> method. This will allow multiple constructors to use the shared code logic in the initialize method by passing the appropriate arguments.</p>
+	</sect1>
+	
+    </chapter>
+    
+    <chapter title="Best practices">
+      
+      <sect1 title="Prefer positive boolean comparisons">
+	<p>It's much easier to think in a positive way about a situation than to be presented with the negative alternative and having to transform it in your mind by yourself to positive. People tend to have a 'logical' or 'the default behaviour' feeling about true, which makes it easy to think about. On the contrary, false is mostly regarded is the 'exception', 'the error situation' or the 'alternative way out'. Therefor we prefer constructs like this:</p>
+	<example title="Positive boolean comparison, the right way">
+	  <verbatim>
+setup();
+if(something == true)
+{
+	dowork();
+}
+cleanup();
+return;
+          </verbatim>
+	</example>
+	<p>above the following negative counterpart:</p>
+	<example title="Positive boolean comparison, the wrong way">
+	  <verbatim>
+setup();
+if(something == false)
+{
+	cleanup();
+	return;
+}
+dowork();
+cleanup();
+return;
+          </verbatim>
+	</example>
+      </sect1>
+
+      <sect1 title="Handle cleanup situations with boolean indicators">
+	<p>Often you're presented with the problem that your code logic contains a series of initializations that can all potentially fail. Typically you want to interrupt any further execution, cleanup and return an error message. Such situations have been known to be resolved through the use of exceptions, gotos, large if-then-else constructs and boolean indicators. From these options, it's the last one we prefer.</p>
+	<p>Below is an example of such a typical code cleanup situation:</p>
+	
+	<example title="Cleanup with boolean indicators">
+	  <verbatim>
+void someMethod()
+{
+	boolean file_setup = false;
+	boolean dir_setup = false;
+
+	/* try to create a new file object and open it for reading */
+	File file = new File("/path/to/file");
+	if(file.open(File.ReadOnly) == true)
+	{
+		file_setup = true;
+	}
+
+	String dir_path("/path/to/default/dir");
+	if(file_setup == true)
+	{
+		/* if the file was setup, read its contents and use it for */
+		/* further processing */
+		TextStream textstream(file);
+		String dir_path = textstream.readLine();
+		dir_path = textstream.readLine();
+	}
+
+	/* try to create a new dir object and open it for reading */
+	Dir dir = new QDir(dir_path);
+	/* some vars that are needed by the dir logic */
+	if(dir.exists() == 0)
+	{
+		/* do stuff with the dir */
+		dir_setup = true;
+	}
+	else
+	{
+		System.out.println(dir_path + " couldn't be processed");
+	}
+
+	/* cleanup the dir setup if needed*/
+	if(dir_setup == true)
+	{
+		/* cleanup what was done in the dir logic part */
+	}
+	
+	/* cleanup the file setup if needed*/
+	if(file_setup == true)
+	{
+		file.close();
+	}
+}
+          </verbatim>
+	</example>
+	
+	<sect2 title="Justification">
+	  <list>
+	    <item>You prevent unnecessary consecutive indentations as is the case with large if-then-else constructs.</item>
+	    <item>It's very easy and clear to follow the logical flow, no jumps are executed as with exceptions.</item>
+	    <item>You can perform context-sensitive cleanups that combine the states of several boolean indicators.</item>
+	  </list>
+	</sect2>
+      </sect1>
+      
+    </chapter>
+  </part>
+
+</ipbook>
+

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Evaluation de l'itération IT1</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>2.0</version>
+    <revhistory>
+      <revision>
+        <revnumber>2.0</revnumber>
+        <date>26/11/2003</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente l'évaluation pour la deuxième itération du projet APES. Cette itération fait partie de la phase d'élaboration. Elle est appelée IT1.</p>
+    </sect1>
+    
+    <sect1 title="Portée">
+      <p>L'évaluation de l'itération est destinée aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Plan d'itération IT1</item>
+	    <item>Modèle des cas d'utilisation</item>
+	    <item>Plan de développement logiciel</item>
+      </list>
+    </sect1>
+
+    <sect1 title="Contenu du document">
+	<p>Ce document vérifie que les objectifs fixés dans le plan d'itération soient atteints. Cela permet ainsi de réévaluer les activités à réaliser dans les itérations suivantes (en plus ou en moins).</p>
+	<p>Il permet aussi d'analyser les charges prévisionnelles afin de réévaluer les estimations futures si nécessaire.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Concordance avec le plan d'itération">
+    <sect1 title="Objectifs atteints">
+
+		<sect2 title="Modèle des cas d'utilisation">
+	  	  <p>Des spécifications de cas d'utilisation ont été rajoutées au modèle des cas d'utilisation.</p>
+		</sect2>
+
+		<sect2 title="Document d'architecture logicielle">
+	  	  <p>Le document d'architecture logicielle a été réalisé et sera affiné à l'itération suivante.</p>
+		</sect2>
+
+		<sect2 title="Prototype de l'outil">
+	  	  <p>Un prototype de l'outil comprenant la réalisation de cas d'utilisation supplémentaires est disponible.</p>
+		</sect2>
+
+	</sect1>
+
+    <sect1 title="Concordance charges évaluées / charges effectives (en heures)">
+
+      <table>
+
+	  <col name="Groupe d'activités" width="2*" align="center"/>
+	  <col name="Isabelle Cassagneau" width="1.5*" align="center"/>
+	  <col name="Delphine De Rosso" align="center"/>
+	  <col name="Aurélien Defossez" align="center"/>
+	  <col name="Nicolas Delmas" align="center"/>
+	  <col name="Lionel Petit" align="center"/>
+	  <col name="Total réel (par activité)" align="center"/>
+	  <col name="Total estimé (par activité)" align="center"/>
+
+		<row> <c>EE : Spécifier le logiciel</c> 						<c>2h30</c>		<c>4h</c>	<c>2h</c>	<c></c>		<c></c>		<c>8h30</c>			<c>40h</c>			</row>
+		<row> <c>AC : Analyser l'architecture</c>						<c></c>			<c></c>		<c></c>		<c></c>		<c>21h</c>	<c>21h</c>			<c>10h</c>			</row>
+		<row> <c>GS : Promouvoir le plan de cycle de vie</c>			<c>4h</c>		<c></c>		<c></c>		<c></c>		<c></c>		<c>4h</c>			<c>6h</c>			</row>
+	    <row> <c>GS : Evaluer le processus</c>							<c>1h30</c>		<c></c>		<c></c>		<c></c>		<c></c>		<c>1h30</c>			<c>2h</c>			</row>
+		<row> <c>GS : Vérifier le fonctionnement des outils</c>		<c></c>			<c></c>		<c>3h</c>	<c></c>		<c>2h</c>		<c>5h</c>			<c>4h</c>			</row>
+        <row> <c>GP : Gérer et contrôler le déroulement du  projet</c>	<c></c>			<c>3h</c>	<c></c>		<c></c>		<c></c>		<c>3h</c>			<c>10h</c>			</row>
+	    <row> <c>GP : Gérer l'itération</c>							<c></c>			<c>2h</c>	<c></c>		<c></c>		<c></c>		<c>2h</c>			<c>2h</c>			</row>
+	    <row> <c>GP : Evaluer l'itération</c>							<c></c>			<c>2h</c>	<c></c>		<c></c>		<c></c>		<c>2h</c>			<c>2h</c>			</row>
+	    <row> <c>GP : Développer le plan de l'itération suivante</c>  	<c></c>			<c>1h30</c>	<c></c>		<c></c>		<c></c>		<c>1h30</c>			<c>2h</c>			</row>
+	    <row> <c>GP : Préparer la revue d'itération</c>				<c>1h</c>		<c>1h</c>	<c></c>		<c></c>		<c></c>		<c>2h</c>			<c>2h</c>			</row>
+	    <row> <c>IM : Codage du prototype</c>   						<c></c>			<c></c>		<c>3h</c>	<c></c>		<c>16h</c>	<c>19h</c>			<c>52h</c>			</row>
+	    <row> <c><e>Total réel (par personne)</e></c>					<c>9h</c>		<c>13h30</c><c>8h</c>	<c></c>		<c>39h</c>	<c><e>67h30</e></c>	<c>-</c>			</row>
+	    <row> <c><e>Total estimé (par personne)</e></c>				<c>32h</c>		<c>36h</c>	<c>26h</c>	<c>8h</c>	<c>30h</c>	<c>-</c>			<c><e>132h</e></c>	</row>
+
+      </table>
+
+    </sect1>
+
+  </chapter>
+	
+</ipbook>

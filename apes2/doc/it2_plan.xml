@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Plan d'itération IT2</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>2.0</version>
+    
+    <revhistory>
+      <revision>
+        <revnumber>2.0</revnumber>
+        <date>25/11/2003</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+  
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente le plan détaillé pour la troisième itération du projet APES. Cette itération correspond au jalon de fin de phase d'Elaboration. Elle est appelée IT2.</p>
+    </sect1>
+    
+    <sect1 title="Portée">
+      <p>Le plan d'itération est destiné aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Document Vision</item>
+	  <item>Plan de développement</item>
+	  <item>Plan de cycle de vie</item>
+	  <item>Liste des risques</item>
+ 	  <item>Modèle des cas d'utilisation</item>
+     </list>
+    </sect1>
+
+  </chapter>
+
+
+  <chapter title="Plan">
+
+    <p>L'itération 2 est la deuxième et dernière itération de la phase d'élaboration. Ainsi cette itération commence le 01/12/2003 et finit le 14/12/2003.</p>
+  
+    <sect1 title="Disciplines de l'itération">
+
+	<table>
+	  <col name="Discipline" width="2*"/>
+	  <col name="Début"/>
+	  <col name="Fin"/>
+	  <row> <c>Expression des exigences (EE)</c> <c>01/12/2003</c> <c>14/12/2003</c> </row>
+	  <row> <c>Analyse et Conception (AC)</c>    <c>01/12/2003</c> <c>14/12/2003</c> </row>
+	  <row> <c>Implémentation (IM)</c>     	   <c>01/12/2003</c> <c>14/12/2003</c> </row>
+	  <row> <c>Gestion de projet (GP)</c>        <c>01/12/2003</c> <c>14/12/2003</c> </row>
+	  <row> <c>Gestion de processus (GS)</c>     <c>01/12/2003</c> <c>14/12/2003</c> </row>
+	</table>
+
+
+    </sect1>
+
+    <sect1 title="Planning">
+      <table>
+	  <col name="Groupe d'activités" width="2*"/>
+	  <col name="Début"/>
+	  <col name="Fin"/>
+	  <col name="Participants" width="2*"/>
+          <row> <c>EE : Spécifier le logiciel</c>      				<c>01/12/2003</c> <c>14/12/2003</c> <c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+
+          <row> <c>AC : Affiner l'architecture</c>      				<c>01/12/2003</c> <c>14/12/2003</c> <c>Lionel Petit</c> </row>
+
+	    <row> <c>GS : Etude du guide de codage</c> 					<c>01/12/2003</c> <c>14/12/2003</c> <c>Aurélien Defossez</c> </row>
+	    <row> <c>GS : Promouvoir le plan de cycle de vie</c> 			<c>01/12/2003</c> <c>14/12/2003</c> <c>Isabelle Cassagneau</c> </row>
+
+	    <row> <c>IM : Réaliser des cas d'utilisation</c> 		<c>01/12/2003</c> <c>14/12/2003</c> <c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+		<row> <c>IM : Codage du prototype</c> 		<c>01/12/2003</c> <c>14/12/2003</c> <c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c> </row>
+
+    	    <row> <c>GP : Accueillir de nouvelles personnes</c> 			<c>01/12/2003</c> <c>14/12/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Gérer et contrôler le déroulement du  projet</c> 	<c>01/12/2003</c> <c>14/12/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Gérer l'itération</c>            				<c>01/12/2003</c> <c>14/12/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Evaluer l'itération</c>            				<c>10/12/2003</c> <c>14/12/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Développer le plan de l'itération suivante</c>  	<c>08/12/2003</c> <c>14/12/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Préparer la fin de phase</c>			   	<c>10/12/2003</c> <c>14/12/2003</c> <c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Préparer la revue d'itération</c>			   	<c>10/12/2003</c> <c>14/12/2003</c> <c>Delphine De Rosso</c> </row>
+
+
+      </table>
+    </sect1>
+
+    <sect1 title="Estimation des volumes horaires">
+      <table>
+
+	  <col name="Groupe d'activités" width="2*"/>
+	  <col name="Isabelle Cassagneau" width="1.5*"/>
+	  <col name="Delphine De Rosso"/>
+	  <col name="Aurélien Defossez"/>
+	  <col name="Nicolas Delmas"/>
+	  <col name="Lionel Petit"/>
+	  <col name="Total estimé (par activité)"/>
+          <row> <c>EE : Spécifier le logiciel</c> 					<c>3</c>  <c>3</c>  <c>3</c>  <c></c>  <c>3</c> <c>12</c> </row>
+          <row> <c>AC : Affiner l'architecture</c>      				<c></c>  <c></c>  <c></c>  <c></c>  <c>6</c> <c>6</c> </row>
+	    <row> <c>GS : Etude du guide de codage</c>		 			<c></c>  <c></c>  <c>3</c>  <c></c>  <c></c> <c>3</c> </row>
+	    <row> <c>GS : Promouvoir le plan de cycle de vie</c> 			<c>4</c>  <c></c>  <c></c>  <c></c>  <c></c> <c>4</c> </row>
+	    <row> <c>IM : Réaliser des cas d'utilisation</c> 			<c>8</c>  <c>8</c>  <c>8</c>  <c></c>  <c>8</c> <c>32</c> </row>
+		<row> <c>IM : Codage du prototype</c>		<c>6</c> <c>6</c> <c>6</c> <c></c> <c>6</c> <c>24</c></row>
+	    <row> <c>GP : Accueillir de nouvelles personnes</c> 			<c>2</c> <c>2</c>  <c>2</c>  <c></c>  <c>2</c> <c>8</c> </row>
+          <row> <c>GP : Gérer et contrôler le déroulement du  projet</c> 	<c></c>  <c>4</c>  <c></c>  <c></c>  <c></c> <c>4</c> </row>
+	    <row> <c>GP : Gérer l'itération</c>            				<c></c>  <c>2</c>  <c></c>  <c></c>  <c></c> <c>2</c> </row>
+	    <row> <c>GP : Evaluer l'itération</c>            				<c></c>  <c>1</c>  <c></c>  <c></c>  <c></c> <c>1</c> </row>
+	    <row> <c>GP : Développer le plan de l'itération suivante</c>  	<c></c>  <c>2</c>  <c></c>  <c></c>  <c></c> <c>2</c> </row>
+	    <row> <c>GP : Préparer la fin de la phase</c>   				<c></c>  <c>1</c>  <c></c>  <c></c>  <c></c> <c>1</c> </row>
+	    <row> <c>GP : Préparer la revue d'itération</c>   			<c>2</c>  <c></c>  <c></c>  <c></c>  <c></c> <c>2</c> </row>
+	 <row> <c><e>Total estimé (par personne)</e></c>				<c>25</c>  <c>29</c>  <c>22</c>  <c></c>  <c>25</c> <c><e>101</e></c> </row>
+
+      </table>
+    </sect1>
+
+    <sect1 title="Produits de l'itération et responsabilités">
+     <table>
+      <col name="Produit"/>
+	<col name="Responsables" width="2*"/>
+	<col name="Etat"/> 
+	<row> <c>Glossaire</c>					    	<c>Lionel Petit</c> 	   <c>provisoire</c> </row>
+	<row> <c>Document Vision</c>             			<c>Nicolas Delmas</c> 	   <c>provisoire</c> </row>
+	<row> <c>Modèle des cas d'utilisation</c> 		<c>Aurélien Defossez</c>   <c>provisoire</c>  </row>
+  	<row> <c>Spécifications supplémentaires</c>          	<c>Isabelle Cassagneau</c> <c>provisoire</c> </row>
+	<row> <c>Document d'architecture logicielle</c> 	<c>Lionel Petit</c> 	   <c>provisoire</c> </row>
+	<row> <c>Guide de codage</c>				 	<c>Aurélien Defossez</c>   <c>complet</c> </row>
+	<row> <c>Plan de développement</c>           		<c>Delphine De Rosso</c>   <c>provisoire</c> </row>
+	<row> <c>Liste des risques</c>                 		<c>Delphine De Rosso</c>   <c>provisoire</c> </row>
+  	<row> <c>Evaluation de l'itération IT2</c>      	<c>Delphine De Rosso</c>   <c>complet</c> </row>
+  	<row> <c>Plan d'itération IT3</c>               	<c>Delphine De Rosso</c>   <c>complet</c> </row>
+  	<row> <c>Plan de cycle de vie</c>               	<c>Isabelle Cassagneau</c> <c>provisoire</c> </row>
+  	<row> <c>Prototype de l'outil</c>               	<c>Toute l'équipe</c>	   <c></c> </row>
+    </table>    
+   </sect1>
+
+  </chapter>
+  
+
+  <chapter title="Ressources">
+  
+    <sect1 title="Ressources humaines">
+      <table>
+        <col name="Rôles"/>
+	  <col name="Personnes affectées" width="3*"/>
+	  <row> <c>Développeurs</c>      	<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c></row>
+	  <row> <c>Concepteur</c>      	<c>Aurélien Defossez</c></row>
+	  <row> <c>Testeur</c>     	 	<c>Isabelle Cassagneau</c></row>
+	  <row> <c>Analystes</c>      	<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c></row>
+        <row> <c>Spécialistes outils</c>  <c>Aurélien Defossez, Lionel Petit</c></row>
+        <row> <c>Architecte</c>      	<c>Lionel Petit</c></row>
+        <row> <c>Ingénieur processus</c>  <c>Isabelle Cassagneau</c></row>
+	  <row> <c>Chef de projet</c>       <c>Delphine De Rosso</c></row>
+      </table>
+    </sect1>
+
+    <sect1 title="Ressources d'équipement">
+      <p>Le matériel et les logiciels suivants sont nécessaires :</p>
+      <list>
+        <item>cinq PCs</item>
+	  <item>une imprimante</item>
+	  <item>un accès CVS</item>
+	  <item>un éditeur de texte, IPSDoc et FOP (rédaction des documents)</item>
+	  <item>JDK 1.3 ou supérieur</item>
+	  <item>Eclipse</item>
+	  <item>un accès au processus RUP/F</item>
+      </list>
+    </sect1>
+  
+  </chapter>
+
+  <chapter title="Cas d'utilisation">
+    <p>Les acteurs et les cas d'utilisation significatifs ayant tous été identifiés, les cas d'utilisations suivants seront spécifiés durant cette itération :</p>
+	<list>
+            <item>CU 2.7 : exporter un composant</item>
+            <item>CU 6.1 : ajouter un état à un produit</item>
+	</list>
+  </chapter>
+
+  <chapter title="Critères d'évaluation">
+    <p>Les objectifs de cette itération sont la réflexion sur l'architecture globale du système ainsi que la spécification des cas d'utilisation significatifs.</p>
+    <p>A la fin de cette itération, nous devrons avoir à notre disposition :</p>
+	<list>
+		<item>l'architecture affinée, assez précise et stable pour commencer le travail de Construction</item>
+      	<item>la spécification détaillée des cas d'utilisation les plus critiques du système sera finie</item>
+		<item>la livraison d'un prototype</item>
+		<item>une diminution des risques du projet</item>
+		<item>intégration du groupe de deuxième année</item>
+	</list>
+
+  </chapter>
+
+</ipbook>

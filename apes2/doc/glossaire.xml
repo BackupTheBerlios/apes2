@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Glossaire</subtitle>
+    <version>1.0</version>
+	<author>Lionel Petit</author>
+    <language>french</language>
+
+    <revhistory>
+      <revision>
+        <revnumber>1.0</revnumber>
+        <date>26/10/2003</date>
+        <author>Lionel Petit</author>
+        <revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+  </info>
+  
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document a pour but de collecter le vocabulaire employé lors du développemement du projet APES.</p>
+    </sect1>
+    
+    <sect1 title="Portée">
+      <p>Le glossaire est destiné aux membres de l'équipe et aux superviseurs du projet.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Définitions">
+    
+    <sect1 title="Processus">
+      <p>Cette section contient le vocabulaire traitant des processus.</p>
+
+      <glossary>
+        
+	<def term="Activité (Activity)">Définition de travail décrivant ce qui est produit dans la cadre d'un rôle. Les activités sont l'élément principal d'un travail.</def>
+	
+	<def term="Composant de Processus (Process Component)">Regroupement cohérent d'éléments de modèle organisés de façon à obtenir une perspective intéressante, telle que la discipline, par exemple le test, ou la production de certains produits de travail, par exemple la gestion des exigences.</def>
+	
+	<def term="Cycle de vie (Life Cycle)">Séquence de phases pour accomplir un but précis. Il définit le processus qui sera appliqué sur un projet donné.</def>
+	
+	<def term="Définition de travail (Work Definition)">Elément de modèle d'un processus qui décrit l'exécution, les opérations réalisées, et les transformations opérées sur les produits de travail dans le cadre d'un rôle. Parmi les définitions de travail on trouve les activités, les itérations, les phases et le cycle de vie.</def>
+	
+	<def term="Dépendance (Dependency)">Relation particulière, spécifique au processus, qui lie entre eux des éléments de modèle.</def>
+	
+        <def term="Discipline (Discipline)">Unité du processus, organisée selon une perspective caractéristique de l'ingénierie du logiciel : gestion de configuration, analyse et conception, gestion de projet...</def>
+	
+	<def term="Elément de Modèle (Model Element)">Elément décrivant un aspect d'un processus.</def>
+
+        <def term="Etape (Step)">Définition de travail atomique, à grain fin, utilisée pour décomposer des activités. Les activités sont des ensembles d'étapes, partiellement ordonnées.</def>
+	
+	<def term="Guide (Guidance)">Elément de modèle associé aux éléments principaux de définition de processus, qui contient des descriptions supplémentaires telles que des techniques, des méthodes, des profils UML, des procédures, des standards, des plans types de fournitures, des exemples de produits de travail, des définitions...</def>
+
+        <def term="Guide de produit (Guideline)">Guide associé à un produit, qui fournit des règles et des recommandations pratiques sur la façon de créer et d'organiser le produit.</def>
+	
+	<def term="Guide de travail (Technique)">Guide associé à une activité, qui fournit des techniques utiles pour la réalisation de l'activité.</def>
+	
+	<def term="Guide outil (Tool Mentor)">Guide fournissant une description détaillée sur la façon de réaliser une activité ou des étapes de l'activité, avec l'aide d'un outil.</def>
+	
+	<def term="Itération (Iteration)">Définition de travail, à gros grain, qui représente un ensemble d'activités, visant au développement d'une portion du système, et qui s'achève par la fourniture (interne ou externe) d'un produit logiciel.</def>
+
+        <def term="Liste de contrôle (Check List)">Guide contenant une liste de points à contrôler pour évaluer la qualité d'un produit de travail.</def>
+	
+	<def term="Phase (Phase)">Définition d'un travail à haut niveau, parachevé par un jalon.</def>
+	
+	<def term="Plan type (Template)">Guide fournissant un document générique à un format standard pour un produit de travail particulier.</def>
+	
+	<def term="Processus (Process)">Description complète d'une méthodologie appliquée à l'ingénierie du logiciel, en termes de rôles, de définitions de travail, de fournitures de produits de travail et de guides associés.</def>
+
+        <def term="Produit de travail (Work Product)">Constituant informatif ou entité physique (document, modèle UML, code exécutable, plan...) produite ou utilisée par une activité du processus d'ingénierie du logiciel.</def>
+	
+	<def term="Exécutant de processus (Process Performer)">Elément du modèle qui décrit les rôles, les responsabilités et compétences d'un individu fournissant des activités au sein du processus, et responsable de certains produits de travail.</def>
+	
+	<def term="Rôle de processus (Process Role)">Elément du modèle qui décrit le propriétaire d'une définition de travail. Il est utilisé pour des définitions de travail qui ne peuvent pas être associées avec un exécutant de processus, telles que le cycle de vie ou la phase.</def>
+      </glossary>
+
+    </sect1>
+
+    <sect1 title="Technologies">
+
+      <p>Cette section contient les noms de technologies envisagées ou utilisées sur le projet.</p>
+      
+      <glossary>
+
+	<def term="RUP/F (Rationnal Unified Process / French)">Processus d'ingénierie logiciel.</def>
+
+        <def term="SPEM (Software Process Engineering Metamodel)">Métamodèle de processus en cours de définition par l'OMG.</def>
+
+	<def term="XML (eXtensible Markup Language)">Norme d'échange de documents informatisés issue de SGML, grâce au travail de l'ERB (Editorial Review Board), sous l'égide du W3C. C'est en fait une version simplifiée de SGML (les spécifications font environ 30 pages au lieu de 500). XML intègre l'idée de métadonnée, et permet de définir les balises que l'on veut en fonction de ses besoins.</def>
+
+        <def term="XMI (XML Model Interchange)">Format standard de sérialisation de modèles défini par l'OMG en accord avec le W3C. Ce format permet d'échanger toute sortes de modèles basés sur le MOF et pas seulement des modèles UML. Il pourra par exemple s'agir de modèles SPEM, etc.</def>
+
+        <def term="XPath">Langage pour sélectionner certaines parties d'un document XML. Peut être vu comme l'équivalent du SQL pour les bases de données.</def>
+
+        <def term="XSL (eXtensible Stylesheet Language)">Langage de description de feuilles de style du W3C associé à XML. Une feuille de style XSL est un fichier qui décrit comment doivent être présentés (c'est à dire affichés, imprimés, épelés...) les documents XML basés sur un dialecte bien précis. La spécification est divisée en trois parties : XSLT (le langage de transformation), XPath (le langage de navigation dans un document XML) et  XSL:FO (le vocabulaire XML de mise en forme).</def>
+
+	<def term="XSLT (eXtended Stylesheet Language Transformations)">Langage fonctionnel (appartenant à la recommandation XSL du W3C) qui décrit les transformations de documents XML. L'objectif principal est la transformation vers un autre document XML ou de la famille XML (XHTML, XSL:FO...) mais le langage XSLT permet aussi les transformations vers tout autre type de documents que cela soit au format texte ou dans un format binaire (ceci n'est pas nativement prévu par la recommandation XSLT).</def>
+
+      </glossary>
+      
+    </sect1>
+
+  </chapter>
+
+</ipbook>

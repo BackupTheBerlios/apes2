@@ -1,0 +1,53 @@
+APES - APES is a Process Engineering Software (c)2002-2003
+
+
+For more information, check the files contained in the doc/ directory.
+If you want printable versions of those documents please download the
+latest version of IPSDoc available at http://ipsquad.tuxfamily.org/
+
+
+1. Disclaimer
+-------------
+
+We are not liable for any damage caused by the use of this program.
+
+
+2. Dependencies
+---------------
+
+These programs are needed to use APES :
+  - JRE (or JDK) >= 1.3
+  
+
+3. Installation
+---------------
+
+cd apes-VERSION/src
+make jar
+
+Then you can copy the apes.jar where you want. APES is self contained.
+
+4. Using APES
+-------------
+
+When you want to invoke APES simply launch :
+
+java -jar apes.jar
+
+
+5. Obtaining APES
+-----------------
+
+How do I get it?
+
+APES is mainly distributed on http://ipsquad.tuxfamily.org/
+
+
+6. Contact
+----------
+
+Kévin Ottens        (maintainer)       ervin at tuxfamily dot org
+Ludovic Dupont      (feature requests) ludo at tuxfamily dot org
+Mario Bensi         (feature requests) nef at tuxfamily dot org
+
+For more information please visit http://ipsquad.tuxfamily.org/

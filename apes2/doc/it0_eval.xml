@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Evaluation de l'itération IT0</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>1.0</version>
+
+    <revhistory>
+      <revision>
+        <revnumber>1.0</revnumber>
+        <date>06/11/2003</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente l'évaluation pour la première itération du projet APES. Cette itération fait partie de la phase de lancement. Elle est appelée IT0.</p>
+    </sect1>
+
+    <sect1 title="Portée">
+      <p>L'évaluation de l'itération est destinée aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Plan d'itération IT0</item>
+	  <item>Modèle des cas d'utilisation</item>
+	  <item>Plan de développement logiciel</item>
+      </list>
+    </sect1>
+
+    <sect1 title="Contenu du document">
+	<p>Ce document vérifie que les objectifs fixés dans le plan d'itération soient atteints. Cela permet ainsi de réévaluer les activités à réaliser dans les itérations suivantes (en plus ou en moins).</p>
+	<p>Il permet aussi d'analyser les charges prévisionnelles afin de réévaluer les estimations futures si nécessaire.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Concordance avec le plan d'itération">
+    <sect1 title="Objectifs atteints">
+	<sect2 title="Modèle des cas d'utilisation">
+	  <p>Le modèle a été entièrement rédigé, mais le détail des cas d'utilisation ne sera complet qu'à l'itération suivante.</p>
+	</sect2>
+    </sect1>
+
+    <sect1 title="Concordance charges évaluées / charges effectives (en heures)">
+
+	<p>Pour cette itération, seules les charges réelles seront précisées, puisque le plan de l'IT0 ne comporte pas d'estimation des volumes horaires.</p>
+
+      <table>
+
+	  <col name="Groupe d'activités" width="2*"/>
+	  <col name="Isabelle Cassagneau" width="1.5*"/>
+	  <col name="Delphine De Rosso" width="1*"/>
+	  <col name="Aurélien Defossez" width="1*"/>
+	  <col name="Nicolas Delmas" width="1*"/>
+	  <col name="Lionel Petit" width="1*"/>
+	  <col name="Total réel (par activité)" width="1*"/>
+
+          <row> <c>EE : Définir la vision du logiciel</c> 				<c>2.45</c>  <c>2</c>  	  <c>2</c> 	  <c>2</c> <c>2.30</c> <c>11.15</c> </row>
+          <row> <c>EE : Identifier les cas d'utilisation</c> 		<c>1.50</c>  <c>1.50</c>  <c>1.50</c> <c></c> <c>1.50</c> <c>7.20</c> </row>
+          <row> <c>EE : Spécifier des cas d'utilisation</c> 			<c>2</c> 	 <c>2</c>  	  <c>1</c> 	  <c></c> <c>2</c>    <c>7</c> </row>
+          <row> <c>EE : Structurer le modèle des cas d'utilisation</c> 	<c></c>  	 <c></c>  	  <c>1.30</c> <c></c> <c></c>     <c>1.30</c> </row>
+          <row> <c>AC : Analyser l'architecture</c>			 	<c></c>  	 <c></c>  	  <c></c>     <c></c> <c>6</c>    <c>6</c> </row>
+	    <row> <c>GS : Définir le plan de cycle de vie</c>   	  		<c>9.30</c>  <c></c>  	  <c></c> 	  <c></c> <c>1</c>     <c>10.30</c> </row>
+          <row> <c>GP : Gérer et contrôler le déroulement du  projet</c> 	<c></c>  	 <c>4</c>  	  <c></c> 	  <c></c> <c></c>     <c>4</c> </row>
+	    <row> <c>GP : Gérer l'itération</c>            			<c></c>  	 <c>4.30</c>  	  <c>3</c> 	  <c></c> <c>2.30</c>     <c>10</c> </row>
+	    <row> <c>GP : Evaluer l'itération</c>            			<c></c>  	 <c>2</c>  	  <c></c> 	  <c></c> <c></c>     <c>2</c> </row>
+	    <row> <c>GP : Développer le plan de l'itération suivante</c>   <c></c>  	 <c>2</c>  	  <c></c>     <c></c> <c></c>     <c>2</c> </row>
+	    <row> <c><e>Total réel (par personne)</e></c>		 		<c>16.05</c> <c>18.20</c> <c>9.20</c> <c>2</c> <c>15.50</c> <c><e>61.35</e></c> </row>
+
+      </table>
+
+    </sect1>
+
+  </chapter>
+
+</ipbook>

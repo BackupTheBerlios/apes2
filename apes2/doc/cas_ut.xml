@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+
+  <info>
+    <title>APES (APES is a Process Engineering 
+Software)</title>
+    <subtitle>Modèle des cas d'utilisation</subtitle>
+    <version>3.0</version>
+    <author>Aurélien Défossez</author>
+    <language>french</language>
+
+    <revhistory>
+      <revision>
+	  <revnumber>3.0</revnumber>
+        <date>05/12/2003</date>
+	  <author>Aurélien Défossez</author>
+	  <revdescription>Modification du document suite à la 
+revue de fin d'IT1</revdescription>
+      </revision>
+	  <revision>
+        <revnumber>2.0</revnumber>
+        <date>20/11/2003</date>
+	  <author>Aurélien Défossez</author>
+	  <revdescription>Ajout de spécifications de cas
+d'utilisation</revdescription>
+      </revision>
+      <revision>
+        <revnumber>1.0</revnumber>
+        <date>10/11/2003</date>
+	  <author>Aurélien Défossez</author>
+	  <revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+  </info>
+
+
+  <chapter title="Introdution">
+
+  	<sect1 title="Objectif">
+		<p>Ce document décrit l'ensemble des exigences
+fonctionnelles du produit. Il décrit les cas d'utilisation en
+exprimant les interactions entre les acteurs et le système.</p>
+	</sect1>
+
+	<sect1 title="Portée">
+		<p>Le modèle des cas d'utilisation est destiné aux
+membres de 
+l'équipe et aux superviseurs du projet.</p>
+	</sect1>
+
+	<sect1 title="Références">
+		<list>
+			<item>Vision</item>
+			<item>Glossaire</item>
+		</list>
+	</sect1>
+
+  </chapter>
+
+  <chapter title="Description des cas d'utilisation">
+
+	<p>Les cas d'utilisation sont tous associés au même 
+acteur, le modélisateur de processus décrit dans le document
+vision.</p>
+	
+	
+	<!--
+	    Fonctionnalité : gérer des composants réutilisables
+	-->
+	
+	<sect1 title="Cas d'utilisation : Ouvrir un nouveau composant">
+	
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ouvrir un nouveau
+composant de processus.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Aucune</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>Le composant est ouvert et apparait dans
+l'arborescence</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande l'ouverture d'un nouveau
+composant de processus</item>
+				<item>2. Le système ouvre un nouveau composant</item>
+				<item>3. Le système donne un nom unique au nouveau 
+composant</item>
+				<item>4. Le cas se termine</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénarii alternatifs">
+		<p>Condition : à l'étape 2 du scénario nominal, il y a 
+déjà un processus ouvert.</p> 
+			<list>
+				<item>2.1. Le système ferme le composant qui est déjà 
+ouvert (le cas d'utilisation "Fermer un composant" est 
+activé)</item>
+				<item>2.2. Retour à l'étape 2 du scénario 
+nominal</item>
+			</list>
+		</sect2>
+	</sect1>
+	
+	
+	<sect1 title="Cas d'utilisation : Ouvrir un composant sauvegardé">
+	
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ouvrir un composant qui 
+a été sauvegardé.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Aucune</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>Le composant est ouvert et apparait dans 
+l'arbre</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande l'ouverture d'un composant de 
+processus sauvegardé</item>
+				<item>2. Le système demande le chemin d'accès de la 
+sauvegarde</item>
+				<item>3. L'acteur donne le chemin d'accès de la 
+sauvegarde</item>
+				<item>4. Le système vérifie que le chemin d'accès est 
+celui d'un composant valide</item>
+				<item>5. Le système ouvre la sauvegarde du 
+composant</item>
+				<item>6. Le cas se termine</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénarii alternatifs">
+		<p>Condition : à l'étape 5 du scénario nominal, il y a 
+déjà un processus ouvert.</p> 
+			<list>
+				<item>5.1. Le système ferme le composant qui est déjà 
+ouvert (le cas d'utilisation "Fermer un composant" est 
+activé)</item>
+				<item>5.2. Retour à l'étape 5 du scénario 
+nominal</item>
+			</list>
+			
+		<p>Condition : à l'étape 5 du scénario nominal, le chemin 
+d'accès choisi par l'acteur n'est pas celui d'un composant 
+valide.</p> 
+			<list>
+				<item>5.1. Le système informe l'acteur que l'ouverture 
+est impossible car le chemin d'accès est incorrect</item>
+				<item>5.2. Retour à l'étape 2 du scénario 
+nominal</item>
+			</list>
+		</sect2>
+		
+		
+	</sect1>
+	
+	
+	<sect1 title="Cas d'utilisation : Fermer un composant">
+	
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur de fermer un composant 
+ouvert.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Un composant est ouvert</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>Le composant est fermé</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande la fermeture du
+composant</item>
+				<item>2. Le système vérifie que le composant n'a pas 
+été modifié depuis la dernière sauvegarde</item>
+				<item>3. Le système ferme le composant</item>
+				<item>4. Le cas se termine</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénarii alternatifs">
+		<p>Condition : à l'étape 2 du scénario nominal, le 
+composant a été modifié depuis la dernière sauvegarde.</p> 
+			<list>
+				<item>2.1. Le système sauvegarde le composant (le cas 
+d'utilisation "Sauvegarder un composant" est activé)</item>
+				<item>2.2. Retour à l'étape 3 du scénario 
+nominal</item>
+			</list>
+		</sect2>
+	</sect1>
+
+
+		<sect1 title="Cas d'utilisation : Ajouter un élément à un composant">
+			<sect2 title="Description">
+				<p>Ce cas d'utilisation est similaire à l'ajout d'un 
+élément dans l'arbre, il ne sera donc pas développé.</p>
+				<p>A noter que ce cas d'utilisation comprend : l'ajout de rôles, de produits, de définitions de travail et de diagrammes de responsabilités.</p>
+			</sect2>
+		</sect1>
+
+
+		<sect1 title="Cas d'utilisation : Supprimer un élément d'un composant">
+			<sect2 title="Description">
+				<p>Ce cas d'utilisation est similaire à la suppression 
+d'un élément dans l'arbre, il ne sera donc pas 
+développé.</p>
+			</sect2>
+		</sect1>
+
+<sect1 title="Cas d'utilisation : Ajouter une interface">
+			<sect2 title="Description">
+				<p>Ce cas d'utilisation est similaire à l'ajout d'un 
+élément dans l'arbre, il ne sera donc pas développé.</p>
+				<p>A noter que ce cas d'utilisation comprend l'ajout 
+d'interfaces fournie et requise à un composant.</p>
+			</sect2>
+		</sect1>
+
+
+		<sect1 title="Cas d'utilisation : Supprimer une interface">
+			<sect2 title="Description">
+				<p>Ce cas d'utilisation est similaire à la suppression 
+d'un élément dans l'arbre, il ne sera donc pas 
+développé.</p>
+			</sect2>
+		</sect1>
+
+
+		<sect1 title="Cas d'utilisation : Ajouter un produit ou 
+un rôle dans une interface">
+			<sect2 title="Description">
+				<p>Ce cas d'utilisation est similaire à l'ajout d'un 
+élément dans l'arbre, il ne sera donc pas développé.</p>
+			</sect2>
+		</sect1>
+
+
+		<sect1 title="Cas d'utilisation : Supprimer un produit ou 
+un rôle dans une interface">
+			<sect2 title="Description">
+				<p>Ce cas d'utilisation est similaire à la suppression 
+d'un élément dans l'arbre, il ne sera donc pas 
+développé.</p>
+			</sect2>
+		</sect1>
+
+
+	<!--
+	    Fonctionnalité : créer des définitions de travail
+	-->
+
+	<!-- <sect1 title="Cas d'utilisation : Ajouter une définition
+de travail">
+	<sect2 title="Description">
+		<p>Ce cas d'utilisation est similaire à l'ajout d'un 
+élément dans l'arbre, il ne sera donc pas développé.</p>
+	</sect2>-->
+	<!--
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ajouter une définition 
+de travail.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Un composant est sélectionné</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>Une définition de travail est ajoutée dans 
+l'arborescence du composant</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande l'ajout d'une définition de 
+travail</item>
+				<item>2. Le système ajoute une définition de travail 
+dans l'arborescence du composant</item>
+				<item>3. Le système ajoute un diagramme d'activité dans 
+l'arborescence de la définition de travail</item>
+				<item>4. Le système nomme le diagramme d'activité 
+"Activités"</item>
+				<item>5. Le système ajoute un diagramme de flots 
+d'objet dans l'arborescence de la définition de travail</item>
+				<item>6. Le système nomme le diagramme de flots d'objet 
+"Flots"</item>
+				<item>7. Le système donne un nom unique à la définition 
+de travail</item>
+				<item>8. Le cas se termine</item>
+			</list>
+		</sect2>
+	</sect1>
+
+	<sect1 title="Cas d'utilisation : Supprimer une définition 
+de travail">
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur de supprimer une 
+définition de travail, ainsi que tous les éléments qu'elle 
+contient.</p>
+			<p>Ce cas d'utilisation est similaire à la suppression 
+d'un élément dans l'arbre, il ne sera donc pas 
+développé.</p>		
+		</sect2>
+	</sect1> -->
+
+	<sect1 title="Cas d'utilisation : Ajouter une activité à 
+une définition de travail">
+		<sect2 title="Description">
+			<!-- <p>But : permettre à l'acteur d'ajouter une activité
+à une définition de travail.</p> -->
+			<p>Ce cas d'utilisation est similaire à l'ajout d'un 
+élément dans l'arbre, il ne sera donc pas développé.</p>		
+		</sect2>
+	</sect1>
+
+	<sect1 title="Cas d'utilisation : Supprimer une activité 
+d'une définition de travail">
+		<sect2 title="Description">
+			<!-- <p>But : permettre à l'acteur de supprimer une
+activité d'une définition de travail.</p> -->
+			<p>Ce cas d'utilisation est similaire à la suppression 
+d'un élément dans l'arbre, il ne sera donc pas 
+développé.</p>		
+		</sect2>
+	</sect1>
+	
+	
+	<sect1 title="Cas d'utilisation : Ajouter un diagramme 
+d'activité à une définition de travail">
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ajouter un diagramme d'activité à une définition de travail.</p>		
+		</sect2>
+
+			<sect2 title="Préconditions">
+				<list>
+					<item>Une définition de travail est sélectionnée dans l'arbre.</item>
+					<item>Il n'y a pas de diagramme d'activité dans la définition de travail sélectionnée.</item>
+				</list>
+			</sect2>
+
+			<sect2 title="Postconditions">
+				<list>
+					<item>Un diagramme d'activité, nommé "Activités", est ajouté à la 
+définition de travail sélectionnée et apparaît dans 
+l'arborescence.</item>
+				</list>
+			</sect2>
+
+			<sect2 title="Scénario nominal">
+
+				<list>
+					<item>1. L'acteur demande l'ajout d'un diagramme 
+d'activité</item>
+					<item>2. Le système effectue l'ajout du diagramme d'activité</item>
+					<item>3. Le système nomme le diagramme "Activités"</item>
+					<item>4. Le cas se termine</item>
+				</list>
+			</sect2>
+	</sect1> 
+	
+	<sect1 title="Cas d'utilisation : Ajouter un diagramme 
+de flots d'objet à une définition de travail">
+		<sect2 title="Description">
+			<p>Ce cas d'utilisation est similaire à l'ajout d'un diagramme d'activité. Le diagramme ajouté sera nommé "Flots".</p>
+		</sect2>
+	</sect1>
+
+	
+	<sect1 title="Cas d'utilisation : Supprimer un
+diagramme d'une définition de travail">
+	<p>Ce cas d'utilisation est similaire à la suppression 
+d'un diagramme dans l'arbre, il ne sera donc pas 
+développé.</p>
+	</sect1>
+	
+	
+	
+
+	<!--
+	    Fonctionnalité : définir les états d'un produit
+	-->
+
+	<sect1 title="Cas d'utilisation : Ajouter un état à un 
+produit">
+	
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ajouter un état à un 
+produit (ex :  "brouillon", "validé", "signé", 
+etc...).</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Un produit est sélectionné dans l'arbre</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Postconditions">
+			<list>
+				<item>L'état est ajouté dans l'arbre au niveau du 
+produit concerné</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande l'ajout d'un nouvel état à un 
+produit</item>
+				<item>2. Un nouvel état est ajouté au produit</item>
+				<item>3. Le système donne un nom unique à l'état</item>
+				<item>4. Le cas se termine</item>
+			</list>
+		</sect2>
+	</sect1>
+
+		
+	<sect1 title="Cas d'utilisation : Supprimer un état d'un 
+produit">
+<sect2 title="Description">
+			<p>But : permettre à l'acteur de supprimer un état d'un 
+produit.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Le produit concerné possède un état</item>
+				<item>Un état est sélectionné dans l'arbre</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Postconditions">
+			<list>
+				<item>L'état sélectionné est supprimé de l'arbre du 
+processus au niveau du produit concerné</item>
+				<item>Les références aux produits dans l'état 
+sélectionné sont supprimées des diagrammes</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande la suppression d'un état d'un 
+produit dans l'arbre</item>
+				<item>2. Le système supprime les références aux 
+produits dans l'état sélectionné dans les diagramme</item>
+				<item>3. Le système supprime l'état du produit de 
+l'arbre</item>
+				<item>4. Le cas se termine</item>
+			</list>
+		</sect2>
+	</sect1>
+	
+
+	<sect1 title="Cas d'utilisation : Renommer un état d'un 
+produit">
+		<sect2 title="Description">
+			<p>Ce cas d'utilisation n'est pas spécifié dans le 
+détail.</p>
+		</sect2>
+	</sect1>
+
+
+	<sect1 title="Cas d'utilisation : Ajouter un produit avec 
+état dans un diagramme">
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ajouter, dans un 
+diagramme, un produit qui soit dans un certain état. Dans le 
+diagramme, l'état sera précisé à la suite du nom du produit 
+(entre parenthèses).</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Un diagramme est ouvert</item>
+				<item>Un état est associé au produit</item>
+				<item>Un état est sélectionné dans l'arbre</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>Le produit est ajouté dans le diagramme avec 
+l'état associé (à côté du nom, entre parenthèses)</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur sélectionne l'état du produit 
+concerné</item>
+				<item>2. L'acteur effectue un glisser/déposer vers le 
+diagramme</item>
+				<item>3. Le système ajoute le produit dans le diagramme 
+avec son état associé</item>
+				<item>4. Le cas se termine</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénarii alternatifs">
+			<p>Condition : à l'étape 3 du scénario nominal, un 
+produit dans cet état existe déjà dans le diagramme.</p> 
+			<list>
+				<item>3.1. Le système informe l'utilisateur que l'ajout 
+est impossible car un produit dans cet état est déjà 
+présent dans le diagramme</item>
+				<item>3.2. Le cas se termine</item>
+			</list>
+		</sect2>
+	</sect1>
+			
+
+	<sect1 title="Cas d'utilisation : Supprimer un produit 
+avec état dans un diagramme">
+		<sect2 title="Description">
+			<p>Ce cas d'utilisation n'est pas spécifié dans le 
+détail.</p>
+		</sect2>
+	</sect1>
+
+	<sect1 title="Cas d'utilisation : Renommer un produit avec 
+état dans un diagramme">
+		<sect2 title="Description">
+			<p>Ce cas d'utilisation n'est pas spécifié dans le 
+détail.</p>
+		</sect2>
+	</sect1>
+	
+	
+	<!--
+	    Fonctionnalité : vérifier la consistance du composant
+	-->
+
+	<sect1 title="Cas d'utilisation : Vérifier la consistance 
+du composant de processus">
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur de vérifier la consistance 
+du composant et de l'informer, s'il y a lieu, des points à 
+corriger. Toutefois la majeure partie des règles assurant 
+la consistance du composant seront vérifiées au moment de sa 
+modélisation.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Aucune</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>La consistance du composant de processus est 
+vérifiée</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande la vérification de la 
+consistance d'un composant de processus</item>
+				<item>2. Le système vérifie la consistance du composant 
+de processus</item>
+				<item>3. Le système affiche un compte rendu de la 
+vérification comprenant la liste des points à corriger s'il y en 
+a</item>
+				<item>4. Le cas se termine</item>
+			</list>
+			<p>NB :  Ce scénario est incomplet. L'étape 2 sera 
+détaillée ultérieurement et nous définirons ce que le 
+système doit vérifier exactement.</p>
+		</sect2>
+	</sect1>
+			
+
+	<!--
+	    Fonctionnalité : importer un processus sauvegardé à
+						 l'aide d'une version précédente d'APES
+	-->
+	<sect1 title="Cas d'utilisation : Importer un processus 
+sauvegardé à l'aide d'une version précédente d'APES">
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur de réutiliser un processus 
+qui a été créé grâce à une version précédente d'APES, en 
+lui donnant la possiblité d'importer la sauvegarde de ce 
+processus, et de la réutiliser en tant que composant.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Le processus à ouvrir a été sauvegardé à l'aide 
+d'une version précédente d'APES</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>Le processus (devenu composant) est ouvert</item>
+			</list>
+		</sect2>
+		
+		
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande l'importation d'une ancienne 
+sauvegarde d'un processus</item>
+				<item>2. Le système demande le chemin d'accès de la 
+sauvegarde</item>
+				<item>3. Le système interprète la sauvegarde à l'aide 
+du convertisseur externe</item>
+				<item>4. Le système propose à l'utilisateur de faire 
+une sauvegarde du composant (ancien processus) au nouveau 
+format</item>
+				<item>5. L'utilisateur ne souhaite pas faire de 
+sauvegarde au nouveau format</item>
+				<item>6. Le système ouvre le composant importé</item>
+				<item>7. Le cas se termine</item>
+			</list>
+			<p>NB :  Ce scénario est incomplet. L'étape 3 sera 
+détaillée ultérieurement et nous définirons plus 
+précisément le fonctionnement du convertisseur externe.</p>
+		</sect2>
+		
+		<sect2 title="Scénarii alternatifs">
+			<p>Condition : à l'étape 5 du scénario nominal, l'acteur 
+souhaite faire une sauvegarde du composant (ancien 
+processus) au nouveau format.</p> 
+			<list>
+				<item>5.1. Le système sauvegarde le composant importé 
+(cas d'utilisation "Sauvegarder un composant" activé)</item>
+				<item>5.2. Retour à l'étape 6 du scénario 
+nominal</item>
+			</list>
+			<p>Condition : à l'étape 6 du scénario nominal, il y a 
+déjà un composant ouvert.</p> 
+			<list>
+				<item>5.1. Le système ferme le composant déjà ouvert 
+(cas d'utilisation "Fermer un composant" activé)</item>
+				<item>5.2. Retour à l'étape 6 du scénario 
+nominal</item>
+			</list>
+		</sect2>
+		
+	</sect1>	
+			
+
+	<!--
+	    Fonctionnalité : Associer un guide à un élément du 
+modèle     
+	-->
+
+	<sect1 title="Cas d'utilisation : Ajouter un guide à un 
+élément du modèle dans l'arbre">
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ajouter un guide à un 
+élément du modèle.</p>
+		</sect2>
+		
+		<sect2 title="Préconditions">
+			<list>
+				<item>Un élément de modèle est sélectionné dans 
+l'arbre</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Postconditions">
+			<list>
+				<item>Un guide est ajouté à l'élément sélectionné et 
+apparaît dans l'arborescence</item>
+			</list>
+		</sect2>
+		
+		<sect2 title="Scénario nominal">
+			<list>
+					<item>1. L'acteur demande l'ajout d'un guide</item>
+					<item>2. Le système affiche la liste des types de 
+guide existants</item>
+					<item>3. L'acteur choisit un type de guide</item>
+					<item>4. L'acteur valide son choix</item>
+					<item>5. Le système effectue l'ajout du guide (de type 
+choisi) et lui donne un nom unique</item>
+					<item>6. Le cas se termine</item>					
+				</list>
+			</sect2>
+	</sect1>	
+		
+
+	<sect1 title="Cas d'utilisation : Supprimer un guide d'un 
+élément du modèle dans l'arbre">
+		<sect2 title="Description">
+			<p>Ce cas d'utilisation est similaire à la suppression 
+d'un élément dans l'arbre, il ne sera donc pas 
+développé.</p>
+		</sect2>
+	</sect1>
+
+	<!--
+	<sect1 title="Cas d'utilisation : Renommer le guide 
+associé à un élément du modèle dans l'arbre">
+		<sect2 title="Description">
+			<p>Ce cas d'utilisation n'est pas spécifié dans le 
+détail.</p>
+		</sect2>
+	</sect1>-->
+
+
+	<!--
+	    Fonctionnalité : Editer le contenu d'un composant
+	 -->
+
+	<sect1 title="Cas d'utilisation : Dupliquer un élément 
+d'un diagramme vers un autre (copier/coller)">
+	</sect1>
+
+	<sect1 title="Cas d'utilisation : Déplacer un élément dans 
+un diagramme (couper/coller)">
+	</sect1>
+
+	<sect1 title="Cas d'utilisation : Imprimer un diagramme">
+		<sect2 title="Description">
+			<!-- <p>But : permettre à l'acteur d'imprimer un 
+diagramme.</p> -->
+			<p>Ce cas d'utilisation ne sera pas développé.</p>
+		</sect2>
+	</sect1>
+
+	<sect1 title="Cas d'utilisation : Gérer le texte et les 
+couleurs">
+		<!-- <sect2 title="Description">
+			<p>But : permettre à l'acteur de gérer le texte et les 
+couleurs.</p>
+		</sect2> -->
+	</sect1>
+
+	<sect1 title="Cas d'utilisation : Ajouter des notes à un 
+diagramme">
+		<sect2 title="Description">
+			<p>But : permettre à l'acteur d'ajouter des notes à un 
+diagramme.</p>
+		</sect2>
+
+		<sect2 title="Préconditions">
+			<list>
+				<item>Un diagramme est sélectionné</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Postconditions">
+			<list>
+				<item>Les notes sont ajoutées dans le diagramme</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Scénario nominal">
+			<list>
+				<item>1. L'acteur demande l'ajout de notes</item>
+				<item>2. Le système demande le contenu de ces 
+notes</item>
+				<item>3. L'acteur précise le contenu des notes</item>
+				<item>4. Le système effectue l'ajout des notes au 
+diagramme</item>
+				<item>5. Le cas se termine</item>
+			</list>
+		</sect2>
+	</sect1>
+  </chapter>
+
+</ipbook>
+
