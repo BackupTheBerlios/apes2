@@ -64,15 +64,7 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	private final int DIAGRAMME = 6 ;
 	private final int PRODUIT = 7 ;
 	private final int DEFINITION_TRAVAIL = 8 ;
-	
-	
-	public static final String REP_ACTIVITES = "/activites/";
-	public static final String REP_ROLES = "/roles/";
-	public static final String REP_PRODUITS = "/produits/" ;
-	public static final String REP_DEF_TRAVAIL = "/definitions_travail/" ;
-	public static final String REP_DIAGRAMMES = "/diagrammes/"  ;
-	public static final String REP_PAQUETAGES = "/paquetages/"  ;
-	
+
 	
 	// liste des produits
 	private Vector interfaceIn ;
@@ -1321,10 +1313,8 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	//--------------------------------------------------------------------------//
 
 	/**
-	 * <b>Date de création</b> : 5 févr. 2004<p>
 	 * Sauvegarde le nom du composant dans un Memento, de manière à pouvoir le restaurer
 	 * plus tard.
-	 * @author Sylvain Lavalley
 	 * @return l'objet mémoire créé
 	 */
 	public Memento sauverNom ()
@@ -1418,12 +1408,19 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 		return this.rechercherDiagramme(o);
 	}
 	
-	public IdObjetModele getDiagrammeFlotProduit(int numrang, int numtype)
+	public IdObjetModele getDiagrammeFlotProduit(int ID_Apes)
 	{
-		ApesWorkDefinition apw = (ApesWorkDefinition)this.listeDefinition.elementAt(numrang);
-		// récupérer le diagramme
-		Object o = apw.getFlowDiagram();
-		return this.rechercherDiagramme(apw.getFlowDiagram());
+		for (int i = 0; i < this.listeDefinition.size(); i++)
+		{
+			ApesWorkDefinition apw = (ApesWorkDefinition)this.listeDefinition.elementAt(i);
+			if (apw.getID() == ID_Apes)
+			{
+				//récupérer le diagramme
+				Object o = apw.getFlowDiagram();
+				return this.rechercherDiagramme(o);
+			}
+		}
+		return null;
 	}
 
 	public IdObjetModele rechercherDiagramme(Object ob)

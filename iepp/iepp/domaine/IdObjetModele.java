@@ -400,15 +400,7 @@ public class IdObjetModele implements Serializable, Cloneable
 		}
 		return null;
 	}
-	
-	public IdObjetModele getDiagrammeFlotProduit()
-	{
-		if (this.estDefinitionTravail())
-		{
-			return (((ComposantProcessus)this.getRef()).getDiagrammeFlotProduit(this.numRang, this.numType));
-		}
-		return null;
-	}
+
 	
 	public Vector getListeDiagrammeResponsabilite()
 	{

@@ -89,6 +89,7 @@ public class ImageUtil
 		JFrame frame = new JFrame();
    		frame.getContentPane().add(mGraph);
     	frame.pack();
+    	frame.setVisible(false);
     	
 		try
 		{

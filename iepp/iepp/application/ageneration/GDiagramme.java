@@ -183,8 +183,42 @@ public class GDiagramme extends GElementModele
 			    }
 				else
 				{
-				    ID_Apes = ((ApesGraphCell)o[i]).getID();
-				    elem = this.cp.getElementPresentation(ID_Apes);
+					if (o[i] instanceof ProcessComponentCell)
+					{
+						// un click sur un composant de processus amène vers le diagramme de
+						// flot de définition de travail (workflow diagram)
+						IdObjetModele id = this.cp.getDiagrammeFlot();
+						if (id != null)
+						{
+							 ID_Apes = id.getID();
+							 elem = this.cp.getElementPresentation(ID_Apes);
+						}
+						else
+						{
+							elem = null;
+						}
+					}
+					else if (o[i] instanceof WorkDefinitionCell)
+					{
+						// un click sur une définition de travail doit ouvrir le diagramme
+					    // de flots d'activité
+						ID_Apes = ((ApesGraphCell)o[i]).getID();
+						IdObjetModele id = this.cp.getDiagrammeFlotProduit(ID_Apes);
+						if (id != null)
+						{
+							 ID_Apes = id.getID();
+							 elem = this.cp.getElementPresentation(ID_Apes);
+						}
+						else
+						{
+							elem = null;
+						}
+					}
+					else
+					{
+					    ID_Apes = ((ApesGraphCell)o[i]).getID();
+					    elem = this.cp.getElementPresentation(ID_Apes);
+					}
 				}
 			    
 				if ( elem != null )
