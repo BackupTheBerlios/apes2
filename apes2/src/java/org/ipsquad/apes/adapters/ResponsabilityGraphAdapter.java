@@ -33,7 +33,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * This adapter allows to display a responsability diagram in a JGraph
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ResponsabilityGraphAdapter extends SpemGraphAdapter 
 {
@@ -53,6 +53,7 @@ public class ResponsabilityGraphAdapter extends SpemGraphAdapter
 				{
 					Link link = (Link)o;
 					DefaultEdge edge = new DefaultEdge();
+					edge.changeAttributes(getDefaultEdgeAttributes());
 					edge.setSource(getCellByUserObject(link.getSource(), null, false).getChildAt(0));
 					edge.setTarget(getCellByUserObject(link.getTarget(), null, false).getChildAt(0));
 					return edge;

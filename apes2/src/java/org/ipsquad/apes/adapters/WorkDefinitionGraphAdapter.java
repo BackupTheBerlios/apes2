@@ -36,7 +36,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {
@@ -56,6 +56,7 @@ public class WorkDefinitionGraphAdapter extends SpemGraphAdapter
 				{
 					Link link = (Link)o;
 					DefaultEdge edge = new DefaultEdge();
+					edge.changeAttributes(getDefaultEdgeAttributes());					
 					edge.setSource(getCellByUserObject(link.getSource(), null, false).getChildAt(0));
 					edge.setTarget(getCellByUserObject(link.getTarget(), null, false).getChildAt(0));
 					mCreated = edge;
