@@ -106,7 +106,7 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 		}
 		
 		// Tester s'il reste des produits dans le produit fusion, ou s'il ne reste pas que des produits en sortie
-		if (this.produitFusion.estLienPrimaire(this.leLien))
+		if (this.produitFusion.estLienPrimaire(this.leLien) && this.produitFusion.getNombreProduits() > 2)
 		{
 		    this.suppTout = true;
 		    // Tout effacer
