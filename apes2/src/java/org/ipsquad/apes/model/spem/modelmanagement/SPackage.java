@@ -24,17 +24,22 @@ package org.ipsquad.apes.model.spem.modelmanagement;
 
 import java.util.Vector;
 
+import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
+import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 /**
  * Package of the model
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SPackage extends ModelElement implements IPackage
 {
-	private Vector mOwnedElement = new Vector();
+	protected Vector mOwnedElement = new Vector();
 
 	public SPackage(String name)
 	{
@@ -62,11 +67,15 @@ public class SPackage extends ModelElement implements IPackage
 	{
 		if(!containsModelElement(e) && e.getParent()==null)
 		{
-			mOwnedElement.add(e);
-			e.setParent(this);
-			return true;
+			if(e instanceof ProcessRole || (e instanceof WorkDefinition && !(e instanceof Activity))
+					|| e instanceof WorkProduct || e instanceof ResponsabilityDiagram
+					|| e instanceof SPackage)
+			{
+				mOwnedElement.add(e);
+				e.setParent(this);
+				return true;
+			}
 		}
-
 		return false;
 	}
 

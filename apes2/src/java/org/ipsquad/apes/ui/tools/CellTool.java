@@ -25,11 +25,10 @@ package org.ipsquad.apes.ui.tools;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.Map;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.adapters.ApesGraphCell;
-import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.jgraph.JGraph;
 import org.jgraph.graph.BasicMarqueeHandler;
@@ -40,7 +39,7 @@ import org.jgraph.graph.GraphConstants;
  * This tool allows to create cells in the graph
  * It use the prototype design pattern to clone cells
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class CellTool extends Tool
 {
@@ -88,23 +87,30 @@ public class CellTool extends Tool
 
 		public void mousePressed(MouseEvent e)
 		{
-			fireToolStarted(); 
-			
+			fireToolStarted();
+
 			mGraph.clearSelection();
 			Point pt = mGraph.fromScreen(e.getPoint());
-			DefaultGraphCell vertex = (DefaultGraphCell) mPrototype.clone();
 
-			Map view = new HashMap(), 
-				attr = vertex.getAttributes();
+			ApesGraphCell vertex = (ApesGraphCell) mPrototype.clone();
+			Map attr = vertex.getAttributes();
+
+			GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
+
+			Map attributes = ApesGraphConstants.createMap();
+			attributes.put(vertex, attr);
+
+			Object[] arg = new Object[]{vertex};
+
+			((SpemGraphAdapter)mGraph.getModel()).insert(arg, attributes, null, null, null);
 			
-			if( vertex instanceof ApesGraphCell || vertex instanceof NoteCell)
-			{	
-				GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
-				view.put("Attributes", attr);
+			if(mGraph.getModel().contains(vertex))
+			{
+				mGraph.setSelectionCell(vertex);
+				
+				// Makes user set a new name
+				mGraph.startEditingAtCell(vertex);
 			}
-			
-			
-			((SpemGraphAdapter)mGraph.getModel()).insertCell( vertex, view );
 		}
 
 		public void mouseReleased(MouseEvent e)

@@ -34,23 +34,36 @@ import java.io.PrintStream;
  *
  * Compilers automatically optimize the code if Debug.enabled is set to false
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Debug
 {
 	/// Debug enabled flag
-	public static final boolean enabled = false;
+	public static final boolean enabled = true;
 
+	public static final int ALL = 0x00001111;
+	public static final int MODEL = 0x00000001;
+	public static final int ADAPTER = 0x00000010;
+	public static final int VIEW = 0x00000100;
+	public static final int MEDIATOR = 0x00001000;
+	
+	private static int mMask = ALL;//MODEL | MEDIATOR;
 	private static PrintStream msErrorOut = System.err;
 
+	public void setMask(int mask)
+	{
+	    mMask = mask;
+	}
+	
 	/**
 	 * Display a debug string
 	 *
 	 * @param s string to display
 	 */
-	public static void print(String s)
+	public static void print(int level, String s)
 	{
-		msErrorOut.println(s);
+	    if((level & mMask) == level)
+	        msErrorOut.println(s);
 	}
 	
 	/**

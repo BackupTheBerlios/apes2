@@ -26,19 +26,19 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ProcessRole extends ProcessPerformer
 {
 	public ProcessRole()
 	{
-		if(Debug.enabled) Debug.print("(M) -> ++ProcessRole");
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++ProcessRole");
 	}
 
 	public ProcessRole(String name)
 	{
 		super(name);
-		if(Debug.enabled) Debug.print("(M) -> ++ProcessRole::"+name);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++ProcessRole::"+name);
 	}
 
 	

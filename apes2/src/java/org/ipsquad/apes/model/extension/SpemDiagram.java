@@ -26,7 +26,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 /**
  * Base class for diagrams
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class SpemDiagram extends ModelElement
 {
@@ -60,6 +60,4 @@ public abstract class SpemDiagram extends ModelElement
 	public abstract boolean areLinkableModelElements(ModelElement source, ModelElement target);
 
 	public abstract boolean existsLinkModelElements(ModelElement source, ModelElement target);
-
-
 }

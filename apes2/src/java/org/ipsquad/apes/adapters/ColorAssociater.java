@@ -26,6 +26,7 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.Link;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
@@ -196,4 +197,6 @@ public class ColorAssociater implements ModelVisitor
 		mBackground = ColorFontPanel.getColor(ColorFontPanel.GUARD_KEY+"background") ;
 		mFont = ColorFontPanel.getStyle(ColorFontPanel.GUARD_KEY);
 	}
+	
+	public void visitLink(Link link) { }
 }

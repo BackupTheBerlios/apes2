@@ -26,7 +26,6 @@ import java.util.Vector;
 
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
-import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
@@ -37,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -46,13 +45,13 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	
 	public WorkDefinitionDiagram()
 	{
-		if(Debug.enabled) Debug.print("(M) -> ++WorkDefinitionDiagram");
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++WorkDefinitionDiagram");
 	}
 
 	public WorkDefinitionDiagram( String name )
 	{
 		super(name);
-		if(Debug.enabled) Debug.print("(M) -> ++WorkDefinitionDiagram::"+name);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++WorkDefinitionDiagram::"+name);
 	}
 	
 	/**
@@ -110,7 +109,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean addModelElement(ModelElement me) 
 	{
-		if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::addModelElement "+me);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addModelElement "+me);
 		if( me instanceof ProcessRole )
 		{
 			return addProcessRole( (ProcessRole) me );
@@ -141,7 +140,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if(!containsModelElement(r))
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::addProcessRole "+r);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addProcessRole "+r);
 			mElements.add(r);
 			return true;
 		}
@@ -159,7 +158,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if(!containsModelElement(p))
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::addWorkProduct "+p);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addWorkProduct "+p);
 			mElements.add(p);
 			return true;
 		}
@@ -183,7 +182,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		
 		if(!containsModelElement(sm))
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::addWorkProductState "+sm);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addWorkProductState "+sm);
 			mElements.add(sm);
 			return true;
 		}
@@ -204,7 +203,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if(!containsModelElement(p))
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::addWorkDefinition "+p);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addWorkDefinition "+p);
 			mElements.add(p);
 			return true;
 		}
@@ -222,7 +221,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if(containsModelElement(e))
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::removeModelElement "+e);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeModelElement "+e);
 			mElements.remove(e);
 			return true;
 		}
@@ -329,7 +328,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 
 	public boolean createLinkModelElements( ModelElement source, ModelElement target) 
 	{
-		if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
 		{
 			return createLinkProcessRoleWorkDefinition( (ProcessRole) source, (WorkDefinition) target );
@@ -372,11 +371,11 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			if (!r.containsFeature(w) && w.getOwner()==null)
 			{
-				if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::createLinkProcessRoleWorkDefinition "+r+" "+w);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkProcessRoleWorkDefinition "+r+" "+w);
 				r.addFeature(w);
 				w.setOwner(r);
 				
-				for(int i=0; i < w.subWorkCount(); i++)
+				/*for(int i=0; i < w.subWorkCount(); i++)
 				{
 					Activity a = w.getSubWork(i); 
 					if( a.getOwner() == null && !r.containsFeature(a) )
@@ -384,7 +383,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 						r.addFeature(a);
 						a.setOwner(r);
 					}
-				}
+				}*/
 				return true;
 			}
 		}
@@ -407,7 +406,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			{
 				if(areLinkableModelElements(wp,wd))
 				{
-					if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkProductWorkDefinition "+wp+" "+wd);
+					if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkProductWorkDefinition "+wp+" "+wd);
 					mTransitions.add(new Transition(wp,wd));
 					return true;
 				}
@@ -431,7 +430,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			{
 				if(areLinkableModelElements(wd,wp))
 				{
-					if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkDefinitionWorkProduct "+wd+" "+wp);
+					if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkDefinitionWorkProduct "+wd+" "+wp);
 					mTransitions.add(new Transition(wd,wp));
 					return true;
 				}
@@ -455,7 +454,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			{	
 				mTransitions.add(new Transition(w,wd));
 				mTransitions.add(new Transition(sm,wd));
-				if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkProductStateWorkDefinition "+sm+" "+wd);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkProductStateWorkDefinition "+sm+" "+wd);
 				return true;
 			}
 		}
@@ -476,7 +475,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			{
 				mTransitions.add(new Transition(wd,w));
 				mTransitions.add(new Transition(wd,sm));
-				if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkDefinitionWorkProductState "+wd+" "+sm);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkDefinitionWorkProductState "+wd+" "+sm);
 				return true;
 			}
 		}
@@ -487,7 +486,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	
 	public boolean removeLinkModelElements( ModelElement source, ModelElement target) 
 	{
-		if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
 		{
 			return removeLinkProcessRoleWorkDefinition( (ProcessRole) source, (WorkDefinition) target );
@@ -529,16 +528,16 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			if (r.removeFeature(w))
 			{
-				if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkProcessRoleWorkDefinition "+r+" "+w);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkProcessRoleWorkDefinition "+r+" "+w);
 				w.setOwner(null);
-				for(int i = 0; i < w.subWorkCount(); i++)
+				/*for(int i = 0; i < w.subWorkCount(); i++)
 				{
 					Activity a = w.getSubWork(i);
 					if(r.removeFeature(a))
 					{
 						a.setOwner(null);
 					}
-				}
+				}*/
 				return true;
 			}
 		}
@@ -557,7 +556,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if(existsLinkModelElements(wp, wd))
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkProductWorkDefinition "+wp+" "+wd);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkProductWorkDefinition "+wp+" "+wd);
 			mTransitions.remove(getTransition(wp,wd));
 			return true;
 		}
@@ -576,7 +575,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if(existsLinkModelElements(wd, wp))
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkDefinitionWorkProduct "+wd+" "+wp);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkDefinitionWorkProduct "+wd+" "+wp);
 			mTransitions.remove(getTransition(wd,wp));
 			return true;
 		}
@@ -596,7 +595,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			
 			if(existsLinkModelElements(w, wd))
 			{
-				if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkProductStateWorkDefinition "+sm+" "+wd);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkProductStateWorkDefinition "+sm+" "+wd);
 				mTransitions.remove(getTransition(w,wd));
 				mTransitions.remove(getTransition(sm,wd));
 				return true;
@@ -616,7 +615,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			
 			if(existsLinkModelElements(wd, w))
 			{
-				if(Debug.enabled) Debug.print("(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkDefinitionWorkProductState "+wd+" "+sm);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkDefinitionWorkProductState "+wd+" "+sm);
 				mTransitions.remove(getTransition(wd,sm));
 				mTransitions.remove(getTransition(wd,w));
 				mTransitions.remove(getTransition(wd,sm));

@@ -22,12 +22,12 @@
 
 package apes.model.spem.process.structure;
 
+import junit.framework.TestCase;
+
 import org.ipsquad.apes.model.spem.process.structure.ProcessPerformer;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
-
-import junit.framework.TestCase;
 
 public class TestWorkProduct extends TestCase
 {

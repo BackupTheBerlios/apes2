@@ -75,7 +75,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Application tree view
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {
@@ -242,7 +242,7 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 			
 			SpemTreeAdapter model = (SpemTreeAdapter)getModel();
 			
-			model.moveInto(userObject, selPath.getLastPathComponent());
+			model.move(new Object[]{userObject}, new Object[]{selPath.getLastPathComponent()});
 
 			dtde.dropComplete(true);
 			return;

@@ -29,7 +29,7 @@ import java.util.Properties;
 
 /**
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ConfigManager
 {
@@ -81,7 +81,7 @@ public class ConfigManager
 			}
 			catch(Exception e)
 			{
-				mConfigManager = new ConfigManager(defaults);
+				mConfigManager = new ConfigManager(defaults == null? new Properties() : defaults);
 			}
 		}
 	}

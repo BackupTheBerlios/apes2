@@ -24,7 +24,7 @@ package org.ipsquad.apes.adapters;
 
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ActivityCell extends ApesGraphCell
 {
@@ -36,14 +36,6 @@ public class ActivityCell extends ApesGraphCell
 	public ActivityCell(Activity a)
 	{
 		super(a);
-	}
-	
-	public Object clone()
-	{
-		ActivityCell c = (ActivityCell) super.clone();
-		c.init();
-		
-		return c;
 	}
 }
 

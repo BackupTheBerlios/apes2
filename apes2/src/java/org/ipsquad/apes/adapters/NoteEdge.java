@@ -22,11 +22,12 @@ package org.ipsquad.apes.adapters;
 
 import java.util.Map;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.GraphConstants;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class NoteEdge extends DefaultEdge
 {
@@ -38,10 +39,10 @@ public class NoteEdge extends DefaultEdge
 	
 	public void init()
 	{
-		Map map = GraphConstants.createMap();
-		GraphConstants.setDashPattern(map, new float[] { 3, 3 });
-		GraphConstants.setEditable(map, false);
-		GraphConstants.setLineEnd(map,GraphConstants.ARROW_NONE);
+		Map map = ApesGraphConstants.createMap();
+		ApesGraphConstants.setDashPattern(map, new float[] { 3, 3 });
+		ApesGraphConstants.setEditable(map, false);
+		ApesGraphConstants.setLineEnd(map,GraphConstants.ARROW_NONE);
 		
 		changeAttributes(map);	
 	}

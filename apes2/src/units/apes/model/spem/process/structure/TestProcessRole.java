@@ -22,9 +22,9 @@
 
 package apes.model.spem.process.structure;
 
-import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
-
 import junit.framework.TestCase;
+
+import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 
 public class TestProcessRole extends TestCase
 {

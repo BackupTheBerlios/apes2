@@ -28,7 +28,7 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Activity extends WorkDefinition
 {
@@ -37,13 +37,13 @@ public class Activity extends WorkDefinition
 	
 	public Activity()
 	{
-		if(Debug.enabled) Debug.print("(M) -> ++Activity");
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++Activity");
 	}
 	
 	public Activity(String name)
 	{
 		super(name);
-		if(Debug.enabled) Debug.print("(M) -> ++Activity::"+name);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++Activity::"+name);
 	}
 	
 	public void visit(SpemVisitor visitor)
@@ -63,7 +63,7 @@ public class Activity extends WorkDefinition
 	{
 		if(!containsInputWorkProduct(w))
 		{
-			if(Debug.enabled) Debug.print("(M) -> Activity("+getName()+")::addInputWorkProduct "+w);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> Activity("+getName()+")::addInputWorkProduct "+w);
 			mInput.add(w);
 			return true;
 		}
@@ -83,7 +83,7 @@ public class Activity extends WorkDefinition
 	{
 		if(containsInputWorkProduct(w))
 		{
-			if(Debug.enabled) Debug.print("(M) -> Activity("+getName()+")::removeInputWorkProduct "+w);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> Activity("+getName()+")::removeInputWorkProduct "+w);
 			mInput.remove(w);
 			return true;
 		}
@@ -115,7 +115,7 @@ public class Activity extends WorkDefinition
 	{
 		if(!containsOutputWorkProduct(w))
 		{
-			if(Debug.enabled) Debug.print("(M) -> Activity("+getName()+")::addOutputWorkProduct "+w);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> Activity("+getName()+")::addOutputWorkProduct "+w);
 			mOutput.add(w);
 			return true;
 		}
@@ -135,7 +135,7 @@ public class Activity extends WorkDefinition
 	{
 		if(containsOutputWorkProduct(w))
 		{
-			if(Debug.enabled) Debug.print("(M) -> Activity("+getName()+")::removeOutputWorkProduct "+w);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> Activity("+getName()+")::removeOutputWorkProduct "+w);
 			mOutput.remove(w);
 			return true;
 		}

@@ -27,20 +27,21 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.ipsquad.apes.Context;
+import org.ipsquad.apes.model.extension.Link;
 import org.ipsquad.apes.model.extension.SpemDiagram;
-import org.ipsquad.apes.model.frontend.InsertEvent;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
-import org.jgraph.graph.ConnectionSet;
+import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
-import org.jgraph.graph.Port;
+
 /**
  * This adapter allows to display a context diagram in a JGraph
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -50,19 +51,27 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 		
 		mBuilder = new Builder()
 		{
-			public Object create( Object o )
-			{			
+			public DefaultGraphCell create( Object o )
+			{
 				if( o instanceof Element )
 				{
 					((Element)o).visit( this );
 					return mCreated;
+				}
+				else if( o instanceof Link )
+				{
+					Link link = (Link)o;
+					DefaultEdge edge = new DefaultEdge();
+					edge.setSource(getCellByUserObject(link.getSource(), null, false).getChildAt(0));
+					edge.setTarget(getCellByUserObject(link.getTarget(), null, false).getChildAt(0));
+					return edge;
 				}
 				return null;
 			}
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				return ( o instanceof WorkProduct || o instanceof ProcessComponent );
+				return ( o instanceof WorkProduct || o instanceof ProcessComponent || o instanceof Link );
 			}	
 
 			public void visitProcessComponent(ProcessComponent component) 
@@ -98,7 +107,7 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 		super.remove( temp.toArray() );
 	}
 	
-	protected void inserted( InsertEvent e ) 
+	/*protected void inserted( InsertEvent e ) 
 	{ 
 		if( e.getDiagram() == mDiagram && e.getInserted() == null && (e.getAttributes() == null || !e.getAttributes().containsKey("firstPort") ) )
 		{	
@@ -112,16 +121,16 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 			Port firstPort = null , 
 						port = null;
 			
-			Vector cells = findCellsByUserObject( new Object[]{ source } );
-			if( cells.size() > 0 )
+			DefaultGraphCell cell = getCellByUserObject( source, null, false );
+			if( cell != null )
 			{	
-				firstPort = (Port) ((ApesGraphCell)cells.get(0)).getChildAt(0);
+				firstPort = (Port) ((ApesGraphCell)cell).getChildAt(0);
 			}
 			
-			cells = findCellsByUserObject( new Object[]{ target } );
-			if( cells.size() > 0 )
+			cell = getCellByUserObject( target, null, false );
+			if( cell != null )
 			{	
-				port = (Port) ((ApesGraphCell)cells.get(0)).getChildAt(0);
+				port = (Port) ((ApesGraphCell)cell).getChildAt(0);
 			}
 			
 			if( firstPort != null && port != null )
@@ -136,9 +145,9 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 				super.insert(new Object[]{ edge },null,cs, null,null);
 			}
 		}
-		else
+		/*else
 		{
 			super.inserted(e);
-		}
-	}
+		}*/
+	//}*/
 }

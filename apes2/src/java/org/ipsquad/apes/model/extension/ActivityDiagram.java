@@ -34,7 +34,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the activity diagram
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ActivityDiagram extends SpemDiagram
 {
@@ -44,7 +44,6 @@ public class ActivityDiagram extends SpemDiagram
 
 	public ActivityDiagram()
 	{
-
 	}
 
 	public ActivityDiagram(String name)
@@ -56,8 +55,6 @@ public class ActivityDiagram extends SpemDiagram
 	{
 		visitor.visitActivityDiagram(this);
 	}
-	
-	
 	
 	/**
 	 * Add a model element to the activity diagram
@@ -239,6 +236,10 @@ public class ActivityDiagram extends SpemDiagram
 		}
 		if(source instanceof Decision)
 		{
+			if(target instanceof Decision)
+			{
+				return areLinkableDecisionDecision((Decision)source,(Decision)target);
+			}
 			if(target instanceof Activity)
 			{
 				return areLinkableDecisionActivity((Decision)source,(Activity)target);
@@ -339,6 +340,23 @@ public class ActivityDiagram extends SpemDiagram
 		return false;
 	}
 	
+	/**
+	 * Test if a link between one decision and one activity can be created
+	 *
+	 * @param d the decision to be tested in output
+	 * @param a the decision to be tested in input
+	 * @return true if the link can be created, false otherwise
+	 */
+	public boolean areLinkableDecisionDecision(Decision d1, Decision d2)
+	{
+		if(!existsLinkModelElements(d1,d2))
+		{
+			return true;
+		}
+
+		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		return false;
+	}
 	
 	/**
 	 * Test if a link between one ModelElement and a Synchro can be created

@@ -19,7 +19,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the responsability diagram
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ResponsabilityDiagram extends SpemDiagram {
 
@@ -31,18 +31,18 @@ public class ResponsabilityDiagram extends SpemDiagram {
 		super();
 		setName(ConfigManager.getInstance().getProperty("ResponsabilityDiagram")+mId);
 		mId++;
-		if(Debug.enabled) Debug.print("(M) -> ++ResponsabilityDiagram::"+getName());
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++ResponsabilityDiagram::"+getName());
 	}
 
 	public ResponsabilityDiagram( String name )
 	{
 		super(name);
-		if(Debug.enabled) Debug.print("(M) -> ++ResponsabilityDiagram::"+name);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++ResponsabilityDiagram::"+name);
 	}
 
 	public boolean addModelElement(ModelElement me) 
 	{
-		if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::addModelElement "+me);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::addModelElement "+me);
 		if( me instanceof ProcessRole )
 		{
 			return addProcessRole( (ProcessRole) me );
@@ -65,7 +65,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	{
 		if(!containsModelElement(r))
 		{
-			if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::addProcessRole "+r);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::addProcessRole "+r);
 			mElements.add(r);
 			return true;
 		}
@@ -83,7 +83,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	{
 		if(!containsModelElement(p))
 		{
-			if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::addWorkProduct "+p);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::addWorkProduct "+p);
 			mElements.add(p);
 			return true;
 		}
@@ -101,7 +101,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	{
 		if(containsModelElement(e))
 		{
-			if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::removeModelElement "+e);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::removeModelElement "+e);
 			mElements.remove(e);
 			return true;
 		}
@@ -170,7 +170,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	{
 		if( source instanceof ProcessRole && target instanceof WorkProduct )
 		{
-			if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::removeModelElement "+source+" "+target);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::removeModelElement "+source+" "+target);
 			return createLinkProcessRoleWorkProduct( (ProcessRole) source, (WorkProduct) target );
 		}
 		
@@ -190,7 +190,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 		{
 			if (!r.containsResponsibility(w) && w.getResponsible()==null)
 			{
-				if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::createLinkProcessRoleWorkProduct "+r+" "+w);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::createLinkProcessRoleWorkProduct "+r+" "+w);
 				r.addResponsibility(w);
 				w.setResponsible(r);
 				return true;
@@ -204,7 +204,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	{
 		if( source instanceof ProcessRole && target instanceof WorkProduct )
 		{
-			if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
 			return removeLinkProcessRoleWorkProduct( (ProcessRole) source, (WorkProduct) target );
 		}
 
@@ -224,7 +224,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 		{
 			if (r.removeResponsibility(w))
 			{
-				if(Debug.enabled) Debug.print("(M) -> ResponsabilityDiagram("+getName()+")::removeLinkProcessRoleWorkProduct "+r+" "+w);
+				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::removeLinkProcessRoleWorkProduct "+r+" "+w);
 				w.setResponsible(null);
 				return true;
 			}

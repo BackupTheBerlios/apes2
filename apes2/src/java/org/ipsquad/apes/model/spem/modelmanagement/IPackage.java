@@ -27,15 +27,17 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 /**
  * Interface that represents a Package of the model
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public interface IPackage
 {
 	public void visit(SpemVisitor visitor);
+	public IPackage getParent();
+	
 	public boolean addModelElement(ModelElement e);
 	public boolean removeModelElement(ModelElement e);
 	public boolean containsModelElement(ModelElement e);
 	public ModelElement getModelElement(int i);
-
+	
 	public int modelElementCount();
 }

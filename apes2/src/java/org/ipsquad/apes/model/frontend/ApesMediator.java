@@ -22,14 +22,24 @@ package org.ipsquad.apes.model.frontend;
 
 import java.awt.Rectangle;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.event.EventListenerList;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Identity;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -38,9 +48,13 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.Link;
+import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
+import org.ipsquad.apes.model.frontend.event.ApesModelEvent;
+import org.ipsquad.apes.model.frontend.event.ApesModelListener;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
@@ -48,16 +62,19 @@ import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 import org.ipsquad.utils.ConfigManager;
+import org.ipsquad.utils.Debug;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 import org.jgraph.graph.GraphConstants;
+import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -66,6 +83,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	private ResourceManager mResource = ResourceManager.getInstance();
 	private ConfigManager mConfig = ConfigManager.getInstance();
 	
+	protected transient EventListenerList mListenerList =
+		new EventListenerList();
+
 	private Vector mListeners = new Vector();
 	private Vector mDiagrams = new Vector();
 	
@@ -73,11 +93,32 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	
 	/**
 	 * Return the unique instance of the ApesMediator
+	 * 
 	 * @return the unique instance of the ApesMediator
 	 */
 	public static ApesMediator getInstance()
 	{
 		return mInstance;
+	}
+	
+	/**
+	 * Adds a listener for the ApesModelEvent posted after the model changes
+	 * 
+	 * @param l
+	 */
+	public void addApesModelListener(ApesModelListener l) 
+	{
+		mListenerList.add(ApesModelListener.class, l);
+	}
+	
+	/**
+	 * Removes a listener previously added with addApesModelListener()
+	 * 
+	 * @param l
+	 */
+	public void removeApesModelListener(ApesModelListener l) 
+	{
+		mListenerList.remove(ApesModelListener.class, l);
 	}
 	
 	/**
@@ -94,6 +135,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	
 	/**
 	 * Set a new process
+	 * 
 	 * @param ap the process
 	 */
 	public void setProcess(ApesProcess ap)
@@ -103,23 +145,20 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			// if there is no component, create the interfaces then create a new component
 			if(ap.getComponent() == null)
 			{
-				ModelElement me = new ProcessComponent(mConfig.getProperty("Component"));
-				ap.addModelElement(me);
-				fireModelUpdated(new InsertEvent(me,ap,null));
-
-				me = new ContextDiagram(mConfig.getProperty("ContextDiagram"));
-				Context.getInstance().getProject().getGraphModel((SpemDiagram)me);				
-				ap.getComponent().addModelElement(me);
-				fireModelUpdated(new InsertEvent(me,ap.getComponent(),null));
+				ProcessComponent pc = new ProcessComponent(mConfig.getProperty("Component"));
+				ap.addModelElement(pc);
+				ContextDiagram cd = new ContextDiagram(mConfig.getProperty("ContextDiagram"));
+				Context.getInstance().getProject().getGraphModel(cd);				
+				pc.addModelElement(cd);
+				WorkDefinitionDiagram wd = new WorkDefinitionDiagram(mConfig.getProperty("WorkDefinitionDiagram"));
+				Context.getInstance().getProject().getGraphModel(wd);				
+				pc.addModelElement(wd);
 				
-				me = new WorkDefinitionDiagram(mConfig.getProperty("WorkDefinitionDiagram"));
-				ap.getComponent().addModelElement(me);
-				fireModelUpdated(new InsertEvent(me,ap.getComponent(),null));
+				insertInModel(new Object[]{pc,cd,wd}, new Object[]{ap,pc,pc}, null);
+				insertInModel(new Object[]{cd,wd}, new Object[]{pc,pc}, null);
 				
 				loadProvidedInterface(ap);
 				loadRequiredInterface(ap);
-				
-				loadProcess(ap);	
 			}
 			else
 			{
@@ -131,7 +170,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			initNewProcess(ap);
 		}
 	}
-	
+
 	private void registerAllDiagrams(IPackage p)
 	{
 		for( int i = 0; i < p.modelElementCount(); i++ )
@@ -161,7 +200,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		{	
 			me = new ApesProcess.ProvidedInterface(mConfig.getProperty("Provided"));
 			ap.addModelElement(me);
-			fireModelUpdated(new InsertEvent(me,ap,null));
+			insertInModel(new Object[]{me}, new Object[]{ap}, null);
 		}
 		else
 		{
@@ -176,14 +215,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				me = ref.getReference();
 				ap.getProvidedInterface().removeModelElement(ref);
 				
-				Map apply = GraphConstants.createMap();
-				Map attr = GraphConstants.createMap();
+				Map apply = ApesGraphConstants.createMap();
+				Map attr = ApesGraphConstants.createMap();
 				Rectangle bounds = new Rectangle(350,i*75+10,50,50);
 				GraphConstants.setBounds(attr,bounds);
-				apply.put("Attributes",attr);
+				ApesGraphConstants.setAttributes(apply, attr);
 				
-				update(createInsertCommandToSpemDiagram(diag,me,apply));
-				update(createInsertCommandToSpemDiagram(diag,c,me,null));
+				insertIn(diag, new Object[]{me, new Link(c,me)}, apply);
 				--i;
 			}
 		}
@@ -203,8 +241,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		{	
 			me = new ApesProcess.RequiredInterface(mConfig.getProperty("Required"));
 			ap.addModelElement(me);
-			fireModelUpdated(new InsertEvent(me,ap,null));
-			System.out.println("requiredInterfaceNull ");
+			insertInModel(new Object[]{me}, new Object[]{ap}, null);
 		}
 		else
 		{
@@ -213,21 +250,18 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			
 			int i = ap.getRequiredInterface().modelElementCount()-1;
 			int index = 0;
-			System.out.println("requiredInterfaceElement ");
 			while( i >= 0 )
 			{
 				ref = (WorkProductRef)ap.getRequiredInterface().getModelElement(index);
 				me = ref.getReference();
 				ap.getRequiredInterface().removeModelElement(ref);
-				System.out.println("requiredInterfaceElement "+i);
 				Map apply = GraphConstants.createMap();
 				Map attr = GraphConstants.createMap();
 				Rectangle bounds = new Rectangle(10,i*75+10,50,50);
 				GraphConstants.setBounds(attr,bounds);
-				apply.put("Attributes",attr);
+				ApesGraphConstants.setAttributes(apply, attr);
 				
-				update(createInsertCommandToSpemDiagram(diag,me,apply));
-				update(createInsertCommandToSpemDiagram(diag,me,c,null));
+				insertIn(diag, new Object[]{me, new Link(me, c)}, apply);				
 				--i;
 			}
 		}
@@ -240,79 +274,29 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	private void initNewProcess( ApesProcess ap )
 	{
 		String name = mConfig.getProperty("Component");
-		ModelElement me = new ProcessComponent(name!=null?name:"");
-		update(createInsertCommand(me,ap,null));
-		
+		ProcessComponent pc = new ProcessComponent(name!=null?name:"");
 		name = mConfig.getProperty("ContextDiagram");
-		me = new ContextDiagram(name!=null?name:"");
-		update(createInsertCommand(me,ap.getComponent(),null));
-		
+		ContextDiagram cd = new ContextDiagram(name!=null?name:"");
 		name = mConfig.getProperty("WorkDefinitionDiagram");
-		me = new WorkDefinitionDiagram(name!=null?name:"");
-		update(createInsertCommand(me,ap.getComponent(),null));
-		
+		WorkDefinitionDiagram wd = new WorkDefinitionDiagram(name!=null?name:"");
 		name = mConfig.getProperty("Provided");
-		me = new ApesProcess.ProvidedInterface(name!=null?name:"");
-		update(createInsertCommand(me,ap,null));
-		
+		ApesProcess.ProvidedInterface api = new ApesProcess.ProvidedInterface(name!=null?name:"");
 		name = mConfig.getProperty("Required");
-		me = new ApesProcess.RequiredInterface(name!=null?name:"");
-		update(createInsertCommand(me,ap,null));
+		ApesProcess.RequiredInterface ari = new ApesProcess.RequiredInterface(name!=null?name:"");
+		
+		insertInModel(new Object[]{pc}, new Object[]{ap}, null);
+		insertInModel(new Object[]{cd,wd}, new Object[]{pc,pc}, null);		
+		insertInModel(new Object[]{api,ari}, new Object[]{ap,ap}, null);
+		GraphModel graph = Context.getInstance().getProject().getGraphModel(wd);
+		Context.getInstance().getTopLevelFrame().openDiagram(graph);
 	}
-	
-	/**
-	 * Load an existing process
-	 * @param parent
-	 */
-	private void loadProcess( IPackage parent )
-	{
-		for( int i = 0; i < parent.modelElementCount(); i++ )
-		{	
-			fireModelUpdated(new InsertEvent(parent.getModelElement(i),parent,null));
-			if( parent.getModelElement(i) instanceof IPackage )
-			{
-				loadProcess((IPackage)parent.getModelElement(i));
-			}
-			if( parent.getModelElement(i) instanceof SpemDiagram )
-			{
-				mDiagrams.add(parent.getModelElement(i));
-			}
-		}
-	}
-	
-	/**
-	 * Adds a listener for the Mediator event posted after the model changes
-	 * 
-	 * @param l the listener to add
-	 * @return true if the listener can be added, false otherwise
-	 */
-	public boolean addApesMediatorListener( Listener l )
-	{
-		if( !mListeners.contains( l ) )
-		{
-			mListeners.add( l );
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Removes a listener previously added with addApesMediatorListener
-	 * 
-	 * @param l the listener to add
-	 * @return true if the listener can be added, false otherwise
-	 */
-	public boolean removeApesMediatorListener( Listener l )
-	{
-		return mListeners.remove( l );
-	}
-
+		
 	/**
 	 * Clear all current ApesMediator listeners
 	 */
 	public void clearListeners()
 	{
-		mListeners.clear();
+		mListenerList = new EventListenerList();
 	}
 	
 	/**
@@ -325,950 +309,58 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	}
 	
 	/**
-	 * Notify all listeners that have registered interest for
-	 * notification on this event type.  
+	 * Sets the source of a link
 	 * 
-	 * @param e the event
+	 * @param link the link to set the source
+	 * @param source the source
 	 */
-	protected void fireModelUpdated( Event e )
+	public void setSource(Object link, Object source)
 	{
-		for( int i = 0; i < mListeners.size(); i++ )
-		{
-			((Listener) mListeners.get( i )).updated( e );
-		}
-	}
-	
-	/**
-	 * Return a command that represents an insert
-	 * 
-	 * @param to_insert the object to insert in the model
-	 * @param parent the parent of the inserted object
-	 * @param attr a map containing informations passing by the object which calls the ApesMediator.
-	 * @return a command that represents an insert
-	 */
-	public Command createInsertCommand( Object to_insert, Object parent, Map attr )
-	{
-		return new InsertCommand( null, to_insert, null, null, parent, attr );
-	}
-	
-	/**
-	 * Return a command that represents an insert
-	 * 
-	 * @param diagram the diagram containing the object to insert
-	 * @param to_insert the object to insert
-	 * @param attr a map containing informations passing by the object which calls the ApesMediator.
-	 * @return a command that represents an insert
-	 */
-	public Command createInsertCommandToSpemDiagram( SpemDiagram diagram, Object to_insert, Map attr )
-	{
-		return new InsertCommand( diagram, to_insert, null, null, null, attr );
-	}
-	
-	/**
-	 * Return a command that represents an insert of a link
-	 * 
-	 * @param diagram  the diagram containing the object to insert
-	 * @param source the source of the transition
-	 * @param target the target of the transition
-	 * @param attr a map containing informations passing by the object which calls the ApesMediator.
-	 * @return a command that represents an insert
-	 */
-	public Command createInsertCommandToSpemDiagram( SpemDiagram diagram, Object source, Object target, Map attr )
-	{
-		return new InsertCommand( diagram, null, source, target, null, attr );
-	}
-	
-	/**
-	 * Return a command that represents a remove
-	 * 
-	 * @param to_remove the objects to remove from the model
-	 * @param attr a map containing informations passing by the object which calls the ApesMediator.
-	 * @return a command that represents a remove
-	 */
-	public Command createRemoveCommand( Object[] to_remove, Map attr )
-	{
-		return new RemoveCommand( null, to_remove, null, null, attr );
-	}
-	
-	/**
-	 * Return a command that represents a remove
-	 * 
-	 * @param diagram the diagram containing the objects to remove
-	 * @param to_remove the objects to remove
-	 * @param sources the sources of the links to remove
-	 * @param targets the targets of the links to remove
-	 * @param attr a map containing informations passing by the object which calls the ApesMediator.
-	 * @return a command that represents a remove
-	 */
-	public Command createRemoveCommand( SpemDiagram diagram, Object[] to_remove, Object[] sources, Object[] targets, Map attr )
-	{
-		return new RemoveCommand( diagram, to_remove, sources, targets, attr );
-	}
-	
-	/**
-	 * Return a command that represents a change
-	 *  
-	 * @param to_change the object which change
-	 * @param newValue the new value of the object
-	 * @param attr a map containing informations passing by the object which calls the ApesMediator.
-	 * @return a command that represents a remove
-	 */
-	public Command createChangeCommand( Object to_change, String newValue, Map attr )
-	{
-		return new ChangeCommand( to_change, newValue, attr );
-	}
-	
-	/**
-	 * Return a command that represents a move
-	 * 
-	 * @param to_move the object to move
-	 * @param newParent the new parent of the object
-	 * @param attr a map containing informations passing by the object which calls the ApesMediator.
-	 * @return a command that represents a remove
-	 */
-	public Command createMoveCommand( Object to_move, Object newParent, Map attr )
-	{
-		return new MoveCommand( to_move, newParent, attr );
-	}
-	
-	/**
-	 * execute a list of commands. All commands are undo in one action
-	 * 
-	 * @param commands the commands to execute
-	 */
-	public void execute( Vector commands )
-	{
-		if( commands == null )
-		{
-			return;
-		}
-		
-		if( commands.get(0) instanceof Command )
-		{
-			update( (Command)commands.get(0), false );
-		}
-		
-		for( int i = 1; i < commands.size(); i++ )
-		{
-			if( commands.get(i) instanceof Command )
-			{
-				update( (Command)commands.get(i), true );
-			}
-		}
-	}
-	
-	/**
-	 * Call this function when you want to modify the model
-	 * 
-	 * @param c the command representing a change to do in the model
-	 */
-	public void update( Command c )
-	{
-		update( c, false );
-	}
-	
-	protected void update( Command c, boolean linked )
-	{
-		if( c instanceof InsertCommand )
-		{
-			insert( (InsertCommand) c, linked );
-		}
-		else if( c instanceof RemoveCommand )
-		{
-			remove( (RemoveCommand) c, linked );
-		}
-		else if( c instanceof MoveCommand )
-		{
-			move( (MoveCommand) c, linked );
-		}
-		else if( c instanceof ChangeCommand )
-		{
-			change( (ChangeCommand) c, linked );
-		}
-	}
-	
-	/**
-	 * Insert a model element into a package
-	 * @param me the element to insert
-	 * @param p the concerned package
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param extraActions events or commands to proceed
-	 */
-	protected void insertModelElementToIPackage( ModelElement me, IPackage p, Map attr, Vector extraActions )
-	{
-		if( !p.containsModelElement( me ) && me.getParent() == null )
-		{
-			if(p.addModelElement(me))
-			{	
-				if(me instanceof ApesWorkDefinition)
-				{
-					extraActions.add(createInsertCommand(new ActivityDiagram(mConfig.getProperty("ActivityDiagram")),me,null));
-					extraActions.add(createInsertCommand(new FlowDiagram(mConfig.getProperty("FlowDiagram")),me,null));
-				}
-				extraActions.add( new InsertEvent( me, p, attr ) );
-			}
-		}
-	}
-	
-
-	/**
-	 * Insert an element in the model
-	 * @param parent the parent 
-	 * @param e the element
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param extraActions events or commands to proceed
-	 */
-	protected void insertElementToModel( Object parent, Element e, Map attr, Vector extraEvents )
-	{
-		if( ( e instanceof Activity
-				|| e instanceof FlowDiagram
-				|| e instanceof ActivityDiagram )
-			&& !( parent instanceof ApesWorkDefinition ) ) 
-		{
-			return;
-		}
-		
-		if( parent instanceof IPackage && e instanceof ModelElement )
-		{
-			insertModelElementToIPackage((ModelElement)e, (IPackage)parent, attr, extraEvents);
-		}
-	}
-	
-	/**
-	 * Insert a link in a diagram
-	 * @param diagram the concerned diagram
-	 * @param source the source of the link
-	 * @param target the target of the link
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param extraActions events or commands to proceed
-	 */
-	protected void insertLinkToDiagram( SpemDiagram diagram, ModelElement source, ModelElement target, 
-											   Map attr, Vector extraActions )
-	{
-		if( diagram.areLinkableModelElements(source, target))
-		{	
-			diagram.createLinkModelElements(source, target);
-			
-			if( diagram instanceof ActivityDiagram )
-			{
-				extraActions.add( new InsertEvent( diagram, ((ActivityDiagram)diagram).getTransition(source, target), null, true, attr ) );
-				return;
-			}
-			else if( diagram instanceof ContextDiagram )
-			{
-				WorkProductRef ref;
-				ApesProcess ap = Context.getInstance().getProject().getProcess();
-				if( source instanceof WorkProduct )
-				{
-					ref = new WorkProductRef((WorkProduct)source);
-					extraActions.add( createInsertCommand(ref, ap.getRequiredInterface(), null));
-				}
-				else
-				{
-					ref = new WorkProductRef((WorkProduct)target);
-					extraActions.add( createInsertCommand(ref, ap.getProvidedInterface(), null));
-				}
-			}
-			
-			Map link = new HashMap();
-			link.put( source, target );
-			extraActions.add( new InsertEvent( diagram, link, attr ) );
-		}
-	}
-	
-	/**
-	 * Inser a model element in a diagram
-	 * @param diagram the concerned diagram
-	 * @param me the element to insert
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param extraActions events or commands to proceed
-	 */
-	protected void insertModelElementToDiagram( SpemDiagram diagram, ModelElement me, Map attr, Vector extraActions )
-	{
-		boolean isAlreadyExist = me.getParent() == null ? false : true;
-
-		if( diagram.addModelElement( me ) )
-		{
-			if( me.getParent() == null )
-			{
-				if( diagram instanceof FlowDiagram && ( me instanceof WorkProduct || me instanceof ProcessRole ) )
-				{
-					((ModelElement)diagram.getParent()).getParent().addModelElement( me );
-				}
-				else if( diagram instanceof WorkDefinitionDiagram )
-				{
-					extraActions.add(createInsertCommand(me,diagram.getParent(),null));
-					extraActions.add(new InsertEvent( diagram, me, null, true, attr ));
-					return;
-				}
-				else
-				{
-					diagram.getParent().addModelElement( me );
-				}
-			}
-			extraActions.add(new InsertEvent( diagram, me, me.getParent(), isAlreadyExist, attr ));
-		}
-	}
-	
-	/**
-	 * Insert an element in the model
-	 * @param diagram the concerned diagram or null
-	 * @param element the element to insert or null
-	 * @param source the source of a link or null
-	 * @param target the target of a link or null
-	 * @param parent the parent of the element or null
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param extraActions events or commands to proceed
-	 */
-	protected void insert( SpemDiagram diagram, Object element, 
-								  Object source, Object target, Object parent, Map attr, 
-								  Vector extraActions )
-	{
-		//System.out.println("ApesMediator::insert "+diagram+" "+element+" "+parent);
-		if( element != null )
-		{
-			// add an element in a diagram
-			if( diagram != null  && element instanceof ModelElement )
-			{
-				insertModelElementToDiagram( diagram, (ModelElement)element, attr, extraActions );
-			}
-			// add a modelElement in a package
-			else if( element instanceof Element )
-			{
-				insertElementToModel( parent, (Element) element, attr, extraActions );				
-			}
-		}
-		// add a transition beetween two elements in a diagram
-		if( source != null && target != null 
-				&& source instanceof ModelElement && target instanceof ModelElement )
-		{
-			insertLinkToDiagram( diagram, (ModelElement)source, (ModelElement)target, attr, extraActions );
-		}
-	}
-	
-	/**
-	 * Insert new element or link into the model according to the InsertCommand.
-	 * Emit an insertEvent if the model changed.
-	 * 
-	 * @param c the command which contains the element or link to insert
-	 */
-	protected void insert( InsertCommand c, boolean linkedEvent )
-	{
-		//System.out.println("Mediator::insert "+c);
-		Vector extraActions = new Vector();
-		insert( c.getDiagram(), c.getElement(), c.getSource(), c.getTarget(), c.getParent(), c.getAttributes(), extraActions );
-		
-		if( extraActions.size() > 0 )
-		{
-			for( int i = extraActions.size()-1; i >= 0; i-- )
-			{	
-				Context.getInstance().getUndoManager().save();
-				
-				if(extraActions.get(i) instanceof Event)
-				{	
-					InsertEvent event = (InsertEvent) extraActions.get(i);
-					fireModelUpdated( event );
-					InsertedUndo edit = null;
-				
-					if( event.isAlreadyExistInModel() )
-					{
-						edit = new InsertedUndo( event.getDiagram(), event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
-					}
-					else
-					{
-						edit = new InsertedUndo( null, event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
-					}
-				
-					edit.setIsChained( i == extraActions.size()-1 ? linkedEvent : true );
-					postEdit( edit );
-				}
-				else if(extraActions.get(i) instanceof InsertCommand)
-				{
-					insert((InsertCommand)extraActions.get(i),true);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Move an element of the model according to the MoveCommand.
-	 * Emit a MoveEvent if the model changed.
-	 * 
-	 * @param c the command which contains the element to move
-	 */
-	protected void move( MoveCommand c, boolean chainedEdit )
-	{
-		//System.out.println("Mediator::move "+c);
-		Context.getInstance().getUndoManager().save();
-			
-		MoveEvent e = move( c.getElement(), c.getNewParent(), c.getAttributes() );
-		if( e != null )
-		{
-			fireModelUpdated( e );
-		 	
-			MovedUndo edit = new MovedUndo( (ModelElement)c.getElement(), (IPackage)e.getOldParent(), (IPackage)e.getNewParent(), Context.getInstance().getUndoManager().restore());
-			edit.setIsChained(chainedEdit);			
-			postEdit( edit );
-		}
-		else
-		{
-			Context.getInstance().getUndoManager().restore();
-		}
+	    if(link instanceof Link)
+	    {
+	        ((Link)link).setSource(source);
+	    }
 	}
 
 	/**
-	 * Move an element to a new parent 
-	 * @param element the element to move
-	 * @param newParent the new parent
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @return the corresponding event
-	 */
-	protected MoveEvent move( Object element, Object newParent, Map attr )
-	{
-		if( element instanceof Activity || element instanceof FlowDiagram 
-				|| element instanceof ActivityDiagram || element instanceof StateMachine)
-		{
-			return null;
-		}
-		
-		ModelElement me = null;
-		int oldIndex = -1, newIndex = -1;
-		IPackage p_new = null , p_old = null;
-		
-		// move ModelElement into another Package
-		if ( element instanceof ModelElement  
-			&& ((ModelElement) element).getParent() instanceof IPackage
-			&& newParent instanceof IPackage )
-		{
-			if( element instanceof ApesProcess.Interface
-				|| element instanceof WorkProductRef
-				|| newParent instanceof ApesProcess
-				|| newParent instanceof ApesProcess.Interface )
-			{
-				ErrorManager.getInstance().println( mResource.getString("errorMoveElement"));
-				return null;
-			}
-			
-			me = (ModelElement) element;
-			p_new = (IPackage) newParent;
-			p_old = me.getParent();
-					
-			if( ( p_new instanceof SPackage && p_old instanceof ApesWorkDefinition )
-				|| ( p_new instanceof ApesWorkDefinition && (p_old instanceof SPackage || p_old instanceof ApesProcess.Interface)) ) 
-			{
-				return null;
-			}
-			
-			oldIndex = getIndexOfChild( p_old , me );
-			
-			p_old.removeModelElement(me);
-			p_new.addModelElement(me);
-			
-			newIndex = getIndexOfChild( p_new , me );
-			
-			return new MoveEvent( me, p_old, oldIndex, p_new, newIndex, attr );
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Call this function when a diagram is destroy an you want to delete the links it contains
+	 * Sets the target of a link
 	 * 
-	 * @param diagram
-	 * @param sources
-	 * @param targets
+	 * @param link the link to set the target
+	 * @param source the target
 	 */
-	public void removeDiagramLinksAfterDeleted( SpemDiagram diagram, Object[] sources, Object[] targets )
+	public void setTarget(Object link, Object target)
 	{
-		for( int i = 0; i < sources.length; i++ )
-		{
-			diagram.removeLinkModelElements( (ModelElement) sources[i], (ModelElement) targets[i] );
-		}
-		
-		postEdit( new RemovedUndo( diagram, null, sources, targets, null, null ) );
+	    if(link instanceof Link)
+	    {
+	        ((Link)link).setTarget(target);
+	    }
 	}
-	
+
 	/**
-	 * Remove elements or links from the model according to the RemoveCommand.
-	 * Emit a removeEvent if the model changed.
+	 * Returns true if the object passed in parameter should go in the tree view
 	 * 
-	 * @param c the command which contains the elements or links to remove
+	 * @param o an object of the model
+	 * @return true if the object should go in the tree view or null
 	 */
-	
-	protected boolean removeLinksFromDiagram( SpemDiagram diagram, ModelElement source, ModelElement target, Vector events )
+	public boolean shouldGoInTree(Object o)
 	{
-		if( diagram.existsLinkModelElements( source, target ) )
+		if(o instanceof Activity || o instanceof ApesProcess || o instanceof ApesWorkDefinition
+			|| o instanceof ProcessComponent || o instanceof ProcessRole || o instanceof StateMachine 
+			|| o instanceof WorkDefinition || o instanceof WorkProduct || o instanceof WorkProductRef 
+			|| o instanceof SPackage || o instanceof ActivityDiagram || o instanceof ContextDiagram 
+			|| o instanceof FlowDiagram || o instanceof WorkDefinitionDiagram || o instanceof ResponsabilityDiagram
+			|| o instanceof ApesProcess.ProvidedInterface || o instanceof ApesProcess.RequiredInterface)
 		{
-			diagram.removeLinkModelElements( source, target );
-			
-			if( diagram instanceof ContextDiagram )
-			{
-				Map parent = new HashMap();
-				Map index = new HashMap();
-				ApesProcess ap = Context.getInstance().getProject().getProcess();
-				WorkProductRef toRemove;
-
-				if( source instanceof WorkProduct )
-				{
-					toRemove = ap.getRequiredInterface().getWorkProductRef((WorkProduct)source);
-					if( toRemove != null )
-					{	
-						parent.put(toRemove, toRemove.getParent());
-						index.put(toRemove, new Integer(getIndexOfChild(toRemove.getParent(),toRemove)));
-						toRemove.getParent().removeModelElement(toRemove);
-						events.add(new RemoveEvent( new Object[]{toRemove}, null,null,parent,index,null));
-					}
-				}
-				else
-				{
-					toRemove = ap.getProvidedInterface().getWorkProductRef((WorkProduct)target);
-					if( toRemove != null )
-					{	
-						parent.put(toRemove, toRemove.getParent());
-						index.put(toRemove, new Integer(getIndexOfChild(toRemove.getParent(),toRemove)));
-						toRemove.getParent().removeModelElement(toRemove);
-						events.add(new RemoveEvent( new Object[]{toRemove}, null,null,parent,index,null));				
-					}
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Remove elements and links from diagram
-	 * @param diagram the concerned diagram
-	 * @param elements the elements to remove
-	 * @param sources the sources to remove
-	 * @param targets the targets to remove
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
-	 */
-	protected void removeFromDiagram( SpemDiagram diagram, Object[] elements, Object[] sources, Object[] targets, Map attr, Vector events )
-	{
-		HashSet removeElements = new HashSet();
-		Vector removedSources = new Vector(),
-				removedTargets = new Vector();
-
-		if( sources != null && sources.length == targets.length )
-		{
-			for( int i = 0; i < sources.length; i++ )
-			{
-				if( sources[i] instanceof ModelElement && targets[i] instanceof ModelElement &&
-					removeLinksFromDiagram( diagram, (ModelElement) sources[i], (ModelElement) targets[i], events ) )
-				{
-					removedSources.add(sources[i]); 
-					removedTargets.add(targets[i]);
-				}
-			}
-		}
-		
-		if( elements != null )
-		{
-			for( int i = 0; i < elements.length; i++ )
-			{
-				if( elements[i] instanceof ModelElement )
-				{
-					ModelElement me = (ModelElement) elements[i];
-					
-					if( diagram.containsModelElement( me ) )
-					{
-						for( int u = 0; u < diagram.modelElementCount(); u++ )
-						{
-							if( removeLinksFromDiagram( diagram, me, diagram.getModelElement( u ), events ) )
-							{
-								removedSources.add(me);
-								removedTargets.add(diagram.getModelElement( u ));
-							}
-							if( removeLinksFromDiagram( diagram, diagram.getModelElement( u ) , me, events ) )
-							{
-								removedSources.add(diagram.getModelElement( u ));
-								removedTargets.add(me);
-							}	
-						}
-						
-						if( diagram.removeModelElement( me ) )
-						{	
-							removeElements.add(me);
-						}
-					}
-				}
-			}
-		}
-
-		if( removeElements.size() > 0 || removedSources.size() > 0 )
-		{	
-			events.add(new RemoveEvent( diagram, removeElements.toArray(), removedSources.toArray(), removedTargets.toArray(), attr ) );
-		}
-	}
-	
-	/**
-	 * Remove an element from all diagrams
-	 * @param element the element to remove
-	 * @param events the corresponding events
-	 */
-	protected void removeElementFromDiagrams( Element element, Vector events )
-	{
-		for( int i = 0; i < mDiagrams.size(); i++ )
-		{
-			removeFromDiagram( (SpemDiagram) mDiagrams.get(i), new Object[]{element}, null, null, null, events );
-		}
-	}
-	
-	/**
-	 * Remove an element from the model
-	 * @param element the element to remove
-	 * @param parent the parent
-	 * @param index the index of the element
-	 * @return true if the element was removed, false otherwise
-	 */
-	protected boolean removeElementFromModel( Element element, Map parent, Map index )
-	{
-		ModelElement me;
-		
-		if( element instanceof ModelElement )
-		{
-			me = (ModelElement) element;
-			
-			if( me.getParent() != null )
-			{
-				parent.put( me, me.getParent() );
-				index.put( me, new Integer(getIndexOfChild( me.getParent() , me)));
-				me.getParent().removeModelElement( me );
-				
-				if( me instanceof SpemDiagram )
-				{
-					SpemDiagram diagram = (SpemDiagram) me;
-					parent.put("Diagram"+((Element)diagram).getID(), Context.getInstance().getProject().getGraphModel( diagram ));
-					Context.getInstance().getProject().removeGraphModel( diagram );
-					mDiagrams.remove( diagram );
-				}		
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Remove elements from model
-	 * @param elements the elements to remove
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
-	 */
-	protected void removeElementsFromModel( Object[] elements, Map attr, Vector events )
-	{
-		ModelElement me = null;
-		Map parents = new HashMap(),
-				indices = new HashMap();
-		Vector removedElements = new Vector();
-		
-		for( int i = 0; i < elements.length; i++ )
-		{	
-			if( elements[i] instanceof IPackage )
-			{
-				IPackage pack = (IPackage) elements[i];
-				
-				if( pack.modelElementCount() > 0 )
-				{	
-					Vector temp = new Vector();
-					for( int j = 0; j < pack.modelElementCount(); j++ )
-					{
-						temp.add(pack.getModelElement(j));
-					}
-					
-					removeElementsFromModel( temp.toArray(), null, events );
-				}
-			}
-			
-			if( elements[i] instanceof Element && !( elements[i] instanceof WorkProductRef ) )
-			{
-				if( removeElementFromModel( (Element)elements[i], parents, indices ) )
-				{
-					removeElementFromDiagrams( (Element)elements[i], events);
-					removedElements.add(elements[i]);				
-				}
-			}
-		}
-		
-		if( removedElements.size() > 0 )
-		{
-			events.add(new RemoveEvent(removedElements.toArray(), null, null, parents, indices, attr ));
-		}		
-	}
-	
-	/**
-	 * Remove elements or links from the model
-	 * @param diagram the concerned diagrams or null
-	 * @param elements the elements to remove or null
-	 * @param sources the sources to remove or null
-	 * @param targets the targets to remove or null
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
-	 */
-	protected void remove( SpemDiagram diagram, Object[] elements,  Object[] sources, Object[] targets, Map attr, Vector events )
-	{
-		if( diagram == null )
-		{
-			removeElementsFromModel( elements, attr, events );
-		}
-		else
-		{
-			removeFromDiagram( diagram, elements, sources, targets, attr, events );
-		}
-	}
-	
-	/**
-	 * Remove elements or links from the model according to the RemoveCommand.
-	 * Emit an RemoveEvent if the model changed.
-	 * 
-	 * @param c the command which contains the elements or links to remove
-	 */
-	protected void remove( RemoveCommand c, boolean linkedEvent )
-	{
-		//System.out.println("Mediator::remove "+c);	
-		Vector events = new Vector();
-		remove( c.getDiagram(), c.getElements(), c.getSources(), c.getTargets(), c.getAttributes(), events );
-		
-		if( events != null )
-		{
-			RemoveEvent e;
-			for( int i = 0; i < events.size(); i++ )
-			{	
-				Context.getInstance().getUndoManager().save();
-				
-				e = (RemoveEvent) events.get(i);
-				
-				fireModelUpdated( e );
-			
-				RemovedUndo edit = new RemovedUndo( e.getDiagram(), e.getElements(), e.getSources(), e.getTargets(), e.getParents(),  Context.getInstance().getUndoManager().restore() );
-				edit.setIsChained( i == 0 ? linkedEvent : true );
-				postEdit( edit );
-			}
-		}
-	}
-	
-	/**
-	 * Change the name of an element or link into the model according to the ChangeCommand.
-	 * Emit an ChangeEvent if the model changed.
-	 * 
-	 * @param c the command which contains the element or link to rename
-	 */
-	protected void change( ChangeCommand c, boolean chainedEdit )
-	{
-		//System.out.println("mediator edit "+c);
-		Vector events = new Vector();
-		change( c.getElement(), c.getNewValue(), c.getAttributes(), events );
-		
-		ChangeEvent event = null;
-		for( int i = events.size()-1; i >= 0; i-- )
-		{
-			event = (ChangeEvent)events.get(i);
-			
-			Context.getInstance().getUndoManager().save();
-			
-			fireModelUpdated( event );
-			
-			ChangedUndo edit = new ChangedUndo( event.getElement(), event.getOldValue(), event.getNewValue(), Context.getInstance().getUndoManager().restore() );
-			edit.setIsChained( i == events.size()-1 ? chainedEdit : true );
-			postEdit( edit );
-		}
-	}
-	
-	/**
-	 * Change the name of an element
-	 * @param to_change the element to change
-	 * @param newValue the new name
-	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
-	 */
-	protected void change( Object to_change, String newValue, Map attr, Vector events )
-	{
-		if( to_change instanceof WorkProductRef )
-		{
-			return;
-		}
-
-		if( to_change instanceof Element && newValue != null && !newValue.equals("") )
-		{
-			Element element = (Element) to_change;
-			
-			if( isDuplicatedName( element, newValue ) )
-			{
-				ErrorManager.getInstance().println( ResourceManager.getInstance().getString("errorDuplicatedName"));
-				return;
-			}
-			else
-			{
-				if( element instanceof WorkProduct )
-				{
-					if(((WorkProduct)element).getReferences() != WorkProduct.NO_REFERENCES )
-					{
-						changeWorkProductName((WorkProduct)element, newValue );
-					}
-					
-					changeWorkProductState((WorkProduct)element, events);
-				}
-				
-				String oldName = element.getName();
-				element.setName( newValue );
-				
-				events.add( new ChangeEvent( element, oldName, newValue, attr ) );
-			}
-		}
-		else if( to_change instanceof ActivityDiagram.Transition )
-		{
-			ActivityDiagram.Transition t = (ActivityDiagram.Transition)to_change;
-			if( ! t.getLabel().equals( newValue ) )
-			{
-				String oldName = t.getLabel();
-				t.setLabel( newValue );
-				
-				events.add( new ChangeEvent( t, oldName, newValue, attr ) );
-			}
-		}
-	}
-	
-	protected void changeWorkProductState( WorkProduct w, Vector events )
-	{
-		for(int i = 0; i < w.behaviorCount(); i++ )
-		{
-			events.add(new ChangeEvent(w.getBehavior(i), w.getBehavior(i).getName(), w.getBehavior(i).getName(), null) );
-		}
-	}
-	
-	protected void changeWorkProductName( WorkProduct w, String newValue )
-	{
-		String reference = ConfigManager.getInstance().getProperty("Reference");
-		ApesProcess ap = Context.getInstance().getProject().getProcess();
-		
-		WorkProductRef ref = ap.getProvidedInterface().getWorkProductRef(w);
-		
-		if( ref != null )
-		{
-			ref.setName(reference+newValue);
-		}
-		else
-		{
-			ref = ap.getRequiredInterface().getWorkProductRef(w);
-			ref.setName(reference+newValue);
-		}
-	}
-	
-	/**
-	 * Find the index of a child
-	 *
-	 * @param parent the container
-	 * @param child the child to evaluate
-	 * @return the index of the child or -1 if child is not in parent
-	 */
-	public int getIndexOfChild( Object parent, Object child )
-	{
-		if(parent instanceof ApesProcess.Interface && child instanceof WorkProductRef )
-		{
-			ApesProcess.Interface in = (ApesProcess.Interface)parent;
-			WorkProductRef ref = (WorkProductRef)child;
-			
-			for( int i = 0; i < in.modelElementCount(); i++ )
-			{
-				if( ref.getReference() == ((WorkProductRef)in.getModelElement(i)).getReference() )
-				{
-					return i;
-				}
-			}
-		}
-		
-		if(parent instanceof IPackage)
-		{
-			IPackage p = (IPackage) parent;
-
-			for(int i=0; i<p.modelElementCount(); i++)
-			{
-				if(p.getModelElement(i)==child)
-				{
-					return i;
-				}
-			}
-		}
-		
-		return -1;
-	}
-
-	/**
-	 * Check if element can have the new name passing in parameter
-	 * 
-	 * @param e the element which wants to change its name
-	 * @param value the new name
-	 * @return true if the new name is valid, false otherwise
-	 */
-	protected boolean isDuplicatedName(Element e, String value)
-	{
-		if(e instanceof ModelElement)
-		{
-			ModelElement me = (ModelElement) e;
-			IPackage p = me.getParent();
-
-			if( p == null )
-			{
-				return false;
-			}
-			
-			for(int i=0; i<p.modelElementCount(); i++)
-			{
-				if(p.getModelElement(i).getName().equals(value))
-				{
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Get a child of a container by giving its index
-	 *
-	 * @param parent the container
-	 * @param index the index of the child
-	 * @return the chil or null if it does not exists
-	 */
-	public Object getChild(Object parent, int index)
-	{
-		if(parent instanceof IPackage)
-		{
-			IPackage p = (IPackage) parent;
-
-			return p.getModelElement(index);
-		}
-
-		return null;
-	}
-	
-	/**
-	 * Get the number of child of a container
-	 *
-	 * @param parent the container
-	 * @return the number of child
-	 */
-	public int getChildCount(Object parent)
-	{
-		if(parent instanceof IPackage)
-		{
-			IPackage p = (IPackage) parent;
-
-			return p.modelElementCount();
-		}
-
-		return 0;
+	        return true;
+	    }
+	    return false;
 	}
 	
 	/**
 	 * Find an element by its id
 	 * 
 	 * @param id the id of the element to find
-	 * @return the corresponding node or null
+	 * @return the corresponding object or null
 	 */
 	public Object findByID( int id )
 	{
@@ -1281,7 +373,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 * 
 	 * @param id the id of the element to find
 	 * @param element the current element
-	 * @return the corresponding node or null
+	 * @return the corresponding object or null
 	 */
 	private Identity findByID( int id, Element element )
 	{
@@ -1306,468 +398,1409 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		return null;
 	}
+
+	/**
+	 * Gets all links in a diagram linked to at least one element of the array passed in parameter
+	 * 
+	 * @param diagram the diagram
+	 * @param elements the elements
+	 * @return a collection of Link
+	 */
+	public Collection getLinks(SpemDiagram diagram, Object[] elements)
+	{
+		if(elements == null)
+			return null;
+		
+	    Set set = new HashSet();
+	    for ( int i = 0; i < elements.length; i++ )
+        {
+	        if(elements[i] != null)
+	        {
+	        	if(!(elements[i] instanceof Link))
+	        	{
+	        		set.addAll(getLinks( diagram, elements[i] ));
+	        	}
+	            else set.add(elements[i]);
+	        }	        
+        }
+	    return set;
+	}
 	
 	/**
-	 * Defines the interface for an object that listens to changes in a ApesMediator
+	 * Gets all links in a diagram linked to with the element passed in parameter
+	 * 
+	 * @param diagram the diagram
+	 * @param elements the element
+	 * @return a collection of Link
 	 */
-	public static interface Listener
-	{
-		public void updated( Event e );
-	}
-	
-	protected abstract class Command implements Serializable
-	{
-		private Map mAttributes;
-		
-		public Command( Map attr )
-		{
-			mAttributes = attr;
-		}
-	
-		public Map getAttributes() { return mAttributes; }
-	}
-	
-	protected class InsertCommand extends Command
-	{
-		private SpemDiagram mDiagram;
-		private Object mElement;
-		private Object mSource, mTarget;
-		private Object mParent;
-		
-		protected InsertCommand( SpemDiagram diagram, Object element, Object source, Object target, Object parent, Map attr )
-		{	
-			super( attr );
-			mDiagram = diagram;
-			mElement = element;
-			mSource= source;
-			mTarget = target;
-			mParent = parent;
-		}
-		
-		public SpemDiagram getDiagram() { return mDiagram; }
-		public Object getElement() { return mElement;	}
-		public Object getSource() { return mSource; }
-		public Object getTarget() { return mTarget; }
-		public Object getParent() { return mParent;	}
-		
-		public String toString()
-		{
-			String result = "element "+mElement;
-			result += " parent "+ mParent+" diagram "+mDiagram;
-			return result;
-		}
-	}
-	
-	protected class MoveCommand extends Command
-	{
-		private Object mElement;
-		private Object mNewParent;
-		
-		protected MoveCommand( Object element, Object newParent, Map attr )
-		{	
-			super( attr );
-			mElement = element;
-			mNewParent = newParent;
-		}
-		
-		public Object getElement() { return mElement; }
-		public Object getNewParent() {	return mNewParent; }
+	public Collection getLinks( SpemDiagram diagram, Object element )
+    {
+	    Set set = new HashSet();
+        if(element instanceof ModelElement)
+        {
+            ModelElement me = (ModelElement) element;
+            if(diagram.containsModelElement(me))
+            {
+            	Collection links = ((SpemGraphAdapter)Context.getInstance().getProject().getGraphModel(diagram)).getLinks(me); 
+                if(links != null)
+                {
+                	set.addAll(links);
+                }
+            }
+        }
+        else if( element instanceof Link )
+        {
+        	set.add(element);
+        }
+        return set;
+    }
 
-		public String toString()
-		{
-			String result = "element "+mElement;
-			result += " newparent "+ mNewParent;
-			return result;
-		}
-	}
-	
-	protected class RemoveCommand extends Command
+	/**
+	 * Gets all elements of a diagram
+	 * 
+	 * @param diagram the diagram
+	 * @return a collection containing all elements in the diagram
+	 */
+	public Collection getAllElements(SpemDiagram diagram)
 	{
-		private Object[] mElements;
-		private Object[] mSources, mTargets;
-		private SpemDiagram mDiagram;
-		
-		protected RemoveCommand( SpemDiagram diagram, Object[] elements, Object[] sources, Object[] targets, Map attr )
-		{
-			super( attr );
-			mDiagram = diagram;
-			mElements = elements;
-			mSources = sources;
-			mTargets = targets;
-		}
-		
-		public SpemDiagram getDiagram(){ return mDiagram; }
-		public Object[] getElements(){ return mElements; }
-		public Object[] getSources() { return mSources; }
-		public Object[] getTargets() { return mTargets; }
-		public Object getSource(int i)
-		{
-			if( i >=0 && i < mSources.length )
-			{
-				return mSources[i];
-			}
+		if(diagram == null)
 			return null;
-		}
-		public Object getTarget(int i)
+		
+		Collection set = new HashSet();
+		for ( int i = 0; i < diagram.modelElementCount(); i++ )
 		{
-			if( i >=0 && i < mTargets.length )
-			{
-				return mTargets[i];
-			}
-			return null;
+			ModelElement me = diagram.getModelElement(i);
+			set.addAll(getLinks(diagram, me));
+			set.add(me);
 		}
-		public String toString()
-		{
-			String result = "concerned ";
-			for( int i = 0; i < mElements.length; i++ )
-				result+=mElements[i]+" , ";
-			result += " diagram "+ mDiagram;
-			return result;
-		}
+		return set;
 	}
 	
-	protected class ChangeCommand extends Command
-	{		
-		private Object mElement;
-		private String mNewValue = "";
-		
-		public String toString()
-		{
-			return "element "+mElement+" newValue "+mNewValue;
-		}
-		
-		protected ChangeCommand( Object element, String newValue, Map attr )
-		{
-			super( attr );
-			mElement = element;
-			mNewValue = (String) newValue;
-		}
-		
-		public Object getElement() {	return mElement; }
-		public String getNewValue() { return mNewValue; }
-	}
-	
-	public class UndoableEdit extends AbstractUndoableEdit
+	/**
+	 * Gets all descendants of elements 
+	 * @param elements
+	 * @return a collection containing all descendants of the elements
+	 */
+	public Collection getDescendants(Object[] elements)
 	{
-		private boolean mIsChained = false;
-		private Vector mExtraEdits = new Vector();
+		if(elements == null)
+			return null;
+		
+        Set set = new HashSet();
+        //get all parts of the tree
+        findRecursiveDependanciesInModel(elements, set);        
+	    return set;
+	}
 	
-		protected UndoableEdit( Vector extraEdits )
+	/**
+	 * Gets an array containing the parents of each elements
+	 * 
+	 * @param elements
+	 * @return an array containing the parents of each elements
+	 */
+    public Object[] getParents( Object[] elements )
+    {
+    	if(elements == null)
+    		return null;
+    	
+        Object[] parents = new Object[elements.length];
+        for ( int i = 0; i < elements.length; i++ )
+        {
+            if(elements != null && elements[i] instanceof ModelElement)
+            {
+                parents[i] = ((ModelElement)elements[i]).getParent();
+            }
+        }
+        return parents;
+    }
+    
+    private void findRecursiveDependanciesInModel(Object[] elements, Collection c)
+    {
+    	for( int i = 0; i < elements.length; i++ )
+        {
+    		if(elements[i] != null)
+    		{
+    			if(elements[i] instanceof IPackage)
+    			{
+    				IPackage p = (IPackage)elements[i];
+    				Object[] tmpElements = new Object[p.modelElementCount()];
+    				for(int j = 0; j < p.modelElementCount(); j++)
+    				{
+    					tmpElements[j] = p.getModelElement(j);
+    				}
+    				findRecursiveDependanciesInModel(tmpElements,c);
+    			}
+    			if(elements[i] instanceof ModelElement)
+    			{
+    				ModelElement me = (ModelElement)elements[i];
+    				Object[] tmpElements = new Object[me.behaviorCount()];
+    				for(int j = 0; j < me.behaviorCount(); j++)
+    				{
+    					tmpElements[j] = me.getBehavior(j);
+    				}
+    				findRecursiveDependanciesInModel(tmpElements,c);
+    			}
+    			c.add(elements[i]);
+    		}
+        }        
+    }
+    
+    /**
+     * Gets an array containing the parents of each elements from a diagram
+     * 
+     * @param diagram
+     * @param elements
+     * @return an array containing the parents of each elements from a diagram
+     */
+    protected Object[] getParentsFromDiagram( SpemDiagram diagram, Object[] elements)
+	{
+	    Vector parents = new Vector();
+	    IPackage parent = diagram.getParent();
+        if(parent != null)
+        {       
+            IPackage parentParent = parent.getParent(); 
+            if(diagram instanceof ContextDiagram
+               || diagram instanceof ResponsabilityDiagram
+               || diagram instanceof WorkDefinitionDiagram)
+            {
+                for(int i = 0; i < elements.length; i++)
+                {
+                    if(elements[i] instanceof ModelElement)
+                    {
+                    	ModelElement me = (ModelElement)elements[i];
+						parents.add(me.getParent()==null?parent:me.getParent());						
+                    }
+                    else
+                    {
+                        parents.add(null);
+                    }
+                }
+            }
+            else if( parentParent != null 
+               && (diagram instanceof ActivityDiagram
+                       || diagram instanceof FlowDiagram))
+            {
+                for(int i = 0; i < elements.length; i++)
+                {
+                	if(elements[i] instanceof ModelElement)
+                	{
+                		ModelElement me = (ModelElement)elements[i];
+                		if(me instanceof Activity)
+                		{
+                			if(me.getParent() == null || me.getParent() == parent)
+                			{
+                				parents.add(parent);
+                			}
+                			else parents.add(null);
+                		}
+                		else
+                		{
+                            parents.add(me.getParent()==null?parentParent:me.getParent());                			
+                		}
+                	}
+                    else
+                    {
+                        parents.add(null);
+                    }
+                }
+            }
+        } 
+        return parents.size()==elements.length?parents.toArray():null;
+	}
+    
+    /**
+     * Returns the reference of a work product
+     *  
+     * @param w the work product
+     * @return the reference of a work product
+     */
+    public WorkProductRef getWorkProductRef(WorkProduct w)
+    {
+        ApesProcess.Interface in = Context.getInstance().getProject().getProcess().getProvidedInterface();
+        WorkProductRef ref = getWorkProductRef(in, w);
+        if(ref != null)
+        {
+            return ref;
+        }
+        in = Context.getInstance().getProject().getProcess().getRequiredInterface();
+        ref = getWorkProductRef(in, w);
+        return ref;
+    }
+    
+    /**
+     * Returns the reference of a work product in an interface
+     *  
+     * @param in the interface where the reference must be found
+     * @param w the work product
+     * @return the reference of a work product
+     */
+    public WorkProductRef getWorkProductRef(ApesProcess.Interface in, WorkProduct w)
+    {
+        for (int i = 0; i < in.modelElementCount(); i++) 
+        {
+            WorkProductRef temp = (WorkProductRef)in.getModelElement(i);
+            if(temp.getReference() == w)
+            {
+                return temp;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Insert the elements in the diagram
+     * 
+     * @param elements the elements to insert
+     * @param parents the parents of each elements
+     * @param extras a stored map wich will be returned by the ApesModelEvent
+     */
+	public void insertInModel(
+	        	Object[] elements, 
+	        		Object[] parents, 
+	        			Map extras)
+	{
+		if( parents == null || elements == null || elements.length != parents.length)
+			throw new IllegalArgumentException("ApesMediator.insert : elements and parents length was different!");
+		
+		if(Debug.enabled)
 		{
-			if( extraEdits != null )
+			String mess = "[ ";
+			for ( int i = 0; i < parents.length; i++ )
 			{
-				mExtraEdits = extraEdits;
+				mess+=elements[i]+"/"+parents[i]+", ";
+			}
+			Debug.print(Debug.MEDIATOR, "\n(ApesMediator) -> insertInModel("+mess+"])");
+		}
+		
+		ApesModelEdit edit =
+			createInsertModelEdit(elements, parents, extras);		
+		
+		if(edit != null)
+		{
+			Context.getInstance().getUndoManager().save();				
+			if(executeModelEdit(edit, getInsertExtraEdits( elements )))
+			{
+				Collection extraEdits = addExtraEdits(edit);
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+				postEdit(edit, extraEdits);
+			}
+			else Context.getInstance().getUndoManager().restore();
+   		}
+		/****NEWLINE*****/
+		System.err.println();
+	}
+	
+	/**
+	 * Adds extra edits dependant of another edit
+	 * 
+     * @param edit the precedent executed edit
+     * @return a collection of edits dependant of the precedent edit 
+     */
+    protected Collection addExtraEdits(ApesEdit edit) 
+    {
+        Collection edits = insertWorkProductRef(edit, edit.getInserted());
+        edits.addAll(removeWorkProductRef(edit, edit.getRemoved()));
+
+        return edits;
+    }
+
+    /**
+     * @param edit
+     * @param edits
+     * @param inserted
+     */
+    protected Collection insertWorkProductRef(ApesEdit edit, Object[] inserted) 
+    {
+        Vector edits = new Vector();
+        
+        if(inserted != null && edit.getSource() instanceof ContextDiagram)
+        {
+            for (int i = 0; i < inserted.length; i++) 
+            {
+                if(inserted[i] instanceof Link)
+                {
+                    Link link = (Link)inserted[i];
+                    WorkProductRef ref = null;
+                    Object parent = null; 
+                    if(link.getSource() != null && link.getSource() instanceof WorkProduct)
+                    {
+                        ref = new WorkProductRef((WorkProduct)link.getSource());
+                        parent = Context.getInstance().getProject().getProcess().getProvidedInterface();
+                    }
+                    else if(link.getTarget() != null && link.getTarget() instanceof WorkProduct)
+                    {
+                        ref = new WorkProductRef((WorkProduct)link.getTarget());
+                        parent = Context.getInstance().getProject().getProcess().getRequiredInterface();
+                    }
+                    
+                    ApesEdit tmpEdit = createInsertModelEdit(new Object[]{ref},new Object[]{parent}, null);
+                    if(tmpEdit != null && tmpEdit.execute())
+                    {
+                        fireModelChanged(null, tmpEdit);
+                        tmpEdit.end();
+            			edits.add(tmpEdit);
+                    }
+                }
+            }
+        }
+        return edits;
+    }
+
+    /**
+     * @param edit
+     * @param edits
+     * @param inserted
+     */
+    protected Collection removeWorkProductRef(ApesEdit edit, Object[] removed) 
+    {
+        Vector edits = new Vector();
+        
+        if(removed != null && edit.getSource() instanceof ContextDiagram)
+        {
+            for (int i = 0; i < removed.length; i++) 
+            {
+                if(removed[i] instanceof Link)
+                {
+                    Link link = (Link)removed[i];
+                    WorkProductRef ref = null;
+                    
+                    if(link.getSource() != null && link.getSource() instanceof WorkProduct)
+                    {
+                        ref = getWorkProductRef((WorkProduct)link.getSource());
+                    }
+                    else if(link.getTarget() != null && link.getTarget() instanceof WorkProduct)
+                    {
+                        ref = getWorkProductRef((WorkProduct)link.getTarget());
+                    }
+                    
+                    ApesEdit tmpEdit = createRemoveModelEdit(new Object[]{ref}, null);
+                    if(tmpEdit != null && tmpEdit.execute())
+                    {
+                        fireModelChanged(null, tmpEdit);
+                        tmpEdit.end();
+            			edits.add(tmpEdit);
+                    }
+                }
+            }
+        }
+        return edits;
+    }
+    
+    /**
+	 * Execute an edit and all extra edits and fire all listeners if the execution returns true
+	 * 
+	 * @param edit the ApesModelEdit to execute
+	 * @param extraEdits the extra edits to execute
+	 * @return true if the execution returns true, false otherwise
+	 */
+	protected boolean executeModelEdit(ApesModelEdit edit, Vector extraEdits)
+	{
+		if(edit.execute())
+		{
+			fireModelChanged(null, edit);	            
+			for ( int i = 0; i < extraEdits.size(); i++ )
+			{
+				ApesEdit tmpEdit = (ApesEdit)extraEdits.get(i);
+				if(tmpEdit.execute())
+				{
+					fireModelChanged(tmpEdit.getSource(), tmpEdit);	            
+					edit.addEdit((UndoableEdit)extraEdits.get(i));
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Adds extra elements to the model depending of the type of the elements
+	 * 
+	 * @param elements
+	 * @return a vector of ApesEdit representing the changes
+	 */
+	protected Vector getInsertExtraEdits( Object[] elements )
+	{
+		Vector edits = new Vector();
+		for ( int i = 0; i < elements.length; i++ )
+		{
+			if(elements[i] instanceof ApesWorkDefinition)
+			{
+				ApesWorkDefinition wd = (ApesWorkDefinition)elements[i];
+				ApesEdit edit = createInsertModelEdit(
+						new Object[]{new ActivityDiagram(), new FlowDiagram()}, 
+						new Object[]{wd,wd},
+						null);
+				edit.end();
+				edits.add(edit);
 			}	
 		}
-		
-		public void setIsChained( boolean isChained )
-		{
-			mIsChained = isChained;
-		}
-		
-		public boolean getIsChained()
-		{
-			return mIsChained;
-		}
-		
-		public void setExtraEdits( Vector extraEdits )
-		{
-			mExtraEdits = extraEdits;
-		}
-		
-		public void addExtraEdits( Vector extraEdits )
-		{
-			mExtraEdits.addAll( extraEdits );
-		}
-		
-		protected Vector getExtraEdits()
-		{
-			return mExtraEdits;
-		}
-		
-		public void undoExtraEdits()
-		{
-			for( int i = 0; i < mExtraEdits.size(); i++ )
-			{
-				((AbstractUndoableEdit)mExtraEdits.get(i)).undo();
-			}
-		}
-		
-		public void redoExtraEdits()
-		{
-			for( int i = 0; i < mExtraEdits.size(); i++ )
-			{
-				((AbstractUndoableEdit)mExtraEdits.get(i)).redo();
-			}
-		}
+		return edits;
 	}
-	
-	protected class InsertedUndo extends UndoableEdit
-	{
-		private SpemDiagram mDiagram;
-		private Element mElement = null;
-		private Object mSource, mTarget;
-		private ModelElement mParent;
-		private SpemGraphAdapter mAdapter;
-		
-		public String toString()
-		{
-			return "insertUndo diagram "+mDiagram+" element "+mElement+
-						" source "+mSource+" target "+mTarget+" parent "+mParent;
-		}
-		
-		public InsertedUndo( SpemDiagram diagram, Object element, Object source, Object target, ModelElement parent, Vector extraEdits )
-		{
-			super( extraEdits );
-			mDiagram = diagram;
-			if( element instanceof Element )
-			{	
-				mElement = (Element) element;
-			}
-			mSource = source;
-			mTarget = target;
-			
-			if( mElement instanceof SpemDiagram )
-			{
-				mAdapter = Context.getInstance().getProject().getGraphModel( (SpemDiagram)mElement);
-			}
-			mParent = parent;
-		}
-		
-		public void undo()
-		{
-			//System.out.println("undoinsert "+this);
-			super.undo();
-			super.undoExtraEdits();
-			
-			remove( mDiagram, 
-							mElement != null ? new Object[]{ mElement } : null, 
-							mSource != null ? new Object[]{ mSource } : null, 
-							mTarget != null ? new Object[]{ mTarget } : null,
-							null, new Vector() );
-		}
-		
-		public void redo()
-		{
-			//System.out.println("redoinsert "+this);
-			super.redo();
-			
-			insert( mDiagram, mElement, mSource, mTarget, mParent, null, new Vector() );
-			
-			if( mElement instanceof SpemDiagram )
-			{
-				Context.getInstance().getProject().setGraphModel( (SpemDiagram)mElement, mAdapter );
-			}
-			
-			super.redoExtraEdits();
-		}
-	}
-	
-	protected class RemovedUndo extends UndoableEdit
-	{
-		private SpemDiagram mDiagram;
-		private Object[] mRemovedElements;
-		private Object[] mSources, mTargets;
-		private Map mParents;
-		
-		public RemovedUndo( SpemDiagram diagram, Object[] removedElements, Object[] sources, Object[] targets, Map parents, Vector extraEdits )
-		{
-			super( extraEdits );
-			mRemovedElements = removedElements;
-			mDiagram = diagram;
-			mParents = ( parents != null ? parents : new HashMap() );
-			mSources = sources;
-			mTargets = targets;
-		}
-		
-		public String toString()
-		{
-			String result = "RemovedUndo : diag "+mDiagram+" elements ";
-			if( mRemovedElements != null )
-			{
-				for( int i = 0;i<mRemovedElements.length; i++ )
-				{
-					result+=mRemovedElements[i]+" ";
-				}
-			}
-			
-			result+=" \n Sources targets : ";
-			if( mSources != null )
-			{
-				for( int i = 0;i<mSources.length; i++ )
-				{	
-					result+=mSources[i]+" "+mTargets[i]+"\n";
-				}
-			}
-			
-			//result+="parents "+mParents.toString();
 
-			return result;
+	/**
+	 * Inserts elements in source
+	 * 
+	 * @param source the source
+	 * @param elements the elements to insert
+     * @param extras a stored map wich will be returned by the ApesModelEvent
+	 */
+	public void insertIn(
+	        Object source, 
+	        	Object[] elements,
+	        		Map extras)
+	{		
+		if(elements == null) return;
+	    
+	    if(source instanceof SpemDiagram)
+	    {
+			if(Debug.enabled) 
+			{
+				String mess = "[ ";
+				for ( int i = 0; i < elements.length; i++ )
+				{
+					mess+=elements[i]+", ";
+				}
+				Debug.print(Debug.MEDIATOR, "\n(ApesMediator) -> insertInDiagram( "+source+":"+mess+"])");
+			}
+			
+			Object[] parents = getParentsFromDiagram((SpemDiagram)source, elements);
+	        if(parents != null)
+	        {
+	        	ApesModelEdit modelEdit = createInsertModelEdit(elements, parents, null);
+	            ApesDiagramEdit diagEdit = createInsertDiagramEdit((SpemDiagram)source,elements, extras);
+	            
+	            if(diagEdit != null)
+	            {
+	            	Context.getInstance().getUndoManager().save();
+	            	if(diagEdit.execute())
+	            	{
+	            		fireModelChanged(diagEdit.getSource(), diagEdit);
+		            	if(modelEdit != null)
+		            	{
+		            		if(executeModelEdit(modelEdit, getInsertExtraEdits(elements)))
+		            		{
+				            	modelEdit.end();
+		            			diagEdit.addEdit(modelEdit);
+		            		}
+		            	}
+		            	
+		            	Collection extraEdits = addExtraEdits(diagEdit);						
+		            	extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+		            	postEdit(diagEdit, extraEdits);
+	            	}	            	
+				}
+	        }
+	    }
+	    /****NEWLINE*****/
+		System.err.println();
+	}
+	
+	/**
+	 * Removes elements from the model
+	 *  
+	 * @param elements the elements to removed
+     * @param extras a stored map wich will be returned by the ApesModelEvent
+	 */
+	public void removeFromModel(Object[] elements, Map extras)
+	{
+		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "\n(ApesMediator) -> removeFromModel ");
+		
+		//retrieve all elements to be removed
+	    elements = getDescendants(elements).toArray();
+	    
+	    Vector edits = new Vector();	    
+	    edits = removeAllLinks( elements );
+	    edits.addAll(removeDiagramFromModel( elements ));
+
+	    //execute all edits
+	    ApesEdit edit = createRemoveModelEdit(elements, extras);
+		if(edit != null)
+		{
+			Context.getInstance().getUndoManager().save();				
+			for ( int i = 0; i < edits.size(); i++ )
+			{
+				ApesEdit tmpEdit = (ApesEdit)edits.get(i);
+				if(tmpEdit.execute())
+				{
+					fireModelChanged(tmpEdit.getSource(), tmpEdit);	            
+					edit.addEdit((UndoableEdit)edits.get(i));
+				}
+			}
+			if(edit.execute())
+			{
+				fireModelChanged(null, edit);	            
+				
+				Collection extraEdits = addExtraEdits(edit);
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+				postEdit(edit, extraEdits);
+			}
+			else Context.getInstance().getUndoManager().restore();
+   		}
+		/****NEWLINE*****/
+		System.err.println();
+	}
+	
+	/**
+	 * Removes diagrams of the elements array
+	 * 
+	 * @param elements
+	 * @return a vector of ApesEdit representing the changes
+	 */
+	protected Vector removeDiagramFromModel( Object[] elements )
+	{
+		//remove all elements in diagram to be removed
+		Vector edits = new Vector();
+	    for ( int i = 0; i < elements.length; i++ )
+        {
+	    	if(elements[i] instanceof SpemDiagram)
+            {
+	    		SpemDiagram diagram = (SpemDiagram)elements[i];
+	    		ApesEdit edit = createRemoveDiagramEdit(diagram, getAllElements(diagram).toArray(), null);
+                if(edit != null)
+                {
+                	edit.end();
+                	edits.add(edit);
+                }
+            }
+        }
+	    return edits;
+	}
+
+	/**
+	 * Removes all links linked to at least one of the elements
+	 * 
+	 * @param elements
+	 * @return a vector of ApesEdit representing the changes
+	 */
+	protected Vector removeAllLinks( Object[] elements )
+	{
+		//remove all concerned links from all diagrams
+		Vector edits = new Vector();
+	    for ( int i = 0; i < mDiagrams.size(); i++ )
+		{
+			SpemDiagram diagram = (SpemDiagram) mDiagrams.get(i);
+			Object[] toRemove = getDependanciesFromDiagram( (SpemDiagram)diagram, elements );
+			if(toRemove != null && toRemove.length > 0)
+			{
+				ApesEdit edit = createRemoveDiagramEdit(diagram, toRemove, null);
+				if(edit != null)
+				{
+					edit.end();
+					edits.add(edit);
+				}
+			}
+		}
+	    return edits;
+	}
+
+	/**
+	 * Removes elements from the source passed in parameter
+	 * 
+	 * @param source the source
+	 * @param elements the elements to remove
+     * @param extras a stored map wich will be returned by the ApesModelEvent
+	 */
+	public void removeFrom(Object source, 
+            				Object[] elements, 
+            					Map extras)
+	{
+		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "\n(ApesMediator) -> removeFrom ");
+		
+		if(source instanceof SpemDiagram && elements != null)
+		{
+			SpemDiagram diagram = (SpemDiagram)source;
+			ApesDiagramEdit edit = createRemoveDiagramEdit(diagram, getDependanciesFromDiagram( (SpemDiagram)source, elements ), extras);
+			if (edit != null) 
+			{
+				if(edit.execute())
+				{
+					Context.getInstance().getUndoManager().save();
+					fireModelChanged(edit.getSource(), edit);
+					
+					Collection extraEdits = addExtraEdits(edit);
+					extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+					postEdit(edit, extraEdits);
+				}
+			}
+		}
+		/****NEWLINE*****/
+		System.err.println();
+	}
+
+	/**
+	 * Gets all dependant's elements in the diagram
+	 * 
+	 * @param diagram
+	 * @param elements
+	 * @return an array of the elements and their direct dependancies
+	 */
+	protected Object[] getDependanciesFromDiagram( SpemDiagram diagram, Object[] elements )
+	{
+		Vector tmpElements = new Vector(getLinks(diagram, elements));
+		for ( int i = 0; i < elements.length; i++ )
+		{
+			if(!(elements[i] instanceof Link)) 
+			{
+				tmpElements.add(elements[i]);
+			}
+		}
+		return tmpElements.toArray();
+	}
+
+	/**
+	 * Changes attributes of elements in the model
+	 * 
+	 * @param source the source of the changes
+	 * @param change a map representing the changes
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 */
+	public void change(Object source,  Map change, Map extras)
+	{
+		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "\n(ApesMediator) -> edit ");
+		
+		//create an edit represent the editing
+		ApesModelEdit edit = createChangeEdit(change, extras);
+		if(edit != null)
+		{
+			if(edit.execute())
+			{
+				Context.getInstance().getUndoManager().save();
+				edit.mExecuteRedoEditsFirst=false;
+				edit.mExecuteUndoEditsFirst=false;
+				fireModelChanged(edit.getSource(), edit);
+				postEdit(edit, Context.getInstance().getUndoManager().restore());
+			}
+		}
+	}
+
+	/**
+	 * Moves elements in the model
+	 * 
+	 * @param moves a map representing the changes
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 */
+	public void move(Map moves, Map extras)
+	{
+		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "\n(ApesMediator) -> move ");
+		
+		if(moves == null || moves.isEmpty())
+			return;
+		
+		ApesModelEdit edit =
+			createMoveEdit(moves, extras);		
+		
+		if(edit != null)
+		{
+			Context.getInstance().getUndoManager().save();				
+			if(edit.execute())
+			{
+				fireModelChanged(null, edit);
+				postEdit(edit, Context.getInstance().getUndoManager().restore());
+			}
+			else Context.getInstance().getUndoManager().restore();
+   		}
+		/****NEWLINE*****/
+		System.err.println();
+	}
+	
+	/**
+	 * Compound each undoable edits in the ApesEdit and call posetEdit
+	 * 
+	 * @param edit
+	 * @param undoableEdits
+	 */
+	protected void postEdit(ApesEdit edit, Collection undoableEdits)
+	{
+		for (Iterator iter = undoableEdits.iterator(); iter.hasNext();) 
+		{
+		    edit.addEdit((UndoableEdit)iter.next());
+		}    	
+		edit.end();
+    	postEdit(edit);
+	}
+	
+	/**
+	 * Returns an edit which represents an insert.
+	 * 
+	 * @param elements the elements to insert
+	 * @param parents the parents of each elements
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return an ApesModelEdit representing the insert or null
+	 */
+	protected ApesModelEdit createInsertModelEdit(
+	        	Object[] elements,
+	        		Object[] parents,
+	          			Map extras)
+	{
+		if(elements == null || elements.length == 0)
+			return null;
+	    ApesModelEdit edit = 
+	        createModelEdit(elements, null, null, parents, extras);
+		return edit;
+	}
+
+	/**
+	 * Returns an edit wich represents the remove
+	 * 
+	 * @param elements the elements to remove
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return an ApesModelEdit representing the remove or null
+	 */
+	protected ApesModelEdit createRemoveModelEdit(Object[] elements, Map extras) 
+	{
+		if(elements == null || elements.length == 0)
+			return null;
+	    ApesModelEdit edit = 
+	    	createModelEdit(null, elements, null, getParents(elements), extras);
+		return edit;
+	}
+	
+	/**
+	 * Creates a model edit
+	 * 
+	 * @param inserted
+	 * @param removed
+	 * @param changed
+	 * @param parents
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return a ApesModelEdit representing the changes or null
+	 */
+	protected ApesModelEdit createModelEdit( 
+	        	Object[] inserted,
+	        		Object[] removed,
+	        			Map changed, 
+	        				Object[] parents,
+	        					Map extras)
+	{
+	    return new ApesModelEdit( inserted, removed, changed, parents, null, extras);
+	}
+	
+	/**
+	 * Returns an edit which represents an insert in a diagram
+	 *  
+	 * @param source the source
+	 * @param elements the elements to insert
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return an ApesDiagramEdit representing the changes
+	 */
+	protected ApesDiagramEdit createInsertDiagramEdit(
+							SpemDiagram source,
+								Object[] elements,									
+									Map extras)
+	{
+		ApesDiagramEdit edit = 
+			createDiagramEdit(source, elements, null, null, extras);
+		return edit;
+	}
+	
+	/**
+	 * Returns an edit wich represents a remove in a diagram
+	 * @param source the source
+	 * @param elements the elements to remove
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return an ApesDiagramEdit representing the changes
+	 */
+	protected ApesDiagramEdit createRemoveDiagramEdit(
+			SpemDiagram source,
+				Object[] elements,									
+					Map extras)
+	{
+		if(elements == null || elements.length == 0) 
+			return null;
+		ApesDiagramEdit edit = 
+			createDiagramEdit(source, null, elements, null, extras);
+		return edit;
+	}
+	
+	/**
+	 * Creates an ApesDiagramEdit
+	 * 
+	 * @param source
+	 * @param inserted
+	 * @param removed
+	 * @param changed
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return an ApesDiagramEdit representing the change
+	 */
+	protected ApesDiagramEdit createDiagramEdit(
+							SpemDiagram source,
+								Object[] inserted,									
+									Object[] removed,
+										Map changed,
+											Map extras)
+	{
+		return new ApesDiagramEdit(source, inserted, removed,changed, extras);
+	}
+	
+	/**
+	 * Returns a change edit representing changes in the model
+	 * 
+	 * @param change
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return an ApesModelEdit representing the changes
+	 */
+	protected ApesModelEdit createChangeEdit(Map change, Map extras)
+	{
+		return new ApesModelEdit(null, null, change,null, null, extras);
+	}
+	
+	/**
+	 * Returns an ApesModelEdit representing the moves of elements in the model
+	 * @param moves
+	 * @param extras a stored map wich will be returned by the ApesModelEvent
+	 * @return an ApesModelEdit representing the changes
+	 */
+	protected ApesModelEdit createMoveEdit(Map moves, Map extras)
+	{
+		return new ApesModelEdit(null, null, null, null, moves, extras);
+	}
+	
+	/**
+	 * Inserts elements into the model
+	 * 
+	 * @param elements the elements to insert
+	 * @param parents the parents of each elements
+	 * @param diagram a map to store the entry diagram-graph adapter
+	 * @return an array of objects to undo the changes
+	 */
+	protected Object[] handleInsertInModel(Object[] elements, Object[] parents, Map diagram) 
+	{
+	    if (elements == null || parents == null)
+		    return null;
+		
+	    if(Debug.enabled)
+	    {
+	    	String mess = "[ ";
+	    	for ( int i = 0; i < parents.length; i++ )
+			{
+				mess+=elements[i]+"/"+parents[i]+", ";
+			}
+	    	Debug.print(Debug.MEDIATOR, "(ApesMediator) -> handleInsertInModel("+mess+"] )");
+	    }
+	    		
+		Vector result = new Vector();
+		for (int i = 0; i < elements.length; i++)
+		{
+			if(elements[i] instanceof ModelElement && ((ModelElement)elements[i]).getParent() == null
+		            && parents.length > i && parents[i] != null && parents[i] instanceof IPackage)
+		    {
+		        if(((IPackage)parents[i]).addModelElement((ModelElement)elements[i]))
+		        {
+		        	result.add(elements[i]);
+		        }
+		    }
+		    
+		    if(elements[i] instanceof SpemDiagram)
+		    {
+		    	mDiagrams.add(elements[i]);
+		    	if(!diagram.containsKey(elements[i]))
+		    	{
+		    		diagram.put(elements[i], Context.getInstance().getProject().getGraphModel((SpemDiagram)elements[i]));
+		    	}
+		    	else
+		    	{
+		    		Context.getInstance().getProject().setGraphModel((SpemDiagram)elements[i],(SpemGraphAdapter)diagram.get(elements[i]));
+		    	}
+		    }
+		}
+		return result.isEmpty() ? null : result.toArray();
+	}
+
+	/**
+	 * Removes elements from the model
+	 * 
+	 * @param elements the elements to remove
+	 * @param @param diagram a map to store the entry diagram-graph adapter 
+	 * @return an array of objects to undo the changes
+	 */
+	protected Map handleRemoveFromModel(Object[] elements, Map diagram) 
+	{
+	    Map removed = new HashMap();
+		if (elements != null)
+		{		    
+		    if(Debug.enabled)
+		    {
+		    	String mess = "[ ";
+		    	for ( int i = 0; i < elements.length; i++ )
+				{
+					mess+=elements[i]+", ";
+				}
+		    	Debug.print(Debug.MEDIATOR, "(ApesMediator) -> handleRemoveFromModel("+mess+"])");
+		    }
+
+		    for (int i = 0; i < elements.length; i++)
+	        {
+	        	if(elements[i] instanceof ModelElement)
+		        {
+	        		ModelElement me = (ModelElement)elements[i];
+		            if(me.getParent() != null)
+		            {
+		            	Object parent = me.getParent();
+		            	if(me.getParent().removeModelElement(me))
+		            		removed.put(me, parent);
+		            }
+		        }
+	        	
+	        	if(elements[i] instanceof SpemDiagram)
+	        	{
+	        		mDiagrams.remove(elements[i]);
+	        		if(!diagram.containsKey(elements[i]))
+			    	{
+	        			diagram.put(elements[i], Context.getInstance().getProject().getGraphModel((SpemDiagram)elements[i]));
+			    	}
+			    	Context.getInstance().getProject().removeGraphModel((SpemDiagram)elements[i]);
+	        	}
+	        }    
+		}
+	    
+		return !removed.isEmpty() ? removed : null;
+	}
+
+	/**
+	 * Inserts elements into the source
+	 * @param source
+	 * @param elements
+	 * @return an array of objects to undo the changes
+	 */
+	protected Object[] handleInsertInDiagram(SpemDiagram source, Object[] elements) 
+	{
+	    if(elements == null) 
+	    	return null;
+	    
+	    if(Debug.enabled)
+	    {
+	    	String mess="[ ";
+	    	for ( int i = 0; i < elements.length; i++ )
+			{
+				mess+=elements[i]+", ";
+			}
+	    	Debug.print(Debug.MEDIATOR, "(ApesMediator) -> handleInsertInDiagram("+source+":"+mess+"])");
+	   	}
+		
+	    Vector inserted = new Vector();
+	    for ( int i = 0; i < elements.length; i++ )
+		{
+    		if(elements[i] instanceof ModelElement)
+	    	{
+	    		ModelElement me = (ModelElement)elements[i];
+	    		if(source.addModelElement(me))
+	    		{
+	    			inserted.add(me);
+	    		}
+	    	}
+	    	else if(elements[i] instanceof Link)
+	    	{
+	    		Link link = (Link) elements[i];
+	    		if(link.getSource() instanceof ModelElement
+	    			&& link.getTarget() instanceof ModelElement
+					&& source.createLinkModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget()))
+	    		{
+	    			inserted.add(0, link);	    		
+	    		}
+	    	}		
+		}
+	    return inserted.size()>0 ? inserted.toArray() : null;
+	}
+
+	/**
+	 * Removes elements from the source
+	 * 
+	 * @param source
+	 * @param elements
+	 * @return an array of objects to undo the changes
+	 */
+	protected Object[] handleRemoveFromDiagram(SpemDiagram source, Object[] elements) 
+	{
+	    List removed = new ArrayList();
+		if (elements != null)
+		{
+		    if(Debug.enabled)
+		    {
+		    	String mess="[ ";
+		    	for ( int i = 0; i < elements.length; i++ )
+				{
+					mess+=elements[i]+", ";
+				}
+		    	Debug.print(Debug.MEDIATOR, "(ApesMediator) -> handleRemoveFromDiagram( "+source+":"+mess+")");
+		    }
+		    
+		    for (int i = 0; i < elements.length; i++)
+		    {
+		    	if(elements[i] instanceof ModelElement)
+		    	{
+		    		ModelElement me = (ModelElement)elements[i];
+		    		if(source.removeModelElement(me))
+		    		{
+		    			removed.add(0, me);
+		            }
+		    	}
+		        else if(elements[i] instanceof Link)
+		        {
+		        	Link link = (Link)elements[i];
+		        	if(link.getSource() instanceof ModelElement
+			    			&& link.getTarget() instanceof ModelElement
+							&& source.removeLinkModelElements((ModelElement)link.getSource(),(ModelElement)link.getTarget()))
+		        	{
+		        		removed.add(link);
+		        	}
+		        }
+		    }
+		}
+		return removed.size()>0 ? removed.toArray() : null;
+	}
+
+	/**
+	 * Changes elements of the model
+	 * @param changes the map representing the changes
+	 * @return a map to undo the changes
+	 */
+	protected Map handleChange(Map changes) 
+	{
+	    if(changes == null) return null;
+
+	    if(Debug.enabled)
+	    {
+	    	Debug.print(Debug.MEDIATOR, "(ApesMediator) -> handleChange( "+changes+" )");
+	    }
+
+	    Map undo = new HashMap();
+	    Iterator it = changes.entrySet().iterator();
+		while(it.hasNext())
+		{
+			Map.Entry entry = (Map.Entry)it.next();
+			if(entry.getKey() instanceof ModelElement && entry.getValue() instanceof String)
+			{
+				ModelElement me = (ModelElement)entry.getKey();
+				undo.put(me, me.getName());
+				me.setName((String)entry.getValue());
+			}
+		}
+		return undo;	    
+	}
+	
+	/**
+	 * Moves elements in the model 
+	 * 
+	 * @param moves a map representing the move
+	 * @return a map to undo the changes
+	 */
+	protected Map handleMove(Map moves)
+	{
+	    if(moves == null) return null;
+
+		if(Debug.enabled) 
+		{
+			Debug.print(Debug.MEDIATOR, "(ApesMediator) -> handleMove( "+moves+" )");
 		}
 		
-		public void undo()
+	    Map undo = new HashMap();
+	    Iterator it = moves.entrySet().iterator();
+		while(it.hasNext())
 		{
-			//System.out.println("undoremove "+hashCode());
-			super.undo();
-			
-			if( mRemovedElements != null )
+			Map.Entry entry = (Map.Entry)it.next();
+			if(entry.getKey() instanceof ModelElement && entry.getValue() instanceof IPackage)
 			{
-				for( int i = 0; i < mRemovedElements.length; i++ )
+				ModelElement me = (ModelElement)entry.getKey();
+				IPackage parent = (IPackage)entry.getValue();
+				IPackage oldParent = me.getParent();
+				
+				if(oldParent != parent)
 				{
-					insert( mDiagram, mRemovedElements[i], null, null, mParents.get(mRemovedElements[i]),	null, new Vector() );
-					
-					if( mRemovedElements[i] instanceof SpemDiagram )
+					oldParent.removeModelElement(me);
+					if(parent.addModelElement(me))
 					{
-						Context.getInstance().getProject().setGraphModel( (SpemDiagram)mRemovedElements[i], (SpemGraphAdapter)mParents.get("Diagram"+((Element)mRemovedElements[i]).getID()));
-						for( int j = 0; j < ((SpemDiagram)mRemovedElements[i]).modelElementCount(); j++ )
-							((SpemDiagram)mRemovedElements[i]).getModelElement(j);
+						undo.put(me, oldParent);
+					}
+					else
+					{
+						oldParent.addModelElement(me);
+						ErrorManager.getInstance().printKey("errorMoveElement");
 					}
 				}
 			}
-			
-			if( mSources != null )
-			{
-				for( int i = 0; i < mSources.length; i++ )
-				{
-					insert( mDiagram, null, mSources[i], mTargets[i], null,	null, new Vector() );
-				}
-			}
-			
-			super.undoExtraEdits();
 		}
-		
-		public void redo()
-		{
-			//System.out.println("redoremove "+hashCode());
-			super.redo();
-			super.redoExtraEdits();
-			
-			remove( mDiagram, mRemovedElements, mSources, mTargets, null, new Vector() );
+		return undo;
+	}
+	
+	/**
+	 * Notify all listeners that the model has changed
+	 * 
+	 * @param source
+	 * @param edit the edit representing the change
+	 */
+	protected void fireModelChanged(
+		Object source,
+		ApesModelEvent.ApesModelChange edit) 
+	{
+	    if(Debug.enabled) Debug.print(Debug.MEDIATOR, "(ApesMediator) -> fireModelChanged "+edit);
+	    if(source == null) source = this;
+	    // Guaranteed to return a non-null array
+		Object[] listeners = mListenerList.getListenerList();
+		ApesModelEvent e = null;
+		// Process the listeners last to first, notifying
+		// those that are interested in this event
+		for (int i = listeners.length - 2; i >= 0; i -= 2) {
+			if (listeners[i] == ApesModelListener.class) {
+				// Lazily create the event:
+				if (e == null)
+					e = new ApesModelEvent(this, edit);
+				((ApesModelListener) listeners[i + 1]).modelChanged(e);
+			}
 		}
 	}
 	
-	protected class MovedUndo extends UndoableEdit
+	static private int msCounter = 0;
+	public abstract class ApesEdit extends CompoundEdit implements ApesModelEvent.ApesModelChange
 	{
-		private IPackage mOldParent;
-		private IPackage mNewParent;
-		private ModelElement mElement;
-		
-		public String toString()
-		{
-			return "element "+mElement+" oldParent "+mOldParent+" newParent "+mNewParent;
-		}
-		
-		public MovedUndo( ModelElement element, IPackage oldParent, IPackage newParent, Vector extraEdits )
-		{
-			super( extraEdits );
-			mElement = element;
-			mOldParent = oldParent;
-			mNewParent = newParent;
-		}
-		
-		public void undo()
-		{
-			super.undo();
-			//System.out.println("undoMove "+this);
-			
-			int index = getIndexOfChild( mNewParent, mElement );
-			
-			super.undoExtraEdits();
-			
-			mNewParent.removeModelElement( mElement );
-			mOldParent.addModelElement( mElement );
-		}
-		
-		public void redo()
-		{
-			super.redo();
-			super.redoExtraEdits();
-			
-			mOldParent.removeModelElement( mElement );
-			mNewParent.addModelElement( mElement );
-		}
-	}
-	
-	protected class ChangedUndo extends UndoableEdit
-	{
-		private Object mElement;
-		private String mOldValue;
-		private String mNewValue;;
-		
-		public String toString()
-		{
-			return "element "+mElement+" oldValue "+mOldValue+" newValue "+mNewValue;
-		}
-		
-		public ChangedUndo( Object element, String oldValue, String newValue, Vector extraEdits )
-		{
-			super( extraEdits );
-			mElement = element;
-			mOldValue = oldValue;
-			mNewValue = newValue;
-		}
-		
-		protected boolean changeRef( ApesProcess.Interface in, String name )
-		{
-			ApesProcess ap = Context.getInstance().getProject().getProcess();
-			WorkProduct w = (WorkProduct) mElement;
-			
-			WorkProductRef ref = in.getWorkProductRef(w);
-				
-			if( ref != null )
-			{
-				ref.setName(ResourceManager.getInstance().getString("reference")+name);
-			}
-			
-			return false;
-		}
-		
-		public void undo()
-		{
-			super.undo();
-			//System.out.println("undoChanged oldval "+mNewValue+" newval "+mOldValue);
-			if( mElement instanceof WorkProduct && ((WorkProduct)mElement).getReferences() != WorkProduct.NO_REFERENCES )
-			{
-				if( ! changeRef(Context.getInstance().getProject().getProcess().getProvidedInterface(), mOldValue) )
-				{	
-					changeRef(Context.getInstance().getProject().getProcess().getRequiredInterface(), mOldValue);
-				}
-			}
-			
-			if( mElement instanceof Element )
-			{
-				((Element)mElement).setName( mOldValue );
-			}
-			else if( mElement instanceof ActivityDiagram.Transition )
-			{
-				((ActivityDiagram.Transition)mElement).setLabel( mOldValue );
-			}
+	    private int mId = msCounter++;
+	    
+	    protected Object[] mInsert, mRemove;
+	    protected Map mChange, mExtras;
 
-			super.undoExtraEdits();
-		}
-		
-		public void redo()
+	    protected boolean mExecuteRedoEditsFirst = true;
+	    protected boolean mExecuteUndoEditsFirst = true;
+	    
+		public ApesEdit(Object[] inserted, 
+							Object[] removed,
+								Map changed,
+									Map extras )
 		{
-			super.redo();
-			//System.out.println("redoChanged oldval "+mOldValue+" newval "+mNewValue);
-			if( mElement instanceof WorkProduct )
-			{
-				if( ! changeRef(Context.getInstance().getProject().getProcess().getProvidedInterface(), mNewValue) )
-				{	
-					changeRef(Context.getInstance().getProject().getProcess().getRequiredInterface(), mNewValue);
-				}
-			}
-			
-			if( mElement instanceof Element )
-			{
-				((Element)mElement).setName( mNewValue );
-			}
-			else if( mElement instanceof ActivityDiagram.Transition )
-			{
-				((ActivityDiagram.Transition)mElement).setLabel( mNewValue );
-			}
-		
-			super.redoExtraEdits();
+			super();
+			mInsert = inserted;
+			mRemove = removed;
+			mChange = changed;
+			mExtras = extras;
 		}
+		
+		public Map getExtras() 
+		{
+			return mExtras;
+		}
+
+		public Map getChanged() 
+		{
+			return mChange;
+		}
+		
+		public Object[] getInserted() 
+		{
+			return mRemove;			
+		}
+		
+		public Object[] getRemoved() 
+		{
+			return mInsert;
+		}
+		
+		public boolean  isSignificant() 
+		{
+			return true;
+		}
+		
+		public void redo() throws CannotRedoException 
+		{
+		    if(Debug.enabled) Debug.print(Debug.MEDIATOR, "\n(ApesModelEdit) -> redo "+edits.size());
+			if(mExecuteRedoEditsFirst)
+			{
+				super.redo();
+				execute();
+			}
+			else
+			{
+				execute();
+				super.redo();				
+			}
+		}
+
+		public void undo() throws CannotUndoException 
+		{
+		    if(Debug.enabled) Debug.print(Debug.MEDIATOR, "\n(ApesModelEdit) -> undo "+edits.size());
+		    if(mExecuteUndoEditsFirst)
+			{
+		    	super.undo();
+				execute();
+			}
+			else
+			{
+				execute();
+				super.undo();				
+			}
+		}
+		
+		protected Object[] getEdits()
+		{
+			return edits.toArray();
+		}   
+	       
+		public abstract boolean execute();
+		
+		public String toString()
+	    {
+			String result = getClass().toString()+"/"+mId+"[ ";
+	        if(mRemove != null)
+	        	result+=", Inserted/"+mRemove.length;
+	        if(mInsert != null)
+	        	result+=", Removed/"+mInsert.length;
+	        if(mChange != null)
+	        	result+=", Changed/"+mChange;
+	        result+=", Extras/"+mExtras;
+	        return result;
+	    }
+	}
+	
+    public class ApesModelEdit extends ApesEdit
+	{
+	    protected Object[] mParents;
+	    protected Map mMove;
+	    protected Map mDiagram = new HashMap();
+		
+		public ApesModelEdit( Object[] inserted, 
+		        					Object[] removed,
+		        						Map changed,
+		        							Object[] parents,
+												Map move,
+													Map extras )
+		{
+		    super(inserted, removed, changed, extras);
+		    mParents = parents;
+		    mMove = move;
+		    if(inserted != null)
+		    {
+		    	mExecuteUndoEditsFirst = true;
+		    	mExecuteRedoEditsFirst = false;
+		    }
+		    else if(removed != null)
+		    {
+		    	mExecuteUndoEditsFirst = false;
+		    	mExecuteRedoEditsFirst = true;
+		    }
+		}
+				
+		public Object[] getParents()
+		{
+		    return mParents;
+		}
+		
+		public Collection getMoved()
+		{
+			if(mMove != null)
+			{
+				return mMove.keySet();
+			}
+			return null;
+		}
+		
+		public Object getOldParent(Object element)
+		{
+			if(mMove != null)
+			{
+				return mMove.get(element);
+			}
+			return null;
+		}
+		
+		public Object getNewParent(Object element)
+		{
+			if(element instanceof ModelElement)
+			{
+				return ((ModelElement)element).getParent();
+			}
+			return null;	
+		}
+		
+		public Object getSource()
+		{
+			return null;
+		}
+		
+		public boolean execute() 
+		{
+		    if(Debug.enabled) Debug.print(Debug.MEDIATOR, "(ApesModelEdit) -> execute");
+		    
+		    Object[] inserted = mInsert;
+		    Object[] removed = mRemove;
+		    Map changed = mChange;
+		    Map moved = mMove;
+		    
+			mRemove = handleInsertInModel(inserted, mParents, mDiagram);
+			Map insert = handleRemoveFromModel(removed, mDiagram);
+			mInsert = insert == null ? null : insert.keySet().toArray();
+			if(insert != null) mParents = insert.values().toArray();
+			mChange = handleChange(changed);
+		    mMove = handleMove(moved);
+		    
+			return mRemove != null || mInsert != null || mChange != null 
+				|| (mMove != null && !mMove.isEmpty()) || edits.size()>0;		
+		}
+       
+       public String toString()
+       {
+           String result = super.toString();
+           if(mParents != null)
+               result+=", Parents/"+mParents.length;
+           return result+"]";
+       }
+	}
+
+    public class ApesDiagramEdit extends ApesEdit
+	{
+    	protected SpemDiagram mSource;
+    	
+    	public ApesDiagramEdit( SpemDiagram source,
+    			Object[] inserted, 
+					Object[] removed,
+						Map changed,
+							Map extras )
+    	{
+    		super(inserted, removed, changed, extras);
+    		mSource = source;
+    	}
+    	
+    	public Object getSource() 
+		{
+			return mSource;
+		}
+		
+        public Object[] getParents()
+        {
+        	return null;
+        }
+        
+        public Collection getMoved()
+        {
+        	return null;
+        }
+        
+        public Object getOldParent(Object element)
+        {
+        	return null;
+        }
+        
+        public Object getNewParent(Object element)
+        {
+        	return null;
+        }
+        
+    	public boolean execute() 
+		{
+		    if(Debug.enabled) Debug.print(Debug.MEDIATOR, "(ApesDiagramEdit) -> execute");
+		    
+		    Object[] inserted = mInsert;
+		    Object[] removed = mRemove;
+		    Map changed = mChange;
+			mRemove = handleInsertInDiagram(mSource, inserted);
+			mInsert = handleRemoveFromDiagram(mSource, removed);			
+		    mChange = handleChange(changed);
+		    
+			return mRemove != null || mInsert != null || mChange != null || edits.size()>0;
+		}
+    	
+    	public String toString()
+        {
+            String result = super.toString();
+            if(mSource != null)
+                result+=", Source/"+mSource;
+            return result+"]";
+        }
 	}
 }

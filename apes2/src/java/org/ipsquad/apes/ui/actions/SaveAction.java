@@ -24,17 +24,11 @@ package org.ipsquad.apes.ui.actions;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 
-import javax.swing.JOptionPane;
-
-import org.ipsquad.apes.Context;
-import org.ipsquad.apes.ui.ApesFrame;
-import org.ipsquad.utils.ResourceManager;
-
 
 /**
  * Save the current project
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class SaveAction extends ProjectManagementAction
 {
@@ -46,10 +40,10 @@ public class SaveAction extends ProjectManagementAction
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		boolean save = true;
+		/*boolean save = true;
 		long time =  Context.getInstance().getProject().getProcess().getComponent().getValidate();
-		if( time == 0 || time < Context.getInstance().getUndoManager().getLastActionTime())
-		{
+		//if( time == 0 || time < Context.getInstance().getUndoManager().getLastActionTime())
+		//{
 			int choice=JOptionPane.showInternalConfirmDialog(
 
 					((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
@@ -61,9 +55,9 @@ public class SaveAction extends ProjectManagementAction
 			{
 				save = false;
 			}
-		}
+		//}
 		
-		if(save)
+		if(save)*/
 		{
 			saveProject();
 		}

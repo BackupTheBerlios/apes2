@@ -26,25 +26,21 @@ import java.util.Vector;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.jgraph.graph.GraphUndoManager;
 
 public class ApesUndoManager extends GraphUndoManager
 {
 	private boolean mBegin = false;
 	private Vector action = new Vector();
-	private long mLastActionTime = System.currentTimeMillis();
 	
 	public synchronized boolean addEdit(UndoableEdit anEdit)
 	{
-		mLastActionTime = System.currentTimeMillis();
-		
-		if(mBegin)
+	    if(mBegin)
 		{
 			action.add(anEdit);
 			return true;
 		}
-		return super.addEdit(anEdit);
+	    return super.addEdit(anEdit);
 	}
 
 	public synchronized void save()
@@ -58,43 +54,5 @@ public class ApesUndoManager extends GraphUndoManager
 		Vector temp = action;
 		action = new Vector();
 		return temp;
-	}
-	
-	public void undo( Object undo )
-	{
-		mLastActionTime = System.currentTimeMillis();
-		
-		UndoableEdit edit = editToBeUndone(undo);
-		if(canUndo(edit))
-		{
-			super.undo(edit);
-			if( edit instanceof ApesMediator.UndoableEdit && ((ApesMediator.UndoableEdit)edit).getIsChained())
-			{
-				edit =  nextEditToBeUndone(edit);
-				undo(edit);
-			}
-		}
-	}
-	
-	public void redo( Object redo )
-	{
-		mLastActionTime = System.currentTimeMillis();
-		
-		UndoableEdit edit = editToBeRedone(redo);
-		if(canRedo(redo))
-		{
-			super.redo(edit);
-			edit = nextEditToBeRedone(edit);
-
-			if( edit != null && edit instanceof ApesMediator.UndoableEdit && ((ApesMediator.UndoableEdit)edit).getIsChained())
-			{
-				redo(edit);
-			}
-		}
-	}
-	
-	public long getLastActionTime()
-	{
-		return mLastActionTime;
 	}
 }

@@ -37,7 +37,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -45,13 +45,13 @@ public class FlowDiagram extends SpemDiagram
 
 	public FlowDiagram()
 	{
-		if(Debug.enabled) Debug.print("(M) -> ++FlowDiagram");
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++FlowDiagram");
 	}
 
 	public FlowDiagram(String name)
 	{
 		super(name);
-		if(Debug.enabled) Debug.print("(M) -> ++FlowDiagram::"+name);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++FlowDiagram::"+name);
 	}
 
 	public void visit(SpemVisitor visitor)
@@ -61,7 +61,7 @@ public class FlowDiagram extends SpemDiagram
 
 	public boolean addModelElement(ModelElement me)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::addModelElement "+me);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::addModelElement "+me);
 		if(me instanceof Activity && (me.getParent() == null || me.getParent().equals(getParent())) )
 		{
 			return addActivity((Activity)me);
@@ -92,7 +92,7 @@ public class FlowDiagram extends SpemDiagram
 	{
 		if(!containsModelElement(r))
 		{
-			if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::addProcessRole "+r);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::addProcessRole "+r);
 			mElements.add(r);
 			return true;
 		}
@@ -110,7 +110,7 @@ public class FlowDiagram extends SpemDiagram
 	{
 		if(!containsModelElement(a))
 		{
-			if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::addActivity "+a);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::addActivity "+a);
 			mElements.add(a);
 			
 			if(getParent()!=null && getParent() instanceof WorkDefinition)
@@ -148,7 +148,7 @@ public class FlowDiagram extends SpemDiagram
 				}
 			}
 		
-			if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::addWorkProduct "+p);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::addWorkProduct "+p);
 			mElements.add(p);
 			return true;
 		}
@@ -172,7 +172,7 @@ public class FlowDiagram extends SpemDiagram
 				
 		if(!containsModelElement(sm))
 		{
-			if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::addWorkProductState "+sm);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::addWorkProductState "+sm);
 			mElements.add(sm);
 			return true;
 		}
@@ -248,7 +248,7 @@ public class FlowDiagram extends SpemDiagram
 	{
 		if(containsModelElement(e))
 		{
-			if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::removeModelElement "+e);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeModelElement "+e);
 			mElements.remove(e);
 			return true;
 		}
@@ -303,7 +303,7 @@ public class FlowDiagram extends SpemDiagram
 	
 	public boolean createLinkModelElements(ModelElement source,ModelElement target)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
 		if(source instanceof ProcessRole)
 		{
 			if(target instanceof Activity)
@@ -356,7 +356,7 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean createLinkProcessRoleActivity(ProcessRole r, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::createLinkProcessRoleActivity "+r+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkProcessRoleActivity "+r+" "+a);
 		if(areLinkableProcessRoleActivity(r,a))
 		{
 			r.addFeature(a);
@@ -376,7 +376,7 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean createLinkWorkProductActivityInput(WorkProduct w, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::createLinkWorkProductActivityInput "+w+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductActivityInput "+w+" "+a);
 		if (containsModelElement(a) && containsModelElement(w))
 		{
 			if(!a.containsInputWorkProduct(w) && !w.containsOutputWorkDefinition(a))
@@ -391,7 +391,7 @@ public class FlowDiagram extends SpemDiagram
 	
 	public boolean createLinkWorkProductStateActivityInput( StateMachine sm, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::createLinkWorkProductStateActivityInput "+sm+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductStateActivityInput "+sm+" "+a);
 		if( sm.getContext() instanceof WorkProduct 
 				&& containsModelElement(sm) 
 				&& containsModelElement(a) )
@@ -416,7 +416,7 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean createLinkWorkProductActivityOutput(WorkProduct w, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::createLinkWorkProductActivityOutput "+w+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductActivityOutput "+w+" "+a);
 		if(containsModelElement(a) && containsModelElement(w))
 		{
 			if(!a.containsOutputWorkProduct(w) && !w.containsInputWorkDefinition(a))
@@ -431,7 +431,7 @@ public class FlowDiagram extends SpemDiagram
 	
 	public boolean createLinkWorkProductStateActivityOutput(StateMachine sm, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::createLinkWorkProductStateActivityOutput "+sm+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductStateActivityOutput "+sm+" "+a);
 		if( sm.getContext() instanceof WorkProduct
 				&& containsModelElement(a) 
 				&& containsModelElement(sm))
@@ -450,7 +450,7 @@ public class FlowDiagram extends SpemDiagram
 	
 	public boolean removeLinkModelElements(ModelElement source,ModelElement target)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
 		if(source instanceof ProcessRole)
 		{
 			if(target instanceof Activity)
@@ -495,7 +495,7 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean removeLinkProcessRoleActivity(ProcessRole r, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::removeLinkProcessRoleActivity "+r+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkProcessRoleActivity "+r+" "+a);
 		if (containsModelElement(r) && containsModelElement(a))
 		{
 			if(r.removeFeature(a))
@@ -527,7 +527,7 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean removeLinkWorkProductActivityInput(WorkProduct w, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductActivityInput "+w+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductActivityInput "+w+" "+a);
 		if (containsModelElement(a) && containsModelElement(w))
 		{
 			if(a.removeInputWorkProduct(w))
@@ -541,7 +541,7 @@ public class FlowDiagram extends SpemDiagram
 	
 	public boolean removeLinkWorkProductStateActivityInput(StateMachine sm, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductStateActivityInput "+sm+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductStateActivityInput "+sm+" "+a);
 		if (sm.getContext() instanceof WorkProduct
 				&& containsModelElement(a) 
 				&& containsModelElement(sm))
@@ -569,7 +569,7 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean removeLinkWorkProductActivityOutput(WorkProduct w, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductActivityOutput "+w+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductActivityOutput "+w+" "+a);
 		if (containsModelElement(a) && containsModelElement(w))
 		{
 			if(a.removeOutputWorkProduct(w))
@@ -583,7 +583,7 @@ public class FlowDiagram extends SpemDiagram
 	
 	public boolean removeLinkWorkProductStateActivityOutput(StateMachine sm, Activity a)
 	{
-		if(Debug.enabled) Debug.print("(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductStateActivityOutput "+sm+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkWorkProductStateActivityOutput "+sm+" "+a);
 		if (sm.getContext() instanceof WorkProduct
 				&& containsModelElement(a) 
 				&& containsModelElement(sm))

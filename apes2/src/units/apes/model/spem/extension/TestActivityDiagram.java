@@ -931,6 +931,21 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.areLinkableDecisionActivity(d,a2));
 	}
 	
+	public void testAreLinkableDecisionDecision()
+	{
+		ActivityDiagram ad = new ActivityDiagram();
+		ActivityDiagram.Decision d = createDecision();
+		ActivityDiagram.Decision d2 = createDecision();
+		
+		ad.addModelElement(d);
+		ad.addModelElement(d2);
+		
+		assertTrue(ad.areLinkableDecisionDecision(d,d2));
+		
+		ad.createLinkModelElements(d,d2);
+		assertFalse(ad.areLinkableDecisionDecision(d,d2));
+	}
+	
 	public void testAreLinkableInitialPointModelElement()
 	{
 		ActivityDiagram ad = new ActivityDiagram();

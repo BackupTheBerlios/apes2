@@ -33,7 +33,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Remove the currently selected element from the tree
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class RemoveFromModelAction extends AbstractAction
 {
@@ -47,6 +47,6 @@ public class RemoveFromModelAction extends AbstractAction
 		ApesTreeNode selected = (ApesTreeNode) Context.getInstance().getTopLevelFrame().getTree().getSelectionPath().getLastPathComponent();
 		SpemTreeAdapter model = (SpemTreeAdapter) Context.getInstance().getTopLevelFrame().getTree().getModel();
 		
-		model.remove( selected );
+		model.remove( new Object[]{selected} );
 	}
 }

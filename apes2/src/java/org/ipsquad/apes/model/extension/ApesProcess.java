@@ -22,19 +22,17 @@ package org.ipsquad.apes.model.extension;
 
 import java.util.Vector;
 
-import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.ModelVisitor;
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
-import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.utils.ConfigManager;
 
 /**
  * 
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesProcess extends ModelElement implements IPackage 
 {
@@ -234,7 +232,7 @@ public class ApesProcess extends ModelElement implements IPackage
 	
 	protected void buildInterfaces( IPackage p )
 	{
-		for( int i = 0; i < p.modelElementCount(); i++)
+		/*for( int i = 0; i < p.modelElementCount(); i++)
 		{
 			ModelElement me = p.getModelElement(i); 
 			if( me instanceof SPackage )
@@ -253,7 +251,7 @@ public class ApesProcess extends ModelElement implements IPackage
 					ApesMediator.getInstance().update(ApesMediator.getInstance().createInsertCommandToSpemDiagram((SpemDiagram)mComponent.getModelElement(0),w,mComponent,null));
 				}
 			}
-		}
+		}*/
 	}
 	
 	public static abstract class Interface extends ModelElement implements IPackage

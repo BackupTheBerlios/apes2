@@ -29,7 +29,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ProcessPerformer extends ModelElement
 {
@@ -38,13 +38,13 @@ public class ProcessPerformer extends ModelElement
 	
 	public ProcessPerformer()
 	{
-		if(Debug.enabled) Debug.print("(M) -> ++ProcessPerformer");
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++ProcessPerformer");
 	}
 
 	public ProcessPerformer(String name)
 	{
 		super(name);
-		if(Debug.enabled) Debug.print("(M) -> ++ProcessPerformer::"+name);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++ProcessPerformer::"+name);
 	}
 
 	public void visit(SpemVisitor visitor)
@@ -60,21 +60,11 @@ public class ProcessPerformer extends ModelElement
 	 * @param f the feature to associate
 	 * @return true if the feature can be added, false otherwise
 	 */
-	/*public boolean addFeature(Activity f)
-	{
-		if(!containsFeature(f))
-		{
-			mFeature.add(f);
-			return true;
-		}
-		return false;
-	}*/
-	
 	public boolean addFeature(WorkDefinition f)
 	{
 		if(!containsFeature(f))
 		{
-			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::addFeature "+f);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ProcessPerformer("+getName()+")::addFeature "+f);
 			mFeature.add(f);
 			return true;
 		}
@@ -88,22 +78,11 @@ public class ProcessPerformer extends ModelElement
 	 * @param f the feature to remove
 	 * @return true if the feature can be removed, false otherwise
 	 */
-	/*public boolean removeFeature(Activity f)
-	{
-		if(containsFeature(f))
-		{
-			mFeature.remove(f);
-			return true;
-		}
-
-		return false;
-	}*/
-	
 	public boolean removeFeature(WorkDefinition f)
 	{
 		if(containsFeature(f))
 		{
-			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::removeFeature "+f);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ProcessPerformer("+getName()+")::removeFeature "+f);
 			mFeature.remove(f);
 			return true;
 		}
@@ -117,10 +96,6 @@ public class ProcessPerformer extends ModelElement
 	 * @param f the Activity to test
 	 * @return true if the Activity is a feature of this ProcessPerformer, false otherwise
 	 */
-	/*public boolean containsFeature(Activity f)
-	{
-		return mFeature.contains(f);
-	}*/
 	public boolean containsFeature(WorkDefinition f)
 	{
 		return mFeature.contains(f);
@@ -137,7 +112,7 @@ public class ProcessPerformer extends ModelElement
 	{
 		if(!containsResponsibility(r))
 		{
-			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::addResponsibility "+r);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ProcessPerformer("+getName()+")::addResponsibility "+r);
 			mResponsibilities.add(r);
 			return true;
 		}
@@ -156,7 +131,7 @@ public class ProcessPerformer extends ModelElement
 	{
 		if(containsResponsibility(r))
 		{
-			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::removeResponsibility "+r);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ProcessPerformer("+getName()+")::removeResponsibility "+r);
 			mResponsibilities.remove(r);
 			return true;
 		}
@@ -198,12 +173,6 @@ public class ProcessPerformer extends ModelElement
 		return mResponsibilities.size();
 	}
 	
-	/*
-	public Activity getFeature(int i)
-	{
-		return (Activity)mFeature.get(i);
-	}
-	*/
 	public WorkDefinition getFeature(int i)
 	{
 		return (WorkDefinition)mFeature.get(i);

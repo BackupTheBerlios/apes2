@@ -35,7 +35,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Add an element into the currently selected element
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class AddToModelAction extends AbstractAction
 {
@@ -55,7 +55,7 @@ public class AddToModelAction extends AbstractAction
 		
 		ApesTreeNode node = (ApesTreeNode)mPrototype.clone();
 		
-		model.insert( node, selected );
+		model.insert( new Object[]{node}, new Object[]{selected} );
 		
 		try
 		{

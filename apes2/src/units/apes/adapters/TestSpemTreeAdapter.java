@@ -30,8 +30,11 @@ import junit.framework.TestCase;
 import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
+import org.ipsquad.apes.model.extension.ApesWorkDefinition;
+import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
+import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
@@ -39,7 +42,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 public class TestSpemTreeAdapter extends TestCase
 {
 	SpemTreeAdapter adapt;
-	/*ApesProcess proc;
+	ApesProcess proc;
 	ProcessComponent component;
 	SPackage p1;
 	SPackage p2;
@@ -48,7 +51,7 @@ public class TestSpemTreeAdapter extends TestCase
 	Activity act;
 	ProcessRole role;
 	WorkProduct prod;
-	ContextDiagram context;*/
+	ContextDiagram context;
 	ApesTreeNode node1;
 	ApesTreeNode node11 = new ApesTreeNode(new Activity("node11"),false);
 	ApesTreeNode node12 = new ApesTreeNode(new SPackage("node12"),true);
@@ -72,7 +75,7 @@ public class TestSpemTreeAdapter extends TestCase
 		//adapt.setRoot(createProcess());
 	}
 	
-	/*private ApesProcess createProcess()
+	private ApesProcess createProcess()
 	{
 		proc = new ApesProcess("proc");
 		component = new ProcessComponent("component");
@@ -100,7 +103,7 @@ public class TestSpemTreeAdapter extends TestCase
 		p3.addModelElement(prod);
 		
 		return proc;
-	}*/
+	}
 	
 	
 	public void testGetChild()

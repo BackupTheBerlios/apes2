@@ -33,21 +33,21 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
-import javax.swing.undo.AbstractUndoableEdit;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.frontend.ApesMediator;
-import org.ipsquad.apes.model.frontend.ChangeEvent;
-import org.ipsquad.apes.model.frontend.Event;
+import org.ipsquad.apes.model.frontend.event.ApesModelEvent;
+import org.ipsquad.apes.model.frontend.event.ApesModelListener;
+import org.ipsquad.utils.Debug;
 import org.ipsquad.utils.ErrorManager;
 import org.jgraph.JGraph;
 import org.jgraph.event.GraphModelEvent;
@@ -58,9 +58,9 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Base class for the graph editing internal frames
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
-public class GraphFrame extends JInternalFrame implements InternalFrameListener, GraphModelListener, DropTargetListener, ApesMediator.Listener
+public class GraphFrame extends JInternalFrame implements InternalFrameListener, GraphModelListener, DropTargetListener, ApesModelListener
 {
 
 	protected JGraph mGraph;
@@ -76,7 +76,7 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 		super(model.getName(),true,true,true,true);
 		
 		model.addGraphModelListener(this);
-		ApesMediator.getInstance().addApesMediatorListener(this);
+		ApesMediator.getInstance().addApesModelListener(this);
 		mToolPalette = createToolPalette();
 		mGraph = createGraph(model);
 		
@@ -147,8 +147,7 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 		
 		try
 		{
-			userObject = ((SpemGraphAdapter)mGraph.getModel()).findWithID(((Integer)transferable.getTransferData(flavors[0])).intValue());
-			
+			userObject = ApesMediator.getInstance().findByID(((Integer)transferable.getTransferData(flavors[0])).intValue());
 		}
 		catch(Exception e)
 		{
@@ -179,7 +178,28 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 
 		GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
 
-		Map view = new HashMap();
+		Map view = ApesGraphConstants.createMap();
+		ApesGraphConstants.setAttributes(view, attr);
+		mGraph.getModel().insert(new Object[]{vertex}, view, null, null, null);
+		
+		if(mGraph.getModel().contains(vertex))
+		{
+			try
+			{
+				setSelected(true);
+			}
+			catch(Exception e) { }
+			
+			mGraph.setSelectionCell(vertex);
+			dtde.dropComplete(true);
+		}
+		else
+		{
+			dtde.dropComplete(false);
+		}
+
+
+		/*Map view = new HashMap();
 		view.put("Attributes", attr);
 		
 		((SpemGraphAdapter)mGraph.getModel()).insertCell( vertex, view);
@@ -228,7 +248,7 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 	
 	public void dispose()
 	{
-		ApesMediator.getInstance().removeApesMediatorListener(this);
+		ApesMediator.getInstance().removeApesModelListener(this);
 		getGraphModel().removeGraphModelListener(this);
 		super.dispose();
 	}
@@ -262,7 +282,7 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 	public void internalFrameIconified(InternalFrameEvent e) { }
 	public void internalFrameDeiconified(InternalFrameEvent e) { }
 
-	public void updated(Event e)
+	/*public void updated(Event e)
 	{
 		if( e instanceof ChangeEvent && ((ChangeEvent)e).getElement() == getGraphModel().getDiagram() )
 		{
@@ -273,6 +293,10 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 				public void redo() { graphChanged(null); }
 			});
 		}
-	}
-
+	}*/
+	
+	public void modelChanged( ApesModelEvent e )
+    {
+	    if(Debug.enabled) Debug.print(Debug.VIEW, "(GraphFrame) -> modelChanged");
+    }
 }

@@ -29,26 +29,23 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 
 import org.ipsquad.apes.ui.ColorFontPanel;
-import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.GraphConstants;
 
 /**
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
-public class NoteCell extends DefaultGraphCell
+public class NoteCell extends ApesGraphCell
 {
 	public NoteCell()
 	{
-		super();
-		init();
+		super(null);
 	}
 	
 	public NoteCell(Object userObject) 
 	{
 		super(userObject);
-		init();
 	}
 	
 	protected void init()
@@ -69,10 +66,8 @@ public class NoteCell extends DefaultGraphCell
 		changeAttributes(map);
 	}
 	
-	public Object clone()
+	public String toString()
 	{
-		NoteCell c = (NoteCell) super.clone();
-		init();
-		return c;
+		return userObject != null ? userObject.toString() : null;
 	}
 }

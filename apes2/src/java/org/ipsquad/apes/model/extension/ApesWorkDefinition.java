@@ -21,16 +21,21 @@
 
 package org.ipsquad.apes.model.extension;
 
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
+import org.ipsquad.apes.model.spem.process.structure.ProcessPerformer;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 
 /**
  * WorkDefinition which contains an activity diagram and a flow diagram 
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesWorkDefinition extends WorkDefinition implements IPackage
 {
@@ -141,7 +146,20 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 	{
 		if( e instanceof Activity )
 		{
-			return addSubWork( (Activity) e );
+			Activity a = (Activity)e;
+			if(addSubWork(a))
+			{
+				if(a.getOwner() == null && getOwner() != null)
+				{
+					if(getOwner() != null && !getOwner().containsFeature(a))
+					{
+						getOwner().addFeature(a);
+					}
+					a.setOwner(getOwner());
+				}
+				return true;
+			}
+			return false;
 		}
 		if( e instanceof FlowDiagram )
 		{
@@ -159,6 +177,16 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 	{
 		if( e instanceof Activity )
 		{
+			Activity a = (Activity)e;
+			Collection links = ApesMediator.getInstance().getLinks(mFlowDiagram, getOwner());
+			if(getOwner() != null && !contains(links, a))
+			{
+				if(getOwner() != null && getOwner().containsFeature(a))
+				{
+					getOwner().removeFeature(a);
+				}
+				a.setOwner(null);
+			}
 			return removeSubWork( (Activity) e );
 		}
 		if( e instanceof FlowDiagram && mFlowDiagram == (FlowDiagram) e )
@@ -232,6 +260,43 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 		}
 
 		return count;
+	}
+	
+	public boolean setOwner(ProcessPerformer owner)
+	{
+		ProcessPerformer oldOwner = getOwner();
+		if(oldOwner != owner && super.setOwner(owner))
+		{
+			if(owner != null && !owner.containsFeature(this))
+				owner.addFeature(this);
+			
+			Collection links = ApesMediator.getInstance().getLinks(mFlowDiagram, oldOwner);
+			for(int i = 0; i < subWorkCount(); i++)
+			{
+				WorkDefinition wd = getSubWork(i);	
+				if(wd.getOwner() == oldOwner && !contains(links, wd))
+				{
+					if(owner != null && !owner.containsFeature(wd))
+						owner.addFeature(wd);
+					wd.setOwner(owner);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean contains(Collection links, Object o)
+	{
+		for ( Iterator iter = links.iterator(); iter.hasNext(); )
+		{
+			Link link = (Link) iter.next();
+			if(link.getSource() == o || link.getTarget() == o)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Object clone()

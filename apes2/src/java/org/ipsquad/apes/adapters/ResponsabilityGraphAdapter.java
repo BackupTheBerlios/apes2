@@ -21,16 +21,19 @@
 
 package org.ipsquad.apes.adapters;
 
+import org.ipsquad.apes.model.extension.Link;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
 
 /**
  * This adapter allows to display a responsability diagram in a JGraph
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ResponsabilityGraphAdapter extends SpemGraphAdapter 
 {
@@ -39,19 +42,27 @@ public class ResponsabilityGraphAdapter extends SpemGraphAdapter
 		super( diagram );
 		
 		mBuilder = new Builder( ) {
-			public Object create( Object o )
+			public DefaultGraphCell create( Object o )
 			{
 				if( o instanceof Element )
 				{
 					((Element)o).visit( this );
 					return mCreated;
 				}
+				else if( o instanceof Link )
+				{
+					Link link = (Link)o;
+					DefaultEdge edge = new DefaultEdge();
+					edge.setSource(getCellByUserObject(link.getSource(), null, false).getChildAt(0));
+					edge.setTarget(getCellByUserObject(link.getTarget(), null, false).getChildAt(0));
+					return edge;
+				}
 				return null;
 			}
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				if( o instanceof WorkProduct || o instanceof ProcessRole )
+				if( o instanceof WorkProduct || o instanceof ProcessRole || o instanceof Link)
 				{
 					return true;
 				}

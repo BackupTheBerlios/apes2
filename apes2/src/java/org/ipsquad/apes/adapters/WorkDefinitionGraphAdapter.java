@@ -21,18 +21,22 @@
 
 package org.ipsquad.apes.adapters;
 
+import org.ipsquad.apes.model.extension.Link;
 import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
+import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
 
 /**
  * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {
@@ -41,19 +45,36 @@ public class WorkDefinitionGraphAdapter extends SpemGraphAdapter
 		super( diagram );
 		
 		mBuilder = new Builder( ) {
-			public Object create( Object o )
+			public DefaultGraphCell create( Object o )
 			{
+				mCreated = null;
 				if( o instanceof Element )
 				{
 					((Element)o).visit( this );
-					return mCreated;
 				}
-				return null;
+				else if( o instanceof Link )
+				{
+					Link link = (Link)o;
+					DefaultEdge edge = new DefaultEdge();
+					edge.setSource(getCellByUserObject(link.getSource(), null, false).getChildAt(0));
+					edge.setTarget(getCellByUserObject(link.getTarget(), null, false).getChildAt(0));
+					mCreated = edge;
+				}
+				else if( o instanceof WorkDefinitionDiagram.Transition )
+				{
+					WorkDefinitionDiagram.Transition link = (WorkDefinitionDiagram.Transition)o;
+					DefaultEdge edge = new DefaultEdge();
+					edge.setSource(getCellByUserObject(link.getInputModelElement(), null, false).getChildAt(0));
+					edge.setTarget(getCellByUserObject(link.getOutputModelElement(), null, false).getChildAt(0));
+					mCreated = edge;
+				}
+				
+				return mCreated;
 			}
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				if( o instanceof WorkProduct || o instanceof ProcessRole || o instanceof WorkDefinition || o instanceof StateMachine)
+				if( o instanceof WorkProduct || o instanceof ProcessRole || o instanceof WorkDefinition || o instanceof StateMachine || o instanceof Link)
 				{
 					return true;
 				}

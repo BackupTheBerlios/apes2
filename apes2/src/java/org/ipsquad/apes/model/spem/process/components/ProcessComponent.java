@@ -21,11 +21,19 @@
 
 package org.ipsquad.apes.model.spem.process.components;
 
+import org.ipsquad.apes.model.extension.ContextDiagram;
+import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.spem.SpemVisitor;
+import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
+import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 /**
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ProcessComponent extends SPackage
 {
@@ -38,6 +46,23 @@ public class ProcessComponent extends SPackage
 	public ProcessComponent(String name)
 	{
 		super(name);
+	}
+	
+	public boolean addModelElement(ModelElement e)
+	{
+		if(!containsModelElement(e) && e.getParent()==null)
+		{
+			if(e instanceof ProcessRole || (e instanceof WorkDefinition && !(e instanceof Activity))
+					|| e instanceof WorkProduct || e instanceof ResponsabilityDiagram
+					|| e instanceof WorkDefinitionDiagram || e instanceof ContextDiagram
+					|| e instanceof SPackage )
+			{
+				mOwnedElement.add(e);
+				e.setParent(this);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void visit(SpemVisitor visitor)

@@ -56,7 +56,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -147,11 +147,10 @@ public class LoadProject extends MonitoredTaskBase
 				mProject.getProcess().addModelElement((ProcessComponent)v.get(0));
 				mProject.setDiagramMap((HashMap)v.get(1));
 			
-				Activity a = new Activity();
-				int count = new Integer(a.getName().substring(6)).intValue();
-				int nb = new Integer(((Activity)v.get(3)).getName().substring(6)).intValue();
+				Activity ref = (Activity)v.get(3);
+				int nb = new Integer(ref.getName().substring(6)).intValue();
 				Element.setNoNameCounter(nb);	
-			
+				Element.setNoID(ref.getID());
 				projectZip.close();
 				
 				print(mResource.getString("loadComponentSuccess"));

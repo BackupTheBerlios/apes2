@@ -26,7 +26,7 @@ import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 
 /**
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class WorkDefinitionCell extends ApesGraphCell
 {
@@ -38,13 +38,5 @@ public class WorkDefinitionCell extends ApesGraphCell
 	public WorkDefinitionCell(WorkDefinition c)
 	{
 		super(c);
-	}
-	
-	public Object clone()
-	{
-		WorkDefinitionCell c = (WorkDefinitionCell) super.clone();
-		c.init();
-		
-		return c;
 	}
 }

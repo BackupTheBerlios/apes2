@@ -72,9 +72,7 @@ public class ApesTreeNode extends DefaultMutableTreeNode implements Identity, Se
 	
 	public Map changeAttributes(Map change)
 	{
-		Element oldUserObject = (Element)userObject;	
 		Map undo = GraphConstants.applyMap(change, getAttributes());
-		
 		return undo;
 	}
 	

@@ -48,7 +48,7 @@ import org.ipsquad.utils.ConfigManager;
  *
  * This class represent a project in the application
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class Project implements Serializable
 {
@@ -99,7 +99,7 @@ public class Project implements Serializable
 				adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
 				mDiagramMap.put(diagram, adapt);
 				ApesMediator.getInstance().registerDiagram(diagram);
-				ApesMediator.getInstance().addApesMediatorListener( adapt );
+				ApesMediator.getInstance().addApesModelListener( adapt );
 				//Context.getInstance().getTopLevelFrame().getTree().getModel().addTreeModelListener(adapt);
 			}
 			else if(diagram instanceof ResponsabilityDiagram)
@@ -108,7 +108,7 @@ public class Project implements Serializable
 				adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
 				mDiagramMap.put(diagram, adapt);
 				ApesMediator.getInstance().registerDiagram(diagram);
-				ApesMediator.getInstance().addApesMediatorListener( adapt );
+				ApesMediator.getInstance().addApesModelListener( adapt );
 			}
 			else if(diagram instanceof ContextDiagram)
 			{
@@ -116,7 +116,7 @@ public class Project implements Serializable
 				adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
 				mDiagramMap.put(diagram, adapt);
 				ApesMediator.getInstance().registerDiagram(diagram);
-				ApesMediator.getInstance().addApesMediatorListener( adapt );
+				ApesMediator.getInstance().addApesModelListener( adapt );
 			}
 			else if(diagram instanceof ActivityDiagram)
 			{
@@ -124,7 +124,7 @@ public class Project implements Serializable
 				adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
 				mDiagramMap.put(diagram, adapt);
 				ApesMediator.getInstance().registerDiagram(diagram);
-				ApesMediator.getInstance().addApesMediatorListener( adapt );
+				ApesMediator.getInstance().addApesModelListener( adapt );
 				//Context.getInstance().getTopLevelFrame().getTree().getModel().addTreeModelListener(adapt);
 			}
 			else if(diagram instanceof WorkDefinitionDiagram)
@@ -133,7 +133,7 @@ public class Project implements Serializable
 				adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
 				mDiagramMap.put(diagram, adapt);
 				ApesMediator.getInstance().registerDiagram(diagram);
-				ApesMediator.getInstance().addApesMediatorListener( adapt );
+				ApesMediator.getInstance().addApesModelListener( adapt );
 				//Context.getInstance().getTopLevelFrame().getTree().getModel().addTreeModelListener(adapt);
 			}
 		}
@@ -151,7 +151,7 @@ public class Project implements Serializable
 	{
 		adapter.addUndoableEditListener(Context.getInstance().getUndoManager());
 		mDiagramMap.put(diagram, adapter);
-		ApesMediator.getInstance().addApesMediatorListener( adapter );
+		ApesMediator.getInstance().addApesModelListener( adapter );
 		//ApesMediator.getInstance().addDiagram( diagram );
 		//Context.getInstance().getTopLevelFrame().getTree().getModel().addTreeModelListener(adapter);
 	}
@@ -164,7 +164,7 @@ public class Project implements Serializable
 		if(adapt!=null)
 		{
 			Context.getInstance().getTopLevelFrame().deleteDiagram(adapt);
-			ApesMediator.getInstance().removeApesMediatorListener( adapt );
+			ApesMediator.getInstance().removeApesModelListener( adapt );
 			//Context.getInstance().getTopLevelFrame().getTree().getModel().removeTreeModelListener(adapt);
 			adapt.destroy();
 			adapt.removeUndoableEditListener(Context.getInstance().getUndoManager());
@@ -179,12 +179,12 @@ public class Project implements Serializable
 		{
 			SpemGraphAdapter adapt = (SpemGraphAdapter) it.next();
 			//Context.getInstance().getTopLevelFrame().getTree().getModel().removeTreeModelListener(adapt);
-			ApesMediator.getInstance().removeApesMediatorListener( adapt );
+			ApesMediator.getInstance().removeApesModelListener( adapt );
 			adapt.removeUndoableEditListener(Context.getInstance().getUndoManager());
 		}
 		SpemTreeAdapter treeAdapt = (SpemTreeAdapter)Context.getInstance().getTopLevelFrame().getTree().getModel();
 		treeAdapt.removeUndoableEditListener(Context.getInstance().getUndoManager());
-		ApesMediator.getInstance().removeApesMediatorListener( treeAdapt );
+		ApesMediator.getInstance().removeApesModelListener( treeAdapt );
 		ApesMediator.getInstance().removeUndoableEditListener(Context.getInstance().getUndoManager());
 	}
 	
@@ -195,13 +195,13 @@ public class Project implements Serializable
 		while(it.hasNext())
 		{
 			SpemGraphAdapter adapt = (SpemGraphAdapter) it.next();
-			ApesMediator.getInstance().addApesMediatorListener( adapt );
+			ApesMediator.getInstance().addApesModelListener( adapt );
 			//Context.getInstance().getTopLevelFrame().getTree().getModel().addTreeModelListener(adapt);
 			adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
 		}
 		SpemTreeAdapter treeAdapt = (SpemTreeAdapter)Context.getInstance().getTopLevelFrame().getTree().getModel();
 		treeAdapt.addUndoableEditListener(Context.getInstance().getUndoManager());
-		ApesMediator.getInstance().addApesMediatorListener( treeAdapt );
+		ApesMediator.getInstance().addApesModelListener( treeAdapt );
 		ApesMediator.getInstance().addUndoableEditListener(Context.getInstance().getUndoManager());
 	}
 	

@@ -23,23 +23,15 @@ package org.ipsquad.apes;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
 
-import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.ApesTransferable;
-import org.ipsquad.apes.adapters.SpemGraphAdapter;
-import org.ipsquad.apes.model.frontend.ApesMediator;
-import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.jgraph.JGraph;
 
 /**
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ApesClipboardManager
 {
@@ -80,7 +72,7 @@ public class ApesClipboardManager
 	
 	public static void paste()
 	{
-		if( Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame() == null )
+		/*if( Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame() == null )
 		{
 			return;
 		}
@@ -139,7 +131,7 @@ public class ApesClipboardManager
 		} 
 		catch (UnsupportedFlavorException e) {
 			System.out.println("DataFlower de mauvais type");
-		}
+		}*/
 	}
 
 }

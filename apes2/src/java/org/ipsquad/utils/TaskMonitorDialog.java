@@ -43,7 +43,7 @@ import javax.swing.Timer;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class TaskMonitorDialog extends JDialog
 {

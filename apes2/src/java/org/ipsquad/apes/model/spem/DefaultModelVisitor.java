@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.extension.ActivityDiagram.Transition;
 
 /**
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class DefaultModelVisitor extends DefaultSpemVisitor implements ModelVisitor 
 {
@@ -57,7 +57,7 @@ public class DefaultModelVisitor extends DefaultSpemVisitor implements ModelVisi
 	public void visitTransition(Transition transition) 
 	{
 	}
-
+	
 	public void visitApesProcess(ApesProcess p)
 	{
 		visitModelElement(p);

@@ -32,7 +32,7 @@ import org.ipsquad.utils.Debug;
 
 /**
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class WorkProductRef extends ModelElement 
 {
@@ -44,7 +44,7 @@ public class WorkProductRef extends ModelElement
 		super("");
 		mRef = new  WorkProduct();
 		mTag = new Date().getTime();
-		if(Debug.enabled) Debug.print("(M) -> ++WorkProductRef");
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++WorkProductRef");
 	}
 	
 	public WorkProductRef( WorkProduct w )
@@ -52,7 +52,7 @@ public class WorkProductRef extends ModelElement
 		super(ConfigManager.getInstance().getProperty("Reference")+w.getName());
 		mRef = w;
 		mTag = new Date().getTime();
-		if(Debug.enabled) Debug.print("(M) -> ++WorkProductRef::"+w);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++WorkProductRef::"+w);
 	}
 	
 	public long getTag()
@@ -62,7 +62,7 @@ public class WorkProductRef extends ModelElement
 	
 	public void setParent( IPackage parent )
 	{
-		if(Debug.enabled) Debug.print("(M) -> WorkProductRef("+getName()+"::setParent "+parent);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkProductRef("+getName()+"::setParent "+parent);
 		super.setParent(parent);
 		if( parent == null )
 		{
@@ -85,7 +85,7 @@ public class WorkProductRef extends ModelElement
 	
 	public void setReference( WorkProduct w )
 	{
-		if(Debug.enabled) Debug.print("(M) -> WorkProductRef("+getName()+"::setReference "+w);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkProductRef("+getName()+"::setReference "+w);
 		mRef = w;
 	}
 	

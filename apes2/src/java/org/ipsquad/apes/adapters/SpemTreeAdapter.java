@@ -22,7 +22,8 @@
 
 package org.ipsquad.apes.adapters;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.Icon;
@@ -36,16 +37,15 @@ import javax.swing.tree.TreePath;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEditSupport;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.Identity;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.frontend.ApesMediator;
-import org.ipsquad.apes.model.frontend.ChangeEvent;
-import org.ipsquad.apes.model.frontend.Event;
-import org.ipsquad.apes.model.frontend.InsertEvent;
-import org.ipsquad.apes.model.frontend.MoveEvent;
-import org.ipsquad.apes.model.frontend.RemoveEvent;
+import org.ipsquad.apes.model.frontend.event.ApesModelEvent;
+import org.ipsquad.apes.model.frontend.event.ApesModelListener;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.utils.Debug;
 import org.ipsquad.utils.IconManager;
@@ -53,9 +53,9 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
-public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesMediator.Listener
+public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesModelListener
 {
 	private EventListenerList mListenerList = new EventListenerList();
 	private ApesTreeNode mRoot = new ApesTreeNode(new ApesProcess("fake"), false);
@@ -78,8 +78,6 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 			Object[] path = {mRoot};
 			fireTreeStructureChanged(this, path, null, null);
 		}
-		//mRoot.addModelElement(new ProcessComponent("Component"));
-		//fireTreeNodesInserted(this,path,new int[]{0},new Object[]{mRoot.getComponent()});
 	}
 
 	/**
@@ -152,31 +150,11 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 		return ((TreeNode)node).isLeaf();
 	}
 
-	/**
-	 * Called when the value associated to a node has changed
-	 *
-	 * @param path the path to the modified node
-	 * @param newValue the new value associated to the node
-	 */
-	public void valueForPathChanged(TreePath path, Object newValue)
+	public boolean shouldGoInTree(Object o)
 	{
-		if( newValue instanceof String && path.getLastPathComponent() != mRoot 
-				&& ! newValue.equals(path.getLastPathComponent().toString()))
-		{
-			change( (ApesTreeNode)path.getLastPathComponent(), (String)newValue );
-		}
-		
-		if( newValue instanceof Map )
-		{	
-			ApesTreeNode node = (ApesTreeNode)path.getLastPathComponent();
-			ApesTreeNode parent = (ApesTreeNode)node.getParent();
-			Map undo = node.changeAttributes((Map)newValue);
-			NodeChandeAttributes edit = new NodeChandeAttributes(node, undo);
-			postEdit(edit);
-			fireTreeNodesChanged(this,parent.getPath(),new int[]{parent.getIndex(node)},new Object[]{node});
-		}
+	    return ApesMediator.getInstance().shouldGoInTree(o);
 	}
-
+	
 	/**
 	 * Find the index of a child in a node
 	 *
@@ -192,18 +170,6 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 		}
 		return -1;
 	}
-
-	/**
-	 * Move an element into another
-	 *
-	 * @param element the element to move
-	 * @param container the element which will contain the moved element
-	 * @return true if the operation is allowed
-	 */
-	public void moveInto(Object element, Object container)
-	{
-		move( element, container );
-	}	
 
 	public TreeNode[] getPathToRoot(ApesTreeNode node)
 	{
@@ -231,7 +197,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 		}
 		else
 		{
-			if(Debug.enabled) Debug.print("associateIcon : Something unknown in the SpemTreeAdapter");
+			if(Debug.enabled) Debug.print(Debug.ADAPTER, "associateIcon : Something unknown in the SpemTreeAdapter");
 			return im.getIcon("icons/TreeUnknown.gif");
 		}
 	
@@ -257,7 +223,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 		}
 		else
 		{
-			if(Debug.enabled) Debug.print("associateMenu : Something unknown in the SpemTreeAdapter");
+			if(Debug.enabled) Debug.print(Debug.ADAPTER, "associateMenu : Something unknown in the SpemTreeAdapter");
 			return null;
 		}
 	
@@ -280,7 +246,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 		}
 		else
 		{
-			if(Debug.enabled) Debug.print("elementAction : Something unknown in the SpemTreeAdapter");
+			if(Debug.enabled) Debug.print(Debug.ADAPTER, "elementAction : Something unknown in the SpemTreeAdapter");
 		}
 	}
 
@@ -343,6 +309,127 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	public void removeTreeModelListener(TreeModelListener l)
 	{
 		mListenerList.remove(TreeModelListener.class, l);
+	}
+
+	/**
+	 * Adds nodes in the tree
+	 * 
+	 * @param nodes the nodes to insert
+	 * @param parents the parents of each nodes
+	 */
+	public void insert( Object[] nodes, Object[] parentNodes )
+	{
+		if(Debug.enabled) Debug.print(Debug.ADAPTER, "(A) -> SpemTreeAdapter::insert ");
+		
+		if(nodes == null || parentNodes == null || nodes.length != parentNodes.length)
+		    return;
+		
+		Map matching = ApesGraphConstants.createMap();
+		Map parentMatching = ApesGraphConstants.createMap();
+		
+        Object[] objects = new Object[nodes.length];
+        Object[] parents = new Object[nodes.length];
+        
+	    for ( int i = 0; i < objects.length; i++ )
+        {
+            objects[i] = ((ApesTreeNode)nodes[i]).getUserObject();
+            parents[i] = ((ApesTreeNode)parentNodes[i]).getUserObject();
+            matching.put(objects[i], nodes[i]);
+            parentMatching.put(parents[i], parentNodes[i]);
+        }
+	    Map saved = ApesGraphConstants.createMap();
+	    ApesGraphConstants.setInsertApesTreeNodes(saved, matching );
+		ApesGraphConstants.setInsertParentApesTreeNodes(saved, parentMatching);
+		
+		ApesMediator.getInstance().insertInModel(objects, parents, saved);
+	}
+	
+	/**
+	 * Removes nodes from the tree
+	 * 
+	 * @param nodes
+	 */
+	public void remove( Object[] nodes )
+	{
+	    if(Debug.enabled) Debug.print(Debug.ADAPTER, "(A) -> SpemTreeAdapter::remove ");
+		
+	    Map matching = ApesGraphConstants.createMap();
+        Object[] objects = new Object[nodes.length];
+	    for ( int i = 0; i < objects.length; i++ )
+        {
+            objects[i] = ((ApesTreeNode)nodes[i]).getUserObject();
+            matching.put(objects[i], nodes[i]);
+        }
+	    Map saved = ApesGraphConstants.createMap();
+	    ApesGraphConstants.setRemoveApesTreeNodes(saved, matching);
+        
+	    ApesMediator.getInstance().removeFromModel(objects, saved);
+	}
+	
+	/**
+	 * Moves the nodes to the new parents
+	 * 
+	 * @param nodes
+	 * @param newParents
+	 */
+	public void move( Object[] nodes, Object[] newParents)
+	{
+		if(Debug.enabled) Debug.print(Debug.ADAPTER, "(A) -> SpemTreeAdapter::move ");
+		
+		if(nodes == null || newParents == null)
+			return;
+	
+		Map matching = ApesGraphConstants.createMap();
+		Map parentMatching = ApesGraphConstants.createMap();
+		Map moves = ApesGraphConstants.createMap();
+		
+	    for ( int i = 0; i < nodes.length; i++ )
+        {
+            Object object = ((ApesTreeNode)nodes[i]).getUserObject();
+            Object parent = ((ApesTreeNode)newParents[i]).getUserObject();
+            
+            moves.put(object, parent);
+            matching.put(object, nodes[i]);
+            parentMatching.put(parent, newParents[i]);
+        }
+	    
+	    Map saved = ApesGraphConstants.createMap();
+	    ApesGraphConstants.setInsertApesTreeNodes(saved, matching );
+		ApesGraphConstants.setInsertParentApesTreeNodes(saved, parentMatching);
+		
+		ApesMediator.getInstance().move(moves, saved);
+	}
+
+	/**
+	 * Called when the value associated to a node has changed
+	 *
+	 * @param path the path to the modified node
+	 * @param newValue the new value associated to the node
+	 */
+	public void valueForPathChanged(TreePath path, Object newValue)
+	{
+		if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemTreeAdapter) -> valueForPathChanged");
+        
+		if( newValue instanceof String && path.getLastPathComponent() != mRoot 
+				&& ! newValue.equals(path.getLastPathComponent().toString()))
+		{
+			ApesTreeNode node = (ApesTreeNode) path.getLastPathComponent();
+			Map attr = ApesGraphConstants.createMap();
+			attr.put(node.getUserObject(), node);
+			Map change = ApesGraphConstants.createMap();
+			change.put(node.getUserObject(), newValue);
+			ApesMediator.getInstance().change(null, change, attr );
+		}
+		
+		if( newValue instanceof Map )
+		{	
+			ApesTreeNode node = (ApesTreeNode)path.getLastPathComponent();
+			ApesTreeNode parent = (ApesTreeNode)node.getParent();
+			Map undo = node.changeAttributes((Map)newValue);
+			NodeChandeAttributes edit = new NodeChandeAttributes(node, undo);
+			postEdit(edit);
+			fireTreeNodesChanged(this,parent.getPath(),new int[]{parent.getIndex(node)},new Object[]{node});
+		}
 	}
 
 	/**
@@ -451,415 +538,315 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 		}
 	}
 
-	/**
-	 * Change the parent of a node
-	 * 
-	 * @param object the child
-	 * @param container the newParent
-	 */
-	public void move( Object object, Object container )
+    public void modelChanged( ApesModelEvent e )
+    {
+        if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemTreeAdapter) -> modelChanged");
+        
+        Object source = e.getChange().getSource();
+        Object[] inserted = e.getChange().getInserted();
+        Map changed = e.getChange().getChanged();
+	    Object[] removed = e.getChange().getRemoved();
+        Object[] parents = e.getChange().getParents();
+        Collection moved = e.getChange().getMoved();
+        Map extras = e.getChange().getExtras();
+        
+        handleInsert(source, inserted, parents, extras);
+        handleRemove(source, removed, extras);
+        handleMove(source, e.getChange(), extras);
+        handleChange(source, changed, extras);
+    }
+    
+    protected void handleInsert(Object source, Object[] elements, Object[] parents, Map attr)
+    {
+        if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemTreeAdapter) -> handleInsert");
+        
+        if(elements == null || parents == null || elements.length != parents.length) return;
+        
+        NodeEdit postEdit = null;
+       
+        for ( int i = 0; i < elements.length; i++ )
+        {
+        	ApesTreeNode node = getNodeByUserObject(elements[i], attr, true);
+            if( node != null && node.getParent() == null )
+            {            	
+            	ApesTreeNode parent = getParentNodeByUserObject(parents[i],attr);
+                if( parent == null )
+                {
+                    parent = mRoot;
+                }
+                NodeEdit edit = createInsertNodeEdit(parent, node);
+                if(edit != null)
+                {
+                	if(postEdit == null)
+                	{
+                		postEdit = edit;
+                	}
+                	else
+                	{
+                		edit.end();
+                		postEdit.addEdit(edit);
+                	}
+                	if(Debug.enabled) Debug.print(Debug.ADAPTER, "\t(SpemTreeAdapter) -> inserted "+edit);
+                	edit.execute();
+                }
+            }
+        }
+        
+        if(postEdit != null)
+        {
+        	postEdit.end();
+        	postEdit(postEdit);
+        }
+    }
+    
+    protected void handleRemove(Object source, Object[] elements, Map attr)
+    {
+        if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemTreeAdapter) -> handleRemoved");
+        
+        if(elements == null || source != null) return;
+        
+        //Vector edits = new Vector();
+        NodeEdit postEdit = null;
+        
+        for ( int i = 0; i < elements.length; i++ )
+        {
+            ApesTreeNode node = getNodeByUserObject(elements[i], attr, false);
+            if( node != null )
+            { 
+                //update reference to the node
+                if(node.getParent() == null && node instanceof Identity)
+                {
+                    node = findWithID(((Identity)node).getID());
+                }
+                ApesTreeNode parent = (ApesTreeNode)node.getParent();
+                if(parent != null)
+                {
+                    NodeEdit edit = createRemoveNodeEdit(parent, node);
+                    if(edit != null)
+                    {
+                    	if(postEdit == null)
+                    	{
+                    		postEdit = edit;
+                    	}
+                    	else
+                    	{
+                    		edit.end();
+                    		postEdit.addEdit(edit);
+                    	}
+                    	if(Debug.enabled) Debug.print(Debug.ADAPTER, "\t(SpemTreeAdapter) -> removed "+edit);
+                    	edit.execute();
+                    }
+                }
+                else
+                {
+                	if(Debug.enabled) Debug.print(Debug.ADAPTER, "**WARNING** (SpemTreeAdapter) -> remove : parent is null!");
+                }
+            }
+        }
+        
+        if(postEdit != null)
+        {
+        	postEdit.end();
+        	postEdit(postEdit);
+        }
+    }
+    
+    protected Map handleMove(Object source, ApesModelEvent.ApesModelChange change, Map attr)
+    {
+    	if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemTreeAdapter) -> handleMoved");
+      
+    	if(change.getMoved() == null) return null;
+    	
+    	Iterator it = change.getMoved().iterator();
+    	while(it.hasNext())
+    	{
+    		Object userObject = it.next();
+    		ApesTreeNode node = getNodeByUserObject(userObject, attr, false);
+    	    ApesTreeNode oldParent = getParentNodeByUserObject(change.getOldParent(userObject),attr);
+    	    ApesTreeNode newParent = getParentNodeByUserObject(change.getNewParent(userObject),attr);
+    	    
+            if( node != null && oldParent != null && newParent != null)
+            { 
+            	NodeEdit edit = createMoveNodeEdit(oldParent, newParent, node);
+            	if(edit != null)
+            	{
+            		edit.end();
+            		edit.execute();
+            		postEdit(edit);
+            	}
+            }
+    	}
+    	return null;
+    }
+    
+    protected void handleChange(Object source, Map changed, Map extras)
+    {
+    	if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemTreeAdapter) -> handleChange");
+        
+    	if(changed != null)
+    	{
+			Iterator it = changed.entrySet().iterator();
+    		while(it.hasNext())
+    		{
+        		Map.Entry entry = (Map.Entry)it.next();
+    			ApesTreeNode node = getNodeByUserObject(entry.getKey(), extras, false);
+    			if(node != null && entry.getValue() != null && entry.getValue() instanceof String)
+    			{
+        			NodeChandeAttributes edit = createChangeNodeEdit(node, null);	
+					if(edit != null)
+					{
+						//edit.change();
+						fireTreeNodesChanged( this, ((ApesTreeNode)node.getParent()).getPath(), new int[]{ node.getParent().getIndex(node) }, new Object[]{ node } );
+						postEdit(edit);
+					}
+    			}
+    		}
+    	}
+    }
+    
+    protected ApesTreeNode getNodeByUserObject(Object userObject, Map attr, boolean create)
+    {
+        ApesTreeNode node = null;
+        if(attr != null && attr.containsKey(ApesGraphConstants.INSERT_APES_TREE_NODE))
+        {
+           node = (ApesTreeNode)ApesGraphConstants.getInsertApesTreeNodes(attr).get(userObject);
+        }
+        if(node == null && userObject instanceof Identity)
+        {
+          node = findWithID(((Identity)userObject).getID());
+        }
+        if( node == null && create && shouldGoInTree(userObject))
+        {
+            node = new ApesTreeNode(userObject,null);
+        }
+        return node;    
+     }
+    
+    protected ApesTreeNode getParentNodeByUserObject(Object parent, Map attr)
+    {
+        ApesTreeNode node = null;
+        if(attr != null && attr.containsKey(ApesGraphConstants.INSERT_PARENT_APES_TREE_NODE))
+        {
+            node = (ApesTreeNode)ApesGraphConstants.getInsertParentApesTreeNodes(attr).get(parent);
+        }
+        if(node == null && parent instanceof Identity)
+        {
+            node = findWithID(((Identity)parent).getID());
+        }
+        return node;    
+    }
+    	
+	protected NodeEdit createInsertNodeEdit(ApesTreeNode insertedParent, ApesTreeNode insertedElement)
 	{
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::move "+object+" "+container);
-		
-		if( object instanceof ApesTreeNode && container instanceof ApesTreeNode )
-		{	
-			ApesTreeNode node = (ApesTreeNode)object;
-			ApesTreeNode parent = (ApesTreeNode)container;
-			
-			Map attr = new HashMap();
-			attr.put("oldParent",node.getParent());
-			attr.put("newParent",container);
-			attr.put(node.getUserObject(),node);
-			
-			ApesMediator.getInstance().update( 
-					ApesMediator.getInstance().createMoveCommand( ((ApesTreeNode)node).getUserObject(), ((ApesTreeNode)container).getUserObject(), attr ) );
-		}
+		return createNodeEdit(insertedParent, insertedElement, null, null, null, null, null);
 	}
 	
-	/**
-	 * Add a node to another
-	 * 
-	 * @param objectToAdd the added node
-	 * @param parent the parent
-	 */
-	public void insert( ApesTreeNode objectToAdd, ApesTreeNode parent )
+	protected NodeEdit createRemoveNodeEdit(ApesTreeNode removedParent, ApesTreeNode removedElement)
 	{
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::insert "+objectToAdd+" "+parent);
-		
-		Map attr = new HashMap();
-		attr.put(objectToAdd.getUserObject(), objectToAdd );
-		attr.put("parent",parent);
-		ApesMediator.getInstance().update( 
-				ApesMediator.getInstance().createInsertCommand( objectToAdd.getUserObject(), parent.getUserObject(), attr ) );
+		return createNodeEdit(null, null, removedParent, removedElement, null, null, null);
 	}
 	
-	/**
-	 * Remove the specified node
-	 * 
-	 * @param nodeToRemove the node to remove
-	 */
-	public void remove( ApesTreeNode nodeToRemove )
+	protected NodeEdit createMoveNodeEdit(ApesTreeNode oldParent, ApesTreeNode newParent, ApesTreeNode movedElement)
 	{
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::remove "+nodeToRemove);
-		
-		Map attr = new HashMap();
-		attr.put(nodeToRemove.getUserObject(), nodeToRemove);
-		
-		ApesMediator.getInstance().update( 
-			ApesMediator.getInstance().createRemoveCommand( new Object[]{ nodeToRemove.getUserObject() }, attr ) );
+		return createNodeEdit(null, null, null, null, oldParent, newParent, movedElement);
 	}
 	
-	/**
-	 * Change the name of a node
-	 * 
-	 * @param nodeToChange the node to change
-	 * @param newValue the new name
-	 */
-	public void change( ApesTreeNode nodeToChange, String newValue )
-	{		
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::change "+nodeToChange+" "+newValue);
-		
-		Map attr = new HashMap();
-		attr.put(nodeToChange.getUserObject(),nodeToChange);
-		ApesMediator.getInstance().update( 
-				ApesMediator.getInstance().createChangeCommand( nodeToChange.getUserObject(), newValue, attr ) );
+	protected NodeChandeAttributes createChangeNodeEdit(ApesTreeNode node, Map changed)
+	{
+		return new NodeChandeAttributes(node, changed);
 	}
 	
-	/**
-	 * Invoked after an element has changed in some way.
-	 */
-	public void updated( Event e )
+	protected NodeEdit createNodeEdit(ApesTreeNode insertedParent, ApesTreeNode insertedElement,
+			ApesTreeNode removedParent, ApesTreeNode removedElement,
+			ApesTreeNode oldParent, ApesTreeNode newParent, ApesTreeNode movedElement )
 	{
-		if( e instanceof InsertEvent )
-		{
-			inserted( (InsertEvent)e );
-		}
-		else if( e instanceof RemoveEvent )
-		{
-			removed( (RemoveEvent)e );
-		}
-		else if( e instanceof ChangeEvent )
-		{
-			changed( (ChangeEvent)e );
-		}
-		else if( e instanceof MoveEvent )
-		{
-			moved( (MoveEvent)e );
-		}
+		return new NodeEdit(insertedParent, insertedElement, 
+				removedParent, removedElement, oldParent, newParent, movedElement);
 	}
 	
-	/**
-	 * A new element has been inserted in the model.
-	 * 
-	 * @param event the event corresponding to the change
-	 */
-	protected void inserted( InsertEvent event )
+	public class NodeEdit extends CompoundEdit
 	{
-		//System.out.println("tree insert "+event);
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::inserted "+event);
+		ApesTreeNode mInsertElement, mRemoveElement, mMoveElement;
+		ApesTreeNode mInsertParent, mRemoveParent, mMoveOldParent, mMoveNewParent;
 		
-		// if the element already exist, do nothing
-		if( !event.isAlreadyExistInModel() && event.getParent() != null )
+		public NodeEdit(ApesTreeNode insertedParent, ApesTreeNode insertedElement,
+				ApesTreeNode removedParent, ApesTreeNode removedElement,
+				ApesTreeNode movedOldParent, ApesTreeNode movedNewParent, ApesTreeNode movedElement)
 		{
-			ApesTreeNode  node = null;
-			ApesTreeNode parent = null;
-			
-			// try to retrieve the attributes of the inserted element
-			if( event.getAttributes() != null && event.getAttributes().containsKey(event.getInserted()) )
-			{
-				node = (ApesTreeNode)event.getAttributes().get(event.getInserted());
-			}
-			else
-			{	
-				//node = findNodeByUserObject( (ApesTreeNode)getRoot(), event.getInserted());
-				node = (ApesTreeNode)findWithID(((Identity)event.getInserted()).getID());
-			}
-			// try to retrieve the attributes of the parent			
-			if( event.getAttributes() != null && event.getAttributes().containsKey("parent") )
-			{
-				parent = (ApesTreeNode)event.getAttributes().get("parent");
-			}
-			else
-			{	
-				//parent = findNodeByUserObject((ApesTreeNode)getRoot(), event.getParent());
-				parent = (ApesTreeNode)findWithID(((Identity)event.getParent()).getID());
-			}
-			// if the node doesn't exist, create it
-			if( node == null )
-			{
-				node = new ApesTreeNode( event.getInserted(), true );
-			}
-			
-			if( parent != null )
-			{	
-				if( node.getParent() == null )
-				{
-					parent.add(node);
-				}
-				// insert the element and create undo edit
-				fireTreeNodesInserted( this, parent.getPath(), new int[]{ parent.getIndex(node) }, new Object[]{ node });
-				
-				NodeInsertedEdit edit = new NodeInsertedEdit( this, node, parent );
-				postEdit( edit );
-			}
-		}
-	}
-	
-	/**
-	 * A new element has been removed in the model.
-	 * 
-	 * @param event the event corresponding to the change
-	 */
-	protected void removed( RemoveEvent event )
-	{
-		//System.out.println("tree remove "+event);
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::removed "+event);
-		
-		//if the remove concerns a diagram, do nothing
-		if( event.getDiagram() == null )
-		{
-			//Only remove the parent of the removed elements
-			Element element = (Element)event.getElements()[event.getElements().length-1];
-			ApesTreeNode node = null;
-			ApesTreeNode parent = null;
-			
-			//try to retrieve the attributes of the removed element
-			if( event.getAttributes() != null && event.getAttributes().containsKey(element) )
-			{
-				node = (ApesTreeNode) event.getAttributes().get(element);
-				parent = (ApesTreeNode)node.getParent();
-			}
-			else
-			{
-				node = (ApesTreeNode)findWithID(element.getID());
-				parent = (ApesTreeNode)findWithID(((Identity)event.getParents().get(element)).getID());
-			}
-			
-			if( node != null && parent != null )
-			{	
-				int[] indices = new int[]{ node.getParent().getIndex(node) };
-				
-				parent.remove(node);
-				
-				fireTreeNodesRemoved(this, parent.getPath(), indices, new Object[]{node} );
-			
-				NodeRemovedEdit edit = new NodeRemovedEdit( this, node, parent );
-				postEdit( edit );
-			}
-		}
-	}
-	
-	/**
-	 * A new element has been changed in the model.
-	 * 
-	 * @param event  the event corresponding to the change
-	 */
-	protected void changed( ChangeEvent event )
-	{
-		//System.out.println("tree edit : "+e);
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::changed "+event);
-		
-		if( event.getAttributes() != null && event.getAttributes().containsKey(event.getElement()))
-		{
-			ApesTreeNode node = null;
-			
-			if( event.getElement() instanceof ApesTreeNode )
-			{	
-				node = (ApesTreeNode)event.getAttributes().get(event.getElement());
-			}
-			else
-			{
-				//node = findNodeByUserObject(mRoot, e.getElement());
-				node = (ApesTreeNode)findWithID(((Identity)event.getElement()).getID());
-			}
-			
-			if( node != null )
-			{	
-				ApesTreeNode parent = (ApesTreeNode)node.getParent();
-			
-				if(parent != null)
-				{
-					fireTreeNodesChanged( this, parent.getPath(), new int[]{ parent.getIndex(node) }, new Object[]{ node } );
-				}
-				NodeChangedEdit edit = new NodeChangedEdit( node );
-				
-				postEdit( edit );
-			}
-		}
-	}
-	
-	/**
-	 * A new element has been moved in the model.
-	 * 
-	 * @param event  the event corresponding to the change
-	 */
-	protected void moved( MoveEvent event )
-	{
-		//System.out.println("tree move "+e.getAttributes() );
-		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::moved "+event);
-		
-		if( event.getAttributes() != null 
-				&& event.getAttributes().containsKey("oldParent")
-				&& event.getAttributes().containsKey("newParent")
-				&& event.getAttributes().containsKey(event.getElement())
-		)
-		{	
-			ApesTreeNode oldParent =  (ApesTreeNode)event.getAttributes().get("oldParent");
-			ApesTreeNode newParent =  (ApesTreeNode)event.getAttributes().get("newParent");
-			ApesTreeNode node =  (ApesTreeNode)event.getAttributes().get(event.getElement());
-			
-			int[] indices = new int[]{oldParent.getIndex(node)};
-									
-			oldParent.remove(node);
-			newParent.add(node);
-			
-			fireTreeNodesRemoved(this, oldParent.getPath(), indices, new Object[]{ node } );
-			fireTreeNodesInserted(this, newParent.getPath(), new int[]{ newParent.getIndex(node) }, new Object[]{ node } );
-		
-			NodeMovedEdit edit = new NodeMovedEdit( this, node, oldParent, newParent );
-			postEdit( edit );
-		}
-	}
-	
-	/**
-	 * An object representing an inserting that has been done, and that can be undone and redone.
-	 */
-	private class NodeInsertedEdit extends AbstractUndoableEdit
-	{
-		private SpemTreeAdapter mSource;
-		private ApesTreeNode mParent;
-		private ApesTreeNode mNode;
-		
-		public NodeInsertedEdit( SpemTreeAdapter source, ApesTreeNode node, ApesTreeNode parent )
-		{
-			mSource = source;
-			mNode = node;
-			mParent = parent;
-		}
-
-		public void undo()
-		{
-			super.undo();
-			int[] indices = new int[]{ mParent.getIndex(mNode) };
-			
-			mParent.remove(mNode);
-			fireTreeNodesRemoved( mSource, mParent.getPath() , indices, new Object[]{ mNode });
-		}
-
-		public void redo()
-		{
-			super.redo();
-			
-			mParent.add(mNode);
-			fireTreeNodesInserted( mSource, mParent.getPath(), new int[]{ mParent.getIndex(mNode) }, new Object[]{ mNode }); 
-		}
-	}
-	
-	/**
-	 * An object representing a removing that has been done, and that can be undone and redone.
-	 */
-	private class NodeRemovedEdit extends AbstractUndoableEdit
-	{
-		private SpemTreeAdapter mSource;
-		private ApesTreeNode mNode;
-		private ApesTreeNode mOldParent;
-		
-		public NodeRemovedEdit( SpemTreeAdapter source, ApesTreeNode node, ApesTreeNode oldParent )
-		{
-			mSource = source;
-			mNode = node;
-			mOldParent = oldParent;
-		}
-
-		public void undo()
-		{
-			super.undo();
-			mOldParent.add(mNode);
-			fireTreeNodesInserted( mSource, mOldParent.getPath() , new int[]{ mOldParent.getIndex(mNode) }, new Object[]{ mNode });
-		}
-
-		public void redo()
-		{
-			super.redo();
-			int[] indices = new int[]{ mOldParent.getIndex(mNode) };
-			mOldParent.remove(mNode);
-			fireTreeNodesRemoved( mSource, mOldParent.getPath(), indices, new Object[]{ mNode });
-		}
-	}
-
-	 /**
-	 * An object representing a moving that has been done, and that can be undone and redone.
-	 */
-	public class NodeMovedEdit extends AbstractUndoableEdit
-	{
-		private SpemTreeAdapter mSource;
-		private ApesTreeNode mNode;
-		private ApesTreeNode mOldParent;
-		private ApesTreeNode mNewParent;
-		
-		public NodeMovedEdit( SpemTreeAdapter source, ApesTreeNode node, ApesTreeNode oldParent, ApesTreeNode newParent )
-		{
-			mSource = source;
-			mNode = node;
-			mOldParent = oldParent;
-			mNewParent = newParent;
+			mInsertElement = insertedElement;
+			mInsertParent = insertedParent;
+			mRemoveElement = removedElement;
+			mRemoveParent = removedParent;
+			mMoveElement = movedElement;
+			mMoveNewParent = movedNewParent;
+			mMoveOldParent = movedOldParent;
 		}
 		
-		private void move( ApesTreeNode newParent )
+		public boolean  isSignificant() 
 		{
-			ApesTreeNode parent = (ApesTreeNode)mNode.getParent();
-			int[] indices = new int[]{ parent.getIndex(mNode) };
-			parent.remove(mNode);
-			newParent.add(mNode);
-			fireTreeNodesRemoved( mSource, parent.getPath(), indices, new Object[]{ mNode } );
-			fireTreeNodesInserted( mSource, newParent.getPath(), new int[]{ newParent.getIndex(mNode) }, new Object[]{ mNode } );
-		}
-		
-		public void undo() throws CannotUndoException
-		{
-			super.undo();
-			move(mOldParent);
-		}
-
-		public void redo() throws CannotRedoException
-		{
-			super.redo();
-			move(mNewParent);
-		}
-	}
-	
-	/**
-	 * An object representing a changing that has been done, and that can be undone and redone.
-	 */
-	public class NodeChangedEdit extends AbstractUndoableEdit
-	{
-		private TreePath mPath;
-		private ApesTreeNode mNode;
-		
-		public NodeChangedEdit(ApesTreeNode node )
-		{
-			mNode = node;
-		}
-		
-		private void change()
-		{
-			ApesTreeNode parent = (ApesTreeNode)mNode.getParent();
-			fireTreeNodesChanged(this, parent.getPath(), new int[]{ parent.getIndex(mNode) }, new Object[]{ mNode } );
-		}
-		
-		public void undo() throws CannotUndoException
-		{
-			super.undo();
-			change();
+			return true;
 		}
 		
 		public void redo() throws CannotRedoException
 		{
 			super.redo();
-			change();
+			execute();
+		}
+		
+		public void undo() throws CannotUndoException
+		{
+			super.undo();
+			execute();
+		}
+		
+		public void execute()
+		{
+        	ApesTreeNode insertedParent = mInsertParent;
+        	ApesTreeNode insertedElement = mInsertElement;
+			
+        	ApesTreeNode removedParent = mRemoveParent;
+        	ApesTreeNode removedElement = mRemoveElement;
+			
+        	if(insertedElement != null)
+			{
+				insertedParent.add(insertedElement);
+				fireTreeNodesInserted(SpemTreeAdapter.this, insertedParent.getPath(), new int[]{insertedParent.getIndex(insertedElement)}, new Object[]{insertedElement});			
+			}
+			mRemoveElement = insertedElement;
+			mRemoveParent = insertedParent;
+			
+			if(removedElement != null)
+			{
+				int[] indices = new int[]{ removedParent.getIndex(removedElement) };
+				removedParent.remove(removedElement);
+				fireTreeNodesRemoved(this, removedParent.getPath(), indices, new Object[]{removedElement} );
+			}
+			mInsertElement = removedElement;
+			mInsertParent = removedParent;
+			
+			ApesTreeNode movedOldParent = mMoveOldParent;
+        	ApesTreeNode movedNewParent = mMoveNewParent;
+        	
+			if(mMoveElement != null)
+			{
+				int[] indices =  new int[]{ movedOldParent.getIndex(mMoveElement) };
+				movedOldParent.remove(mMoveElement);
+				fireTreeNodesRemoved(this, movedOldParent.getPath(), indices, new Object[]{ mMoveElement } );
+				movedNewParent.add(mMoveElement);
+				fireTreeNodesInserted(this, movedNewParent.getPath(), new int[]{ movedNewParent.getIndex(mMoveElement) }, new Object[]{ mMoveElement } );
+			}
+			mMoveOldParent = movedNewParent;
+			mMoveNewParent = movedOldParent;
+		}
+		
+		public String toString()
+		{
+			String result = "NodeEdit[ insert/"+mInsertElement+" insertParent/"+mInsertParent
+				+" remove/"+mRemoveElement+" removeParent/"+mRemoveParent+"]";
+			return result;
 		}
 	}
-	
+
 	/**
 	 * An object representing an attributes changing that has been done, and that can be undone and redone.
 	 */

@@ -25,7 +25,7 @@ package org.ipsquad.apes.adapters;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ProcessRoleCell extends ApesGraphCell
 {
@@ -53,13 +53,5 @@ public class ProcessRoleCell extends ApesGraphCell
 		GraphConstants.setOpaque(map, true);
 		changeAttributes(map);
 	}*/
-	
-	public Object clone()
-	{
-		ProcessRoleCell c = (ProcessRoleCell) super.clone();
-		//colorStyle(c.attributes,"RoleTitle");
-		c.init();
-		return c;
-	}
 }
 

@@ -46,7 +46,7 @@ import org.jgraph.JGraph;
 /**
  * Save a graph in a jpeg file
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SaveImage
 {
@@ -123,7 +123,6 @@ public class SaveImage
 		if(temp.exists() && !temp.isDirectory())
 		{
 			File rename=new File(temp.getAbsolutePath()+".apesback");
-			System.out.println(rename.getName());
 			temp.renameTo(rename);
 		}
 		

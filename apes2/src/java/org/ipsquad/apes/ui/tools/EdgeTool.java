@@ -27,9 +27,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.Map;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.NoteEdge;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -37,8 +37,6 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.BasicMarqueeHandler;
 import org.jgraph.graph.ConnectionSet;
 import org.jgraph.graph.DefaultEdge;
-import org.jgraph.graph.DefaultGraphCell;
-import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.Port;
 import org.jgraph.graph.PortView;
@@ -47,7 +45,7 @@ import org.jgraph.graph.PortView;
  * This tool allows to create edges in the graph
  * It use the prototype design pattern to clone edges
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class EdgeTool extends Tool
 {
@@ -124,45 +122,40 @@ public class EdgeTool extends Tool
 			if(e!=null && !e.isConsumed() && mPort!=null && mFirstPort!=null && mFirstPort!=mPort)
 			{
 				mGraph.clearSelection();
-				DefaultEdge edge = null;
+				ConnectionSet cs = new ConnectionSet();
+				Port firstPort = (Port) mFirstPort.getCell();
+				Port port = (Port) mPort.getCell();
 				
-				if( mFirstPort.getParentView() != null && mPort.getParentView() != null )
+				DefaultEdge edge = null;
+				if(mFirstPort.getParentView().getCell() instanceof NoteCell
+						|| mPort.getParentView().getCell() instanceof NoteCell)
+				{
+					edge = new NoteEdge();
+				}
+				else
 				{
 					edge = (DefaultEdge) mPrototype.clone();
-					Map view = new HashMap();
-					view.put( "firstPort",mFirstPort.getCell());
-					view.put( "endPort",mPort.getCell());
-					Map attr = mPrototype.getAttributes();
-					//attr.put(edge, attr);
-
-					view.put("Attributes", attr);
-					
-					if (mPort.getParentView().getCell() instanceof NoteCell || mFirstPort.getParentView().getCell() instanceof NoteCell)
-					{	
-						Port firstPort = (Port)mFirstPort.getCell();
-						Port port = (Port)mPort.getCell();
-						edge = new NoteEdge();
-						ConnectionSet cs = new ConnectionSet();
-						edge.setSource( firstPort);
-						edge.setTarget( port );
-						firstPort.addEdge( edge );
-						port.addEdge( edge );
-						cs.connect(edge, mFirstPort, mPort );
-						((DefaultGraphModel)mGraph.getModel()).insert(new Object[]{edge},attr,cs,null,null);
-					}
-					else
-					{
-						((SpemGraphAdapter)mGraph.getModel()).insertEdge( (DefaultGraphCell)mFirstPort.getParentView().getCell(), (DefaultGraphCell)mPort.getParentView().getCell(), view);
-					}
+					edge.setSource(firstPort);
+					edge.setTarget(port);
 				}
 				
+				cs.connect(edge, firstPort, port);
+				
+				Map attr = edge.getAttributes();
+
+				Map attributes = ApesGraphConstants.createMap();
+				attributes.put(edge, attr);
+
+				Object[] arg = new Object[]{edge};
+
+				((SpemGraphAdapter)mGraph.getModel()).insert(arg, attributes, cs, null, null);
+
 				e.consume();
 				
 				mGraph.repaint();
 			}
 			else
 			{
-				//mGraph.repaint();
 				mStable = false;
 			}
 			

@@ -26,8 +26,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import org.ipsquad.apes.adapters.ApesGraphCell;
-import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellHandle;
 import org.jgraph.graph.CellMapper;
@@ -93,7 +91,7 @@ public class ApesEdgeView extends EdgeView
 				
 				if( mFirstPort != null && mPort != null )
 				{
-					((SpemGraphAdapter)graph.getModel()).moveEdge( (DefaultEdge)getCell(),(ApesGraphCell)mPort.getParentView().getCell(), mFirstPort == getTarget() );
+					//((SpemGraphAdapter)graph.getModel()).moveEdge( (DefaultEdge)getCell(),(ApesGraphCell)mPort.getParentView().getCell(), mFirstPort == getTarget() );
 				}
 				
 				graph.repaint();

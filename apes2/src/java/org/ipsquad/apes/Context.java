@@ -42,7 +42,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class Context
 {
@@ -135,7 +135,6 @@ public class Context
 		}
 		
 		project.setListeners();
-		//project.initApesMediator();
 		
 		mProject = project;
 		

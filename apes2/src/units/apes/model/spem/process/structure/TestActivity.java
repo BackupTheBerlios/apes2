@@ -22,10 +22,10 @@
 
 package apes.model.spem.process.structure;
 
+import junit.framework.TestCase;
+
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
-
-import junit.framework.TestCase;
 
 public class TestActivity extends TestCase
 {

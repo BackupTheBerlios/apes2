@@ -29,7 +29,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class WorkDefinition extends ModelElement
 {
@@ -40,13 +40,13 @@ public class WorkDefinition extends ModelElement
 	
 	public WorkDefinition()
 	{
-		if(Debug.enabled) Debug.print("(M) -> ++WorkDefinition");
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++WorkDefinition");
 	}
 	
 	public WorkDefinition(String name)
 	{
 		super(name);
-		if(Debug.enabled) Debug.print("(M) -> ++WorkDefinition::"+name);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ++WorkDefinition::"+name);
 	}
 	
 	public void visit(SpemVisitor visitor)
@@ -63,7 +63,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if(mOwner==null || owner==null)
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::setOwner"+owner);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinition("+getName()+")::setOwner"+owner);
 			mOwner = owner;
 			return true;
 		}
@@ -75,7 +75,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if( ! mSubWork.contains( a ) )
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::addSubWork "+a);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinition("+getName()+")::addSubWork "+a);
 			mSubWork.add( a );
 			a.addParentWork( this );
 			return true;
@@ -87,7 +87,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if( mSubWork.remove( a ) )
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::removeSubWork "+a);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinition("+getName()+")::removeSubWork "+a);
 			mSubWork.remove( a );
 			a.removeParentWork( this );
 			
@@ -121,7 +121,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if( ! mParentWork.contains( w ) )
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::addParentWork "+w);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinition("+getName()+")::addParentWork "+w);
 			mParentWork.add( w );
 			return true;
 		}
@@ -132,7 +132,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if( mParentWork.remove( w ) )
 		{
-			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::removeParentWork "+w);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinition("+getName()+")::removeParentWork "+w);
 			return true;
 		}
 		return false;

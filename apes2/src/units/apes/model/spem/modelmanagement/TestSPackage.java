@@ -24,9 +24,14 @@ package apes.model.spem.modelmanagement;
 
 import junit.framework.TestCase;
 
+import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
+import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 public class TestSPackage extends TestCase
 {
@@ -40,113 +45,142 @@ public class TestSPackage extends TestCase
 	
 	public void testAddModelElement()
 	{
-		SPackage p = new SPackage();
+		ProcessRole pr = new ProcessRole();
+		WorkDefinition wd = new WorkDefinition();
+		WorkProduct wp = new WorkProduct();
+		ResponsabilityDiagram rp = new ResponsabilityDiagram();
+		
 		ModelElement me = createModelElement();
+		Activity a = new Activity();
 		
-		assertTrue(p.modelElementCount()==0);
-		assertTrue(me.getParent()==null);
+		SPackage p = new SPackage();
+		assertEquals(0, p.modelElementCount());
 		
-		p.addModelElement(me);
+		wrongAddTest(p, a);
+		wrongAddTest(p, me);
 		
-		assertTrue(p.modelElementCount()==1);
-		assertTrue(me.getParent()==p);
+		rightAddTest(p, pr);
+		rightAddTest(p, wd);
+		rightAddTest(p, wp);
+		rightAddTest(p, rp);
+				
+		SPackage p1 = new SPackage();
+		assertEquals(0, p1.modelElementCount());
 		
-		p.addModelElement(me);
-		assertTrue(p.modelElementCount()==1);
-		assertTrue(me.getParent()==p);
-		
-		for(int i=1; i<100; i++)
+		wrongAddTest(p1, pr);
+		wrongAddTest(p1, wd);
+		wrongAddTest(p1, wp);
+		wrongAddTest(p1, rp);
+				
+		for(int i=0; i<100; i++)
 		{
-			me = createModelElement();
-			assertTrue(p.modelElementCount()==i);
-			p.addModelElement(me);
+			pr = new ProcessRole();
+			assertEquals(i, p1.modelElementCount());
+			p1.addModelElement(pr);
 		}
 		
 	}
 
+	public void wrongAddTest(SPackage p, ModelElement me)
+	{
+		Object parent = me.getParent();
+		int count = p.modelElementCount();
+		if(p.addModelElement(me))
+			fail();
+		assertEquals(count, p.modelElementCount());
+		assertEquals(parent, me.getParent());
+	}
+
+	public void rightAddTest(SPackage p, ModelElement me)
+	{
+		int count = p.modelElementCount();
+		if(!p.addModelElement(me))
+			fail();
+		assertEquals(count+1, p.modelElementCount());
+		assertEquals(p, me.getParent());
+	}
+
 	public void testRemoveModelElement()
 	{
-		ModelElement me1 = createModelElement();
-		ModelElement me2 = createModelElement();
+		ProcessRole pr = new ProcessRole();
+		WorkDefinition wd = new WorkDefinition();
+		WorkProduct wp = new WorkProduct();
+		ResponsabilityDiagram rp = new ResponsabilityDiagram();
+		
 		SPackage p = new SPackage();
 		
-		p.addModelElement(me1);
+		p.addModelElement(pr);
 		assertTrue(p.modelElementCount()==1);
-		assertTrue(me1.getParent()==p);
+		assertTrue(pr.getParent()==p);
 		
-		p.removeModelElement(me2);
+		p.removeModelElement(wd);
 		assertTrue(p.modelElementCount()==1);
 		
-		p.removeModelElement(me1);
+		p.removeModelElement(pr);
 		assertTrue(p.modelElementCount()==0);
-		assertTrue(me1.getParent()==null);
+		assertTrue(pr.getParent()==null);
 		
 		for(int i=0; i<100; i++)
 		{
-			me1 = createModelElement();
-			p.addModelElement(me1);
+			wd = new WorkDefinition();
+			p.addModelElement(wd);
 		}
 		
-		p.addModelElement(me2);
+		p.addModelElement(wp);
 		
 		for(int i=0; i<100; i++)
 		{
-			me1 = createModelElement();
-			p.addModelElement(me1);
+			rp = new ResponsabilityDiagram();
+			p.addModelElement(rp);
 		}
 		
 		assertTrue(p.modelElementCount()==201);
-		p.removeModelElement(me2);
+		p.removeModelElement(wp);
 		assertTrue(p.modelElementCount()==200);
 	}
 	
 	public void testContainsModelElement()
 	{
-		ModelElement me1;
+		ProcessRole pr = null;
 		ModelElement me2 = createModelElement();
 		SPackage p = new SPackage();
 		
 		for(int i=0; i<100; i++)
 		{
-			me1 = createModelElement();
-			p.addModelElement(me1);
+			pr = new ProcessRole();
+			p.addModelElement(pr);
 		}
 		
 		assertFalse(p.containsModelElement(me2));
-		p.addModelElement(me2);
-		assertTrue(p.containsModelElement(me2));
-		
-		for(int i=0; i<100; i++)
-		{
-			me1 = createModelElement();
-			p.addModelElement(me1);
-		}
-		
-		assertTrue(p.containsModelElement(me2));
+		assertTrue(p.containsModelElement(pr));
 	}
 
 	public void testGetModelElement()
 	{
-		ModelElement me1;
-		ModelElement me2 = createModelElement();
+		ProcessRole pr = null;
+		WorkDefinition wd = new WorkDefinition();
+		WorkProduct wp = new WorkProduct();
+		ResponsabilityDiagram rp = new ResponsabilityDiagram();
+		
 		SPackage p = new SPackage();
 		
 		for(int i=0; i<100; i++)
 		{
-			me1 = createModelElement();
-			p.addModelElement(me1);
+			pr = new ProcessRole();
+			p.addModelElement(pr);
 		}
 		
-		p.addModelElement(me2);
+		p.addModelElement(wd);
 		
 		for(int i=0; i<100; i++)
 		{
-			me1 = createModelElement();
-			p.addModelElement(me1);
+			pr = new ProcessRole();
+			p.addModelElement(pr);
 		}
 		
-		assertEquals(p.getModelElement(100), me2);
-		assertEquals(p.getModelElement(-1), null);
-		assertEquals(p.getModelElement(201), null);
+		assertEquals(wd, p.getModelElement(100));
+		assertNull(p.getModelElement(-1));
+		assertEquals(pr, p.getModelElement(200));
+		assertNull(p.getModelElement(201));
 	}
 }

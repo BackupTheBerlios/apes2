@@ -40,7 +40,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Align the centers of selected objects vertically
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class AlignVAction extends ApesAction
 {
@@ -56,11 +56,6 @@ public class AlignVAction extends ApesAction
 		if(listCells.length>1)
 		{	
 			alignV(listCells);
-			//System.out.println("AlignVAction performed");
-		}
-		else
-		{
-			//System.out.println("AlignVAction unauthorized !");	
 		}
 	}
 	
