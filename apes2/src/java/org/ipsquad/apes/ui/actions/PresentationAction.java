@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 
 
 import org.ipsquad.apes.Context;
-import org.ipsquad.apes.processing.SaveProject;
 import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.DefaultPathPanel;
 import org.ipsquad.utils.ConfigManager;
@@ -35,7 +34,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class PresentationAction extends ApesAction
 {
