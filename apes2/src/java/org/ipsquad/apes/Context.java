@@ -22,9 +22,12 @@
 
 package org.ipsquad.apes;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 
 import javax.swing.Action;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.tree.TreePath;
@@ -42,7 +45,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class Context
 {
@@ -162,7 +165,17 @@ public class Context
 		
 		ApesTreeNode toSelect = (ApesTreeNode)((ApesTreeNode)getTopLevelFrame().getTree().getModel().getRoot()).getChildAt(0).getChildAt(1);
 		getTopLevelFrame().getTree().setSelectionPath(new TreePath( toSelect.getPath()) );
-		Context.getInstance().getAction("TreeOpenDiagram").actionPerformed(null);
+		
+		if(getTopLevelFrame() instanceof JFrame)
+		{
+		    ((JFrame)getTopLevelFrame()).addComponentListener(new ComponentAdapter() {
+		        public void componentShown(ComponentEvent e) 
+		        {
+		            Context.getInstance().getAction("TreeOpenDiagram").actionPerformed(null);
+		            ((JFrame)getTopLevelFrame()).removeComponentListener(this);            	    
+		        }
+		    });
+		}
 	}
 
 	

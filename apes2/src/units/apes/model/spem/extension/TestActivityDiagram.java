@@ -650,8 +650,8 @@ public class TestActivityDiagram extends TestCase
 		assertFalse(ad.createLinkModelElements(a2,d));
 		assertFalse(ad.createLinkModelElements(a,d2));
 		assertFalse(ad.createLinkModelElements(a2,d2));
-		assertFalse(ad.createLinkModelElements(d,d2));
-		assertFalse(ad.createLinkModelElements(d2,d));
+		assertTrue(ad.createLinkModelElements(d,d2));
+		assertTrue(ad.createLinkModelElements(d2,d));
 		
 		ad.addModelElement(s);
 		ad.addModelElement(s2);
@@ -794,7 +794,7 @@ public class TestActivityDiagram extends TestCase
 		
 		ad.createLinkModelElements(d,d2);
 		assertFalse(ad.removeLinkModelElements(d2,d));
-		assertFalse(ad.removeLinkModelElements(d,d2));
+		assertTrue(ad.removeLinkModelElements(d,d2));
 
 		
 		ad.createLinkModelElements(s,s2);
@@ -1085,8 +1085,8 @@ public class TestActivityDiagram extends TestCase
 		ad.addModelElement(d);
 		ad.addModelElement(d2);
 		
-		assertFalse(ad.areLinkableModelElements(d,d2));
-		assertFalse(ad.areLinkableModelElements(d2,d));
+		assertTrue(ad.areLinkableModelElements(d,d2));
+		assertTrue(ad.areLinkableModelElements(d2,d));
 		assertFalse(ad.areLinkableModelElements(a,d));
 		assertTrue(ad.areLinkableModelElements(d,a));
 		

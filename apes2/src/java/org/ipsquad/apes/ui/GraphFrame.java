@@ -58,7 +58,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Base class for the graph editing internal frames
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class GraphFrame extends JInternalFrame implements InternalFrameListener, GraphModelListener, DropTargetListener, ApesModelListener
 {
@@ -114,7 +114,7 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 	
 	private void installToolPalette()
 	{
-		Context context = Context.getInstance();
+	    Context context = Context.getInstance();
 	
 		if(context.getTopLevelFrame().getToolPalette()!=null)
 		{

@@ -52,7 +52,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
@@ -148,7 +148,7 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 	
 	public void setToolPalette(ToolPalette toolPalette)
 	{
-		mPanel.remove(mToolPalette);
+	    mPanel.remove(mToolPalette);
 		toolPalette.setOrientation(JToolBar.VERTICAL);
 		mPanel.add(toolPalette, BorderLayout.WEST);
 		mToolPalette = toolPalette;

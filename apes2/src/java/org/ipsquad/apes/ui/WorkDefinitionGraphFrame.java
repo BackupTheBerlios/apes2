@@ -36,7 +36,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * Work definition graph editing internal frame
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class WorkDefinitionGraphFrame extends GraphFrame {
 	
@@ -47,7 +47,7 @@ public class WorkDefinitionGraphFrame extends GraphFrame {
 	
 	public ToolPalette createToolPalette()
 	{
-		ToolPalette palette = super.createToolPalette();
+	    ToolPalette palette = super.createToolPalette();
 
 		DefaultEdge edge = new ContextEdge();
 		
