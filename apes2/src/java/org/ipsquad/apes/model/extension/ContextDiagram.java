@@ -13,12 +13,13 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.ipsquad.utils.Debug;
 import org.ipsquad.utils.ErrorManager;
 
 /**
  * Base class for the context diagram
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ContextDiagram extends SpemDiagram
 {
@@ -28,12 +29,13 @@ public class ContextDiagram extends SpemDiagram
 	
 	public ContextDiagram()
 	{
-
+		if(Debug.enabled) Debug.print("(M) -> ++ContextDiagram");
 	}
 
 	public ContextDiagram( String name )
 	{
 		super(name);
+		if(Debug.enabled) Debug.print("(M) -> ++ContextDiagram::"+name);
 	}
 
 	public void visit(SpemVisitor visitor)
@@ -43,6 +45,7 @@ public class ContextDiagram extends SpemDiagram
 	
 	public boolean addModelElement(ModelElement me) 
 	{
+		if(Debug.enabled) Debug.print("(M) -> ContextDiagram("+getName()+"::addModelElement "+me);
 		if( me instanceof WorkProduct )
 		{
 			return addWorkProduct( (WorkProduct) me );
@@ -60,6 +63,7 @@ public class ContextDiagram extends SpemDiagram
 	 */
 	public boolean addWorkProduct(WorkProduct p)
 	{
+		if(Debug.enabled) Debug.print("(M) -> ContextDiagram("+getName()+")::addWorkProduct "+p);
 		if(!containsModelElement(p))
 		{
 			mUnlinkElements.add(p);
@@ -78,6 +82,7 @@ public class ContextDiagram extends SpemDiagram
 	 */
 	public boolean removeModelElement(ModelElement e) 
 	{
+		if(Debug.enabled) Debug.print("(M) -> ContextDiagram("+getName()+")::removeModelElement "+e);
 		if(mUnlinkElements.contains(e))
 		{
 			mUnlinkElements.remove(e);
@@ -101,6 +106,7 @@ public class ContextDiagram extends SpemDiagram
 
 	public boolean canAddModelElement(ModelElement me) 
 	{
+		if(Debug.enabled) Debug.print("(M) -> ContextDiagram("+getName()+")::canAddModelElement "+me);
 		if(me instanceof WorkProduct)
 		{
 			if(!containsModelElement(me))
@@ -182,6 +188,7 @@ public class ContextDiagram extends SpemDiagram
 	 */
 	public boolean createLinkModelElements( ModelElement source, ModelElement target) 
 	{
+		if(Debug.enabled) Debug.print("(M) -> ContextDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
 		if( (source instanceof WorkProduct && target instanceof ProcessComponent) )
 		{
 			if(containsModelElement(source))
@@ -212,6 +219,7 @@ public class ContextDiagram extends SpemDiagram
 	
 	public boolean removeLinkModelElements( ModelElement source, ModelElement target) 
 	{
+		if(Debug.enabled) Debug.print("(M) -> ContextDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
 		if(existsLinkModelElements(source, target))
 		{
 			if( (source instanceof ProcessComponent && target instanceof WorkProduct) )

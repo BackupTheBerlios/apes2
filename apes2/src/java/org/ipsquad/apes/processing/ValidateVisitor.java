@@ -27,6 +27,7 @@ import java.util.Vector;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
+import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
@@ -51,7 +52,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -307,6 +308,46 @@ public class ValidateVisitor implements RoutedSpemVisitor
 					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : \""+activity.getName()+"\"");
 			mHasErrors = true;
 		}
+		
+		if( activity.getParent() instanceof ApesWorkDefinition )
+		{
+			ProcessComponent c = Context.getInstance().getProject().getProcess().getComponent();
+			int i = 0;
+			while( i < c.modelElementCount() && !(c.getModelElement(i) instanceof WorkDefinitionDiagram) )
+			{
+				i++;
+			}
+			
+			if( i < c.modelElementCount() )
+			{
+				ApesWorkDefinition wd = (ApesWorkDefinition)activity.getParent(); 
+				WorkDefinitionDiagram wdd = (WorkDefinitionDiagram)c.getModelElement(i);
+				
+				for( i = 0; i < activity.getInputCount(); i++ )
+				{
+					WorkProduct wp = activity.getInput(i);
+					if(!wdd.existsLinkWorkProductWorkDefinition( wp, wd ))
+					{
+						boolean isInternal = false;
+						
+						for( int j = 0; j < wp.getInputCount(); j++ )
+						{
+							if( wd.getFlowDiagram().containsModelElement(wp.getInput(j)) )
+							{
+								isInternal = true;
+							}
+						}
+						
+						if(!isInternal)
+						{
+							ErrorManager.getInstance().println(
+									ResourceManager.getInstance().getString("errorValidateActivityWithBadInputWorkProduct")+" : \""+wp.getName()+"\", \""+activity.getName()+"\"");
+							mHasErrors = true;
+						}
+					}
+				}
+			}
+		}
 	}
 
 
@@ -380,6 +421,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 						isUsed = true;
 					}
 				}
+				
 				if( isProvided && !isUsed )
 				{
 					ErrorManager.getInstance().println(

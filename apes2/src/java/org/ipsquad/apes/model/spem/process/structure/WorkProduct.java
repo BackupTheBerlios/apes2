@@ -28,9 +28,10 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
+import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class WorkProduct extends ModelElement implements IPackage
 {
@@ -47,12 +48,13 @@ public class WorkProduct extends ModelElement implements IPackage
 	
 	public WorkProduct()
 	{
-	
+		if(Debug.enabled) Debug.print("(M) -> ++WorkProduct");
 	}
 	
 	public WorkProduct(String name)
 	{
 		super(name);
+		if(Debug.enabled) Debug.print("(M) -> ++WorkProduct::"+name);
 	}
 
 	public void visit(SpemVisitor visitor)
@@ -62,6 +64,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	
 	public void setReferences( int references )
 	{
+		if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::setReferences "+references);
 		mReferences = references;
 	}
 	
@@ -77,6 +80,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	 */
 	public void setResponsible(ProcessPerformer r)
 	{
+		if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::setResponsible "+r);
 		mResponsible = r;
 	}
 	
@@ -102,6 +106,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	{
 		if(!containsInputWorkDefinition(w))
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::addInputWorkDefinition "+w);
 			mInput.add(w);
 			return true;
 		}
@@ -119,6 +124,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	{
 		if(containsInputWorkDefinition(w))
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::removeInputWorkDefinition "+w);
 			mInput.remove(w);
 			return true;
 		}
@@ -146,6 +152,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	{
 		if(!containsOutputWorkDefinition(w))
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::addOutputWorkDefinition "+w);
 			mOutput.add(w);
 			return true;
 		}
@@ -163,6 +170,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	{
 		if(containsOutputWorkDefinition(w))
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::removeOutputWorkDefinition "+w);
 			mOutput.remove(w);
 			return true;
 		}
@@ -216,6 +224,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	{
 		if( e instanceof StateMachine && addBehavior( (StateMachine)e ) )
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::addModelElement "+e);
 			e.setParent( this );
 			return true;
 		}
@@ -226,6 +235,7 @@ public class WorkProduct extends ModelElement implements IPackage
 	{
 		if( e instanceof StateMachine && removeBehavior( (StateMachine)e ) )
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkProduct("+getName()+")::removeModelElement "+e);
 			e.setParent(null);
 			return true;
 		}

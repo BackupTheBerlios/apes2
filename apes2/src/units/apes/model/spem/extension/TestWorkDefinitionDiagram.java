@@ -404,7 +404,11 @@ public class TestWorkDefinitionDiagram extends TestCase
 		fd.addProcessRole(pr4);
 		fd.createLinkModelElements(pr4,a2);
 		
-
+		/* wdd : pr  -> wd
+		 * wdd : pr  -> wd2
+		 * wdd : pr3 -> awd
+		 * fd  : pr4 -> a2
+		 */
 		wdd.addWorkDefinition(awd);
 		wdd.addProcessRole(pr3);
 		assertTrue(wdd.createLinkProcessRoleWorkDefinition(pr3,awd));

@@ -31,7 +31,7 @@ import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.extension.SpemDiagram;
-import org.ipsquad.apes.processing.SaveJPEG;
+import org.ipsquad.apes.processing.SaveImage;
 import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.DefaultPathPanel;
 import org.ipsquad.utils.ConfigManager;
@@ -43,13 +43,18 @@ import org.ipsquad.utils.SmartChooser;
 /**
  * Save the selected diagram in a jpeg file
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.1 $
  */
-public class SaveAsJpegAction extends AbstractAction
+public class SaveAsImageAction extends AbstractAction
 {
-	protected SimpleFileFilter filter = new SimpleFileFilter(new String[]{"jpeg","jpg"}, "JPEG");
+	public final static String jpeg = "jpeg";
+	public final static String jpg = "jpg";
+	public final static String png = "png";
 
-	public SaveAsJpegAction(String label)
+	protected SimpleFileFilter filterJpg = new SimpleFileFilter(new String[]{jpeg,jpg}, "JPEG");
+	protected SimpleFileFilter filterPng = new SimpleFileFilter(new String[]{png}, "PNG");
+	
+	public SaveAsImageAction(String label)
 	{
 		super(ResourceManager.getInstance().getString(label));
 	}
@@ -58,7 +63,8 @@ public class SaveAsJpegAction extends AbstractAction
 	{
 		SmartChooser chooser = SmartChooser.getChooser();
 		chooser.setAcceptAllFileFilterUsed(false);
-		chooser.setFileFilter(filter);
+		chooser.addChoosableFileFilter(filterJpg);
+		chooser.addChoosableFileFilter(filterPng);
 		chooser.setDirectory(ConfigManager.getInstance().getProperty(DefaultPathPanel.PICTURES_KEY+"defaultPath"));
 		
 		if (chooser.showSaveDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane())
@@ -71,19 +77,22 @@ public class SaveAsJpegAction extends AbstractAction
 			}
 
 			String selected_file=chooser.getSelectedFile().getAbsolutePath();
+			SimpleFileFilter filter = (SimpleFileFilter)chooser.getFileFilter();
 			int last_separator= selected_file.lastIndexOf( File.separatorChar );
 			int last_point=0;
 			if(last_separator!=-1)
-				last_point=selected_file.indexOf( '.', last_separator);
+				last_point=last_separator+selected_file.substring(last_separator, selected_file.length()).lastIndexOf( '.');
 			else last_point=selected_file.lastIndexOf( '.');
 			File f=null;
 			if(last_point==-1)
-				f=new File(selected_file+".jpeg");
+				f=new File(selected_file+"."+filter.getFirstExtension());
 			else
 			{
-				String suffixe=selected_file.substring(last_point,selected_file.length());
-				if(suffixe.compareTo(".jpeg")!=0 && suffixe.compareTo(".jpg")!=0)
-					f=new File(selected_file+".jpeg");
+				String suffixe=selected_file.substring(1+last_point,selected_file.length());
+				if(!filter.containsExtension(suffixe))
+				{
+					f=new File(selected_file+"."+filter.getFirstExtension());
+				}
 				else f=new File(selected_file);
 			}
 
@@ -92,7 +101,7 @@ public class SaveAsJpegAction extends AbstractAction
 				ErrorManager.getInstance().display("errorTitleSaveProcess", "errorWrongFileName");
 				return;
 			}
-			System.out.println(f.getName()+" "+f.getAbsolutePath());
+			
 			if(f.exists())
 			{
 				int choice=JOptionPane.showInternalConfirmDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
@@ -110,13 +119,13 @@ public class SaveAsJpegAction extends AbstractAction
 						
 			try
 			{
-				SaveJPEG saveJPEG = new SaveJPEG(f.getAbsolutePath(),selected_adapter);
-				saveJPEG.save();
+				SaveImage saveImage = new SaveImage(f.getAbsolutePath(),selected_adapter);
+				if(!saveImage.save(filter.getFirstExtension()))
+					ErrorManager.getInstance().display("errorTitleSaveProcess", "errorOpenProcess");	
 			}
 			catch(Throwable t)
 			{
 				ErrorManager.getInstance().display("errorTitleSaveProcess", "errorOpenProcess");
-				return;
 			}
 		}
 	}

@@ -86,4 +86,19 @@ public class SimpleFileFilter extends FileFilter
 
 		return buf.toString();
 	}
+	
+	public String getFirstExtension()
+	{
+		return extensions[0];
+	}
+	
+	public boolean containsExtension(String ext)
+	{
+		for(int i = 0; i < extensions.length; i++ )
+		{
+			if(extensions[i].equals(ext))
+				return true;
+		}
+		return false;
+	}
 }

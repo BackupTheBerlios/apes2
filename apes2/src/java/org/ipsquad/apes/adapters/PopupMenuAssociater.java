@@ -45,7 +45,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This visitor associates an element with a popup menu.
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class PopupMenuAssociater extends DefaultModelVisitor
 {
@@ -139,15 +139,6 @@ public class PopupMenuAssociater extends DefaultModelVisitor
 		{
 			ApesWorkDefinition aw = (ApesWorkDefinition) w;
 			mResult.add(msContext.getAction("TreeAddActivity"));
-			
-			/*if( aw.canAddActivityDiagram() )
-			{
-				mResult.add(msContext.getAction("TreeAddActivityDiagram"));
-			}
-			if( aw.canAddFlowDiagram() )
-			{
-				mResult.add(msContext.getAction("TreeAddFlowDiagram"));
-			}*/
 		}
 		
 		super.visitWorkDefinition(w);
@@ -156,7 +147,7 @@ public class PopupMenuAssociater extends DefaultModelVisitor
 	public void visitSpemDiagram(SpemDiagram diagram)
 	{
 		mResult.add(msContext.getAction("TreeOpenDiagram"));
-		mResult.add(msContext.getAction("SaveAsJpeg"));
+		mResult.add(msContext.getAction("SaveAsImage"));
 		if(diagram.modelElementCount()!= 0)
 		{
 			mResult.addSeparator();

@@ -66,7 +66,7 @@ import org.ipsquad.apes.ui.actions.RemoveAction;
 import org.ipsquad.apes.ui.actions.RemoveFromModelAction;
 import org.ipsquad.apes.ui.actions.SaveAction;
 import org.ipsquad.apes.ui.actions.SaveAsAction;
-import org.ipsquad.apes.ui.actions.SaveAsJpegAction;
+import org.ipsquad.apes.ui.actions.SaveAsImageAction;
 import org.ipsquad.apes.ui.actions.SmallerAction;
 import org.ipsquad.apes.ui.actions.TreeRenameAction;
 import org.ipsquad.apes.ui.actions.UndoAction;
@@ -81,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class ApesMain
 {
@@ -287,7 +287,7 @@ public class ApesMain
 		context.registerAction("TreeRemove", new RemoveFromModelAction("treeRemove"));
 		context.registerAction("TreeRename", new TreeRenameAction("treeRename"));
 		//context.registerAction("TreeAddExternalElement", new AddExternalElement("treeAddExternalElement"));
-		context.registerAction("SaveAsJpeg",new SaveAsJpegAction("saveAsJpeg"));
+		context.registerAction("SaveAsImage",new SaveAsImageAction("saveAsImage"));
 		context.registerAction("PrintDiagram",new PrintDiagramAction("printDiagram"));
 	}
 

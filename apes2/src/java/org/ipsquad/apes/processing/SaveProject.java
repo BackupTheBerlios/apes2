@@ -111,7 +111,7 @@ public class SaveProject
 		Map diagrams = Context.getInstance().getProject().getDiagramMap();
 		SpemGraphAdapter adapter = null;
 		SaveJpegWithMap map = null ;
-		SaveJPEG image = null;
+		SaveImage image = null;
 		
 		Iterator it = diagrams.entrySet().iterator();
 
@@ -124,8 +124,8 @@ public class SaveProject
 			entryZip = new ZipEntry(IMAGE_PATH+System.getProperty("file.separator")+normalizeName(adapter.getName())+adapter.getID()+".jpeg");
 			mZipFile.putNextEntry(entryZip);
 			data = new DataOutputStream( new BufferedOutputStream(mZipFile) );
-			image = new SaveJPEG(adapter);
-			image.save(data);
+			image = new SaveImage(adapter);
+			image.save(data,"jpg");
 			mZipFile.closeEntry();
 		}
 	}

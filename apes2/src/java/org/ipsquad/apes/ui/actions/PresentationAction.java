@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.DefaultPathPanel;
@@ -34,7 +33,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class PresentationAction extends ApesAction
 {

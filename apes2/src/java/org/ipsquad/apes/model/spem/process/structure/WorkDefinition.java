@@ -26,9 +26,10 @@ import java.util.Vector;
 
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class WorkDefinition extends ModelElement
 {
@@ -39,12 +40,13 @@ public class WorkDefinition extends ModelElement
 	
 	public WorkDefinition()
 	{
-	
+		if(Debug.enabled) Debug.print("(M) -> ++WorkDefinition");
 	}
 	
 	public WorkDefinition(String name)
 	{
 		super(name);
+		if(Debug.enabled) Debug.print("(M) -> ++WorkDefinition::"+name);
 	}
 	
 	public void visit(SpemVisitor visitor)
@@ -59,14 +61,9 @@ public class WorkDefinition extends ModelElement
 	
 	public boolean setOwner(ProcessPerformer owner)
 	{
-		if(owner==null)
+		if(mOwner==null || owner==null)
 		{
-			mOwner = owner;
-			return true;
-		}
-		
-		if(mOwner==null)
-		{
+			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::setOwner"+owner);
 			mOwner = owner;
 			return true;
 		}
@@ -78,6 +75,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if( ! mSubWork.contains( a ) )
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::addSubWork "+a);
 			mSubWork.add( a );
 			a.addParentWork( this );
 			return true;
@@ -89,6 +87,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if( mSubWork.remove( a ) )
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::removeSubWork "+a);
 			mSubWork.remove( a );
 			a.removeParentWork( this );
 			
@@ -122,6 +121,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if( ! mParentWork.contains( w ) )
 		{
+			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::addParentWork "+w);
 			mParentWork.add( w );
 			return true;
 		}
@@ -130,7 +130,12 @@ public class WorkDefinition extends ModelElement
 	
 	public boolean removeParentWork( WorkDefinition w )
 	{
-		return mParentWork.remove( w );
+		if( mParentWork.remove( w ) )
+		{
+			if(Debug.enabled) Debug.print("(M) -> WorkDefinition("+getName()+")::removeParentWork "+w);
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean containsParentWork( WorkDefinition w )

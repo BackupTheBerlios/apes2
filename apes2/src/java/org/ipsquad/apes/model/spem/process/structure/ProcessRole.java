@@ -23,20 +23,22 @@
 package org.ipsquad.apes.model.spem.process.structure;
 
 import org.ipsquad.apes.model.spem.SpemVisitor;
+import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ProcessRole extends ProcessPerformer
 {
 	public ProcessRole()
 	{
-	
+		if(Debug.enabled) Debug.print("(M) -> ++ProcessRole");
 	}
 
 	public ProcessRole(String name)
 	{
 		super(name);
+		if(Debug.enabled) Debug.print("(M) -> ++ProcessRole::"+name);
 	}
 
 	

@@ -58,7 +58,7 @@ import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.7 $ 
+ * @version $Revision: 1.8 $ 
  */
 public class TestApesMediator extends TestCase
 {
@@ -84,7 +84,8 @@ public class TestApesMediator extends TestCase
 	static TestListener listener;
 	static SpemTreeAdapter model;
 	
-	static{
+	static
+	{
 		Context context = Context.getInstance();
 		ConfigManager.init(null);
 		

@@ -53,7 +53,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesMediator.Listener
 {
@@ -459,6 +459,8 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	 */
 	public void move( Object object, Object container )
 	{
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::move "+object+" "+container);
+		
 		if( object instanceof ApesTreeNode && container instanceof ApesTreeNode )
 		{	
 			ApesTreeNode node = (ApesTreeNode)object;
@@ -482,6 +484,8 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	 */
 	public void insert( ApesTreeNode objectToAdd, ApesTreeNode parent )
 	{
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::insert "+objectToAdd+" "+parent);
+		
 		Map attr = new HashMap();
 		attr.put(objectToAdd.getUserObject(), objectToAdd );
 		attr.put("parent",parent);
@@ -496,6 +500,8 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	 */
 	public void remove( ApesTreeNode nodeToRemove )
 	{
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::remove "+nodeToRemove);
+		
 		Map attr = new HashMap();
 		attr.put(nodeToRemove.getUserObject(), nodeToRemove);
 		
@@ -511,7 +517,8 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	 */
 	public void change( ApesTreeNode nodeToChange, String newValue )
 	{		
-	
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::change "+nodeToChange+" "+newValue);
+		
 		Map attr = new HashMap();
 		attr.put(nodeToChange.getUserObject(),nodeToChange);
 		ApesMediator.getInstance().update( 
@@ -549,6 +556,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	protected void inserted( InsertEvent event )
 	{
 		//System.out.println("tree insert "+event);
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::inserted "+event);
 		
 		// if the element already exist, do nothing
 		if( !event.isAlreadyExistInModel() && event.getParent() != null )
@@ -605,6 +613,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	protected void removed( RemoveEvent event )
 	{
 		//System.out.println("tree remove "+event);
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::removed "+event);
 		
 		//if the remove concerns a diagram, do nothing
 		if( event.getDiagram() == null )
@@ -648,6 +657,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	protected void changed( ChangeEvent event )
 	{
 		//System.out.println("tree edit : "+e);
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::changed "+event);
 		
 		if( event.getAttributes() != null && event.getAttributes().containsKey(event.getElement()))
 		{
@@ -686,6 +696,8 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	protected void moved( MoveEvent event )
 	{
 		//System.out.println("tree move "+e.getAttributes() );
+		if(Debug.enabled) Debug.print("(A) -> SpemTreeAdapter::moved "+event);
+		
 		if( event.getAttributes() != null 
 				&& event.getAttributes().containsKey("oldParent")
 				&& event.getAttributes().containsKey("newParent")

@@ -40,6 +40,7 @@ import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.WorkProductRef;
+import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
@@ -55,7 +56,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -149,10 +150,7 @@ public class LoadProject extends MonitoredTaskBase
 				Activity a = new Activity();
 				int count = new Integer(a.getName().substring(6)).intValue();
 				int nb = new Integer(((Activity)v.get(3)).getName().substring(6)).intValue();
-				while( count++ < nb )
-				{
-					new Activity().resetName();
-				}	
+				Element.setNoNameCounter(nb);	
 			
 				projectZip.close();
 				

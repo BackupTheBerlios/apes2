@@ -34,12 +34,12 @@ import java.io.PrintStream;
  *
  * Compilers automatically optimize the code if Debug.enabled is set to false
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Debug
 {
 	/// Debug enabled flag
-	public static final boolean enabled = true;
+	public static final boolean enabled = false;
 
 	private static PrintStream msErrorOut = System.err;
 

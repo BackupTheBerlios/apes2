@@ -26,9 +26,10 @@ import java.util.Vector;
 
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ProcessPerformer extends ModelElement
 {
@@ -37,12 +38,13 @@ public class ProcessPerformer extends ModelElement
 	
 	public ProcessPerformer()
 	{
-	
+		if(Debug.enabled) Debug.print("(M) -> ++ProcessPerformer");
 	}
 
 	public ProcessPerformer(String name)
 	{
 		super(name);
+		if(Debug.enabled) Debug.print("(M) -> ++ProcessPerformer::"+name);
 	}
 
 	public void visit(SpemVisitor visitor)
@@ -72,6 +74,7 @@ public class ProcessPerformer extends ModelElement
 	{
 		if(!containsFeature(f))
 		{
+			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::addFeature "+f);
 			mFeature.add(f);
 			return true;
 		}
@@ -100,6 +103,7 @@ public class ProcessPerformer extends ModelElement
 	{
 		if(containsFeature(f))
 		{
+			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::removeFeature "+f);
 			mFeature.remove(f);
 			return true;
 		}
@@ -133,6 +137,7 @@ public class ProcessPerformer extends ModelElement
 	{
 		if(!containsResponsibility(r))
 		{
+			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::addResponsibility "+r);
 			mResponsibilities.add(r);
 			return true;
 		}
@@ -151,6 +156,7 @@ public class ProcessPerformer extends ModelElement
 	{
 		if(containsResponsibility(r))
 		{
+			if(Debug.enabled) Debug.print("(M) -> ProcessPerformer("+getName()+")::removeResponsibility "+r);
 			mResponsibilities.remove(r);
 			return true;
 		}

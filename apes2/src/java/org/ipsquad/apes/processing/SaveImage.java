@@ -21,14 +21,13 @@
 
 package org.ipsquad.apes.processing;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import org.ipsquad.apes.adapters.ActivityGraphAdapter;
@@ -44,16 +43,12 @@ import org.ipsquad.apes.ui.ResponsabilityJGraph;
 import org.ipsquad.apes.ui.WorkDefinitionJGraph;
 import org.jgraph.JGraph;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
 /**
  * Save a graph in a jpeg file
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
-public class SaveJPEG
+public class SaveImage
 {
 	private String mPath = null;
 	private SpemGraphAdapter mAdapter;
@@ -64,18 +59,18 @@ public class SaveJPEG
 	 * @param path the abolute path to the save file
 	 * @param adapter the SpemGraphAdapter containing the diagram to be saved
 	 */ 
-	public SaveJPEG(String path, SpemGraphAdapter adapter)
+	public SaveImage(String path, SpemGraphAdapter adapter)
 	{
 		mPath=path;
 		mAdapter=adapter;
 	}	
 
 	/**
-	 * Constructor without path when you want to call directly save(OutputStream). 
+	 * Constructor without path when you want to call directly save(OutputStream,String). 
 	 *
 	 * @param adapter the SpemGraphAdapter containing the diagram to be saved
 	 */ 
-	public SaveJPEG(SpemGraphAdapter adapter)
+	public SaveImage(SpemGraphAdapter adapter)
 	{
 		mAdapter=adapter;
 	}	
@@ -116,10 +111,11 @@ public class SaveJPEG
 	}
 
 	/**
-	 * Save in jpeg the diagram in the file specified by  mPath variable
+	 * Save the diagram in the file specified by mPath variable
 	 *
+	 *@param format the image's format
 	 */
-	public void save() throws IOException 
+	public boolean save(String format) throws IOException 
 	{
 		File file=new File(mPath);
 		File temp=new File(file.getParent());
@@ -138,12 +134,12 @@ public class SaveJPEG
 		
 		OutputStream out = new java.io.FileOutputStream(file);
 		
-		save(out);
-		
+		boolean result = save(out, format);
 		out.close();
+		return result;
 	}
 
-	public void save(OutputStream out) throws IOException
+	public boolean save(OutputStream out, String format) throws IOException
 	{
 		JGraph mGraph=null;
 		if(mAdapter instanceof FlowGraphAdapter)
@@ -170,24 +166,19 @@ public class SaveJPEG
 		JFrame frame = new JFrame();
    		frame.getContentPane().add(mGraph);
     	frame.pack();
-    	//frame.setVisible(false);
-	
+    	
 		int width = mGraph.getWidth();
 		int height = mGraph.getHeight();
 		
 		if(width!=0 && height!=0)
 		{
-			//BufferedImage bimg = (java.awt.image.BufferedImage)mGraph.createImage(width,height);
 			BufferedImage bimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			Graphics g = bimg.getGraphics();
-    			mGraph.paint(g);
-			Graphics2D g2 = (Graphics2D)bimg.getGraphics();
-			g2.setPaint(Color.white);
-		
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-      		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(bimg);
-      		param.setQuality(0.75f,true);
-      		encoder.encode(bimg,param);
+			Graphics2D g2 = bimg.createGraphics();
+			mGraph.paint(g2);
+			g2.dispose();
+			if(!ImageIO.write(bimg, format, out))
+				return false;
 		}
+		return true;
 	}
 };
