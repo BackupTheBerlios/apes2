@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 
 /**
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WorkProduct extends ModelElement implements IPackage
 {
@@ -187,6 +187,7 @@ public class WorkProduct extends ModelElement implements IPackage
 		wp.mInput=new Vector();
 		wp.mOutput=new Vector();
 		wp.mResponsible = null;
+		wp.mReferences = NO_REFERENCES;
 		
 		return wp;
 	}

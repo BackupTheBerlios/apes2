@@ -72,7 +72,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -368,7 +368,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				{	
 					Map apply = null;
 					
-					if( e.getAttributes() != null && e.getAttributes().get("Attributes") != null )
+					if( e.getAttributes() != null && e.getAttributes().containsKey("Attributes") )
 					{
 						Map attr = (Map) e.getAttributes().get("Attributes");
 						apply =  new HashMap();
@@ -391,14 +391,19 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		{
 			Port firstPort = null, port = null;
 			Map apply = new HashMap();
-			
-			if( e.getAttributes() != null && e.getAttributes().containsKey("firstPort") )
-			{	
-				firstPort = (Port) e.getAttributes().get("firstPort");
-				port = (Port)e.getAttributes().get("endPort");
+
+			if( e.getAttributes() != null && e.getAttributes().containsKey("Attributes") )
+			{
 				Map attr = (Map) e.getAttributes().get("Attributes");
 				apply = new HashMap();
 				apply.put( edge, attr );
+			}
+			
+			if( e.getAttributes() != null && e.getAttributes().containsKey("firstPort") 
+					&& e.getAttributes().containsKey("endPort") )
+			{	
+				firstPort = (Port) e.getAttributes().get("firstPort");
+				port = (Port)e.getAttributes().get("endPort");
 			}
 			else
 			{

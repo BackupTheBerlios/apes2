@@ -37,7 +37,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a flow diagram in a JGraph
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -91,7 +91,7 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 	
 	protected void inserted( InsertEvent e ) 
 	{ 
-		if( e.getInserted() == null && (e.getAttributes() == null || !e.getAttributes().containsKey("firstPort") ) )
+		if( e.getDiagram() == mDiagram && e.getInserted() == null && (e.getAttributes() == null || !e.getAttributes().containsKey("firstPort") ) )
 		{	
 			ContextEdge edge = new ContextEdge();
 			
