@@ -41,7 +41,6 @@ public class TacheGeneration extends MonitoredTaskBase {
 	private TaskMonitorDialog mTask = null;
 	private boolean generationReussie = false;
 	
-
 	protected Object processingTask()
 	{
 		this.genererSite();
@@ -58,12 +57,11 @@ public class TacheGeneration extends MonitoredTaskBase {
 		{
 			//récupérer l'heure de début de la génération
 			GenerationManager.getInstance().debuterGeneration();
+			
+			this.recupererProduitsExterieurs();
 			this.preparerGeneration();
 			this.creerArbreApes();
-			/*
-			this.ajouterApropos();
-			this.ajouterQuoiDeNeuf();
-			*/
+
 			// fermeture du fichier tree.dat
 			this.pwFicTree.close();
 			this.generationReussie = true;
@@ -105,6 +103,10 @@ public class TacheGeneration extends MonitoredTaskBase {
 			// Création du dossier description
 			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.DESCRIPTION_PATH );
 			rep.mkdirs();
+			
+			// Création du dossier pour le contenu extérieur au processus
+			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.EXTERIEUR_PATH );
+			rep.mkdirs();
 				
 			// copie des répertoires ressource (javascript ...)
 			Copie.copieRep(Application.getApplication().getConfigPropriete("site"), GenerationManager.getInstance().getCheminGeneration()+ File.separator + CGenererSite.APPLET_PATH);
@@ -112,10 +114,9 @@ public class TacheGeneration extends MonitoredTaskBase {
 			//copie du répertoire des feuilles de styles
 			Copie.copieRep(Application.getApplication().getConfigPropriete("styles"), GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.STYLES_PATH);
 		
-		
-			// Création des pages contenues dans la page d'accueil
+			//Création des pages contenues dans la page d'accueil
 			this.creerPageAccueil();
-		
+			
 			//Création du fichier tree.dat
 			this.creerFicTree(GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.APPLET_PATH);	
 		}
@@ -163,6 +164,53 @@ public class TacheGeneration extends MonitoredTaskBase {
 
 
 
+		/**
+		 * récupérer la liste des produits en entrée et vérifier s'ils sont extérieurs au processus
+		 * @param idComposant
+		 */
+		public void recupererProduitsExterieurs()
+		{
+			//liste des produits extérieurs: les produits en entrée qui sont en sortie d'aucun composant
+			Vector listeProduitsExterieurs = new Vector();
+			
+			this.print("Recuperation produits extérieurs");
+			Vector liste = GenerationManager.getInstance().getListeAGenerer();
+			PaquetagePresentation paquet ;
+			IdObjetModele idComposant ;
+			for (int i = 0; i < liste.size(); i++)
+			{
+				if (liste.elementAt(i) instanceof IdObjetModele)
+				{
+					// composant publiable
+					//on recupere l'ID du ième composant de la definition de Processus
+					idComposant = (IdObjetModele)liste.elementAt(i);
+					Vector listeProduits = idComposant.getProduitEntree();
+					Vector listeLiens = ((ComposantProcessus)idComposant.getRef()).getLien();
+					for(int j = 0; j < listeProduits.size(); j++)
+					{
+					 	IdObjetModele idProduit = (IdObjetModele)listeProduits.elementAt(j);
+					 	if (listeLiens.size() == 0)
+					 	{
+					 		listeProduitsExterieurs.addElement(idProduit);
+					 	}
+					 	else
+					 	{
+						 	for (int k = 0; k < listeLiens.size(); k++)
+						 	{
+						 		LienProduits lien = (LienProduits)listeLiens.elementAt(k);
+						 		if (!lien.contient(idProduit))
+						 		{
+						 			listeProduitsExterieurs.addElement(idProduit);
+						 		}
+						 	}
+					 	}
+					}
+				}
+			}
+			//GenerationManager.getInstance().setListeProduitsExterieurs(listeProduitsExterieurs);
+			System.out.println(listeProduitsExterieurs);
+		}
+		
 		/**
 		 * permet de creer les fichiers HTML corespondant à l'accueil du site
 		 */
