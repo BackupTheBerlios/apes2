@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1756,8 +1756,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		while(it.hasNext())
 		{
 			Map.Entry entry = (Map.Entry)it.next();
-			if(entry.getKey() instanceof ModelElement && !(entry.getKey() instanceof Activity)
-			        && entry.getValue() instanceof IPackage)
+			if(entry.getKey() instanceof ModelElement && entry.getValue() instanceof IPackage)
 			{
 				ModelElement me = (ModelElement)entry.getKey();
 				IPackage parent = (IPackage)entry.getValue();
