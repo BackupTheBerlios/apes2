@@ -238,15 +238,6 @@ public class GenerationManager
 		return(GenerationManager.listeAGenerer);
 	}
 	
-	public int getTypeComposant()
-	{
-		return (GenerationManager.type_page_composant);
-	}
-
-	public int getTypeDefTravail()
-	{
-		return (GenerationManager.type_page_deftravail);
-	}
 
 	
 	/**

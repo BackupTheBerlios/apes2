@@ -25,6 +25,7 @@ import iepp.Projet;
 import iepp.application.CCreerReferentiel;
 import iepp.application.CExporterProcessus;
 import iepp.application.CFermerProjet;
+import iepp.application.CGenererSite;
 import iepp.application.CNouveauProjet;
 import iepp.application.COuvrirDP;
 import iepp.application.COuvrirReferentiel;
@@ -32,6 +33,7 @@ import iepp.application.aedition.CImprimerDiagramme;
 import iepp.application.aedition.CZoomer;
 import iepp.application.areferentiel.Referentiel;
 import iepp.application.averification.CVerification;
+import iepp.domaine.DefinitionProcessus;
 import iepp.ui.ireferentiel.VueReferentielArbre;
 import iepp.ui.iverification.PanneauVerification;
 import iepp.ui.preferences.FenetrePreference;
@@ -611,10 +613,21 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 				}
 			}
 
-			 // génération
-			 else if ((source == this.generer )||(source == this.bgenerer))
+			 // génération boîte dialogue
+			 else if ((source == this.generer ))
 			 {
 			 	JDialog dialogueGen = new FenetrePreference(this, FenetrePreference.TYPE_GENERATION);		 	
+			 }
+			 // génération rapide
+			 else if ((source == this.bgenerer))
+			 {
+				CGenererSite c = new CGenererSite(Application.getApplication().getProjet().getDefProc()) ;
+				if (c.executer())
+				{
+					 JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("Generation_ok"),
+					 				Application.getApplication().getTraduction("Generation_site_titre"),
+									JOptionPane.INFORMATION_MESSAGE);
+				}
 			 }
 			 
 			else if ((source == this.propriete ) || source == this.bpreferences)

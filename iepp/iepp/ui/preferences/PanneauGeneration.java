@@ -2,6 +2,7 @@ package iepp.ui.preferences;
 
 import iepp.Application;
 import iepp.Projet;
+import iepp.application.CGenererSite;
 import iepp.application.ageneration.GenerationManager;
 import iepp.application.ageneration.TacheGeneration;
 import iepp.domaine.DefinitionProcessus;
@@ -37,14 +38,11 @@ import javax.swing.border.TitledBorder;
 import org.ipsquad.apes.ui.PreferencesDialog;
 
 import util.TaskMonitorDialog;
-import util.TaskMonitorPanel;
 
 
 public class PanneauGeneration extends PanneauOption 
 {
 	private DefinitionProcessus defProc;
-	private TaskMonitorPanel panneauAvancement = null;
-	private TacheGeneration tacheGener;
 	private JButton bGenerer;
 	
 	public static final String GENERATION_PANEL_KEY = "Generation_GO_Desc";
@@ -85,14 +83,6 @@ public class PanneauGeneration extends PanneauOption
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
 		
-		this.tacheGener = new TacheGeneration();
-		this.panneauAvancement = new TaskMonitorPanel(tacheGener);
-		c.gridx = 0; c.gridy = 2;
-		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = 4;
-		c.gridheight = 1;
-		//this.panneauAvancement.setPreferredSize(new Dimension(150,100));
-		mPanel.add(this.panneauAvancement, c);
 		
 		//linefeed
 		c.weighty = 1;  
@@ -124,20 +114,6 @@ public class PanneauGeneration extends PanneauOption
 	}
 
 	
-	public void initGeneration()
-	{
-		// on sauvegarde l'ordre de la liste dans le Generation Manager
-		GenerationManager.getInstance().setListeAGenerer(this.defProc.getListeAGenerer());
-		// on modifie le chemin de generation
-		GenerationManager.getInstance().setCheminGeneration(this.defProc.getRepertoireGeneration());
-		//on modifie la couleur des éléments sélectionnés dans l'arbre
-		GenerationManager.getInstance().setCouleurSurligne(new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre"))));
-		// feuille de style
-		GenerationManager.getInstance().setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
-		// contenu
-		GenerationManager.getInstance().setPlaceContenu(Application.getApplication().getConfigPropriete("place_contenu"));
-	}
-	
 	private class ManagerButton implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -147,12 +123,14 @@ public class PanneauGeneration extends PanneauOption
 			
 			// sauver les paramètres
 			if (source == PanneauGeneration.this.bGenerer)
-			{
-				PanneauGeneration.this.initGeneration();
-				
-				PanneauGeneration.this.tacheGener.setTask(PanneauGeneration.this.panneauAvancement);
-				PanneauGeneration.this.panneauAvancement.go();
-			
+			{	
+				CGenererSite c = new CGenererSite(PanneauGeneration.this.defProc) ;
+				if (c.executer())
+				{
+					 JOptionPane.showMessageDialog(Application.getApplication().getFenetrePrincipale(),Application.getApplication().getTraduction("Generation_ok"),
+					 				Application.getApplication().getTraduction("Generation_site_titre"),
+									JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		}
 	}

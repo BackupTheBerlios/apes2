@@ -36,15 +36,9 @@ import util.ErrorManager;
 public class TacheGeneration extends MonitoredTaskBase {
 
 	private PrintWriter pwFicTree ;
-	private TaskMonitorPanel mTask = null;
+	private TaskMonitorDialog mTask = null;
 	private boolean generationReussie = false;
 	
-	
-	public TacheGeneration()
-	{
-		this.setLengthOfTask(100);
-		this.setCurrent(0);
-	}
 	protected Object processingTask()
 	{
 		this.genererSite();
@@ -80,7 +74,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 		}
 	}
 
-	public void setTask(TaskMonitorPanel task)
+	public void setTask(TaskMonitorDialog task)
 	{
 		this.mTask = task;
 	}
@@ -120,6 +114,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 		
 			//Création des pages contenues dans la page d'accueil
 			this.creerPageAccueil();
+			this.setCurrent(20);
 			
 			//Création du fichier tree.dat
 			this.creerFicTree(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.APPLET_PATH);	
@@ -132,6 +127,13 @@ public class TacheGeneration extends MonitoredTaskBase {
 			Vector liste = GenerationManager.getInstance().getListeAGenerer();
 			PaquetagePresentation paquet ;
 			IdObjetModele idComposant ;
+			/*
+			int part = 80;
+			if (liste.size() != 0)
+			{
+				part = 80 / liste.size() ;
+			}
+			*/
 			for (int i = 0; i < liste.size(); i++)
 			{
 				if (liste.elementAt(i) instanceof PaquetagePresentation)
@@ -161,6 +163,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 						 compCourant.traiterGeneration();
 					}
 				}
+				//this.setCurrent(this.getCurrent() + part);
 			}
 		
 			return true;
@@ -293,13 +296,20 @@ public class TacheGeneration extends MonitoredTaskBase {
 		{
 			this.print(Application.getApplication().getTraduction("extraction_icone"));
 			// Créer un flux d'entrée contenant l'archive ZIP à décompresser
-			FileInputStream fin = new FileInputStream(paquet.getNomFichier());
+			File f = new File(paquet.getNomFichier());
+			FileInputStream fin = new FileInputStream(f);
 
+			/*
+			int taille = new Long(f.length()).intValue();
+			int avant = 0;
+			*/
+			
 			// Mettre ce flux en mémoire tampon
 			BufferedInputStream bis = new BufferedInputStream(fin);
 
 			// Identifier le flux tampon comme flux de compression ZIP
 			ZipInputStream zin = new ZipInputStream(bis);
+			
 
 			// Définir un objet ZipEntry
 			ZipEntry ze = null;
@@ -335,6 +345,10 @@ public class TacheGeneration extends MonitoredTaskBase {
 					 }
 					 dezipper(zin, fout);
 				 }
+				/*
+				 this.setCurrent(this.getCurrent() + (((taille - fin.available()) * part) / taille) - avant); 
+				 avant = ((taille - fin.available()) * part) / taille;
+				 */
 			 }
 			 // Fermer le flux d'entrée
 			 zin.close(); 
