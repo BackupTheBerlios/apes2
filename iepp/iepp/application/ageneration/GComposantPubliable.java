@@ -173,7 +173,7 @@ public class GComposantPubliable  extends GElementModele
 			
 			// S'ils ne sont pas exterieurs, ils n'ont peut etre pas de presentation mais sont des produits en entree lies
 			HashMap listeProduitsChanges = GenerationManager.getListeProduitsChanges();
-			IdObjetModele nouveau = GenerationManager.estProduitChange(id);
+			IdObjetModele nouveau = GenerationManager.getProduitChange(id);
 			if (nouveau != null)
 			{
 			    trouve = true;

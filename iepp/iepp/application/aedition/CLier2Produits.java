@@ -134,10 +134,10 @@ public class CLier2Produits extends CommandeAnnulable
 			{
 				mdfusion = (MDProduit)destination.getModele();
 			}
-			
+			/*
 			mdfusion.setLargeur(30);
 			mdfusion.setHauteur(40);
-			
+			*/
 			// Creation des liens fusion 
 			this.lien1 = new FLienFusion(new MDLienClassic());
 			this.lien2 = new FLienFusion(new MDLienClassic());		

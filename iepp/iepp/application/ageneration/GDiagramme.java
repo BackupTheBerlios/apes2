@@ -175,7 +175,7 @@ public class GDiagramme extends GElementModele
 				int ID_Apes;
 				ElementPresentation elem;
 				
-				IdObjetModele nouvelId = GenerationManager.estProduitChange( this.cp.toString()+ "::" + o[i].toString());
+				IdObjetModele nouvelId = GenerationManager.getProduitChange( this.cp.toString()+ "::" + o[i].toString());
 			    if (nouvelId != null)
 			    {
 			        ID_Apes = nouvelId.getID();

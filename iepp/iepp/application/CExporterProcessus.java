@@ -38,6 +38,7 @@ import util.SmartChooser;
 import util.ToolKit;
 import iepp.Application;
 import iepp.domaine.ComposantProcessus;
+import iepp.domaine.DefinitionProcessus;
 import iepp.domaine.ElementPresentation;
 import iepp.domaine.IdObjetModele;
 import iepp.domaine.LienProduits;
@@ -106,6 +107,9 @@ public class CExporterProcessus extends CommandeNonAnnulable
 		
 		try
 		{
+			// récupérer la definition de processus
+			DefinitionProcessus defProc = Application.getApplication().getProjet().getDefProc();
+			
 			// créer le fichier d'exportation
 			
 			// crée un fichier binaire...
@@ -114,9 +118,24 @@ public class CExporterProcessus extends CommandeNonAnnulable
 
 			data.write("<?iepp version=\""+Application.NUMVERSION+"\"?>\n");
 			data.write("<exportExecution>\n");
-			data.write("\t<cheminGeneration>");
+			
+			data.write("\t<proprietes>");
+			data.write("\t\t<nomProcessus>");
+			data.write(defProc.getNomDefProc());
+			data.write("</nomProcessus>\n");
+			data.write("\t\t<nomAuteur>");
+			data.write(defProc.getAuteur());
+			data.write("</nomAuteur>\n");
+			data.write("\t\t<emailAuteur>");
+			data.write(defProc.getEmailAuteur());
+			data.write("</emailAuteur>\n");
+			data.write("\t\t<commentaires>");
+			data.write(defProc.getCommentaires());
+			data.write("</commentaires>\n");
+			data.write("\t\t<cheminGeneration>");
 			data.write(GenerationManager.getInstance().getCheminGeneration());
 			data.write("</cheminGeneration>\n");
+			data.write("\t</proprietes>\n");
 			
 			
 			// liste des roles de la définition	
@@ -169,13 +188,13 @@ public class CExporterProcessus extends CommandeNonAnnulable
 					    }
 					    
 					    // Si le produit est change, on remplace par l'id du produit en sortie
-					    if (GenerationManager.estProduitChange(prod) == null)
+					    if (GenerationManager.getProduitChange(prod) == null)
 					    {
 					        produit = new Integer(prodID +  (i * 10000));
 					    }
 					    else
 					    {
-					        produit = new Integer(GenerationManager.estProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.estProduitChange(prod).getRef()).getIdComposant()) * 10000));
+					        produit = new Integer(GenerationManager.getProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.getProduitChange(prod).getRef()).getIdComposant()) * 10000));
 					    }
 						data.write("\t\t\t\t\t<responsabilite>");
 						data.write(produit.toString());
@@ -233,13 +252,13 @@ public class CExporterProcessus extends CommandeNonAnnulable
 					    }
 					    
 					    // Si le produit est change, on remplace par l'id du produit en sortie
-					    if (GenerationManager.estProduitChange(prod) == null)
+					    if (GenerationManager.getProduitChange(prod) == null)
 					    {
 					        produit = new Integer(prodID +  (i * 10000));
 					    }
 					    else
 					    {
-					        produit = new Integer(GenerationManager.estProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.estProduitChange(prod).getRef()).getIdComposant()) * 10000));
+					        produit = new Integer(GenerationManager.getProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.getProduitChange(prod).getRef()).getIdComposant()) * 10000));
 					    }					    					    
 					    data.write("\t\t\t\t\t<prodEntree>");
 						data.write(produit.toString());
@@ -266,13 +285,13 @@ public class CExporterProcessus extends CommandeNonAnnulable
 					    }
 					    
 					    // Si le produit est change, on remplace par l'id du produit en sortie
-					    if (GenerationManager.estProduitChange(prod) == null)
+					    if (GenerationManager.getProduitChange(prod) == null)
 					    {
 					        produit = new Integer(prodID +  (i * 10000));
 					    }
 					    else
 					    {
-					        produit = new Integer(GenerationManager.estProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.estProduitChange(prod).getRef()).getIdComposant()) * 10000));
+					        produit = new Integer(GenerationManager.getProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.getProduitChange(prod).getRef()).getIdComposant()) * 10000));
 					    }
 						data.write("\t\t\t\t\t<prodSortie>");
 						data.write(produit.toString());
@@ -298,7 +317,7 @@ public class CExporterProcessus extends CommandeNonAnnulable
                 {
                     IdObjetModele io = (IdObjetModele) produits.elementAt(j);
                     // On ecrit le produit que s'il ne s'agit pas d'un produit en entree lie vers un autre
-                    if (GenerationManager.estProduitChange(io) == null)
+                    if (GenerationManager.getProduitChange(io) == null)
                     {
                         data.write("\t\t\t<produit>\n");
 

@@ -114,7 +114,7 @@ public class MDDiagramme extends MDDessin
     //---------------------------------------------------------------------
 
     public void ajouterModeleFigure(MDFigure mf) 
-	{
+	{	
     	if (mf instanceof MDNote){}
     	else if (mf instanceof MDElement)
     	{

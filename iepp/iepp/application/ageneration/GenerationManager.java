@@ -687,7 +687,7 @@ public class GenerationManager
 	 * @param id IdObjectModele a controler
 	 * @return l'ID du produit qu'il faut afficher si l'objet est trouve, null sinon
 	 */
-	public static IdObjetModele estProduitChange (IdObjetModele id)
+	public static IdObjetModele getProduitChange (IdObjetModele id)
 	{
 	    if (id != null)
 	    {
@@ -703,7 +703,7 @@ public class GenerationManager
 	 * @param id IdObjectModele a controler
 	 * @return l'ID du produit qu'il faut afficher si l'objet est trouve, null sinon
 	 */
-	public static IdObjetModele estProduitChange (String id)
+	public static IdObjetModele getProduitChange (String id)
 	{
 	    if (listeProduitsChanges.containsKey(id))
 	    {
@@ -711,9 +711,4 @@ public class GenerationManager
 	    }
 	    return null;
 	}
-
-
-
-	
-	
 }

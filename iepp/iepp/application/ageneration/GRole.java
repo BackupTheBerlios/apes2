@@ -67,13 +67,13 @@ public class GRole extends GElementModele
             IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
             if (GenerationManager.estProduitExterieur(id) == 0)
             {
-                if (GenerationManager.estProduitChange(id) == null)
+                if (GenerationManager.getProduitChange(id) == null)
                 {
                     fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
                 }
                 else
                 {
-                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(GenerationManager.estProduitChange(id)) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(GenerationManager.getProduitChange(id)) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
                 }
             }
             else
