@@ -27,10 +27,12 @@ import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.ipsquad.apes.model.spem.statemachine.StateMachine;
+
 /**
  * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {
@@ -51,7 +53,7 @@ public class WorkDefinitionGraphAdapter extends SpemGraphAdapter
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				if( o instanceof WorkProduct || o instanceof ProcessRole || o instanceof WorkDefinition)
+				if( o instanceof WorkProduct || o instanceof ProcessRole || o instanceof WorkDefinition || o instanceof StateMachine)
 				{
 					return true;
 				}
@@ -72,6 +74,11 @@ public class WorkDefinitionGraphAdapter extends SpemGraphAdapter
 			{
 				mCreated = new WorkDefinitionCell( workDefinition );
 			}			
+			
+			public void visitStateMachine( StateMachine sm )
+			{
+				mCreated = new WorkProductStateCell(sm); 
+			}
 			
 			public void visitActivity(Activity activity) { mCreated = null; }
 			

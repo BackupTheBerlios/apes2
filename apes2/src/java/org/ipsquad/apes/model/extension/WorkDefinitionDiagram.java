@@ -30,12 +30,13 @@ import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 import org.ipsquad.utils.ErrorManager;
 
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -119,6 +120,10 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			return addWorkDefinition( (WorkDefinition) me );
 		}
+		else if(me instanceof StateMachine)
+		{
+			return addWorkProductState((StateMachine)me);
+		}
 
 		return false;
 	}
@@ -158,6 +163,32 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	}
 	
 	/**
+	 * Add a work product state to the work definition diagram
+	 *
+	 * @param s the work product state to associate
+	 * @return true if the work product can be added, false otherwise
+	 */
+	public boolean addWorkProductState(StateMachine sm)
+	{
+		if( containsModelElement(sm.getContext()) )
+		{
+			ErrorManager.getInstance().printKey("errorStateContextPresentInDiagram");
+			return false;
+		}
+		
+		if(!containsModelElement(sm))
+		{
+			mElements.add(sm);
+			return true;
+		}
+		
+		ErrorManager.getInstance().printKey("errorElementAlreadyPresent");
+		return false;
+	}
+	
+	
+	
+	/**
 	 * Add a work definition to the work definition diagram
 	 *
 	 * @param p the work definition to associate
@@ -193,7 +224,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 
 	public boolean canAddModelElement(ModelElement me) 
 	{
-		if( me instanceof ProcessRole || me instanceof WorkProduct || me instanceof WorkDefinition)
+		if( me instanceof ProcessRole || me instanceof WorkDefinition)
 		{
 			if(!containsModelElement(me))
 			{
@@ -206,10 +237,50 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			}
 		}
 		
+		if( me instanceof WorkProduct )
+		{
+			return canAddWorkProduct((WorkProduct)me);
+		}
+		
+		if( me instanceof StateMachine )
+		{
+			return canAddStateMachine((StateMachine)me);
+		}
+		
 		ErrorManager.getInstance().printKey("errorElementForbidden");
 		
 		return false;
 	}
+	
+	public boolean canAddWorkProduct( WorkProduct p )
+	{
+		if( !containsModelElement(p) )
+		{	
+			for( int i = 0; i < p.behaviorCount(); i++ )
+			{
+				if( mElements.contains(p.getBehavior(i)) )
+				{
+					ErrorManager.getInstance().printKey("errorStateContextPresentInDiagram");
+					return false;
+				}
+			}
+			return true;
+		}
+		ErrorManager.getInstance().printKey("errorElementAlreadyPresent");
+		return false;
+	}
+	
+	public boolean canAddStateMachine( StateMachine sm )
+	{
+		if( containsModelElement(sm.getContext()) )
+		{
+			ErrorManager.getInstance().printKey("errorStateContextPresentInDiagram");
+			return false;
+		}
+		return true;
+	}
+	
+	
 
 	/**
 	 * Check if a model element is in this diagram
@@ -265,6 +336,17 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			return createLinkWorkDefinitionWorkProduct( (WorkDefinition) source, (WorkProduct) target );
 		}
 		
+		if( source instanceof StateMachine && target instanceof WorkDefinition )
+		{
+			return createLinkWorkProductStateWorkDefinition( (StateMachine) source, (WorkDefinition) target );
+		}
+		
+		if( source instanceof WorkDefinition && target instanceof StateMachine )
+		{
+			return createLinkWorkDefinitionWorkProductState( (WorkDefinition) source, (StateMachine) target );
+		}
+		
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 
@@ -346,6 +428,49 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return false;
 	}
 	
+	
+	public boolean createLinkWorkProductStateWorkDefinition( StateMachine sm, WorkDefinition wd)
+	{
+		if( sm.getContext() instanceof WorkProduct 
+				&& containsModelElement(sm) 
+				&& containsModelElement(wd) )
+		{
+			WorkProduct w = (WorkProduct)sm.getContext();
+			if(containsModelElement(wd))
+			{
+				if((areLinkableModelElements(w,wd)) && (areLinkableModelElements(sm,wd)))
+				{
+					mTransitions.add(new Transition(w,wd));
+					mTransitions.add(new Transition(sm,wd));
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean createLinkWorkDefinitionWorkProductState(WorkDefinition wd,  StateMachine sm)
+	{
+		if( sm.getContext() instanceof WorkProduct 
+				&& containsModelElement(sm) 
+				&& containsModelElement(wd) )
+		{
+			WorkProduct w = (WorkProduct)sm.getContext();
+			if(containsModelElement(wd))
+			{
+				if((areLinkableModelElements(wd,w)) && (areLinkableModelElements(wd,sm)))
+				{
+					mTransitions.add(new Transition(wd,w));
+					mTransitions.add(new Transition(wd,sm));
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	
 	public boolean removeLinkModelElements( ModelElement source, ModelElement target) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
@@ -361,6 +486,16 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		if( source instanceof WorkDefinition && target instanceof WorkProduct )
 		{
 			return removeLinkWorkDefinitionWorkProduct((WorkDefinition) source, (WorkProduct) target);
+		}
+		
+		if( source instanceof StateMachine && target instanceof WorkDefinition )
+		{
+			return removeLinkWorkProductStateWorkDefinition( (StateMachine) source, (WorkDefinition) target );
+		}
+		
+		if( source instanceof WorkDefinition && target instanceof StateMachine )
+		{
+			return removeLinkWorkDefinitionWorkProductState((WorkDefinition) source, (StateMachine) target);
 		}
 
 		return false;
@@ -430,6 +565,47 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		
 		return false;	
 	}
+	
+	
+	
+	public boolean removeLinkWorkProductStateWorkDefinition(StateMachine sm, WorkDefinition wd)
+	{
+		if (sm.getContext() instanceof WorkProduct
+				&& containsModelElement(wd) 
+				&& containsModelElement(sm))
+		{
+			WorkProduct w = (WorkProduct)sm.getParent();
+			
+			if(existsLinkModelElements(w, wd))
+			{
+				mTransitions.remove(getTransition(w,wd));
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	public boolean removeLinkWorkDefinitionWorkProductState(WorkDefinition wd, StateMachine sm)
+	{
+		if (sm.getContext() instanceof WorkProduct
+				&& containsModelElement(wd) 
+				&& containsModelElement(sm))
+		{
+			WorkProduct w = (WorkProduct)sm.getParent();
+			
+			if(existsLinkModelElements(wd, w))
+			{
+				mTransitions.remove(getTransition(wd,w));
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
+
 
 	public boolean areLinkableModelElements( ModelElement source, ModelElement target) 
 	{	
@@ -446,6 +622,16 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		if( source instanceof WorkDefinition && target instanceof WorkProduct )
 		{
 			return areLinkableWorkDefinitionWorkProduct((WorkDefinition) source, (WorkProduct) target);
+		}
+		
+		if( source instanceof StateMachine && target instanceof WorkDefinition )
+		{
+			return areLinkableWorkProductStateWorkDefinition( (StateMachine) source, (WorkDefinition) target );
+		}
+		
+		if( source instanceof WorkDefinition && target instanceof StateMachine )
+		{
+			return areLinkableWorkDefinitionWorkProductState((WorkDefinition) source, (StateMachine) target);
 		}
 		
 		return false;
@@ -477,7 +663,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			}
 		}
 
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 	
@@ -517,6 +703,46 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return false;
 	}
 	
+	
+	
+	public boolean areLinkableWorkProductStateWorkDefinition(StateMachine sm, WorkDefinition wd)
+	{
+		if (sm.getContext() instanceof WorkProduct
+				&& containsModelElement(wd) 
+				&& containsModelElement(sm))
+		{
+			WorkProduct w = (WorkProduct)sm.getParent();
+			
+			if((!existsLinkModelElements(w,wd)) && (!existsLinkModelElements(wd,sm)))
+			{
+				return true;
+			}
+		}
+		
+		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		return false;
+	}
+	
+	public boolean areLinkableWorkDefinitionWorkProductState(WorkDefinition wd, StateMachine sm)
+	{
+		if (sm.getContext() instanceof WorkProduct
+				&& containsModelElement(wd) 
+				&& containsModelElement(sm))
+		{
+			WorkProduct w = (WorkProduct)sm.getParent();
+			if((!existsLinkModelElements(wd,w)) && (!existsLinkModelElements(sm,wd)))
+			{
+				return true;
+			}
+		}
+		
+		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		return false;
+	}
+	
+	
+	
+	
 	public boolean existsLinkModelElements( ModelElement source, ModelElement target) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
@@ -532,6 +758,16 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		if( source instanceof WorkDefinition && target instanceof WorkProduct )
 		{
 			return existsLinkWorkDefinitionWorkProduct((WorkDefinition) source, (WorkProduct) target);
+		}
+		
+		if( source instanceof StateMachine && target instanceof WorkDefinition )
+		{
+			return existsLinkWorkProductStateWorkDefinition( (StateMachine) source, (WorkDefinition) target );
+		}
+		
+		if( source instanceof WorkDefinition && target instanceof StateMachine )
+		{
+			return existsLinkWorkDefinitionWorkProductState((WorkDefinition) source, (StateMachine) target);
 		}
 		
 		return false;
@@ -589,6 +825,47 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 
 		return false;
 	}
+	
+	
+	public boolean existsLinkWorkProductStateWorkDefinition(StateMachine sm, WorkDefinition wd)
+	{
+		if (sm.getContext() instanceof WorkProduct
+				&& containsModelElement(wd) 
+				&& containsModelElement(sm))
+		{
+			WorkProduct w = (WorkProduct)sm.getParent();
+			
+			if(getTransition(w,wd)!=null)
+			{
+				if (getTransition(sm,wd)!=null)
+				{	
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean existsLinkWorkDefinitionWorkProductState(WorkDefinition wd, StateMachine sm)
+	{
+		if ( sm.getContext() instanceof WorkProduct
+				&& containsModelElement(wd) 
+				&& containsModelElement(sm))
+		{
+			WorkProduct w = (WorkProduct) sm.getParent();
+			
+			if(getTransition(wd,w)!=null)
+			{
+				if (getTransition(wd,sm)!=null)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	
 	public void visit(SpemVisitor visitor) 
 	{

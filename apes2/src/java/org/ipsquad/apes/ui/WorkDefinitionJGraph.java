@@ -30,6 +30,7 @@ import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.WorkDefinitionCell;
 import org.ipsquad.apes.adapters.WorkProductCell;
+import org.ipsquad.apes.adapters.WorkProductStateCell;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.Edge;
@@ -40,7 +41,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a WorkDefinitionDiagram
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class WorkDefinitionJGraph extends JGraph
 {
@@ -67,6 +68,10 @@ public class WorkDefinitionJGraph extends JGraph
 		if(v instanceof WorkProductCell)
 		{
 			return new WorkProductView(v, this, cm);
+		}
+		if(v instanceof WorkProductStateCell)
+		{
+			return new WorkProductStateView(v, this, cm);
 		}
 		if(v instanceof NoteCell)
 		{
