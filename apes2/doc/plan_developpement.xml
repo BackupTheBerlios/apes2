@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
-<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
+<!DOCTYPE ipbook SYSTEM "/home/ptiyo/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
 
 <ipbook>
   <info>
@@ -7,20 +7,62 @@
     <subtitle>Plan de Développement</subtitle>
     <author>Delphine De Rosso</author>
     <language>french</language>
-    <version>3.0</version>
+    <version>6.1</version>
 
     <revhistory>
+	<revision>
+         <revnumber>6.1</revnumber>
+         <date>05/03/2004</date>
+	   <author>Delphine De Rosso</author>
+         <revdescription>Modification de la date de fin de projet. Elle sera désormais le 22/03/2004 au lieu du 26/03/2004 compte tenu des deux jours de révisions pour les examens. La phase de transition ne durera donc que 2 semaines au lieu de 3</revdescription>
+       </revision>
+	<revision>
+         <revnumber>6.0</revnumber>
+         <date>23/02/2004</date>
+	   <author>Delphine De Rosso</author>
+         <revdescription>Ajout d'informations concernant l'IT6 et la phase de transition</revdescription>
+       </revision>
+	<revision>
+         <revnumber>5.2</revnumber>
+         <date>12/02/2004</date>
+	   <author>Delphine De Rosso</author>
+         <revdescription>Ajout d'un cas d'utilisation dans le récapitulatif</revdescription>
+       </revision>
+        <revision>
+         <revnumber>5.1</revnumber>
+         <date>09/02/2004</date>
+	   <author>Delphine De Rosso</author>
+         <revdescription>Ajout d'informations concernant l'IT5</revdescription>
+       </revision>
+        <revision>
+         <revnumber>5.0</revnumber>
+         <date>30/01/2004</date>
+	   <author>Delphine De Rosso</author>
+         <revdescription>Modification des cas d'utilisation à réaliser durant l'IT4 suite à la revue du 26/01/2004</revdescription>
+       </revision>
+        <revision>
+         <revnumber>4.1</revnumber>
+         <date>25/01/2004</date>
+	   <author>Delphine De Rosso</author>
+         <revdescription>Modification des cas d'utilisation à réaliser durant l'IT4</revdescription>
+       </revision>
+        <revision>
+         <revnumber>4.0</revnumber>
+         <date>13/01/2004</date>
+	   <author>Delphine De Rosso</author>
+         <revdescription>Ajout d'informations concernant l'IT4, et les étudiants de 2ème année</revdescription>
+       </revision>
         <revision>
          <revnumber>3.0</revnumber>
          <date>02/12/2003</date>
 	   <author>Delphine De Rosso</author>
-         <revdescription>Rajout d'informations concernant l'IT3</revdescription>
+         <revdescription>Ajout d'informations concernant l'IT3</revdescription>
        </revision>
        <revision>
          <revnumber>2.0</revnumber>
          <date>20/11/2003</date>
 	   <author>Delphine De Rosso</author>
-         <revdescription>Rajout d'informations concernant l'IT2</revdescription>
+         <revdescription>Ajout d'informations concernant l'IT2</revdescription>
        </revision>
        <revision>
          <revnumber>1.1</revnumber>
@@ -70,8 +112,8 @@
     </sect1>
 
     <sect1 title="Hypothèses et Contraintes">
-       <p>Sur ce projet, l'équipe de développement est constituée de cinq étudiants de 3e Année ISI et de quatre ou cinq étudiants de 2e Année ISI.</p>
-       <p>La date butoir de projet est fixée au 26 Mars 2004.</p>
+       <p>Sur ce projet, l'équipe de développement est constituée de cinq étudiants de 3e Année ISI et de quatre étudiants de 2e Année ISI.</p>
+       <p>La date butoir de projet est fixée au 22 Mars 2004.</p>
     </sect1>
 
     <sect1 title="Fournitures du projet">
@@ -86,8 +128,8 @@
            <item>la documentation des cas d'utilisation</item>
            <item>le plan de cycle de vie</item>
            <item>le plan de développement logiciel</item>
-   	     <item>les plans de chaque itération</item>
-   	     <item>les évaluations de chaque itération</item>
+   	   <item>les plans de chaque itération</item>
+   	   <item>les évaluations de chaque itération</item>
            <item>le cahier de recette</item>
            <item>le glossaire</item>
          </list>
@@ -102,9 +144,9 @@
 	<table>
          <col name="Rôles" align="center"/>
    	   <col name="Personnes affectées" width="3*"/>
-         <row> <c>Développeurs</c> <c>TOUS (2éme année + 3ème année)</c></row>
-	  <row> <c>Concepteur</c>      	<c>Aurélien Defossez</c></row>
-	  <row> <c>Testeur</c>     	 	<c>Isabelle Cassagneau</c></row>
+         <row> <c>Développeurs</c> <c>Rémi Joffre, Victor Nancy, Trung Ngo Thanh, Florent Scaravetti</c></row>
+	   <row> <c>Concepteur</c>      	<c>Aurélien Defossez</c></row>
+	   <row> <c>Testeurs</c>     	 	<c>Isabelle Cassagneau, Nicolas Delmas</c></row>
    	   <row> <c>Ingénieur processus</c>      <c>Isabelle Cassagneau</c></row>
  	   <row> <c>Architecte</c>     <c>Lionel Petit</c></row>
          <row> <c>Analystes</c>      <c>Isabelle Cassagneau, Aurélien Défossez, Nicolas Delmas, Delphine De Rosso, Lionel Petit</c></row>
@@ -131,8 +173,8 @@
 	 		<col name="Fin" align="center"/>
 	 		<row> <c>Lancement</c>    <c>1</c> <c>17/10/2003</c> <c>17/11/2003</c> </row>
 	 		<row> <c>Elaboration</c>  <c>2</c> <c>18/11/2003</c> <c>12/12/2003</c> </row>
-	 	  	<row> <c>Construction</c> <c>3</c> <c>13/12/2003</c> <c>05/03/2004</c> </row>
-			<row> <c>Transition</c> <c>1</c> <c>06/03/2004</c> <c>26/03/2004</c> </row>
+	 	  	<row> <c>Construction</c> <c>3</c> <c>13/12/2003</c> <c>07/03/2004</c> </row>
+			<row> <c>Transition</c>   <c>1</c> <c>08/03/2004</c> <c>22/03/2004</c> </row>
  	     </table>
        </sect2>
 	 
@@ -150,11 +192,11 @@
 	 	  <col name="Durée" align="center"/>
 	 	  <row> <c>Lancement</c>    <c>IT0</c>  <c>17/10/2003</c> <c>17/11/2003</c> <c>17/11/2003</c> <c>4 semaines</c> </row>
 	 	  <row> <c>Elaboration</c>  <c>IT1</c>  <c>18/11/2003</c> <c>30/11/2003</c> <c>01/12/2003</c> <c>2 semaines</c> </row>
-	 	  <row> <c></c>             <c>IT2</c>  <c>01/12/2003</c> <c>14/12/2003</c> <c>12/12/2003</c> <c>2 semaines</c> </row>
-	 	  <row> <c>Construction</c> <c>IT3</c>  <c>15/12/2003</c> <c>25/01/2004</c> <c></c> <c>3 semaines</c> </row>
-	 	  <row> <c></c>             <c>IT4</c>  <c>26/01/2004</c> <c>15/02/2004</c> <c></c> <c>3 semaines</c> </row>
-	 	  <row> <c></c>             <c>IT5</c>  <c>16/02/2004</c> <c>07/03/2004</c> <c></c> <c>3 semaines</c> </row>
-	 	  <row> <c>Transition</c>   <c>IT6</c>  <c>08/03/2004</c> <c>26/03/2004</c> <c></c> <c>3 semaines</c> </row>
+	 	  <row> <c></c>             <c>IT2</c>  <c>01/12/2003</c> <c>12/12/2003</c> <c>12/12/2003</c> <c>2 semaines</c> </row>
+	 	  <row> <c>Construction</c> <c>IT3</c>  <c>13/12/2003</c> <c>25/01/2004</c> <c>26/01/2004</c> <c>3 semaines</c> </row>
+	 	  <row> <c></c>             <c>IT4</c>  <c>26/01/2004</c> <c>15/02/2004</c> <c>16/02/2004</c> <c>3 semaines</c> </row>
+	 	  <row> <c></c>             <c>IT5</c>  <c>16/02/2004</c> <c>07/03/2004</c> <c>08/03/2004</c> <c>3 semaines</c> </row>
+	 	  <row> <c>Transition</c>   <c>IT6</c>  <c>08/03/2004</c> <c>22/03/2004</c> <c>22/03/2004</c> <c>2 semaines</c> </row>
          </table>
          <p><e>Les revues auront lieu à la fin de chaque itération.</e></p>
 
@@ -184,35 +226,64 @@
 		<p>Itération 2 :</p>
 		<list>
 			<item>L'architecture logicielle doit être affinée.</item>
-			<item>Des cas d'utilisation doivent être réalisés. Il sera donc possible d'ouvrir/fermer un composant, d'ajouter/supprimer un élément à un composant, d'ajouter/supprimer une interface, d'ajouter/supprimer un produit ou un rôle dans une interface, d'ajouter/supprimer une activité dans une définition de travail, d'ajouter/supprimer un diagramme dans une définition de travail.</item>
+			<item>Des cas d'utilisation doivent être réalisés. Il sera donc possible de :</item>
+				<list>
+					<item>ouvrir/fermer un composant</item>
+					<item>ajouter/supprimer un élément dans un composant</item>
+					<item>ajouter/supprimer une interface</item>
+					<item>ajouter/supprimer un produit dans une interface</item>
+					<item>ajouter/supprimer une définition de travail</item>
+					<item>ajouter/supprimer une activité dans une définition de travail</item>
+				</list>
 			<item>Une formation sur le sujet du BE est prévue pour le groupe de 2ème année.</item>
 		</list>
 
 	  	</sect4>
 
 		<sect4 title="Phase de construction">
-	<p>Cette phase va permettre à l'équipe de compléter l'analyse et la conception avec l'aide du groupe de 2ème année.</p>
-	<p>Le parallélisme du travail des développeurs va permettre une implémentation itérative du logiciel, avec ainsi la production de versions utilisables aussi vite que possible.</p>
+		<p>Le but de la phase de construction est de construire le système à partir de l'architecture stabilisée. Il s'agit en fait d'un processus de production où l'accent est mis sur la gestion des ressources et le contrôle des opérations pour optimiser les coûts, les délais et la qualité.</p>
+		<p>Cette phase va donc permettre à l'équipe de compléter l'analyse et la conception avec l'aide du groupe de 2ème année.</p>
+		<p>Le parallélisme du travail des développeurs va permettre une implémentation itérative du logiciel, avec ainsi la production de versions utilisables aussi vite que possible.</p>
 		<p>Itération 3 :</p>
 		<list>
 			<item>Le groupe de 2ème année doit être définitivement intégré.</item>
-			<item>Des cas d'utilisation doivent être réalisés. Il sera donc possible d'ajouter/supprimer/renommer un état d'un produit, d'imprimer un diagramme, d'ajouter des notes à un diagramme.</item>
+			<item>Des cas d'utilisation doivent être réalisés. Il sera donc possible de :</item>
+				<list>
+					<item>ajouter/supprimer un diagramme de flots</item>
+					<item>ajouter un produit/lien dans le diagramme de contexte</item>
+					<item>ajouter/supprimer/renommer un état d'un produit</item>
+					<item>imprimer un diagramme</item>
+					<item>gérer le texte et les couleurs</item>
+					<item>gérer les préférences utilisateur</item>
+				</list>
 		</list>
 
-		<!--<p>Itération 4 :</p>
+		<p>Itération 4 :</p>
 		<list>
-			</list>
+			<item>La vérification de la consistance d'un composant de processus sera possible.</item>
+			<item>Un élément pourra être dupliqué d'un diagramme vers un autre (copier/coller) entre deux instances.</item>
+			<item>Les préférences de l'utilisateur pourront être complètement appliquées, et la gestion du texte et des couleurs terminée.</item>
+			<item>Possibilité d'ajouter des notes à un diagramme.</item>
+			<item>Possibilité de déplacer un lien sans le supprimer.</item>
+			<item>Les éléments d'un diagramme pourront être alignés horizontalement ou verticalement.</item>
+		</list>
 
 		<p>Itération 5 :</p>
 		<list>
-			</list>
-	  	</sect4> -->
+			<item>Un cas d'utilisation doit être réalisé. Il sera donc possible d'ajouter un diagramme de flots de définitions de travail</item>
+			<item>Fin du codage de l'ajout de notes dans un diagramme</item>
+			<item>Correction des éventuels bugs</item>
+		</list>
+	  	</sect4>
 
-		<!-- <sect4 title="Phase de transition">
+		<sect4 title="Phase de transition">
+		<p>L'objectif de la phase de transition est de s'assurer que le logiciel est disponible pour les utilisateurs finaux.</p>
+		<p>A la fin de la phase de transition, les objectifs doivent avoir été atteints et le projet doit être sur le point d'être clos.</p>
 		<p>Itération 6 :</p>
 		<list>
-			</list> -->
-
+			<item>Correction des derniers bugs et améliorations éventuelles</item>
+			<item>Livraison de la version finale de l'outil ainsi que de tous les documents finalisés du projet</item>
+		</list>
 	  	</sect4>
 
 	  </sect3>
@@ -231,9 +302,9 @@
 	 	 	<col name="Responsables" align="center"/>
 			<col name="Date" align="center"/>
 
-			<row> <c>2ème et 3ème année</c>	<c>CVS</c>					<c>Lionel Petit</c> <c></c></row>
-			<row> <c>2ème année</c>			<c>Sujet de BE - RUP/F</c>	<c>2ème année</c> <c></c></row>
-			<row> <c>2ème année</c>			<c>Installation et utilisation des outils à maîtriser pour le développement du projet</c>	<c>Aurélien Defossez et Lionel Petit</c> <c></c></row>
+			<row> <c>2ème année</c>		<c>CVS</c>				<c>Aurélien Defossez</c> <c>15/01/2004</c></row>
+			<row> <c>2ème année</c>		<c>Sujet de BE - RUP/F</c>	<c>groupe de 3ème année</c> <c>08/01/2004 et 14/01/2004</c></row>
+			<row> <c>2ème année</c>		<c>Installation et utilisation des outils à maîtriser pour le développement du projet</c>	<c>Aurélien Defossez et Lionel Petit</c> <c>14/01/2004</c></row>
 		</table>
 
      </sect2>
@@ -257,40 +328,38 @@
 		<col name="Difficulté" align="center"/>
 		<col name="Temps estimé" align="center"/>
 
-		<!--x--><row> <c>Ouvrir un nouveau composant</c>                <c>1</c> <c>1</c> <c>4</c></row>
-		<!--x--><row> <c>Ouvrir un composant sauvegardé</c>                <c>1</c> <c>2</c> <c>4</c></row>
-		<!--x--><row> <c>Fermer un composant</c>                <c>2</c> <c>1</c> <c>4</c></row>
-		<!--x--><row> <c>Ajouter un élément à un composant</c>                <c>1</c> <c>2</c> <c>4</c></row>
-		<!--x--><row> <c>Supprimer un élément d'un composant</c>                <c>1</c> <c>2</c> <c>4</c></row>
-		<!--x--><row> <c>Ajouter une interface</c>                <c>1</c> <c>2</c> <c>4</c></row>
-		<!--x--><row> <c>Supprimer une interface</c>                <c>1</c> <c>2</c> <c>4</c></row>
-		<!--x--><row> <c>Ajouter un produit ou un rôle dans une interface</c>           <c>1</c> <c>2</c> <c>4</c></row>
-		<!--x--><row> <c>Supprimer un produit ou un rôle dans une interface</c>                              <c>1</c> <c>2</c> <c>4</c></row>
-		<!--x--><row> <c>Ajouter une activité à une définition de travail</c>               <c>2</c> <c>1</c> <c>4</c></row>
-		<!--x--><row> <c>Supprimer une activité d'une définition de travail</c>             <c>2</c> <c>1</c> <c>4</c></row>
-		<!--x--><row> <c>Ajouter un diagramme d'activité à une définition de travail</c>               <c>1</c> <c>2</c> <c>8</c></row>
-		<!--x--><row> <c>Ajouter un diagramme de flots d'objet à une définition de travail</c>               <c>1</c> <c>2</c> <c>8</c></row>
-		<!--x--><row> <c>Supprimer un diagramme d'une définition de travail</c>               <c>2</c> <c>1</c> <c>4</c></row>
+		<!-- x --> <row> <c>Ouvrir un nouveau composant</c>                <c>1</c> <c>1</c> <c>4</c></row>
+		<!-- x --> <row> <c>Ouvrir un composant sauvegardé</c>                <c>1</c> <c>2</c> <c>4</c></row>
+		<!-- x --> <row> <c>Ouvrir les interfaces avec un composant vide (à l'origine)</c>                <c>1</c> <c>2</c> <c>24</c></row>
+		<!-- x --> <row> <c>Fermer le composant</c>                <c>2</c> <c>1</c> <c>4</c></row>
+		<!-- x --> <row> <c>Ajouter un élément au composant</c>                <c>1</c> <c>2</c> <c>4</c></row>
+		<!-- x --> <row> <c>Supprimer un élément du composant</c>                <c>1</c> <c>2</c> <c>4</c></row>
+		<!-- x --> <row> <c>Ajouter un élément dans un diagramme</c>                <c>1</c> <c>2</c> <c>12</c></row>
+		<!-- x --> <row> <c>Ajouter un lien dans un diagramme</c>                <c>1</c> <c>2</c> <c>16</c></row>
+		<!-- x --> <row> <c>Déplacer un lien dans un diagramme</c>                <c>2</c> <c>3</c> <c>16</c></row>
 
-		<!--x--><row> <c>Ajouter un état à un produit</c> <c>1</c> <c>2</c> <c>16</c></row>
-		<!--x--><row> <c>Supprimer un état d'un produit</c> <c>2</c> <c>2</c> <c>16</c></row>
-		<!--x--><row> <c>Renommer un état d'un produit</c> <c>2</c> <c>3</c> <c>16</c></row>
-		<!--x--><row> <c>Ajouter un produit avec état dans un diagramme</c> <c>2</c> <c>2</c> <c>16</c></row>
-		<!--x--><row> <c>Supprimer un produit avec état dans un diagramme</c> <c>2</c> <c>2</c> <c>16</c></row>
-		<!--x--><row> <c>Renommer un produit avec état dans un diagramme</c> <c>2</c> <c>2</c> <c>16</c></row>
+		<!-- x --> <row> <c>Ajouter une définition de travail</c>               <c>1</c> <c>2</c> <c>12</c></row>
+		<!-- x --> <row> <c>Supprimer une définition de travail</c>               <c>1</c> <c>2</c> <c>10</c></row>
+		<!-- x --> <row> <c>Ajouter une activité à une définition de travail</c>               <c>2</c> <c>1</c> <c>4</c></row>
+		<!-- x --> <row> <c>Supprimer une activité d'une définition de travail</c>             <c>2</c> <c>1</c> <c>4</c></row>
+		<!-- x --> <row> <c>Ajouter un diagramme de flots de définitions de travail</c>               <c>1</c> <c>2</c> <c>8</c></row>
 
-		<!--x--><row> <c>Vérifier la consistance du composant de processus</c>    <c>2</c> <c>3</c> <c>24</c></row>
+		<!-- x --> <row> <c>Ajouter un état à un produit</c> <c>1</c> <c>2</c> <c>16</c></row>
+		<!-- x --> <row> <c>Supprimer un état d'un produit</c> <c>2</c> <c>2</c> <c>16</c></row>
+		<!-- x --> <row> <c>Renommer un état d'un produit</c> <c>2</c> <c>3</c> <c>16</c></row>
+		<!-- x --> <row> <c>Ajouter un produit avec état dans un diagramme (à partir de l'arbre)</c> <c>2</c> <c>2</c> <c>16</c></row>
+		<!-- x --> <row> <c>Supprimer un produit avec état dans un diagramme</c> <c>2</c> <c>2</c> <c>16</c></row>
+		<!-- x --> <row> <c>Renommer un produit avec état dans un diagramme</c> <c>2</c> <c>2</c> <c>16</c></row>
 
-		<!--x--><row> <c>Importer un processus sauvegardé à l'aide d'une version précédente d'APES</c> <c>2</c> <c>3</c> <c>40</c></row>
+		<!-- x --> <row> <c>Vérifier la consistance du composant de processus</c>    <c>2</c> <c>3</c> <c>24</c></row>
 
-		<!--x--><row> <c>Ajouter un guide à un élément du modèle dans l'arbre</c>       <c>3</c> <c>1</c> <c>4</c></row>
-		<!--x--><row> <c>Supprimer un guide d'un élément du modèle dans l'arbre</c>  <c>3</c> <c>1</c> <c>4</c></row>
-
-		<!--x--><row> <c>Dupliquer un élément d'un diagramme vers un autre (copier/coller)</c>                             <c>3</c> <c>3</c> <c>16</c></row>
-		<!--x--><row> <c>Déplacer un élément dans un diagramme (couper/coller)</c>                             <c>3</c> <c>3</c> <c>16</c></row>
-		<!--x--><row> <c>Imprimer un diagramme</c>                     <c>2</c> <c>1</c> <c>4</c></row>
-		<!--x--><row> <c>Gérer le texte et les couleurs</c>                     <c>2</c> <c>3</c> <c>16</c></row>
-		<!--x--><row> <c>Ajouter des notes à un diagramme</c>                     <c>2</c> <c>1</c> <c>4</c>></row>
+		<!-- x --> <row> <c>Gérer les préférences</c>                     <c>2</c> <c>3</c> <c>24</c></row>
+		<!-- x --> <row> <c>Aligner des icônes dans un diagramme</c>	<c>2</c> <c>3</c> <c>8</c></row>
+		<!-- x --> <row> <c>Dupliquer un élément (copier/coller)</c>                             <c>3</c> <c>3</c> <c>16</c></row>
+		<!-- x --> <row> <c>Déplacer un élément dans un diagramme (couper/coller)</c>     <c>3</c> <c>3</c> <c>16</c></row>
+		<!-- x --> <row> <c>Imprimer un diagramme</c>                     <c>2</c> <c>1</c> <c>4</c></row>
+		<!-- x --> <row> <c>Gérer le texte et les couleurs</c>                     <c>2</c> <c>3</c> <c>16</c></row>
+		<!-- x --> <row> <c>Ajouter des notes à un diagramme</c>                     <c>2</c> <c>1</c> <c>4</c></row>
 
 	</table>
 

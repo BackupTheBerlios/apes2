@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
-<!DOCTYPE ipbook SYSTEM "/opt/ipsquad/ipsdoc/dtd/ipsdoc.dtd">
 
 <ipbook>
   <info>
@@ -8,21 +7,39 @@
     <author>Delphine De Rosso</author>
    <language>french</language>
 
-    <version>1.0</version>
+    <version>5.1</version>
     
     <revhistory>
-      <revision>
+     <revision>
+        <revnumber>5.1</revnumber>
+        <date>30/01/2004</date>
+    	  <author>Delphine De Rosso</author>
+    	<revdescription>Un nouvel hébergeur est désormais utilisé</revdescription>
+     </revision>
+     <revision>
+        <revnumber>5.0</revnumber>
+        <date>27/01/2004</date>
+    	  <author>Delphine De Rosso</author>
+    	<revdescription>Ajout d'un risque concernant l'indisponibilité de l'hébergeur. Risque rencontré.</revdescription>
+     </revision>
+     <revision>
+        <revnumber>4.0</revnumber>
+        <date>20/01/2004</date>
+    	  <author>Delphine De Rosso</author>
+    	<revdescription>Suivi des risques</revdescription>
+     </revision>
+     <revision>
         <revnumber>1.1</revnumber>
         <date>13/11/2003</date>
     	  <author>Delphine De Rosso</author>
     	<revdescription>Un risque a été rencontré</revdescription>
-      </revision>
-	  <revision>
+     </revision>
+    <revision>
         <revnumber>1.0</revnumber>
         <date>23/10/2003</date>
     	  <author>Delphine De Rosso</author>
     	<revdescription>Création du document</revdescription>
-      </revision>
+    </revision>
     </revhistory>
 
   </info>
@@ -328,10 +345,62 @@
 
     </sect1>
 
+
+    <sect1 title="Indisponibilité de l'hébergeur">
+      
+      <sect2 title="Exposition au Risque">
+        <p>Il s'agit d'un risque important, puisqu'il est susceptible de ralentir le développement du projet.</p>
+      </sect2>
+      
+      <sect2 title="Description">
+        <p>L'utilisation de CVS nécessite les services d'un hébergeur. Il est possible que ce dernier soit indisponible pour différentes raisons.</p>
+      </sect2>
+      
+      <sect2 title="Impacts">
+        <p>En cas d'indisponibilité de l'hébergeur utilisé, il peut en résulter plusieurs conséquences :</p>
+	<list>
+	  <item>ralentissement du développement puisque le cvs n'est plus possible</item>
+	  <item>indisponibilité de notre site web</item>
+	</list>
+      </sect2>
+      
+      <!-- Néant
+      <sect2 title="Indicateurs">
+        <p></p>
+      </sect2>
+      -->
+      
+      <!--
+	<sect2 title="Mesures Préventives">
+        <p></p>
+      </sect2>
+	-->
+      
+      <sect2 title="Plan de Secours">
+        <p>Nous serons amenés à rechercher un nouvel hébergeur pour notre projet.</p>
+      </sect2>
+      
+    </sect1>
+
+
   </chapter>
-  
+
+  <chapter title="Suivi des Risques">
+  <table>
+    <col name="Risques"/>
+    <col name="Points de contrôle"/>
+    <col name="Variations depuis le point de contrôle précédent" width="2*"/>
+    <col name="Nouvelles actions à entreprendre" width="2*"/>
+    <row> <c>R1. Disponibilités et performances des ressources informatiques</c>	<c>10/01/2004</c> <c>Deux membres de l'équipe n'ont pas une connexion personnelle à Internet</c> <c></c></row>
+    <row> <c>R4. Mauvaise coopération entre étudiants de 2ème et 3ème année</c>	<c>15/01/2004</c> <c>Réduit : pas de problème particulier rencontré lors des réunions d'équipe</c> 	<c></c></row>
+    <row> <c>R7. Indisponibilité d'un membre de l'équipe</c>				<c>29/09/2003</c> <c>Nicolas Delmas est malade et ne peut pas assurer sa partie du projet</c> <c>Réorganisation de la répartition de travail au sein de l'équipe</c></row>
+    <row> <c></c>												<c>05/01/2004</c> <c>Retour de Nicolas Delmas</c> <c></c></row>
+    <row> <c>R8. Indisponibilité de l'hébergeur</c>						<c>26/01/2004</c> <c>Suite à un piratage d'un serveur de Tuxfamily, les services fournis par cet hébergeur ont été coupés</c> <c>Recherche d'un nouvel hébergeur</c></row>
+    <row> <c></c>												<c>30/01/2004</c> <c>Utilisation de Berlios comme nouvel hébergeur</c> <c></c></row>
+  </table>
+  </chapter>
+
   <chapter title="Synthèse des Risques">
-  
   <table>
     <col name="Risque"/>
     <col name="Criticité"/>
@@ -341,13 +410,13 @@
     <row> <c>Difficulté à s'approprier le sujet</c>                    		<c>Critique</c>                          <c>Faible</c>     <c>Non rencontré.</c></row>
     <row> <c>Difficulté à appliquer le processus</c>      		           	<c>Important</c>                         <c>Moyenne</c>    <c>Non rencontré.</c></row>
     <row> <c>Mauvaise coopération entre étudiants de 2ème et 3ème année</c> 	<c>Important</c>                         <c>Moyenne</c>    <c>Non rencontré.</c></row>
-    <row> <c>Mauvaise communication entre les groupes de 3ème année</c> 	<c>Important</c>                         <c>Faible</c>    <c>Non rencontré.</c></row>
-    <row> <c>Manque de retour sur l'utilisation du logiciel</c>         	<c>Important</c>                         <c>Moyenne</c>    <c>Non rencontré.</c></row>
+    <row> <c>Mauvaise communication entre les groupes de 3ème année</c> 	<c>Important</c>                         <c>Faible</c>     <c>Non rencontré.</c></row>
     <row> <c>Indisponibilité d'un membre de l'équipe</c>                	<c>Variable, négligeable à important</c> <c>Faible</c>     <c>Rencontré.</c></row>
-    <row> <c>Réutilisation de composants inadaptés ou mal maîtrisés</c> 	<c>Négligeable</c>                       <c>Faible</c>     <c>Non rencontré.</c></row>
+    <row> <c>Manque de retour sur l'utilisation du logiciel</c>         	<c>Important</c>                         <c>Moyenne</c>    <c>Non rencontré.</c></row>
+    <row> <c>Indisponibilité de l'hébergeur</c>      		  		      <c>Important</c>                         <c>Moyenne</c>    <c>Rencontré.</c></row>
+
   </table>
-  
   </chapter>
-  
+
 </ipbook>
 

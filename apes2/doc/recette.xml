@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ipbook SYSTEM "/home/delph/logiciels/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+  <title>APES (APES is a Process Engineering Software)</title>
+  <subtitle>Cahier de recette</subtitle>
+  <author>Aurélien Défossez</author>
+  <author>Delphine De Rosso</author>
+  <language>french</language>
+
+  <version>7.0</version>
+
+  <revhistory>
+    <revision>
+      <revnumber>7.0</revnumber>
+      <date>16/03/2004</date>
+        <author>Aurélien Défossez</author>
+	<author>Delphine De Rosso</author>
+      <revdescription>Création du document.</revdescription>
+    </revision>
+  </revhistory>
+
+  </info>
+
+  <chapter title="Introduction">
+    <sect1 title="Objectif">
+      <p>Ce document a pour but de détailler le déroulement de la recette.</p>
+    </sect1>
+
+    <sect1 title="Portée">
+      <p>Le cahier de recette est destiné aux superviseurs de projet.</p>
+    </sect1>
+
+  </chapter>
+
+
+  <chapter title="Déroulement de la recette">
+
+  <sect1 title="Mise en place de l'application">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Lancer l&apos;application Apes2</c> <c>La fenêtre principale s&apos;affiche et propose un composant contenant un diagramme de contexte "component interfaces" ainsi qu&apos;un diagramme de flots "flow diagram". L&apos;arbre contient également les interfaces du composant</c> <c></c> <c></c> </row>
+
+	<row> <c>Maximiser la fenêtre de l'application</c> <c>La fenêtre principale est maximisée</c> <c></c> <c></c> </row>
+
+	<row> <c>Cliquer sur le bouton cacher du panneau d'erreur</c> <c>Le panneau d'erreur disparaît</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Définition de travail">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Cliquer avec le bouton droit de la souris sur le composant "component"</c> <c>Le menu contextuel apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;entrée "Ajouter une définition de travail"</c> <c>Une définition de travail nommée "noname1" est créée. Elle contient un diagramme de flot et un diagramme d'activité</c> <c></c> <c></c> </row>
+
+      <row> <c>Effacer le nom, taper "définition de travail" puis appuyer sur "Entrée"</c> <c>Le nouveau nom de la définition de travail est affiché</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer avec le bouton droit de la souris sur la définition de travail "définition de travail"</c> <c>Le menu contextuel apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;entrée "Ajouter une activité" </c> <c>Une activité nommée "noname2" est créée</c> <c></c> <c></c> </row>
+
+      <row> <c>Effacer le nom, taper "activité1" puis appuyer sur "Entrée"</c> <c>Le nouveau nom de l'activité est affiché</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Diagramme d'activité">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Double cliquer avec le bouton gauche de la souris sur le diagramme d'activité "activity diagram" dans l'arbre</c> <c>Le diagramme d'activité s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Minimiser le diagramme d'activité</c> <c>Le diagramme d'activité est minimisé</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer avec le bouton gauche de la souris sur l'icône de la fenêtre du diagramme d'activité</c> <c>Le diagramme d'activité reprend sa taille d'origine</c> <c></c> <c></c> </row>
+
+      <row> <c>Maximiser le diagramme d'activité</c> <c>Le diagramme d'activité est maximisé</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l&apos;icône point de départ de la barre d&apos;outil contextuelle et cliquer dans la fenêtre du diagramme</c> <c>Un point de départ apparaît dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener l&apos;activité "activité1" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>L'activité est insérée dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l&apos;icône point d'arrivée de la barre d&apos;outil contextuelle et cliquer dans la fenêtre du diagramme</c> <c>Un point d'arrivée apparaît dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;icône du lien dans la barre d&apos;outil du diagramme et lier le point de départ à l'activité "activité1"</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+
+      <row> <c>Lier l'activité "activité1" au point d'arrivée</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer dans le blanc du diagramme</c> <c>Le mode lien disparaît, retour en mode pointeur</c> <c></c> <c></c> </row>
+   </table>
+  </sect1>
+
+  <sect1 title="Alignement">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Sélectionner tout le contenu du diagramme d'activité</c> <c>Les éléments du diagramme sont sélectionnés</c> <c></c> <c></c> </row>
+ 
+      <row> <c>Cliquer sur l'icône "Aligner les centres horizontalement" de la barre d'outils principale</c> <c>Les éléments du diagramme sont alignés</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Copier/Coller">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Cliquer sur l'icône "Copier" dans la barre d'outils principale</c> <c>Les éléments sont copiés (non visible)</c> <c></c> <c></c> </row>
+ 
+      <row> <c>Lancer une seconde instance d'Apes2. Ajouter une définition de travail. Ouvrir le diagramme d'activité</c> <c>(traitement déjà effectué auparavant)</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l'icône "Coller" dans la barre d'outils principale</c> <c>Les éléments sont collés dans le diagramme et ajoutés dans l'arbre</c> <c></c> <c></c> </row>
+
+      <row> <c>Fermer la seconde instance d'Apes2 en cliquant sur la croix de la fenêtre et répondre "Non" à la demande de sauvegarde</c> <c>La deuxième instance d'Apes2 est fermée</c> <c></c> <c></c> </row>
+
+      <row> <c>Fermer le diagramme d'activité</c> <c>Le diagramme est fermé</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Diagramme de flots de définitions de travail">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Double cliquer avec le bouton gauche de la souris sur le diagramme de flot du composant "flow diagram" dans l'arbre</c> <c>Le diagramme de flot s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Maximiser le diagramme de flot</c> <c>Le diagramme de flot est maximisé</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener la définition de travail "définition de travail" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>La définition de travail "définition de travail" est insérée dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer avec le bouton droit de la souris sur le composant "component"</c> <c>Le menu contextuel apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;entrée "Ajouter un produit de travail"</c> <c>Un produit de travail nommé "noname5" est créé en mode édition</c> <c></c> <c></c> </row>
+
+      <row> <c>Saisir le nom "produit1" et valider en cliquant n'importe où dans l'arbre</c> <c>Le produit de travail se nomme désormais "produit1"</c> <c></c> <c></c> </row>
+   </table>
+  </sect1>
+
+  <sect1 title="Etats d'un produit">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Cliquer avec le bouton droit de la souris sur le produit de travail "produit1"</c> <c>Le menu contextuel apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;entrée "Ajouter un état"</c> <c>Un état de produit de travail nommé "noname6" est créé en mode édition</c> <c></c> <c></c> </row>
+
+      <row> <c>Saisir le nom "etat1" puis appuyer sur "Entrée"</c> <c>Le nom est changé</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener l'état "etat1" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>Le produit de travail "produit1" à l'état "etat1" est inséré dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l&apos;icône "Rôle" de la barre d&apos;outil contextuelle et cliquer dans la fenêtre du diagramme</c> <c>Un rôle "noname7" est créé dans l'arbre et le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;icône du lien dans la barre d&apos;outil du diagramme et lier la définition de travail "définition de travail" au produit "produit1"</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+
+      <row> <c>Lier le rôle "noname7" à la définition de travail "définition de travail"</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Couleur du texte">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Double cliquer dans le diagramme sur le rôle "noname7"</c> <c>Le nom passe en mode édition</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l'icône changer la couleur du texte dans la barre d'outil</c> <c>La fenêtre de choix des couleurs apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner une couleur puis cliquer sur le bouton "Ok"</c> <c>Le texte prend la couleur sélectionnée dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Saisir "role1", valider en cliquant ailleurs dans le diagramme</c> <c>Le nouveau nom apparaît dans le diagramme et dans l'arbre</c> <c></c> <c></c> </row>
+
+      <row> <c>Fermer le diagramme de flot du composant</c> <c>Le diagramme est fermé</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Diagramme de flots">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Double cliquer avec le bouton gauche de la souris sur le diagramme de flot de la définition de travail "définition de travail" dans l'arbre</c> <c>Le diagramme de flot s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Maximiser le diagramme de flot de la définition de travail</c> <c>Le diagramme de flot est maximisé</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener l&apos;activité "activité1" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>L'activité est insérée dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener l'état "état1" du produit de travail "produit1" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>Le produit de travail avec état est inséré dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;icône du lien dans la barre d&apos;outil du diagramme et lier l'activité "activité1" au produit "produit1"</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+
+      <row> <c>Fermer le diagramme de flot de la définition de travail</c> <c>Le diagramme est fermé</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Préférences, changement de la langue">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Cliquer sur l'entrée "Affichage" puis "Préférences" du menu principal</c> <c>La fenêtre de préférences apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Double cliquer sur le dossier "Fenêtre"</c> <c>Le dossier est développé</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur le champ "Langage"</c> <c>Les choix de langue possibles apparaissent</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur "English" et valider en cliquant sur le bouton "Valider"</c> <c>L'affichage des menus passe en Anglais</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Diagramme de responsabilités">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Cliquer avec le bouton droit de la souris sur le composant</c> <c>Le menu contextuel apparaît (en anglais)</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;entrée "Add Responsability Diagram"</c> <c>Une diagramme nommé "product responsability0" est créé</c> <c></c> <c></c> </row>
+
+      <row> <c>Double cliquer avec le bouton gauche de la souris sur le diagramme de responsabilités dans l'arbre</c> <c>Le diagramme de responsabilités s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Maximiser le diagramme de responsabilités</c> <c>Le diagramme de responsabilités est maximisé</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener le produit de travail "produit1" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>Le produit de travail est inséré dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener le rôle "role1" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>Le rôle est inséré dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;icône du lien dans la barre d&apos;outil du diagramme et lier le rôle "role1" au produit "produit1"</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Diagramme de contexte">
+
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Double cliquer avec le bouton gauche de la souris sur le diagramme "component interfaces" dans l'arbre</c> <c>Le diagramme "component interfaces" s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Maximiser le diagramme de contexte</c> <c>Le diagramme de contexte est maximisé</c> <c></c> <c></c> </row>
+
+      <row> <c>Amener le produit de travail "produit1" depuis l&apos;arbre vers le diagramme par glisser-déposer</c> <c>Le produit de travail est inséré dans le diagramme</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;icône du lien dans la barre d&apos;outil du diagramme et lier le composant au produit "produit1"</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+
+      <row> <c>Développer l'"interface::provided" dans l'arbre</c> <c>L'interface fournie contient le produit "produit1"</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Undo, Redo, Validation">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+      <row> <c>Cliquer sur l'icône "Undo" dans la barre d'outils principale</c> <c>Le lien disparaît du diagramme, et le produit "produit1" disparaît de l'interface fournie</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l'icône "Validate" dans la barre d'outils principale</c> <c>Une fenêtre de résultat de la validation apparaît et le panneau d'erreur s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur le bouton "Close"</c> <c>La fenêtre se ferme</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l'icône "Redo" dans la barre d'outils principale</c> <c>Le lien réapparaît, et le produit "produit1" réapparaît dans l'interface fournie</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Notes">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Sélectionner l&apos;icône des notes dans la barre d&apos;outil du diagramme et cliquer dans le diagramme</c> <c>Une note s'affiche</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner l&apos;icône du lien dans la barre d&apos;outil du diagramme et lier la note au composant "component"</c> <c>Le lien s'affiche</c> <c></c> <c></c> </row>
+
+      <row> <c>Double cliquer avec le bouton gauche sur la note dans le diagramme</c> <c>La note passe en mode édition</c> <c></c> <c></c> </row>
+
+      <row> <c>Saisir le texte "contenu de la note" et valider en appuyant sur "Entrée"</c> <c>La note contient le nouveau texte</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Sauvegarde">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Cliquer sur l'icône "Save" dans la barre d'outils principale</c> <c>Une fenêtre apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur le bouton "No"</c> <c>La fenêtre disparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l'icône "Validate" dans la barre d'outils principale</c> <c>Une fenêtre de résultat de la validation apparaît et le panneau d'erreur s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l'icône "Save" dans la barre d'outils principale</c> <c>Une fenêtre de sauvegarde apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Saisir le nom "test" et cliquer sur le bouton "Save" pour valider</c> <c>Le modèle est enregistré</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  <sect1 title="Chargement">
+   <table>
+      <col name="Action"/>
+      <col name="Résultat attendu"/>
+      <col name="Validé" width="1.5cm"/>
+      <col name="Commentaires"/>
+
+      <row> <c>Cliquer sur l'icône "New" dans la barre d'outils principale</c> <c>Un nouveau modèle s'ouvre</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur l'icône "Open" dans la barre d'outils principale</c> <c>Une fenêtre apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Sélectionner le fichier "test.apes" précédemment enregistré et cliquer sur le bouton "Open" pour l'ouvrir</c> <c>Une fenêtre d'avancement de l'ouverture apparaît</c> <c></c> <c></c> </row>
+
+      <row> <c>Cliquer sur la croix de la fenêtre</c> <c>La fenêtre se ferme</c> <c></c> <c></c> </row>
+
+      <row> <c>Développer le composant puis la définition de travail "définition de travail"</c> <c>Tous les éléments du modèles sont bien présents</c> <c></c> <c></c> </row>
+
+      <row> <c>Appuyer sur les touches CTRL+Q</c> <c>L'application Apes2 se ferme</c> <c></c> <c></c> </row>
+   </table>
+
+  </sect1>
+
+  </chapter>
+
+</ipbook>
+	

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ipbook SYSTEM "/home/delph/logiciels/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Evaluation de l'itération IT6</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>7.0</version>
+    <revhistory>
+      <revision>
+        <revnumber>7.0</revnumber>
+        <date>19/03/2004</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente l'évaluation pour la septième et dernière itération du projet APES. Cette itération fait partie de la phase de transition. Elle est appelée IT6.</p>
+    </sect1>
+
+    <sect1 title="Portée">
+      <p>L'évaluation de l'itération est destinée aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Plan d'itération IT6</item>
+	  <item>Modèle des cas d'utilisation</item>
+	  <item>Plan de développement logiciel</item>
+      </list>
+    </sect1>
+
+    <sect1 title="Contenu du document">
+	<p>Ce document vérifie que les objectifs fixés dans le plan d'itération soient atteints. Cela permet ainsi de réévaluer les activités à réaliser dans les itérations suivantes (en plus ou en moins).</p>
+	<p>Il permet aussi d'analyser les charges prévisionnelles afin de réévaluer les estimations futures si nécessaire.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Concordance avec le plan d'itération">
+    <sect1 title="Objectifs atteints">
+
+		<sect2 title="Mise à jour de la documentation en général">
+	  	  <p>Livraison des versions finales des documents du projet.</p>
+		</sect2>
+
+		<sect2 title="Mise à jour du code en général">
+			<list>
+				<item>Réalisation de tests unitaires</item>
+				<item>Correction des derniers bugs</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Dossier de recette">
+	  	  <p>Rédaction du dossier de recette pour valider la dernière version du logiciel.</p>
+		</sect2>
+    </sect1>
+
+    <!--<sect1 title="Objectifs non atteints">
+
+    </sect1>-->
+
+    <sect1 title="Concordance charges estimées / charges effectives (en heures)">
+
+      <table>
+
+	  <col name="Groupe d'activités" width="2*" align="center"/>
+	  <col name="Charges réelles (h)" align="center"/>
+	  <col name="Charges estimées (h)" align="center"/>
+
+	  <row> <c>IM : Correction de bugs + Tests unitaires</c> <c>43</c> <c>40</c> </row>
+	  <row> <c>IM : Tester le prototype</c> <c>12</c> <c>18</c> </row>
+	  <row> <c>IM : Mise à jour des documents en général</c> <c>11</c> <c>6</c> </row>
+	  <row> <c>IM : Rédaction du dossier de recette</c> <c>11</c> <c>10</c> </row>
+	  <row> <c>GP : Gérer et contrôler le projet et l'itération (planification, évaluation,...)</c> <c>12</c> <c>9</c> </row>
+	  <row> <c>GP : Réunion d'équipe</c> <c>14</c> <c>18</c> </row>
+	  <row> <c>GS : Gérer l'environnement</c> <c>1</c> <c>2</c> </row>
+	  <row> <c><e>Total</e></c> <c><e>104</e></c> <c><e>103</e></c> </row>
+
+      </table>
+
+    </sect1>
+
+  </chapter>
+	
+</ipbook>

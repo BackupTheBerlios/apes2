@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE ipbook SYSTEM "/home/delph/logiciels/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Evaluation de l'itération IT5</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>6.0</version>
+    <revhistory>
+      <revision>
+        <revnumber>6.0</revnumber>
+        <date>05/03/2004</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+
+  </info>
+
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente l'évaluation pour la sixième itération du projet APES. Cette itération est la dernière de la phase de construction. Elle est appelée IT5.</p>
+    </sect1>
+
+    <sect1 title="Portée">
+      <p>L'évaluation de l'itération est destinée aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+        <item>Plan d'itération IT5</item>
+	  <item>Modèle des cas d'utilisation</item>
+	  <item>Plan de développement logiciel</item>
+      </list>
+    </sect1>
+
+    <sect1 title="Contenu du document">
+	<p>Ce document vérifie que les objectifs fixés dans le plan d'itération soient atteints. Cela permet ainsi de réévaluer les activités à réaliser dans les itérations suivantes (en plus ou en moins).</p>
+	<p>Il permet aussi d'analyser les charges prévisionnelles afin de réévaluer les estimations futures si nécessaire.</p>
+    </sect1>
+
+  </chapter>
+
+  <chapter title="Concordance avec le plan d'itération">
+    <sect1 title="Objectifs atteints">
+
+		<sect2 title="Analyse et Conception">
+	  	  <p>Modification des spécifications textuelles des cas d'utilisation :</p>
+			<list>
+				<item>Ouvrir un nouveau composant</item>
+				<item>Ouvrir les interfaces avec un composant vide (à l'origine)</item>
+				<item>Ajouter un élément au composant</item>
+				<item>Ajouter un produit avec état dans un diagramme</item>
+				<item>Vérifier la consistance du composant de processus</item>
+				<item>Déplacer un élément dans un diagramme (couper/coller)</item>
+				<item>Supprimer un élément du composant</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Codage">
+	  	  <p>Codage des cas d'utilisation :</p>
+			<list>
+				<item>Ajouter un diagramme de flots de définitions de travail</item>
+				<item>Ajouter des notes à un diagramme (complet)</item>
+			</list>
+		</sect2>
+
+		<sect2 title="Dossier de test">
+	  	  <p>Suite de la rédaction du dossier de test pour les différentes fonctionnalités du logiciel.</p>
+		</sect2>
+    </sect1>
+
+    <!--<sect1 title="Objectifs non atteints">
+
+    </sect1>-->
+
+    <sect1 title="Concordance charges estimées / charges effectives (en heures)">
+
+      <table>
+
+	  <col name="Groupe d'activités" width="2*" align="center"/>
+	  <col name="Charges réelles (h)" align="center"/>
+	  <col name="Charges estimées (h)" align="center"/>
+
+          <row> <c>AC : Spécifier et concevoir le logiciel</c> <c>4</c> <c>6</c> </row>
+	  <row> <c>AC : Mise à jour de l'architecture</c> <c>0</c> <c>4</c> </row>
+	  <row> <c>IM : Codage de "ajouter un diagramme de flots de définitions de travail"</c> <c>13</c> <c>12</c> </row>
+	  <row> <c>IM : Codage de "ajouter des notes à un diagramme" (fin)</c> <c>17</c> <c>12</c> </row>
+	  <row> <c>IM : Correction de bugs</c> <c>22</c> <c>20</c> </row>
+	  <row> <c>IM : Tests unitaires</c> <c>8</c> <c>20</c> </row>
+	  <row> <c>IM : Rédaction des jeux de tests et réalisation</c> <c>12</c> <c>20</c> </row>
+	  <row> <c>IM : Tester le prototype</c> <c>20</c> <c>27</c> </row>
+	  <row> <c>IM : Rédaction du manuel utilisateur</c> <c>4</c> <c>6</c> </row>
+	  <row> <c>GP : Gérer et contrôler le projet et l'itération (planification, évaluation,...)</c> <c>13</c> <c>15</c> </row>
+	  <row> <c>GP : Réunion d'équipe</c> <c>27</c> <c>54</c> </row>
+	  <row> <c>GS : Vérifier le fonctionnement des outils</c> <c>3</c> <c>2</c> </row>
+	  <row> <c>GS : Gérer l'environnement</c> <c>1</c> <c>2</c> </row>
+	  <row> <c><e>Total</e></c> <c><e>144</e></c> <c><e>200</e></c> </row>
+
+      </table>
+
+    </sect1>
+
+  </chapter>
+	
+</ipbook>

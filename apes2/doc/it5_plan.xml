@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!DOCTYPE ipbook SYSTEM "/home/delph/logiciels/ipsdoc/dtd/ipsdoc.dtd">
+
+<ipbook>
+  <info>
+    <title>APES (APES is a Process Engineering Software)</title>
+    <subtitle>Plan d'itération IT5</subtitle>
+    <author>Delphine De Rosso</author>
+    <language>french</language>
+
+    <version>5.0</version>
+    
+    <revhistory>
+      <revision>
+        <revnumber>5.0</revnumber>
+        <date>10/02/2004</date>
+        <author>Delphine De Rosso</author>
+	<revdescription>Création du document</revdescription>
+      </revision>
+    </revhistory>
+    
+  </info>
+  
+  <chapter title="Introduction">
+
+    <sect1 title="Objectif">
+      <p>Ce document présente le plan détaillé pour la sixième itération du projet APES. Cette itération correspond à la dernière itération de la phase de Construction. Elle est appelée IT5.</p>
+    </sect1>
+    
+    <sect1 title="Portée">
+      <p>Le plan d'itération est destiné aux membres de l'équipe et aux superviseurs de projet.</p>
+    </sect1>
+
+    <sect1 title="Références">
+      <list>
+		<item>Document Vision</item>
+	  	<item>Plan de développement</item>
+	  	<item>Plan de cycle de vie</item>
+	  	<item>Liste des risques</item>
+ 	  	<item>Modèle des cas d'utilisation</item>
+     </list>
+    </sect1>
+
+   </chapter>
+
+
+  <chapter title="Plan">
+
+    <p>L'itération 5 est la dernière itération de la phase de Construction. Ainsi cette itération commence le 16/02/2004 et fini le 07/03/2004.</p>
+
+    <sect1 title="Disciplines de l'itération">
+
+	<table>
+	  <col name="Discipline" width="2*"/>
+	  <col name="Début" align="center"/>
+	  <col name="Fin" align="center"/>
+	  <row> <c>Analyse et Conception (AC)</c>    <c>16/02/2004</c> <c>07/03/2004</c> </row>
+	  <row> <c>Implémentation (IM)</c>     	   <c>16/02/2004</c> <c>07/03/2004</c> </row>
+	  <row> <c>Gestion de projet (GP)</c>        <c>16/02/2004</c> <c>07/03/2004</c> </row>
+	  <row> <c>Gestion de processus (GS)</c>     <c>16/02/2004</c> <c>07/03/2004</c> </row>
+	</table>
+
+    </sect1>
+
+    <sect1 title="Planning et estimation des volumes horaires">
+      <table>
+
+	  <col name="Groupe d'activités" width="2*" align="center"/>
+	  <col name="Début" align="center"/>
+	  <col name="Fin" align="center"/>
+	  <col name="Charges estimées (h)" align="center"/>
+	  <col name="Participants" align="center"/>
+          <row> <c>AC : Spécifier et concevoir le logiciel (cas d'utilisation)</c>  				<c>16/02/2004</c>		<c>07/03/2004</c>		<c>6</c>			<c>TOUS (2ème année + 3ème année)</c> </row>
+	    <row> <c>AC : Mise à jour de l'architecture</c>					  				<c>16/02/2004</c>		<c>07/03/2004</c>		<c>4</c>			<c>Lionel Petit</c> </row>
+	    <row> <c>IM : Codage de "ajouter un diagramme de flots de définitions de travail"</c> 		<c>16/02/2004</c>		<c>07/03/2004</c>		<c>12</c>			<c>2ème année</c> </row>
+	    <row> <c>IM : Codage de "ajouter des notes à un diagramme" (à terminer)</c>		 		<c>16/02/2004</c>		<c>07/03/2004</c>		<c>12</c>			<c>2ème année</c> </row>
+	    <row> <c>IM : Correction de bugs</c>									 		<c>16/02/2004</c>		<c>07/03/2004</c>		<c>20</c>			<c>TOUS (2ème année + 3ème année)</c> </row>
+	    <row> <c>IM : Tests unitaires</c>						 					<c>16/02/2004</c>		<c>07/03/2004</c>		<c>20</c>			<c>TOUS (2ème année + 3ème année)</c> </row>
+	    <row> <c>IM : Rédaction des jeux de tests et réalisation</c>		 					<c>16/02/2004</c>		<c>07/03/2004</c>		<c>20</c>			<c>TOUS (2ème année + 3ème année)</c> </row>
+	    <row> <c>IM : Tester le prototype</c>		 									<c>16/02/2004</c>		<c>07/03/2004</c>		<c>27</c>			<c>TOUS (2ème année + 3ème année)</c> </row>
+	    <row> <c>IM : Rédaction du manuel utilisateur</c>		 							<c>16/02/2004</c>		<c>07/03/2004</c>		<c>6</c>			<c>Delphine De Rosso, Aurélien Defossez</c> </row>
+	    <row> <c>GP : Gérer et contrôler le projet et l'itération (planification, évaluation,...)</c>	<c>16/02/2004</c>		<c>07/03/2004</c>		<c>15</c>			<c>Delphine De Rosso</c> </row>
+	    <row> <c>GP : Réunion d'équipe</c>								   			<c>16/02/2004</c>		<c>07/03/2004</c>		<c>54</c>			<c>TOUS (2ème année + 3ème année)</c> </row>
+	    <row> <c>GS : Vérifier le fonctionnement des outils</c>		 						<c>16/02/2004</c>		<c>07/03/2004</c>		<c>2</c>			<c>Aurélien Defossez</c> </row>
+	    <row> <c>GS : Gérer l'environnement</c>				 						<c>16/02/2004</c>		<c>07/03/2004</c>		<c>2</c>			<c>Isabelle Cassagneau</c> </row>
+	    <row> <c></c>															<c></c>			<c><e>TOTAL</e></c>	<c><e>200</e></c>		<c></c> </row>
+
+      </table>
+
+	  <p>Ce qui revient environ à 7 heures de travail par semaine (3 semaines) par personne (9 personnes).</p>
+
+    </sect1>
+
+    <sect1 title="Produits de l'itération et responsabilités">
+     <table>
+      <col name="Produit" align="center"/>
+	<col name="Responsables" width="2*" align="center"/>
+	<col name="Etat" align="center"/>
+	<row> <c>Document d'architecture logicielle</c> 	<c>Lionel Petit</c>		<c>complet</c> </row>
+	<row> <c>Modèle des cas d'utilisation</c> 		<c>Aurélien Defossez</c>	<c>complet</c>  </row>
+  	<row> <c>Spécifications supplémentaires</c>          	<c>Isabelle Cassagneau</c>	<c>complet</c> </row>
+	<row> <c>Prototype de l&apos;outil</c>               	<c>Toute l'équipe</c>		<c></c> </row>
+	<row> <c>Documentation de tests</c>            		<c>Nicolas Delmas</c>		<c>provisoire</c> </row>
+	<row> <c>Manuel utilisateur</c>               		<c>Aurélien Defossez</c>	<c>provisoire</c> </row>
+	<row> <c>Plan de développement</c>           		<c>Delphine De Rosso</c>	<c>provisoire</c> </row>
+	<row> <c>Liste des risques</c>                 		<c>Delphine De Rosso</c>	<c>provisoire</c> </row>
+  	<row> <c>Evaluation de l'itération IT5</c>      	<c>Delphine De Rosso</c>	<c>complet</c> </row>
+  	<row> <c>Plan d'itération IT6</c>               	<c>Delphine De Rosso</c>	<c>complet</c> </row>
+	<row> <c>Glossaire</c>					    	<c>Lionel Petit</c>		<c>complet</c> </row>
+   </table>
+   </sect1>
+
+  </chapter>
+
+
+  <chapter title="Ressources">
+  
+    <sect1 title="Ressources humaines">
+      <table>
+        <col name="Rôles" align="center"/>
+	  <col name="Personnes affectées" width="3*"/>
+	  <row> <c>Développeurs</c>      	<c>Rémi Joffre, Victor Nancy, Trung Ngo Thanh, Florent Scaravetti + 3ème année</c></row>
+	  <row> <c>Concepteur</c>      	<c>Aurélien Defossez</c></row>
+	  <row> <c>Testeurs</c>     	 	<c>Isabelle Cassagneau, Nicolas Delmas</c></row>
+	  <row> <c>Analystes</c>      	<c>Isabelle Cassagneau, Delphine De Rosso, Aurélien Defossez, Nicolas Delmas, Lionel Petit</c></row>
+        <row> <c>Spécialistes outils</c>  <c>Aurélien Defossez, Lionel Petit</c></row>
+        <row> <c>Architecte</c>      	<c>Lionel Petit</c></row>
+        <row> <c>Ingénieur processus</c>  <c>Isabelle Cassagneau</c></row>
+	  <row> <c>Chef de projet</c>       <c>Delphine De Rosso</c></row>
+      </table>
+    </sect1>
+
+    <sect1 title="Ressources d'équipement">
+      <p>Le matériel et les logiciels suivants sont nécessaires :</p>
+      <list>
+		<item>cinq PCs</item>
+	  	<item>une imprimante</item>
+	  	<item>un accès CVS</item>
+	  	<item>un éditeur de texte, IPSDoc et FOP (rédaction des documents)</item>
+	  	<item>JDK 1.4 ou supérieur</item>
+	  	<item>Eclipse</item>
+	  	<item>un accès au processus RUP/F</item>
+      </list>
+    </sect1>
+  
+  </chapter>
+
+  <chapter title="Cas d'utilisation">
+    <p>Durant cette itération, le cas d'utilisation suivant sera réalisé :</p>
+	<list>
+            <item>ajouter un diagramme de flots de définitions de travail</item>
+            <item>ajouter des notes à un diagramme</item>
+	</list>
+  </chapter>
+
+  <chapter title="Critères d'évaluation">
+	<list>
+		<item>validation de la version fonctionnelle du logiciel</item>
+		<item>validation des livrables de cette itération</item>
+		<item>validation du plan d'itération 6</item>
+	</list>
+
+  </chapter>
+
+</ipbook>
