@@ -24,13 +24,13 @@ package org.ipsquad.apes.ui.actions;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 
-import org.ipsquad.apes.Context;
+import org.ipsquad.apes.ApesClipboardManager;
 
 
 /**
  * Paste the clipboard into the current graph
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class PasteAction extends ApesAction
 {
@@ -42,7 +42,7 @@ public class PasteAction extends ApesAction
 	public void actionPerformed(ActionEvent e)
 	{
 		//ApesTransferable t = new ApesTransferable () ;
-		((Context)Context.getInstance()).paste();
+		ApesClipboardManager.paste();
 		
 	}
 	
