@@ -104,11 +104,7 @@ public class CodeHTML
 				retour += ligne + new String(retourChariot);
 			}
 		}
-		else
-		{
-			System.out.println("Pas de fichier contenu ou le fichier n'existe pas : " + f.getName());
-		}
-
+		
 		if (GenerationManager.getInstance().estContenuAvant())
 		{
 		    retour +=

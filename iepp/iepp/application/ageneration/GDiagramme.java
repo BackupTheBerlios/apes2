@@ -24,7 +24,6 @@ import iepp.domaine.ElementPresentation;
 import iepp.domaine.IdObjetModele;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -43,7 +42,6 @@ import org.ipsquad.apes.adapters.WorkDefinitionCell;
 import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
 import org.ipsquad.apes.adapters.WorkProductStateCell;
-import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.ui.ActivityJGraph;
 import org.ipsquad.apes.ui.ContextJGraph;
 import org.ipsquad.apes.ui.FlowJGraph;

@@ -65,6 +65,7 @@ Presentations=Paquetages de présentation
 Generation_ok=Generation du site Web terminée avec succès.
 Generation_site_titre=Génération du site web
 Composants_pub_vides=Composants publiables & Composants vides
+projet_valide=Votre projet a été validé
 
 # Erreurs /message d'erreurs
 ERR_INSTANCE_EXISTANTE=Une instance de l'application a déjà été créée
@@ -250,6 +251,8 @@ traitement_comp=Traitement du composant publiable :
 creation_page_acc=Création de la page d'accueil
 creation_menu=Création du menu
 extraction_icone=Extraction des icones et des contenus
+recup_prod_exterieurs=Recupération des produits extérieurs
+construct_arbre=Construction de l'arbre de génération
 
 #barre de progression pour les chargements
 Initialisation_chargement=Initialisation du chargement
@@ -269,6 +272,22 @@ paquetage_succes=Chargement du paquetage de présentation réussi
 dp_trouve=Fichier xml trouvé
 creation_parseur=Création d'un parseur
 recupere_donnees=Récupération des données en cours...
+
+#statistiques génération
+NB_COMPOSANTS=Nombre de pages composant : \t\t
+NB_ROLES=Nombre de pages rôle : \t\t
+NB_PRODUITS=Nombre de pages produit : \t\t
+NB_ACTIVITES=Nombre de pages activité : \t\t
+NB_DEFS_TRAVAIL=Nombre de pages définition travail : \t
+NB_DIAGRAMMES=Nombre de pages diagramme : \t
+NB_GUIDES=Nombre de pages guide : \t\t
+NB_PAQ_PRESENT=Nombre de pages paquetage présentation : \t
+NB_PAQ=Nombre de pages paquetages: \t\t
+NB_ELEM_PRESENT=Nombre de pages élément présentation : \t
+NB_ACCUEIL=Nombre de pages accueil : \t\t
+NB_PAGES_TOTAL=Nombre de pages total : \t\t
+
+
 
 
 #panneau de verification

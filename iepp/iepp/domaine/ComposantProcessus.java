@@ -22,9 +22,6 @@ package iepp.domaine;
 import java.util.HashMap;
 import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-
 import org.ipsquad.apes.adapters.*;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
@@ -40,13 +37,11 @@ import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
-import org.ipsquad.apes.ui.*;
-import org.jgraph.JGraph;
+
 
 import iepp.Application;
 import iepp.application.aedition.annulation.Memento;
 import iepp.application.aedition.annulation.ObjetAnnulable;
-import iepp.application.ageneration.CodeHTML;
 import iepp.ui.iedition.dessin.rendu.liens.FLien;
 
 /**

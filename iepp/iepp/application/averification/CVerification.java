@@ -128,15 +128,9 @@ public class CVerification extends CommandeNonAnnulable
 		else
 		{
         	Application.getApplication().getFenetrePrincipale().getPanneauVerif().clearErrorArea();
-			// Creation du OptionPane
-        	// TODO SP mettre langue
-	        JOptionPane pane = new JOptionPane("Votre projet a été validé");
-	        // Creation des boutons OUI - NON
-	        Object[] options =  new String[] {"Ok"};
-	        pane.setOptions(options);
-	        // Creation du message box
-	        JDialog dialog = pane.createDialog(Application.getApplication().getFenetrePrincipale(),"Validation du projet");
-	        dialog.show();
+        	 JOptionPane.showMessageDialog(Application.getApplication().getFenetrePrincipale(),Application.getApplication().getTraduction("projet_valide"),
+	 				Application.getApplication().getTraduction("Valider"),
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 

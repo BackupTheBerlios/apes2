@@ -20,12 +20,11 @@
  
 package iepp.application.ageneration;
 
+import iepp.Application;
 import iepp.domaine.ElementPresentation;
 import iepp.domaine.PaquetagePresentation;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Vector;
 
 /**
  * Classe permettant de gérer la publication d'un paquetage de présentation
@@ -58,6 +57,8 @@ public class GPaquetagePresentation extends GElement
 	 */
 	public void traiterGeneration(long id) throws IOException
 	{
+		GenerationManager.print(Application.getApplication().getTraduction("traitement_paquetage") + element.getNomPresentation());
+		
 		this.IDParent = id;
 		// créer le répertoire
 		this.creerRep();

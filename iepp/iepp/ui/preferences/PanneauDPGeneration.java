@@ -298,23 +298,22 @@ public class PanneauDPGeneration extends PanneauOption
 	}
 	private void retirer(ActionEvent e)
 	{
-			int indexSelect = this.LS_arbre.getSelectedIndex();
-		
-			// TODO 7 = taille de la liste du ref
-			if((indexSelect != -1) && (indexSelect < this.ComposantsListModel.getSize()))
+		int indexSelect = this.LS_arbre.getSelectedIndex();
+	
+		if((indexSelect != -1) && (indexSelect < this.ComposantsListModel.getSize()))
+		{
+			PPListModel listeRef = (PPListModel)LS_referentiel.getModel();
+			ComposantsListModel listeComp = (ComposantsListModel)LS_arbre.getModel();
+			Object a_retirer = listeComp.getListe().elementAt(indexSelect);
+			if (a_retirer instanceof PaquetagePresentation)
 			{
-				PPListModel listeRef = (PPListModel)LS_referentiel.getModel();
-				ComposantsListModel listeComp = (ComposantsListModel)LS_arbre.getModel();
-				Object a_retirer = listeComp.getListe().elementAt(indexSelect);
-				if (a_retirer instanceof PaquetagePresentation)
-				{
-					String cheminFichier = ((PaquetagePresentation)a_retirer).getNomFichier();
-					a_retirer = (cheminFichier.substring(cheminFichier.lastIndexOf(File.separator) + 1, cheminFichier.lastIndexOf(".")));
-				}
-				//listeRef.ajouter(a_retirer);
-				this.LS_arbre.setSelectedIndex(indexSelect-1);
-				listeComp.enlever(indexSelect);
+				String cheminFichier = ((PaquetagePresentation)a_retirer).getNomFichier();
+				a_retirer = (cheminFichier.substring(cheminFichier.lastIndexOf(File.separator) + 1, cheminFichier.lastIndexOf(".")));
 			}
+			//listeRef.ajouter(a_retirer);
+			this.LS_arbre.setSelectedIndex(indexSelect-1);
+			listeComp.enlever(indexSelect);
+		}
 	}
 	private void descendre(ActionEvent e)
 	{

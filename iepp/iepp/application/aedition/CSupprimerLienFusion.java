@@ -95,7 +95,6 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 	
 	/**
 	 * La commande renvoie si elle s'est bien passée ou non
-	 * AJOUTER COMMENTAIRE 
 	 * @return true si la suppression s'est bien passée false sinon
 	 */
 	public boolean executer() {
@@ -112,7 +111,6 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 
 			// Suppression du lien dans les composants
 			((ComposantProcessus)(this.leComposant.getModele().getId().getRef())).supprimerLien(leLien);
-			//TODO NM : Verifier
 			this.effacerLien(fprod.getModele().getId());
 			
 			//Liaison du produit avec le composant

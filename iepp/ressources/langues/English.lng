@@ -63,6 +63,7 @@ Presentations=Presentation packages
 Generation_ok=Web site successfully generated
 Generation_site_titre=Web site generation
 Composants_pub_vides=Publishable components & Empty components
+projet_valide=Your project has been validated
 
 # Errors
 ERR_INSTANCE_EXISTANTE=this application is already running
@@ -250,6 +251,8 @@ traitement_comp=Component processing
 creation_page_acc=Creating welcome page
 creation_menu=Creating menu
 extraction_icone=Icons and contents extraction
+recup_prod_exterieurs=Getting external products
+construct_arbre=Building the generation tree
 
 #barre de progression pour les chargements
 Initialisation_chargement=Starting to load
@@ -270,6 +273,19 @@ dp_trouve=XML file found
 creation_parseur=Creating parser
 recupere_donnees=Loading data...
 
+#statistiques génération
+NB_COMPOSANTS=Number of component pages : \t\t
+NB_ROLES=Number of role pages : \t\t
+NB_PRODUITS=Number of product pages : \t\t
+NB_ACTIVITES=Number of activity pages : \t\t
+NB_DEFS_TRAVAIL=Number of work definition pages : \t
+NB_DIAGRAMMES=Number of diagram pages : \t\t
+NB_GUIDES=Number of guide pages : \t\t
+NB_PAQ_PRESENT=Number of presentation package pages : \t
+NB_PAQ=Number of package pages : \t\t
+NB_ELEM_PRESENT=Number of presentation element pages : \t
+NB_ACCUEIL=Number of home pages : \t\t
+NB_PAGES_TOTAL=Total number of pages : \t\t
 
 #panneau de verification
 Produits_entree_non_lies=Unlinked incoming workproducts

@@ -32,8 +32,7 @@ public class Produit implements Serializable
 {
 
 	private String nom ;
-	
-	//private WorkProduct produitApes;
+
 	
 	/**
 	 * @return

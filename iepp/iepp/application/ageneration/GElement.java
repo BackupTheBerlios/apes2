@@ -474,7 +474,8 @@ public class GElement
 	 */
 	public void extraireIconeContenu(PaquetagePresentation paquet) throws FileNotFoundException, IOException
 	{
-		//this.print(Application.getApplication().getTraduction("extraction_icone"));
+		GenerationManager.print(Application.getApplication().getTraduction("extraction_icone"));
+		
 		// Créer un flux d'entrée contenant l'archive ZIP à décompresser
 		File f = new File(paquet.getNomFichier());
 		FileInputStream fin = new FileInputStream(f);

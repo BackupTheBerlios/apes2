@@ -79,6 +79,8 @@ public class GComposantPubliable  extends GElementModele
 	 */
 	public void traiterGeneration(long id) throws IOException
 	{
+		GenerationManager.print(Application.getApplication().getTraduction("traitement_comp") + element.getNomPresentation());
+		
 		this.IDParent = id;
 		// créer le répertoire
 		this.creerRep();

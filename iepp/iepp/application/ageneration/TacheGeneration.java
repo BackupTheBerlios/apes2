@@ -20,11 +20,6 @@
 package iepp.application.ageneration;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import iepp.domaine.*;
 import iepp.ui.iedition.VueDPGraphe;
 
 import iepp.Application;
@@ -57,7 +52,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 		{
 			//récupérer l'heure de début de la génération
 			GenerationManager.getInstance().debuterGeneration();
-			
+			GenerationManager.getInstance().setTache(this);
 			this.arbre = new ArbreGeneration();
 			
 			GenerationManager.recupererProduitsExterieurs();
@@ -72,12 +67,14 @@ public class TacheGeneration extends MonitoredTaskBase {
 			
 			//Création des pages contenues dans la page d'accueil
 			this.creerPageAccueil();
+			this.print(Application.getApplication().getTraduction("creation_pages"));
 			this.arbre.genererSite();
 			
 			// fermeture du fichier tree.dat
 			this.pwFicTree.close();
 			
 			this.generationReussie = true;
+			GenerationManager.getInstance().setTache(null);
 		}
 		catch(Throwable t)
 		{
@@ -186,7 +183,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 			this.mTask = task;
 		}
 		
-		private void print( String msg )
+		public void print( String msg )
 		{
 			this.setMessage(msg);
 			if(this.mTask != null )

@@ -36,6 +36,9 @@ import java.awt.*;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
+import util.MonitoredTaskBase;
+import util.TaskMonitorDialog;
+
 /**
  * Classe permettant de garder la configuration de la génération
  * c'est-à-dire, toutes les options de génération que l'utilisateur
@@ -59,6 +62,7 @@ public class GenerationManager
     private static Vector listeProduitsSortie;
 	private static String place_contenu;
 	private static String info_bulle;
+	private static TacheGeneration tache;
 	
 	// mettre tous les autres attributs en private static
 
@@ -101,6 +105,7 @@ public class GenerationManager
 		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
 		GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
 		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
+		GenerationManager.tache = null;
 	}
 
 
@@ -189,6 +194,19 @@ public class GenerationManager
 	public void setTypeDefTravail(int type)
 	{
 		GenerationManager.type_page_deftravail = type;
+	}
+	
+	public void setTache(TacheGeneration tache)
+	{
+		GenerationManager.tache = tache;
+	}
+	
+	public static void print(String message)
+	{
+		if (GenerationManager.tache != null)
+		{
+			GenerationManager.tache.print(message);
+		}
 	}
 	
 	//--------------------------------------------------//
@@ -360,6 +378,10 @@ public class GenerationManager
 	 */
 	public static void recupererProduitsExterieurs()
 	{
+		if (GenerationManager.tache != null)
+		{
+			GenerationManager.tache.print(Application.getApplication().getTraduction("recup_prod_exterieurs"));
+		}
 		//liste des produits extérieurs: les produits en entrée qui sont en sortie d'aucun composant
 		Vector listeProduitsExterieurs = new Vector();
 		
@@ -369,7 +391,6 @@ public class GenerationManager
 		// Liste des produits en sortie de composants
 		Vector listeProduitsSortie = new Vector();
 		
-		// TODO SP rajouter les produits exétieurs, la langue
 		Vector liste = GenerationManager.getInstance().getListeAGenerer();
 		PaquetagePresentation paquet ;
 		IdObjetModele idComposant ;
@@ -448,7 +469,10 @@ public class GenerationManager
 	 */
 	public static void construireArbre(ArbreGeneration arbre, PrintWriter fd) 
 	{
-		//TODO ajouter u print
+		if (GenerationManager.tache != null)
+		{
+			GenerationManager.tache.print(Application.getApplication().getTraduction("construct_arbre"));
+		}
 		Vector liste = GenerationManager.getInstance().getListeAGenerer();
 		PaquetagePresentation paquet ;
 		IdObjetModele idComposant ;

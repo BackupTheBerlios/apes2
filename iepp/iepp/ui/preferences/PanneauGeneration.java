@@ -123,22 +123,21 @@ public class PanneauGeneration extends PanneauOption
 	 */
 	public void afficherStatistiques()
 	{
-		//TODO SP rajouter langue
-		this.mOutput.append("Nombre de pages composant : \t\t " + GenerationManager.nbComposants + "\n");
-		this.mOutput.append("Nombre de pages rôle : \t\t " + GenerationManager.nbRoles + "\n");
-		this.mOutput.append("Nombre de pages produit : \t\t " + GenerationManager.nbProduits + "\n");
-		this.mOutput.append("Nombre de pages activité : \t\t " + GenerationManager.nbActivites + "\n");
-		this.mOutput.append("Nombre de pages définition travail : \t " + GenerationManager.nbDefinitionsTravail + "\n");
-		this.mOutput.append("Nombre de pages diagramme : \t " + GenerationManager.nbDiagrammes + "\n");
-		this.mOutput.append("Nombre de pages guide : \t\t " + GenerationManager.nbGuides + "\n");
-		this.mOutput.append("Nombre de pages paquetage présentation : \t " + GenerationManager.nbPaquetagesPresentation + "\n");
-		this.mOutput.append("Nombre de pages paquetages: \t\t " + GenerationManager.nbPaquetages + "\n");
-		this.mOutput.append("Nombre de pages élément présentation : \t " + GenerationManager.nbElementPresentation + "\n");
-		this.mOutput.append("Nombre de pages accueil : \t\t 1"+ "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_COMPOSANTS") + " " + GenerationManager.nbComposants + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_ROLES") + " " + GenerationManager.nbRoles + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PRODUITS") + " " + GenerationManager.nbProduits + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_ACTIVITES") + " " + GenerationManager.nbActivites + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_DEFS_TRAVAIL") + " " + GenerationManager.nbDefinitionsTravail + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_DIAGRAMMES") + " " + GenerationManager.nbDiagrammes + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_GUIDES") + " " + GenerationManager.nbGuides + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PAQ_PRESENT") + " " + GenerationManager.nbPaquetagesPresentation + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PAQ") + " " + GenerationManager.nbPaquetages + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_ELEM_PRESENT") + " " + GenerationManager.nbElementPresentation + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_ACCUEIL") + " " + "1" + "\n");
 		
 		this.mOutput.append("-------------------------------------------------------------------------------\n");
 		
-		this.mOutput.append("Nombre de pages total : \t\t " + GenerationManager.nbPagesTotal + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PAGES_TOTAL") + " " + GenerationManager.nbPagesTotal + "\n");
 	}
 	
 	public PanneauOption openPanel(String key)
