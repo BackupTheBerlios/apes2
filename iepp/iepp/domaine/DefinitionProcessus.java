@@ -114,6 +114,18 @@ public class DefinitionProcessus extends ObjetModele
 		}
 	}
 	
+	/**
+	 * @param paquet
+	 */
+	public void retirerPresentation(PaquetagePresentation paquet) 
+	{
+		if (listeAGenerer != null)
+		{
+			this.listeAGenerer.removeElement(paquet);
+			this.maj("COMPOSANT_REMOVED");
+		}
+	}
+	
 	//------------------------------------------------------------------//
 	// Getters et setters												//
 	//------------------------------------------------------------------//
@@ -269,6 +281,4 @@ public class DefinitionProcessus extends ObjetModele
 			this.maj("CHANGED");
 		}
 	}
-	
-
 }

@@ -493,9 +493,10 @@ public class Referentiel extends Observable implements TreeModel
 			raf.writeBytes("./" + ToolKit.removeSlashTerminatedPath(ToolKit.getRelativePathOfAbsolutePath(
 					pathFic, this.cheminReferentiel)) + "\n");
 			
+			/*
 			System.out.println("./" + ToolKit.removeSlashTerminatedPath(ToolKit.getRelativePathOfAbsolutePath(
 					pathFic, this.cheminReferentiel)));
-			
+			*/
 			// Fermeture du flux
 			raf.close();
 			
@@ -693,7 +694,8 @@ public class Referentiel extends Observable implements TreeModel
 		Vector tab = null;	
 		IdObjetModele id = null;
 		ComposantProcessus comp;
-		long idCompo = 0;
+		long idCompo, idPresent = 0;
+		PaquetagePresentation paquet =null;
 					
 		// Initialisation du chargeur
 		ChargeurDP chargeur = new ChargeurDP(new File(eltRef.getChemin()));
@@ -713,8 +715,8 @@ public class Referentiel extends Observable implements TreeModel
 		// On récupère la définition processus du projet
 		def = projet.getDefProc();
 		
-		// On récupère la liste des composants utilisés dans cette définition processus
-		tab = def.getListeComp();
+		// On récupère la liste des composants et paquetage utilisés dans cette définition processus
+		tab = def.getListeAGenerer();
 		
 		// Ajout de la référence et de l'id de la définition processus dans les HashMap
 		this.ajouterReferenceMemoire (projet.getDefProc(), idDp) ;
@@ -722,35 +724,55 @@ public class Referentiel extends Observable implements TreeModel
 		// On remplis les Hashmap avec les références et les id des composants chargés
 		for (int i=0; i < tab.size(); i++)
 		{
-			// On récupère l'IdObjetModele du composant
-			id = (IdObjetModele)tab.get(i);
-			
-			// Grâce à laquelle on retrouve l'objet Composant
-			comp = (ComposantProcessus)id.getRef();	
-			
-			// si c'est un composant vide on ne vérifie pas
-			if (comp.getNomFichier()!= null)
+			// on s'occupe d'un composant
+			if (tab.get(i) instanceof IdObjetModele)
 			{
-				// On cherche dans le référentiel l'id correspondant au nom du composant
-				idCompo = this.nomComposantToId(this.extraireNomFichier(comp.getNomFichier()));
-	
-				// si renvoie -1, on essaye de charger un composant qui a été supprimé du référentiel
-				if (idCompo == -1)
+				// On récupère l'IdObjetModele du composant
+				id = (IdObjetModele)tab.get(i);
+				
+				// Grâce à laquelle on retrouve l'objet Composant
+				comp = (ComposantProcessus)id.getRef();	
+				
+				// si c'est un composant vide on ne vérifie pas
+				if (comp.getNomFichier()!= null)
 				{
-					// on l'ajoute à la liste des composants à supprimer
-					listeComposant.addElement(comp.getIdComposant());
+					// On cherche dans le référentiel l'id correspondant au nom du composant
+					idCompo = this.nomComposantToId(this.extraireNomFichier(comp.getNomFichier()));
+		
+					// si renvoie -1, on essaye de charger un composant qui a été supprimé du référentiel
+					if (idCompo == -1)
+					{
+						// on l'ajoute à la liste des composants à supprimer
+						listeComposant.addElement(comp.getIdComposant());
+					}
+					else
+					{
+						// Remplis les HashMap avec la référence du composant en clé et l'id du composant en valeur
+						this.ajouterReferenceMemoire (comp, idCompo) ;
+					}
 				}
 				else
 				{
+					idCompo = this.nomComposantToId(comp.getNomComposant());
 					// Remplis les HashMap avec la référence du composant en clé et l'id du composant en valeur
 					this.ajouterReferenceMemoire (comp, idCompo) ;
 				}
 			}
+			// c'est un paquetage de présentation qu'il faut aussi vérifié
 			else
 			{
-				idCompo = this.nomComposantToId(comp.getNomComposant());
-				// Remplis les HashMap avec la référence du composant en clé et l'id du composant en valeur
-				this.ajouterReferenceMemoire (comp, idCompo) ;
+				// on récupère le paquetage
+				paquet = (PaquetagePresentation)tab.get(i);
+				
+				//On cherche dans le référentiel l'id correspondant au paquetage
+				idPresent = this.nomPresentationToId(this.extraireNomFichier(paquet.getNomFichier()));
+	
+				// si renvoie -1, on essaye de charger un composant qui a été supprimé du référentiel
+				if (idPresent == -1)
+				{
+					// on l'ajoute à la liste des composants à supprimer
+					listeComposant.addElement(paquet);
+				}
 			}
 		}
 		
@@ -798,7 +820,7 @@ public class Referentiel extends Observable implements TreeModel
 		ElementReferentiel feuille;
 		long idElt;
 		
-		System.out.println(defProc);
+		//System.out.println(defProc);
 		
 		// On récupère l'id de la définition processus dans la HashMap grâce à la référence de l'objet
 		idElt = ((Long)elementToId.get(defProc)).longValue();
@@ -820,12 +842,12 @@ public class Referentiel extends Observable implements TreeModel
 		ElementReferentiel feuille;
 		long idElt;
 		
-		System.out.println(cp);
+		//System.out.println(cp);
 		
 		// On récupère l'id de la définition processus dans la HashMap grâce à la référence de l'objet
 		idElt = ((Long)elementToId.get(cp)).longValue();
 		
-		System.out.println(idElt);
+		//System.out.println(idElt);
 		
 		// On va chercher le composant vide correspondant dans l'arbre
 		feuille = this.chercherElement(idElt, ElementReferentiel.COMPOSANT_VIDE);

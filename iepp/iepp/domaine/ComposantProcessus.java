@@ -228,7 +228,7 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	{
 		for ( int i = 0; i < md.modelElementCount(); i++ )
 		{
-			System.out.println(md.getModelElement(i) + md.getModelElement(i).getClass().toString() + md.getModelElement(i).getID());
+			//System.out.println(md.getModelElement(i) + md.getModelElement(i).getClass().toString() + md.getModelElement(i).getID());
 			if ( md.getModelElement(i) instanceof WorkProduct)
 			{
 				this.produits.addElement((WorkProduct)md.getModelElement(i));

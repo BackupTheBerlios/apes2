@@ -57,6 +57,10 @@ public class GElementModele extends GElement
 		{
 			res = res.substring(2);
 		}
+		else
+		{
+			System.out.println("BOUHOU LE CHEMIN : " + id);
+		}
 		//System.out.println("RES " + id.getChemin() + " : " + id);
 		ArbreGeneration aux = this.arbre;
 		// on remonte jusqu'à la racine

@@ -74,9 +74,6 @@ public class TacheGeneration extends MonitoredTaskBase {
 			this.creerPageAccueil();
 			this.arbre.genererSite();
 			
-			/*
-			this.creerArbreApes();
-			*/
 			// fermeture du fichier tree.dat
 			this.pwFicTree.close();
 			
@@ -100,17 +97,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 		// Creation du dossier du site
 		File rep = new File(GenerationManager.getInstance().getCheminGeneration());
 		rep.mkdirs();
-			
-		/*
-		// Création du dossier contenu
-		rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.CONTENU_PATH );
-		rep.mkdirs();
-	*/
-		
-		// Création du dossier description
-		rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.DESCRIPTION_PATH );
-		rep.mkdirs();
-		
+
 		// Création du dossier pour le contenu extérieur au processus
 		rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.EXTERIEUR_PATH );
 		rep.mkdirs();
@@ -122,60 +109,10 @@ public class TacheGeneration extends MonitoredTaskBase {
 		Copie.copieRep(Application.getApplication().getConfigPropriete("styles"), GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.STYLES_PATH);
 	
 		//Création du fichier tree.dat
-		System.out.println(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.APPLET_PATH);
 		this.creerFicTree(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.APPLET_PATH);	
 	}
 
-
-		private boolean creerArbreApes() throws FileNotFoundException, IOException
-		{
-			this.print(Application.getApplication().getTraduction("creation_pages"));
-			Vector liste = GenerationManager.getInstance().getListeAGenerer();
-			PaquetagePresentation paquet ;
-			IdObjetModele idComposant ;
-
-			for (int i = 0; i < liste.size(); i++)
-			{
-				if (liste.elementAt(i) instanceof PaquetagePresentation)
-				{
-					paquet = (PaquetagePresentation)liste.elementAt(i);
-					this.print(Application.getApplication().getTraduction("traitement_paquetage") + " " + paquet.getNomPresentation());
-					paquet.trierElement();
-					// récupérer les icones et les contenuts pour chaque paquetage
-					//extraireIconeContenu(paquet);
-					// on traite la génération de ce paquetage
-					/*
-					GPaquetagePresentation paquetCourant = new GPaquetagePresentation (paquet, pwFicTree);
-					paquetCourant.traiterGeneration();
-					*/
-				}
-				else
-				{
-					// composant publiable
-					//on recupere l'ID du ième composant de la definition de Processus
-					idComposant = (IdObjetModele)liste.elementAt(i);
-					paquet = idComposant.getPaquetagePresentation();
-					if (paquet != null && !paquet.getNomFichier().equals(""))
-					{
-						 this.print(Application.getApplication().getTraduction("traitement_comp") + " " + paquet.getNomPresentation());
-						 // récupérer les icones et les contenus pour chaque paquetage
-						 //extraireIconeContenu(paquet);
-						 /*
-						 // on traite la génération de ce composant
-						 GComposantPubliable compCourant = new GComposantPubliable (idComposant, pwFicTree);
-						 compCourant.traiterGeneration();
-						 */
-					}
-				}
-			}
-		
-			return true;
-		}
-
-
-
-		
-		
+	
 		/**
 		 * permet de creer les fichiers HTML corespondant à l'accueil du site
 		 */

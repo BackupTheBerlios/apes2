@@ -88,7 +88,6 @@ public class CVerification extends CommandeNonAnnulable
 			int nbInterfaceNonResolues = 0 ;
 			
 			Vector liens = cp.getLien();
-			System.out.println(liens);
 			// récupérer la liste des produits en entrée qui ne sont pas liés
 			Vector produitEntree = cp.getProduitEntree();
 			
@@ -130,6 +129,7 @@ public class CVerification extends CommandeNonAnnulable
 		{
         	Application.getApplication().getFenetrePrincipale().getPanneauVerif().clearErrorArea();
 			// Creation du OptionPane
+        	// TODO SP mettre langue
 	        JOptionPane pane = new JOptionPane("Votre projet a été validé");
 	        // Creation des boutons OUI - NON
 	        Object[] options =  new String[] {"Ok"};

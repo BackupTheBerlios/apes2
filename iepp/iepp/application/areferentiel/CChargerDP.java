@@ -24,9 +24,11 @@ import javax.swing.JOptionPane;
 
 import iepp.Application;
 import iepp.Projet;
+import iepp.application.CSupprimerPresentationDP;
 import iepp.application.CommandeNonAnnulable;
 import iepp.application.aedition.CSupprimerComposant;
 import iepp.domaine.IdObjetModele;
+import iepp.domaine.PaquetagePresentation;
 
 /**
  * Chargement d'une définition de processus depuis le référentiel dans l'application.
@@ -92,15 +94,31 @@ public class CChargerDP extends CommandeNonAnnulable
 			Application.setProjet(p);
 			for (int i = 0; i < listeComposantSupprimer.size(); i++)
 			{
-				IdObjetModele id = (IdObjetModele)listeComposantSupprimer.elementAt(i);
-				CSupprimerComposant c = new CSupprimerComposant (id);
-				c.executer();
-				
-				JOptionPane.showMessageDialog ( Application.getApplication().getFenetrePrincipale(),
-								Application.getApplication().getTraduction("ERR_Composant_Supprimer_partie1")+ " " +
-								 id.toString() + " " + Application.getApplication().getTraduction("ERR_Composant_Supprimer_partie2"),
-								Application.getApplication().getTraduction("ERR"),
-								JOptionPane.INFORMATION_MESSAGE );
+				if (listeComposantSupprimer.elementAt(i) instanceof IdObjetModele)
+				{
+					IdObjetModele id = (IdObjetModele)listeComposantSupprimer.elementAt(i);
+					CSupprimerComposant c = new CSupprimerComposant (id);
+					c.executer();
+					
+					JOptionPane.showMessageDialog ( Application.getApplication().getFenetrePrincipale(),
+									Application.getApplication().getTraduction("ERR_Composant_Supprimer_partie1")+ " " +
+									 id.toString() + " " + Application.getApplication().getTraduction("ERR_Composant_Supprimer_partie2"),
+									Application.getApplication().getTraduction("ERR"),
+									JOptionPane.INFORMATION_MESSAGE );
+				}
+				// paquetage de présentation
+				else
+				{
+					PaquetagePresentation paquet = (PaquetagePresentation)listeComposantSupprimer.elementAt(i);
+					CSupprimerPresentationDP c = new CSupprimerPresentationDP (paquet);
+					c.executer();
+					
+					JOptionPane.showMessageDialog ( Application.getApplication().getFenetrePrincipale(),
+									Application.getApplication().getTraduction("ERR_Presentation_Supprimer_partie1")+ " " +
+									paquet.toString() + " " + Application.getApplication().getTraduction("ERR_Presentation_Supprimer_partie2"),
+									Application.getApplication().getTraduction("ERR"),
+									JOptionPane.INFORMATION_MESSAGE );
+				}
 			}
 			return true;
 		}

@@ -282,24 +282,10 @@ public class Application {
 		this.langueCourante = new Properties() ;
 		 //	charger le fichier dans lequel est stockée la langue
 		 try
-		 {
-			/*
-			 URL url = this.getClass().getResource(this.config.getProperty("dossierLangues") 
-													+ this.config.getProperty("langueCourante")
-													+ "." + this.config.getProperty("extensionLangue"));
-
-			 this.langueCourante.load(url.openStream());
-			 */
-						
+		 {		
 			 this.langueCourante.load(new FileInputStream (this.config.getProperty("dossierLangues") 
 			+ this.config.getProperty("langueCourante")
 			+ "." + this.config.getProperty("extensionLangue")));
-			 /*
-			 System.out.println("J'ai chargé le fichier: " 
-								+ (this.config.getProperty("dossierLangues") 
-								+ this.config.getProperty("langueCourante")
-								+ "." + this.config.getProperty("extensionLangue")));
-			*/
 		 }
 		 catch (FileNotFoundException e)
 		 {

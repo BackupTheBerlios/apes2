@@ -90,6 +90,9 @@ ERR_SUP_REF_ED=Unable to delete a component being edited.
 ERR_Fic_Ref_Corromp=This repository file is corrupted.
 ERR_Composant_Supprimer_partie1=The component
 ERR_Composant_Supprimer_partie2=has been removed from the repository. It will now be removed from the current process definition.
+ERR_Presentation_Supprimer_partie1=The presentation package
+ERR_Presentation_Supprimer_partie2=has been removed from the repository. It will now be removed from the current process definition.
+
 
 ERR_Ann_CP_separ=Unable to undo the action: separator not found
 ERR_Ann_CP_param=Unable to undo the action: parameter not found

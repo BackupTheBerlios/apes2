@@ -414,7 +414,7 @@ public class GenerationManager
 		GenerationManager.setListeProduitsChanges(listeProduitsChanges);
 		GenerationManager.setListeProduitsExterieurs(listeProduitsExterieurs);
 		GenerationManager.setListeProduitsSortie(listeProduitsSortie);
-		System.out.println("Produits exterieurs " + listeProduitsExterieurs);
+		//System.out.println("Produits exterieurs " + listeProduitsExterieurs);
 	}
 	
 	/**

@@ -178,10 +178,8 @@ public class CSupprimerLienFusion extends CommandeAnnulable
 	 */
 	public void effacerLien(IdObjetModele id)
 	{
-		System.out.println("Nettoyage");
 		for (int i = 0; i < produitFusion.getNombreProduits(); i++)
 		{
-			System.out.println("Net");
 			((ComposantProcessus)produitFusion.getProduits(i).getModele().getId().getRef()).supprimerLien(id);
 		}
 	}

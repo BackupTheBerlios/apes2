@@ -290,7 +290,6 @@ public class FenetreCreerProcessus extends JDialog {
 		boolean pointTrouve = false;
 		if(this.nom.getText().equals(""))
 		{
-			System.out.println("nom pas trouve");
 			JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_nomprocessus"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE);
 			return false;
 		}

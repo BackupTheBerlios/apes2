@@ -91,6 +91,8 @@ ERR_Composant_Deja_DP=Le composant se trouve déjà dans la définition de procesus
 ERR_SUP_REF_ED=Impossible de supprimer un processus en cours d'édition
 ERR_Composant_Supprimer_partie1=Le composant
 ERR_Composant_Supprimer_partie2=a été supprimé du référentiel. Il sera donc supprimé de la définition de processus courante.
+ERR_Presentation_Supprimer_partie1=Le paquetage de présentation
+ERR_Presentation_Supprimer_partie2=a été supprimé du référentiel. Il sera donc supprimé de la définition de processus courante.
 
 ERR_Ann_CP_separ=Annulation impossible : le séparateur n'a pas ete trouvé
 ERR_Ann_CP_param=Annulation impossible : pas de paramètre
