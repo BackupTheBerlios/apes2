@@ -67,6 +67,9 @@ public class GPaquetagePresentation extends GElement
 		this.ecrireArbre();
 		// on crée le fichier correspondant
 		this.creerFichierDescription();
+		GenerationManager.nbPagesTotal++;
+		GenerationManager.nbPaquetagesPresentation++;
+		GenerationManager.nbElementPresentation--;
 	}
 	
 	/**

@@ -101,6 +101,7 @@ public class GElement
 		this.ecrireArbre();
 		// on crée le fichier correspondant
 		this.creerFichierDescription();
+		GenerationManager.nbPagesTotal++;
 	}
 
 	/**
@@ -329,6 +330,8 @@ public class GElement
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+		
+		GenerationManager.nbElementPresentation++;
 	}
 
 	/**

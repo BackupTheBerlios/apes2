@@ -133,6 +133,8 @@ public class GDiagramme extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+		
+		GenerationManager.nbDiagrammes++;
 	}
 	
 	/**

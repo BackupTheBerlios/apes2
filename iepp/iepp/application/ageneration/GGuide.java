@@ -21,6 +21,7 @@ package iepp.application.ageneration;
 
 import iepp.domaine.ElementPresentation;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
@@ -39,6 +40,19 @@ public class GGuide extends GElement
 	public GGuide(ElementPresentation elem, PrintWriter writer) 
 	{
 		super(elem, writer);
+	}
+	
+	/**
+	 * Traitement commun à tous les éléments à générer
+	 * ecriture dans l'arbre et création du fichier de contenu
+	 * @param feuille, indique si l'élément courant est une feuille ou non
+	 * @param id
+	 */
+	public void traiterGeneration(long id) throws IOException
+	{
+		super.traiterGeneration(id);
+		GenerationManager.nbGuides++;
+		GenerationManager.nbElementPresentation--;
 	}
 	
 	

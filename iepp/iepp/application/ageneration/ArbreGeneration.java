@@ -60,6 +60,7 @@ public class ArbreGeneration
 	{
 		this.element = elem;
 		this.listeSousArbres = new Vector();
+		this.IDGenere = 1;
 	}
 	
 	
@@ -70,6 +71,7 @@ public class ArbreGeneration
 	public ArbreGeneration() 
 	{
 		this.listeSousArbres = new Vector();
+		this.IDGenere = 1;
 	}
 
 

@@ -88,6 +88,7 @@ public class GComposantPubliable  extends GElementModele
 		this.ecrireArbre();
 		// on crée le fichier correspondant
 		this.creerFichierDescription();
+		GenerationManager.nbPagesTotal++;
 	}
 	
 	/**
@@ -231,6 +232,8 @@ public class GComposantPubliable  extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+		
+		GenerationManager.nbComposants++;
 	}
 
 }

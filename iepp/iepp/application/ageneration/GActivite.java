@@ -129,5 +129,7 @@ public class GActivite extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+		
+		GenerationManager.nbActivites++;
 	}
 }

@@ -78,9 +78,17 @@ public class GenerationManager
 	public static final String PRESENT = "1";
 	public static final String NON_PRESENT = "0";
 	
-    
-
-	
+	public static long nbPagesTotal = 1; // un pour la page d'accueil
+	public static long nbComposants = 0;
+	public static long nbRoles = 0;
+	public static long nbProduits = 0;
+	public static long nbActivites = 0;
+	public static long nbDefinitionsTravail = 0;
+	public static long nbDiagrammes = 0;	// un pour le diagramme d'accueil
+	public static long nbGuides = 0;
+	public static long nbPaquetagesPresentation = 0;
+	public static long nbPaquetages = 0;
+	public static long nbElementPresentation = 0;
 
 	/**
 	 * Constructeur du manager de la génération
@@ -123,6 +131,18 @@ public class GenerationManager
 		//this.setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
 		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
 		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
+		
+		nbPagesTotal = 2; // un pour la page d'accueil
+		nbComposants = 0;
+		nbRoles = 0;
+		nbProduits = 0;
+		nbActivites = 0;
+		nbDefinitionsTravail = 0;
+		nbDiagrammes = 1;	// un pour le diagramme d'accueil
+		nbGuides = 0;
+		nbPaquetagesPresentation = 0;
+		nbPaquetages = 0;
+		nbElementPresentation = 0;
 	}
 	
 	/**

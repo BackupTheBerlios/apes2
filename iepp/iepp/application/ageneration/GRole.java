@@ -88,6 +88,7 @@ public class GRole extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+		
+		GenerationManager.nbRoles++;
 	}
-	
 }

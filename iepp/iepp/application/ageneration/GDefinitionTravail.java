@@ -78,6 +78,8 @@ public class GDefinitionTravail extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+		
+		GenerationManager.nbDefinitionsTravail++;
 	}
 
 }

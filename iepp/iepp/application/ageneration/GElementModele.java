@@ -88,6 +88,7 @@ public class GElementModele extends GElement
 			this.ecrireArbre();
 			// on crée le fichier correspondant
 			this.creerFichierDescription();
+			GenerationManager.nbPagesTotal++;
 		}
 	}
 	
