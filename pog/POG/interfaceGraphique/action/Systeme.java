@@ -726,7 +726,7 @@ public class Systeme {
 	public void quitter() {
 		if (PogToolkit.askYesNoQuestion(lnkFenetrePrincipale.getLnkLangues().valeurDe("questionquitter"), false, lnkFenetrePrincipale) == PogToolkit._NO)
 			return;
-		if (lnkFenetrePrincipale.get_pathSave().equals("")) {
+		if (lnkFenetrePrincipale.get_pathSave().equals("") && !_save) {
 			if (PogToolkit.askYesNoQuestion(lnkFenetrePrincipale.getLnkLangues().valeurDe("errquitterenregistrer"), false, lnkFenetrePrincipale) == PogToolkit._NO)
 				return;
 		}
