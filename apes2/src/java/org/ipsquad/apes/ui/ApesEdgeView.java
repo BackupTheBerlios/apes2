@@ -40,7 +40,7 @@ import org.jgraph.graph.PortView;
 
 /**
  * 
- * @version $revision$
+ * @version $Revision : 1.8 $
  */
 public class ApesEdgeView extends EdgeView
 {
