@@ -415,7 +415,7 @@ function drawItem(insertAtObj)
 
   docW = docW + "<tr>" + leftSide + "<td valign=top>"
   if (USEICONS)
-      docW = docW + "<a " + fullLink  + " id=\"itemIconLink"+this.id+"\">" + "<img id='itemIcon"+this.id+"' " + "src='"+this.iconSrc+"' border=0>" + "</a>"
+      docW = docW + "<a " + fullLink  + " id=\"itemIconLink"+this.id+"\">" + "<img id='itemIcon"+this.id+"' " + "src='"+this.iconSrc+"' width=16 height=16 border=0>" + "</a>"
   else
 	  if (this.prependHTML == "")
         docW = docW + "<img src=" + ICONPATH + "ftv2blank.gif height=2 width=3>"

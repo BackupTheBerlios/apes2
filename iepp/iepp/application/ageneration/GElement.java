@@ -241,7 +241,7 @@ public class GElement
 	 */
 	protected void recopierContenu(String contenu, FileWriter fd) throws IOException
 	{
-		File f = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + "contenu" + File.separator + contenu);
+		File f = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.CONTENU_PATH + File.separator + contenu);
 		if (f.exists())
 		{
 			FileReader fr = new FileReader(f);

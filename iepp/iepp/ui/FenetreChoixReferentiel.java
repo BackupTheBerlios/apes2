@@ -162,6 +162,10 @@ public class FenetreChoixReferentiel extends JDialog
 			COuvrirReferentiel c = new COuvrirReferentiel ();
 			if (c.executer())
 			{
+				Application.getApplication().getFenetrePrincipale().setTitle(
+						Application.getApplication().getConfigPropriete("titre")
+						+ " " + Application.getApplication().getReferentiel().getNomReferentiel());
+				
 				this.dispose();
 				// fenêtre suivante
 				new FenetreChoixProcessus(fenetrePrincipale);
@@ -177,6 +181,10 @@ public class FenetreChoixReferentiel extends JDialog
 			CCreerReferentiel c = new CCreerReferentiel ();
 			if (c.executer())
 			{
+				Application.getApplication().getFenetrePrincipale().setTitle(
+						Application.getApplication().getConfigPropriete("titre")
+						+ " " + Application.getApplication().getReferentiel().getNomReferentiel());
+				
 				this.dispose();
 			}
 		}

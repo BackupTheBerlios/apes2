@@ -555,7 +555,12 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 			 {
 					// création d'un nouveau référentiel
 			 		 CCreerReferentiel c = new CCreerReferentiel() ;
-					 c.executer() ;
+					 if (c.executer())
+					 {
+					 	Application.getApplication().getFenetrePrincipale().setTitle(
+								Application.getApplication().getConfigPropriete("titre")
+								+ " " + Application.getApplication().getReferentiel().getNomReferentiel());
+					 }
 					 this.majEtat();
 			 }
 			 
@@ -564,13 +569,23 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 			 {
 			 		// fermeture du projet ouvert
 			 		CFermerProjet c = new CFermerProjet(true);
-			 		c.executer();
+			 		if (c.executer())
+			 		{
+			 			Application.getApplication().getFenetrePrincipale().setTitle(
+								Application.getApplication().getConfigPropriete("titre")
+								+ " " + Application.getApplication().getReferentiel().getNomReferentiel());
+			 		}
 			 		this.majEtat();	
 			 }
 			 else if ((source == this.ouvrir_referentiel )||(source == this.bouvrir_referentiel))
 			 {
 					 COuvrirReferentiel c = new COuvrirReferentiel();
-					 c.executer();
+					 if (c.executer())
+					 {
+					 	Application.getApplication().getFenetrePrincipale().setTitle(
+								Application.getApplication().getConfigPropriete("titre")
+								+ " " + Application.getApplication().getReferentiel().getNomReferentiel());
+					 }
 				 	 this.majEtat();
 			 }
 			 else if ((source == this.sauver )||(source == this.bsauver))

@@ -176,6 +176,9 @@ public class Application {
 			CChargerReferentielDemarrage c = new CChargerReferentielDemarrage(ref);
 			if (c.executer())
 			{
+				Application.getApplication().getFenetrePrincipale().setTitle(
+						Application.getApplication().getConfigPropriete("titre")
+						+ " " + Application.getApplication().getReferentiel().getNomReferentiel());
 				new FenetreChoixProcessus(this.fenetrePpale);
 			}
 			else

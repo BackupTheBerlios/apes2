@@ -196,13 +196,15 @@ public class Projet implements Serializable, Observer
 		{
 			Application.getApplication().getFenetrePrincipale().setTitle(
 				Application.getApplication().getConfigPropriete("titre")
-				+ " " + this.defProc.getNomDefProc() + " *" );
+				+ " " + Application.getApplication().getReferentiel().getNomReferentiel()
+				+ "::" + this.defProc.getNomDefProc() + " *" );
 		}
 		else
 		{
 			Application.getApplication().getFenetrePrincipale().setTitle(
 					Application.getApplication().getConfigPropriete("titre")
-					+ " " + this.defProc.getNomDefProc());
+					+ " " + Application.getApplication().getReferentiel().getNomReferentiel()
+					+ "::" + this.defProc.getNomDefProc());
 		}
 		Application.getApplication().getFenetrePrincipale().majEtat();
 	}
