@@ -27,11 +27,11 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
-import org.ipsquad.utils.ResourceManager;
+import org.ipsquad.utils.ConfigManager;
 
 /**
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkProductRef extends ModelElement 
 {
@@ -47,7 +47,7 @@ public class WorkProductRef extends ModelElement
 	
 	public WorkProductRef( WorkProduct w )
 	{
-		super(ResourceManager.getInstance().getString("reference")+w.getName());
+		super(ConfigManager.getInstance().getProperty("Reference")+w.getName());
 		mRef = w;
 		mTag = new Date().getTime();
 	}
@@ -97,7 +97,7 @@ public class WorkProductRef extends ModelElement
 		WorkProductRef w = (WorkProductRef)super.clone();
 		
 		w.mRef = new WorkProduct(w.getName());
-		w.setName(ResourceManager.getInstance().getString("reference")+w.mRef.getName() );
+		w.setName(ConfigManager.getInstance().getProperty("Reference")+w.mRef.getName() );
 		mTag = new Date().getTime()+ Long.parseLong(w.mRef.getName(), 36) ;
 		
 		return w;

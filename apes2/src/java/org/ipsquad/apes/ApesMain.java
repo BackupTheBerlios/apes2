@@ -81,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class ApesMain
 {
@@ -97,6 +97,7 @@ public class ApesMain
 		properties.setProperty("ActivityDiagram","activity diagram");
 		properties.setProperty("ResponsabilityDiagram","product responsability");
 		properties.setProperty("Interface","interface::");
+		properties.setProperty("Reference","ref::");
 		properties.setProperty("Provided","provided");
 		properties.setProperty("Required","required");
 		
