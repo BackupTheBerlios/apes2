@@ -38,7 +38,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Work definition graph editing internal frame
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WorkDefinitionGraphFrame extends GraphFrame {
 	
@@ -73,7 +73,7 @@ public class WorkDefinitionGraphFrame extends GraphFrame {
 		*/
 		
 		vertex = new WorkDefinitionCell();
-		palette.addToolButton(new CellTool(vertex), "icons/PaletteActivity.gif", "paletteActivity");
+		palette.addToolButton(new CellTool(vertex), "icons/PaletteWorkDef.gif", "paletteWorkDefinition");
 		
 		vertex = new WorkProductCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteWorkProduct.gif", "paletteWorkProduct");
@@ -91,7 +91,7 @@ public class WorkDefinitionGraphFrame extends GraphFrame {
 	
 	public JGraph createGraph(SpemGraphAdapter model)
 	{
-		return new ResponsabilityJGraph(model);
+		return new WorkDefinitionJGraph(model);
 	}
 	
 }

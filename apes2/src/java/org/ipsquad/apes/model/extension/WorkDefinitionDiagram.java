@@ -33,13 +33,13 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
-	Vector mElements = new Vector();
-	Vector mLinks = new Vector();
-
+	private Vector mElements = new Vector();
+	private Vector mTransitions = new Vector();
+	
 	public WorkDefinitionDiagram()
 	{
 
@@ -50,18 +50,81 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		super(name);
 	}
 	
-	public class Link
+	public static class Transition 
 	{
-		private ModelElement mSource;
-		private ModelElement mTarget;
+		private ModelElement mInput;
+		private ModelElement mOutput;
 		
-		public Link(ModelElement source, ModelElement target)
+		public Transition()
 		{
-			mSource = source ;
-			mTarget = target ;
 		}
 		
+		public Transition(ModelElement input, ModelElement output)
+		{
+			mInput=input;
+			mOutput=output;
+		}
+		
+		public void setInputModelElement(ModelElement me)
+		{
+			mInput=me;
+		}
+		
+		public ModelElement getInputModelElement()
+		{
+			return mInput;
+		}
+		
+		public void setOutputModelElement(ModelElement me)
+		{
+			mOutput=me;
+		}
+
+		public ModelElement getOutputModelElement()
+		{
+			return mOutput;
+		}
+		
+		public Object clone()
+		{
+			return new Transition( mInput, mOutput);
+		}
+	};
+	
+	
+	public Transition getTransition(ModelElement source, ModelElement target)
+	{
+		for(int i=0;i<mTransitions.size();i++)
+		{
+			if((((Transition)mTransitions.get(i)).getInputModelElement()==source) && ((Transition)mTransitions.get(i)).getOutputModelElement()==target)
+			{
+				return (Transition)mTransitions.get(i);
+			}
+		}
+		
+		return null;
 	}
+	
+	
+	public Transition getTransition(int i)
+	{
+		if(i<0 || i>=mTransitions.size())
+		{
+			return null;
+		}
+
+		return (Transition) mTransitions.get(i);
+	}
+
+
+	public int getTransitionCount()
+	{
+		return mTransitions.size();
+	}
+	
+	
+	
+	
 
 	public boolean addModelElement(ModelElement me) 
 	{
@@ -258,16 +321,17 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean createLinkWorkProductWorkDefinition(WorkProduct wp, WorkDefinition wd)
 	{
-		if (containsModelElement(wp) && containsModelElement(wd))
+		if(containsModelElement(wp))
 		{
-			if (!mLinks.contains(new Link(wp,wd)))
+			if(containsModelElement(wd))
 			{
-				mLinks.add(new Link(wp,wd));
-				return true ;
-			}	
-			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+				if(areLinkableModelElements(wp,wd))
+				{
+					mTransitions.add(new Transition(wp,wd));
+					return true;
+				}
+			}
 		}
-		
 		return false;
 	}
 	
@@ -280,16 +344,17 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean createLinkWorkDefinitionWorkProduct(WorkDefinition wd, WorkProduct wp)
 	{
-		if (containsModelElement(wp) && containsModelElement(wd))
+		if(containsModelElement(wd))
 		{
-			if (!mLinks.contains(new Link(wd,wp)))
+			if(containsModelElement(wp))
 			{
-				mLinks.add(new Link(wd,wp));
-				return true ;
-			}	
-			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+				if(areLinkableModelElements(wd,wp))
+				{
+					mTransitions.add(new Transition(wd,wp));
+					return true;
+				}
+			}
 		}
-		
 		return false;
 	}
 	
@@ -345,11 +410,13 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean removeLinkWorkProductWorkDefinition(WorkProduct wp, WorkDefinition wd)
 	{
-		if (containsModelElement(wd) && containsModelElement(wp))
+		if(existsLinkModelElements(wp, wd))
 		{
-			return mLinks.remove(new Link(wp,wd));
+			mTransitions.remove(getTransition(wp,wd));
+			return true;
 		}
-		return false ;
+		
+		return false;	
 	}
 	
 	
@@ -362,19 +429,16 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean removeLinkWorkDefinitionWorkProduct(WorkDefinition wd, WorkProduct wp)
 	{
-		if (containsModelElement(wd) && containsModelElement(wp))
+		if(existsLinkModelElements(wd, wp))
 		{
-			return mLinks.remove(new Link(wd,wp));
+			mTransitions.remove(getTransition(wd,wp));
+			return true;
 		}
-		return false ;
+		
+		return false;	
 	}
 	
-	
-	
-	
-	
-	
-	
+
 	public boolean areLinkableModelElements( ModelElement source, ModelElement target) 
 	{	
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
@@ -426,12 +490,9 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean areLinkableWorkProductWorkDefinition(WorkProduct wp, WorkDefinition wd)
 	{
-		if (containsModelElement(wd) && containsModelElement(wp))
+		if(!existsLinkModelElements(wp,wd))
 		{
-			if (!mLinks.contains(new Link(wp,wd)))
-			{
-				return true ;
-			}
+			return true;
 		}
 		
 		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
@@ -448,12 +509,9 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean areLinkableWorkDefinitionWorkProduct(WorkDefinition wd, WorkProduct wp)
 	{
-		if (containsModelElement(wd) && containsModelElement(wp))
+		if(!existsLinkModelElements(wd,wp))
 		{
-			if (!mLinks.contains(new Link(wd,wp)))
-			{
-				return true ;
-			}
+			return true;
 		}
 		
 		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
@@ -510,13 +568,11 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean existsLinkWorkProductWorkDefinition(WorkProduct wp, WorkDefinition wd)
 	{
-		if (containsModelElement(wd) && containsModelElement(wp))
+		if(getTransition(wp,wd)!=null)
 		{
-			if (mLinks.contains(new Link(wp,wd)))
-			{
-				return true ;
-			}
+			return true;
 		}
+
 		return false;
 	}
 	
@@ -529,13 +585,11 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean existsLinkWorkDefinitionWorkProduct(WorkDefinition wd, WorkProduct wp)
 	{
-		if (containsModelElement(wd) && containsModelElement(wp))
+		if(getTransition(wd,wp)!=null)
 		{
-			if (mLinks.contains(new Link(wd,wp)))
-			{
-				return true ;
-			}
+			return true;
 		}
+
 		return false;
 	}
 	
@@ -550,6 +604,9 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		WorkDefinitionDiagram d = (WorkDefinitionDiagram) super.clone();
 		d.mElements = (Vector) mElements.clone();
+		d.mTransitions = (Vector) mTransitions.clone();
 		return d;
 	}
+	
+	
 }

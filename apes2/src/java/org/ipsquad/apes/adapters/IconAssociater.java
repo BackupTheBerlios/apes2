@@ -28,6 +28,7 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.DefaultModelVisitor;
@@ -47,7 +48,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This visitor associate an element with an Icon.
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class IconAssociater extends DefaultModelVisitor
 {
@@ -158,6 +159,10 @@ public class IconAssociater extends DefaultModelVisitor
 		mResult = mManager.getIcon("icons/TreeCtxDiag.gif");
 	}
 
+	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
+	{
+		mResult = mManager.getIcon("icons/TreeWorkDefFlow.gif");
+	}
 	
 	public void visitWorkProductRef(WorkProductRef ref)
 	{
