@@ -78,10 +78,10 @@ public class FenetreCreerProcessus extends JDialog {
 	JLabel lemail = new JLabel();
 	JLabel lchamps_oblig = new JLabel();
 	
-	JTextField nom = new JTextField();
+	JTextField nom = new JTextField(Application.getApplication().getTraduction("new_dp"));
 	JTextArea com = new JTextArea();
-	JTextField auteur = new JTextField();
-	JTextField email = new JTextField("webmaster@iepp.com");
+	JTextField auteur = new JTextField(Application.getApplication().getTraduction("new_author"));
+	JTextField email = new JTextField("iepp@free.fr");
 	
 	JButton validerButton = new JButton();
 	JButton cancelButton = new JButton();
@@ -299,7 +299,7 @@ public class FenetreCreerProcessus extends JDialog {
 			for(int j = 0; j < this.nom.getText().length(); j++)
 			{
 				char c = this.nom.getText().charAt(j);
-				if(c=='/'||c=='\\'||c=='"'||c==':'||c=='*'||c=='<'||c=='>'||c=='|'||c=='?')
+				if(c=='/'||c=='\\'||c=='"'||c==':'||c=='*'||c=='<'||c=='>'||c=='|'||c=='?'||c=='+')
 				{
 					JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("ERR_Nom_Proc_Incorrect"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE); 
 					return false;

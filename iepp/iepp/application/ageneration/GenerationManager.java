@@ -107,7 +107,7 @@ public class GenerationManager
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		GenerationManager.dateGeneration =  "[" + formatter.format(current_date) + "] ";
 		
-		this.setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
+		//this.setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
 		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
 		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
 		

@@ -1063,6 +1063,34 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	
 
 	/**
+	 * Renvoie la définition de travail dans laquelle se trouve l'activité courante
+	 */
+	public IdObjetModele getDefinitionTravail(int numrang, int numtype)
+	{
+		switch (numtype)
+		{
+			case ACTIVITE : Activity act = (Activity) this.activites.elementAt(numrang);
+							for (int k = 0; k < this.listeDefinition.size(); k++)
+							{
+								ApesWorkDefinition apw = (ApesWorkDefinition)this.listeDefinition.elementAt(k);
+								for (int i = 0; i < apw.subWorkCount(); i++ )
+								{
+									 Activity a = apw.getSubWork(i);
+									 if ( a.equals(act) )
+									 {
+										 if (!this.mapId.containsKey(apw))
+										 {
+											 this.mapId.put(apw,new IdObjetModele(this,i,DEFINITION_TRAVAIL));
+										 }
+										 return (IdObjetModele) (this.mapId.get(apw));
+									 }									
+								}
+							}
+		}
+		return null;
+	}
+	
+	/**
 	 * 
 	 */
 	public Vector getActivite(int numrang, int numtype)

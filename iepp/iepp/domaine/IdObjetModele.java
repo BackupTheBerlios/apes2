@@ -438,5 +438,16 @@ public class IdObjetModele implements Serializable, Cloneable
 	{
 		return (((ComposantProcessus)this.getRef()).getChemin(-1, this.numType));
 	}
+	/**
+	 * @return
+	 */
+	public IdObjetModele getLaDefinitionTravail() 
+	{
+		if (this.estActivite())
+		{
+			return (((ComposantProcessus)this.getRef()).getDefinitionTravail(this.numRang, this.numType));
+		}
+		return null;
+	}
 
 }

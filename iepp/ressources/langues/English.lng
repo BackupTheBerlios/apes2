@@ -180,7 +180,8 @@ Commentaire_proc=Comment :
 Auteur_proc=*Author name :
 E_mail_proc=*Author E-mail :
 Champs_obligatoires=*Required entries
-
+new_author=Author
+new_dp=New Process
 M_nomprocessus=This new process needs a name.
 M_nomauteur=You have to enter an author name for this process.
 M_emailauteur=You have to enter author E-mail.

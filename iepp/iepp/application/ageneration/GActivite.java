@@ -71,6 +71,15 @@ public class GActivite extends GElementModele
 								+ "</p></td></tr></table></center><BR><BR>\n");
 
 		this.ajouterLienRacine(fd);
+		// lien vers la page de la définition de travail
+		// TODO mettre la langue
+		IdObjetModele def = this.modele.getLaDefinitionTravail();
+		if (def != null)
+		{
+			fd.write("<br>");
+			fd.write("<a href=\"../../" + def.getChemin() + "\" >" + " Page d'accueil de la définition de travail" + "</a>");
+			fd.write("<br>");
+		}
 		
 		// affiche les produits en entrée / sortie
 		fd.write("<div class=\"titreliste\">"+ Application.getApplication().getTraduction("WEB_PROD_ENTREE") +"</div>\n");
