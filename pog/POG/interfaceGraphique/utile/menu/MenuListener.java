@@ -25,9 +25,11 @@ package POG.interfaceGraphique.utile.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.filechooser.FileFilter;
 
+import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.utile.MyMultiFileFilter;
 import POG.utile.PogToolkit;
 
@@ -42,7 +44,7 @@ public class MenuListener implements ActionListener {
 
  public void actionPerformed(ActionEvent evt) {
 
-   if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("Ouvrir"))) {
+   if (evt.getActionCommand().equals(getLangue("Ouvrir"))) {
      MyMultiFileFilter fd = new MyMultiFileFilter(".pog");
      fd.addExt(".pre");
      File pres = PogToolkit.chooseFileWithFilter(pgm.lnkFenetrePrincipale, fd);
@@ -52,14 +54,14 @@ public class MenuListener implements ActionListener {
        {
          return;
        }
-       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("Vous ne pouvez ouvrir ce type de fichier");
+       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("ouvtype");
        return;
      }
 
      pgm.lnkFenetrePrincipale.getLnkSysteme().ouvrirPresentation(pres.toString());
 //     pgm.lnkFenetrePrincipale.getLnkArbrePresentation().selectionnerRacine();
    }
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("Enregistrer"))){
+   else if (evt.getActionCommand().equals(getLangue("Enregistrer"))){
      if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() != null){
        if (this.pgm.lnkFenetrePrincipale.get_pathSave().equalsIgnoreCase(""))
          this.pgm.lnkFenetrePrincipale.getLnkFenetreEnregistrerSous().setVisible(true);
@@ -67,89 +69,107 @@ public class MenuListener implements ActionListener {
          pgm.lnkFenetrePrincipale.getLnkSysteme().enregistrerPresentation();
      }
      else
-       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("Presentation vide");
-   }else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("enregistrersous"))){
+       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
+   }else if (evt.getActionCommand().equals(getLangue("enregistrersous"))){
      if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() !=null)
        pgm.lnkFenetrePrincipale.getLnkFenetreEnregistrerSous().setVisible(true);
      else
-       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("Presentation vide");
-   } else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("apes")))   {
-     String argvApes = new String("");
-     if ((this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() != null)
-         && (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() != null))
-       argvApes = this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele().getPath();
-     try {
-       String str = pgm.lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getPathApes();
-       System.out.println("java -jar " + str + " " +argvApes);
-       Runtime.getRuntime().exec("java -jar " + str + " " +argvApes);
-     }
-     catch (Exception e) {
-       e.printStackTrace();
-     }
+       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
+   } else if (evt.getActionCommand().equals(getLangue("apes")))   {
+     	new FenetrePrincipale.TheTraitement("APES") {
+			public void traitement() {
+				String argvApes = new String("");
+				if ((pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() != null)
+					&& (pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() != null))
+				argvApes = pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele().getPath();
+				String str = pgm.lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getPathApes();
+				str = "java -jar \"" + str + "\" \"" + argvApes + "\"";
+				System.out.println(str);
+				try {
+					final Process pp = Runtime.getRuntime().exec(str);
+					new FenetrePrincipale.TheTraitement("SuiviAPES") {
+						public void traitement() {
+							int c;
+							try {
+								while ((c = pp.getInputStream().read()) != -1)
+									System.out.write(c);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					};
+					int c;
+					while ((c = pp.getErrorStream().read()) != -1)
+						System.out.write(c);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+     	};     	
    }//*/
-/*   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("ExporterIEPP")))
+/*   else if (evt.getActionCommand().equals(getLangue("ExporterIEPP")))
      Exporter.versIepp(pgm.lnkFenetrePrincipale.getLnkSysteme().getLnkControleurExporter(),pgm.lnkFenetrePrincipale.getLnkDebug());*/
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("Quitter")))
+   else if (evt.getActionCommand().equals(getLangue("Quitter")))
      pgm.lnkFenetrePrincipale.getLnkSysteme().quitter();
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("Preferences")))
+   else if (evt.getActionCommand().equals(getLangue("Preferences")))
      pgm.lnkFenetrePrincipale.afficherFenetrePreferences();
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("viderlog")))
+   else if (evt.getActionCommand().equals(getLangue("viderlog")))
      pgm.lnkFenetrePrincipale.getLnkDebug().clearTexte();
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("Exporter")))
+   else if (evt.getActionCommand().equals(getLangue("Exporter")))
    {
      if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() !=null)
      {
        if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkProcessComponent == null
           || this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkProcessComponent.getValidate() != 0
-          || PogToolkit.askYesNoQuestion(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("apesmodelenonvaliderquestioncontinuer"), false, this.pgm.lnkFenetrePrincipale) == PogToolkit._YES)
+          || PogToolkit.askYesNoQuestion(getLangue("apesmodelenonvaliderquestioncontinuer"), false, this.pgm.lnkFenetrePrincipale) == PogToolkit._YES)
        {
          pgm.lnkFenetrePrincipale.getLnkFenetreExport().setVisible(true);
        }
      }
      else
-       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("Presentation vide");
+       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
    }
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("EditeurHTML")))
+   else if (evt.getActionCommand().equals(getLangue("EditeurHTML")))
      pgm.lnkFenetrePrincipale.getLnkappliTest().lancement();
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("Nouveau")))
+   else if (evt.getActionCommand().equals(getLangue("Nouveau")))
      pgm.lnkFenetrePrincipale.getLnkFenetreOuverture().setVisible(true);
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("SansModele"))){
+   else if (evt.getActionCommand().equals(getLangue("SansModele"))){
      pgm.lnkFenetrePrincipale.getLnkFenetreOuverture().setVisible(true);
    }
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("AvecModele"))) {
+   else if (evt.getActionCommand().equals(getLangue("AvecModele"))) {
      pgm.lnkFenetrePrincipale.getLnkFenetreNouvellePresentationAvecModele().setVisible(true);
    }
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("apropos")))
+   else if (evt.getActionCommand().equals(getLangue("apropos")))
       pgm.lnkFenetrePrincipale.getLnkFenetreAPropos().setVisible(true);
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterElementPresentation")))
+   else if (evt.getActionCommand().equals(getLangue("AjouterElementPresentation")))
      pgm.lnkFenetrePrincipale.getLnkSysteme().ajouterElementPre();
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("Synchroniser")))
+   else if (evt.getActionCommand().equals(getLangue("Synchroniser")))
    {
      if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() !=null)
        pgm.lnkFenetrePrincipale.getLnkArbreExplorateur().load();
      else
-       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("Presentation vide");
+       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
    }
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("syncapes")))
+   else if (evt.getActionCommand().equals(getLangue("syncapes")))
      {
        if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() == null)
        {
-         this.pgm.lnkFenetrePrincipale.getLnkDebug().afficher("Votre presentation n'est pas liee a un modele : synchronisation impossible");
+         this.pgm.lnkFenetrePrincipale.getLnkDebug().afficher("presnonlier");
        }
        else {
          pgm.lnkFenetrePrincipale.getLnkSysteme().synchroniserApes();
        }
      }
-  else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("VerifierCoherence")))
+  else if (evt.getActionCommand().equals(getLangue("VerifierCoherence")))
   {
     if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() != null)
       pgm.lnkFenetrePrincipale.getLnkSysteme().verifiePresentation();
     else
-       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("Presentation vide");
+       pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
   }
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("ManuelUtilisation")))
-     POG.utile.HtmlViewer.mymain();
-   else if (evt.getActionCommand().equals(pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe("extraire")))
+   else if (evt.getActionCommand().equals(getLangue("ManuelUtilisation")))
+     POG.utile.HtmlViewer.mymain(pgm.lnkFenetrePrincipale);
+   else if (evt.getActionCommand().equals(getLangue("extraire")))
      pgm.lnkFenetrePrincipale.getLnkSysteme().extraireIcone();
    else
      pgm.lnkFenetrePrincipale.getLnkDebug().afficher(evt.getActionCommand() + " : Non pris en compte...");
@@ -174,5 +194,9 @@ public class MenuListener implements ActionListener {
        return _ext;
    }
  }
+
+	private String getLangue(String cle) {
+ 		return pgm.lnkFenetrePrincipale.getLnkLangues().valeurDe(cle);
+	}
 
 }

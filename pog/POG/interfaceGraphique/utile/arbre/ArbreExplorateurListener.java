@@ -46,8 +46,10 @@ public class ArbreExplorateurListener implements MouseListener {
   private JPopupMenu popup = null;
   private AbstractAction actionEditer ;
   private AbstractAction actionRenommer ;
-
+  private AbstractAction actionSupprimer;
+  
   private static DefaultMutableTreeNode _objetCourantSelectionne = null;
+
 
   public ArbreExplorateurListener(ArbreExplorateur tree) {
     super();
@@ -125,8 +127,18 @@ public class ArbreExplorateurListener implements MouseListener {
         } ;
     JMenuItem renommer = new JMenuItem(this.actionRenommer) ;
 
+	this.actionSupprimer = new AbstractAction (this.lnkArbreExplorateur.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("Supprimer"))
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			lnkArbreExplorateur.supprimer(_objetCourantSelectionne);
+		  }
+		} ;
+	JMenuItem supprimer = new JMenuItem(this.actionSupprimer) ;
+
     this.popup.add(editer);
     this.popup.add(renommer);
+	this.popup.add(supprimer);
   }
 
   public void afficherMenu(Component compo, int x ,int y, boolean estFichier){

@@ -68,14 +68,11 @@ public class ControleurPresenter extends ControleurSemantique {
     /* On recupere les elements de modele connus dans POG et on les place dans le vecteur oldElements*/
     if (lnkControleurPresentation.getlnkPresentation().lnkProcessComponent == null)
       return true;
-    Apes.loadModel(lnkControleurPresentation.get_pathModele());
     HashMap modelpog = new HashMap();
     Object[] tpog = lnkControleurPresentation.getlnkPresentation().
         listeElementPresentation();
     for (int i = 0; i < tpog.length; i++) {
-      FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.
-          INSTANCE.getLnkLangues().valeurDe("syncapes") +
-          (int) ( ( (float) i / (float) tpog.length) * 100.0 / 3.0) + "%");
+      FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", i, tpog.length * 3);
       if (tpog[i] instanceof PresentationElementModele)
         if ( ( (PresentationElementModele) tpog[i]).getLnkModelElement() == null)
           if (flag)
@@ -106,10 +103,7 @@ public class ControleurPresenter extends ControleurSemantique {
     }
     Vector vapes = Apes.getListeElementApes();
     for (int i = 0; i < vapes.size(); i++) {
-      FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.
-          INSTANCE.getLnkLangues().valeurDe("syncapes") +
-          (int) (33.0 + ( (float) i / (float) vapes.size()) * 100.0 / 3.0) +
-          "%");
+      FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", 33 * 3 * vapes.size() + i, vapes.size() * 3);
       if (!modelpog.containsKey(vapes.get(i))) {
         ModelElement md = (ModelElement) vapes.get(i);
         if (md instanceof WorkProduct)
@@ -133,9 +127,7 @@ public class ControleurPresenter extends ControleurSemantique {
     tpog = lnkControleurPresentation.getlnkPresentation().
         listeElementPresentation();
     for (int i = 0; i < tpog.length; i++) {
-      FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.
-          INSTANCE.getLnkLangues().valeurDe("syncapes") +
-          (int) (66.0 + ( (float) i / (float) tpog.length) * 100.0 / 3.0) + "%");
+		FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", 66 * 3 * tpog.length + i, tpog.length * 3);
       if (tpog[i] instanceof PresentationElementModele) {
         PresentationElementModele pere = (PresentationElementModele) modelpog.
             get( ( (PresentationElementModele) tpog[i]).getLnkModelElement().

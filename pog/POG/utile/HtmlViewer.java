@@ -19,6 +19,7 @@
 
 package POG.utile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -30,6 +31,8 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLDocument;
 
+import POG.interfaceGraphique.fenetre.FenetrePrincipale;
+
 
 /**
  * This class is a simple html viewer. It is able to render html files and display them.
@@ -39,8 +42,14 @@ import javax.swing.text.html.HTMLDocument;
  */
 public class HtmlViewer extends JScrollPane {
 
+	private static String _fichierAide;
 
-  public static void mymain () {
+  public static void mymain (FenetrePrincipale fp) {
+	_fichierAide = POG.utile.propriete.Preferences.REPPREF + "AidePOG/default.htm";
+	if (!(new File(_fichierAide).exists())) {
+		fp.getLnkDebug().debogage("pasaide");
+		return;
+	}
     myhtml v = new myhtml();
     v.setTitle("AidePOG");
     v.setVisible(true);
@@ -72,7 +81,7 @@ public class HtmlViewer extends JScrollPane {
                         }
         });
 
-        setWebPage("file:///" + POG.utile.propriete.Preferences.REPPREF + "AidePOG/default.htm");
+        setWebPage("file:///" + _fichierAide);
     }
 
     /**

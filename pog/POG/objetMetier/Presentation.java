@@ -29,12 +29,9 @@ import java.io.OutputStreamWriter;
 import java.util.Vector;
 
 import POG.application.importExport.Apes;
+import POG.utile.PogToolkit;
 import POG.utile.propriete.Preferences;
 import POG.application.sauvegarde.Sauvegarde;
-import POG.objetMetier.ElementPresentation;
-import POG.objetMetier.PresentationElementModele;
-import POG.objetMetier.Guide;
-import POG.objetMetier.Contenu;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.utile.trace.Debug;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
@@ -52,9 +49,7 @@ public class Presentation
   private List _idElements = null;
   private String _nomPresentation = new String();
   private String _IdRacine;
-  private String _pathBibli = new String();
   private ImageIcon _icone;
-//  public FenetrePrincipale lnkFenetrePrincipale;
 
   public ElementPresentation _chargement_element;
 
@@ -83,7 +78,6 @@ public class Presentation
     _pathModele = null;
     _idElements = null;
     _nomPresentation = name;
-    _pathBibli = path;
     _icone = icone;
 
     this.lnkBibliotheque = new Bibliotheque(path);
@@ -101,7 +95,6 @@ public class Presentation
     _idElements = null;
     _pathModele = null;
     _icone = icone;
-    _pathBibli = path;
     _nomPresentation = name;
     this.lnkBibliotheque = new Bibliotheque(path);
     this._idElements = new Vector();
@@ -391,8 +384,7 @@ public class Presentation
         out.write("Contenu" + File.separator);
       }
       else {
-        out.write(this._pathBibli);
-
+        out.write(lnkBibliotheque.getAbsolutePath());
       }
       out.write("</chemin_contenus>\n");
 
@@ -519,11 +511,17 @@ public class Presentation
       	File toto = new File(_tmp_charger_element.contenu);
       	if (!toto.exists())
       		toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
-		if (toto.exists())
+		if (!toto.exists())
+			if (PogToolkit.askYesNoQuestion(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("deplbiblio"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
+				File nbib = PogToolkit.chooseDirectory(FenetrePrincipale.INSTANCE);
+				FenetrePrincipale.INSTANCE.getLnkSysteme().changerBibliotheque(nbib);
+				toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
+			}
+		if (!toto.exists())
+			FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("attachefich").replaceFirst("ARG0", _tmp_charger_element.contenu).replaceFirst("ARG1", _tmp_charger_element.nom_presentation));
+		else
         	_chargement_element.setContenu(new Contenu(toto, this.lnkBibliotheque.getAbsolutePath()));
-        else
-        	FenetrePrincipale.INSTANCE.getLnkDebug().debogage("Impossible d'attacher le fichier " + _tmp_charger_element.contenu + " à l'élément " + _tmp_charger_element.nom_presentation);
-      }
+	  }
       _chargement_element.set_description(_tmp_charger_element.description);
 
       _tmp_charger_element = new tmp_charger_element();
@@ -547,7 +545,7 @@ public class Presentation
 	boolean ok = true;
 
     for (int i = 0; i < lstelem.length; i++) {
-	  FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("verifval") + (int)(((float)i / (float)lstelem.length) * 100.0) + " %");
+	  FenetrePrincipale.INSTANCE.getLnkDebug().patienter("verifval", i, lstelem.length);
       if (lnkProcessComponent != null)
         if (!(lstelem[i] instanceof Guide))
           if (!(lstelem[i] instanceof PresentationElementModele)) {
@@ -561,4 +559,11 @@ public class Presentation
     }
     return ok;
   }
+
+	/**
+	 * @param newBib Nouvelle Bibliothèque
+	 */
+	public void setBibliotheque(String newBib) {
+		lnkBibliotheque = new Bibliotheque(newBib);
+	}
 }

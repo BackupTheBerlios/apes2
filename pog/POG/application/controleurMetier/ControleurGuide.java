@@ -76,29 +76,30 @@ public class ControleurGuide {
       parser.setDocumentHandler(new parseur());
       parser.parse(fileXML);
     }
-    catch (Exception e) {
+    catch (Exception e) {    	
+    	
       // Type par defaut :
-      String nom = new String("DefTrav");
+      String nom = "ApesWorkDefinition";
       Vector vect = new Vector();
       vect.add("Concept");
       vect.add("Article");
       vect.add("Technique");
       _lienElementGuide.put(nom, vect);
 
-      nom = new String("Role");
+      nom = "ProcessRole";
       vect = new Vector();
       vect.add("Concept");
       vect.add("Article");
       _lienElementGuide.put(nom, vect);
 
-      nom = new String("Activite");
+      nom = "Activity";
       vect = new Vector();
       vect.add("Technique");
       vect.add("Article");
       vect.add("Guide Outil");
       _lienElementGuide.put(nom, vect);
 
-      nom = new String("Produit");
+      nom = "WorkProduct";
       vect = new Vector();
       vect.add("Guide de redaction");
       vect.add("Liste de controles");
@@ -106,7 +107,7 @@ public class ControleurGuide {
       vect.add("Exemple");
       _lienElementGuide.put(nom, vect);
 
-      nom = new String("ElementDePresentation");
+      nom = new String("ALL");
       vect = new Vector();
       Collection elements = this._lienElementGuide.values() ;
       for (Iterator it = elements.iterator() ; it.hasNext() ; )
@@ -123,27 +124,13 @@ public class ControleurGuide {
     }
   }
 
-/* cette fonction est-elle utile ? il semble que non :
-  public void sauver(OutputStreamWriter out, boolean FlagExporter) {
-    try {
-      String nom;
-      for (Iterator it = _lienElementGuide.keySet().iterator(); it.hasNext(); ) {
-        nom = (String) it.next();
-        out.write("<guide>" + System.getProperty("line.separator"));
-        out.write("\t<nom>" + nom  + "</nom>" +  System.getProperty("line.separator"));
-        Object [] vect = ((Vector)_lienElementGuide.get(nom)).toArray();
-        for (int i = 0; i < vect.length; i++)
-          out.write("\t<lien>" + (String)vect[i]  + "</lien>" +  System.getProperty("line.separator"));
-        out.write("</guide>" + System.getProperty("line.separator"));
-      }
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-*/
   public Vector type(String eltModele) {
-    return (Vector)_lienElementGuide.get(eltModele);
+  	if (eltModele.lastIndexOf(".") != -1)
+  		eltModele = eltModele.substring(eltModele.lastIndexOf(".") + 1);
+  	Vector vres = (Vector)_lienElementGuide.get(eltModele);
+  	if (vres == null)
+		vres = (Vector)_lienElementGuide.get("ALL");
+  	return vres;
   }
 
   public Guide ajouterGuide(ElementPresentation elt, String id, ImageIcon ico, String type)

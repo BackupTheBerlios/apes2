@@ -244,8 +244,8 @@ public class ElementPresentation implements Sauvegarde {
 			toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_guide.contenu);
 		if (toto.exists())
 		_chargement_guide.setContenu(new Contenu(toto, lnkBibliotheque.getAbsolutePath()));
-		else
-			FenetrePrincipale.INSTANCE.getLnkDebug().debogage("Impossible d'attacher le fichier " + _tmp_charger_guide.contenu + " à l'élément " + _tmp_charger_guide.nom_presentation);
+		else 
+			FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("attachefich").replaceFirst("ARG0", _tmp_charger_guide.contenu).replaceFirst("ARG1", _tmp_charger_guide.nom_presentation));			
 	  }
 
       

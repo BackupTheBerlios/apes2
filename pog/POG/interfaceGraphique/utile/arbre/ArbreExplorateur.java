@@ -192,6 +192,19 @@ public class ArbreExplorateur extends Arbre implements DragSourceListener, DragG
   }
 
   /**
+   * Lance le processus de suppression de l'objet selectionne
+   * @param n Element a supprimer
+   */
+  public void supprimer (DefaultMutableTreeNode n)
+  {
+  	if (PogToolkit.askYesNoQuestion(lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("questsuppfich").replaceFirst("ARG0", n.toString()), false, lnkSysteme.lnkFenetrePrincipale) == PogToolkit._YES) {
+		(new File(this.getFichier(n))).delete();
+		this.load();
+  	}
+  }
+
+
+  /**
    * Retourne le chemin du fichier au noeud specifie
    * @param n Noeud correspondant au fichier
    * @return Chemin vers le fichier du noeud

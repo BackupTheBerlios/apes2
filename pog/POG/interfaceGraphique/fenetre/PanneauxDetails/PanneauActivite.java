@@ -146,8 +146,7 @@ public class PanneauActivite
   public void afficherMenuGuides(Component compo, int x, int y) {
     JPopupMenu popup = new JPopupMenu();
     popup.setBackground(java.awt.Color.CYAN);
-    Vector vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().
-        type("Activite");
+    Vector vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().type("Activity");
     Enumeration enum = vTypes.elements();
     while (enum.hasMoreElements()) {
       String value = (String) enum.nextElement();

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path=""/>
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="/home/paul/Documents/Programmation/BE/POG/AidePog.jar"/>
-    <classpathentry kind="lib" path="/home/paul/Documents/Programmation/BE/POG/apes2-1.5-java1.4.jar"/>
-    <classpathentry kind="lib" path="/home/paul/Documents/Programmation/BE/POG/help.jar"/>
-    <classpathentry kind="output" path="classes"/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/apes2"/>
+	<classpathentry kind="lib" path="/apes2/src/lib/JSX.jar"/>
+	<classpathentry sourcepath="/home/ptiyo/logiciels/jgraph3/src" kind="lib" path="/apes2/src/lib/jgraph.jar"/>
+	<classpathentry kind="output" path="classes"/>
 </classpath>

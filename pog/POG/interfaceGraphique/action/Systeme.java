@@ -28,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Stack;
 import java.util.Vector;
@@ -48,6 +49,7 @@ import POG.application.controleurMetier.ControleurGuide;
 import POG.application.controleurMetier.ControleurOrganiser;
 import POG.application.controleurMetier.ControleurPresentation;
 import POG.application.controleurMetier.ControleurPresenter;
+import POG.application.importExport.Apes;
 import POG.application.importExport.Importer;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.fenetre.Patientez;
@@ -147,8 +149,8 @@ public class Systeme {
 	private void _invaliderTAG() {
 		if (_save)
 			lnkFenetrePrincipale.getLnkMainToolBar()._btnSave.setEnabled(true);
-		if (_coherent)
-			lnkFenetrePrincipale.getLnkMainToolBar()._btnCheckSPEMs.setEnabled(true);
+//		if (_coherent)
+//			lnkFenetrePrincipale.getLnkMainToolBar()._btnCheckSPEMs.setEnabled(true);
 		_save = false;
 		_coherent = false;
 	}
@@ -168,12 +170,12 @@ public class Systeme {
 		if (!_coherent) {
 			_coherent = (_modele == lnkControleurPresentation.get_pathModele().lastModified());
 			if (!_coherent) {
-				lnkFenetrePrincipale.getLnkDebug().verificationMessage(lnkFenetrePrincipale.getLnkLangues().valeurDe("messverifsync"));
+				lnkFenetrePrincipale.getLnkDebug().verificationMessage("messverifsync");
 				return;
 			}
 			_coherent = lnkControleurExporter.verifierPresentation(lnkFenetrePrincipale.getLnkDebug());
-			lnkFenetrePrincipale.getLnkDebug().patienter("");
-			lnkFenetrePrincipale.getLnkMainToolBar()._btnCheckSPEMs.setEnabled(!_coherent);
+			lnkFenetrePrincipale.getLnkDebug().patienter("", 0, 0);
+//			lnkFenetrePrincipale.getLnkMainToolBar()._btnCheckSPEMs.setEnabled(!_coherent);
 		}
 	}
 
@@ -191,6 +193,7 @@ public class Systeme {
     lnkFenetrePrincipale.getLnkPanneauBibliotheque().load();
     lnkFenetrePrincipale.getLnkControleurPanneaux().loadVide();
     System.setProperty("user.dir", pathBibli.getAbsolutePath());
+	_invaliderTAG();
   }
 
   public void ouvrirPresentation(final String pathOuv) {
@@ -202,7 +205,7 @@ public class Systeme {
 			lnkFenetrePrincipale.set_pathSave(pathOuv);
     		lnkFenetrePrincipale.getLnkArbreExplorateur().load();
     		lnkFenetrePrincipale.getLnkArbrePresentation().load();
-                lnkFenetrePrincipale.jLabelPathBib.setText(lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
+            lnkFenetrePrincipale.jLabelPathBib.setText(lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
 		}
 	};
   }
@@ -232,10 +235,10 @@ public class Systeme {
 	new FenetrePrincipale.TheTraitement("Exportation") {
 	   public void traitement() {
 			_verifcohe();
-	    	if (!_coherent)
-				lnkFenetrePrincipale.getLnkDebug().verificationMessage(lnkFenetrePrincipale.getLnkLangues().valeurDe("messverifcoh"));
+	    	if (_coherent)
+				lnkFenetrePrincipale.getLnkDebug().verificationMessage("messverifcoh");
 	    	else
-				lnkFenetrePrincipale.getLnkDebug().verificationMessage(lnkFenetrePrincipale.getLnkLangues().valeurDe("messverifncoh"));
+				lnkFenetrePrincipale.getLnkDebug().verificationMessage("messverifncoh");
 	   }
 	};
   }
@@ -340,7 +343,7 @@ public class Systeme {
   }
 
   private void _extractFromRessources(String str) throws Exception {
-    String pathIco = lnkControleurPresentation.getlnkPresentation().lnkBibliotheque.getAbsolutePath() + File.separator + "Icone" + File.separator;
+    String pathIco = lnkPreferences.getPathIcones();
     (new File(pathIco)).mkdir();
     URL ip = ClassLoader.getSystemResource(str);
 
@@ -469,11 +472,13 @@ public class Systeme {
             _modele = getlnkControleurPresentation().get_pathModele().
                 lastModified();
             System.setProperty("user.dir", pathBibli);
+            _invaliderTAG();
           }
         }
         catch (Exception e) {
           e.printStackTrace();
         }
+        
       }
     };
   }
@@ -505,24 +510,24 @@ public class Systeme {
 
     //Si extension inexistante dans p0
     if (indexPt == -1) {
-      this.lnkFenetrePrincipale.getLnkDebug().afficher(
-          "Extension inexistante dans ce fichier !");
+      lnkFenetrePrincipale.getLnkDebug().afficher("manqueext");
       return;
     }
 
     //Sinon
     String ext = p0.substring(indexPt + 1, p0.length());
     String editeur = lnkPreferences.get_editeur(ext);
-
-    if (editeur != null)
-    {
-      String[] par = new String[] {
-          new File(editeur).getAbsolutePath(), p0};
-      try {
-        Process p = Runtime.getRuntime().exec(par);
-      }
-      catch (Exception e) {}
-    }
+    if (editeur == null)
+    	return;
+	if (editeur.equals("PIKA"))
+		FenetrePrincipale.INSTANCE.getLnkappliTest().ouvrirFile(p0);
+	else {
+		String[] par = new String[] { new File(editeur).getAbsolutePath(), p0};
+  		try {
+    		Process p = Runtime.getRuntime().exec(par);
+  		}
+  		catch (Exception e) {}
+  	}
   }
 
   public ControleurOrganiser getLnkControleurOrganiser() {
@@ -621,8 +626,9 @@ public class Systeme {
 
 	new FenetrePrincipale.TheTraitement("Synchro") {
 		public void traitement() {
+			Apes.loadModel(lnkControleurPresentation.get_pathModele());
 			getLnkControleurPresenter().synchroniserApes(true);
-			lnkFenetrePrincipale.getLnkDebug().patienter("");
+			lnkFenetrePrincipale.getLnkDebug().patienter("", 0, 0);
 			lnkFenetrePrincipale.getLnkArbrePresentation().load();
 			_modele = lnkControleurPresentation.get_pathModele().lastModified();
 		}
@@ -654,5 +660,46 @@ public class Systeme {
 	public void quitter() {
 		_verifierSauve(true);
 		System.exit(0);
+	}
+
+	/**
+	 * Change la bibliothèque
+	 * @param newBib Nouvelle bibliothèque
+	 */
+	public void changerBibliotheque(File newBib) {
+		_invaliderTAG();
+		lnkControleurPresentation.getlnkPresentation().setBibliotheque(newBib.getAbsolutePath());
+		HashMap allmap = new HashMap();
+		Vector sscontenu = new Vector();
+		Stack stff = new Stack();
+		stff.push(newBib);
+		while (!stff.isEmpty()) {
+			File ff = (File)stff.pop();
+			if (ff.isFile())
+				allmap.put(ff.getName(), ff);
+			else {
+				File [] ssff = ff.listFiles();
+				for (int i = 0; i < ssff.length; i++)
+					stff.push(ssff[i]);
+			}
+		}
+		Object [] elem = lnkControleurPresentation.getlnkPresentation().listeElementPresentation();
+		for (int i = 0; i < elem.length; i++) {
+			ElementPresentation ep = (ElementPresentation)elem[i];
+			if (ep.getContenu() == null)
+				continue;
+			if (allmap.containsKey(ep.getContenu().getFile().getName()))
+				lnkControleurOrganiser.associerContenu(ep, (File)allmap.get(ep.getContenu().getFile().getName()));
+			else {
+				sscontenu.add("\t" + ep.get_nomPresentation());
+				lnkControleurOrganiser.supprimerContenu(ep);
+			}
+		}
+		if (sscontenu.size() > 0) {
+			lnkFenetrePrincipale.getLnkDebug().afficher("perdulien");
+			lnkFenetrePrincipale.getLnkDebug().afficher(sscontenu.toArray());
+		}
+		lnkFenetrePrincipale.getLnkArbreExplorateur().load();
+		lnkFenetrePrincipale.jLabelPathBib.setText(lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
 	}
 }

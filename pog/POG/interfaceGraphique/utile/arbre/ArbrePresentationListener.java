@@ -25,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.JMenu;
@@ -33,9 +32,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
+import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.model.spem.core.ModelElement;
 
-import POG.objetMetier.Contenu;
 import POG.objetMetier.ElementPresentation;
 import POG.objetMetier.Guide;
 import POG.objetMetier.PresentationElementModele;
@@ -52,22 +51,22 @@ import POG.objetMetier.PresentationElementModele;
 public class ArbrePresentationListener
     implements MouseListener {
 
-  static ArbrePresentation lnkArbrePresentation;
+  private ArbrePresentation lnkArbrePresentation;
 
   protected static Object _objetCourantSelectionne = null;
   protected static DefaultMutableTreeNode _noeudCourantSelectionne = null;
 
-  public ArbrePresentationListener(ArbrePresentation tree) {
+  public ArbrePresentationListener (ArbrePresentation tree) {
     super();
-    ArbrePresentationListener.lnkArbrePresentation = tree;
+    lnkArbrePresentation = tree;
+    initMenus();
   }
 
   public ElementPresentation getElementPresentationSelectionne() {
-    if (ArbrePresentationListener.lnkArbrePresentation.get_arbre().isSelectionEmpty()) {
+    if (lnkArbrePresentation.get_arbre().isSelectionEmpty()) {
       return null;
     }
-    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)ArbrePresentationListener.
-        lnkArbrePresentation._arbre.getLastSelectedPathComponent();
+    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)lnkArbrePresentation._arbre.getLastSelectedPathComponent();
     Object objet = noeud.getUserObject();
     return (ElementPresentation) objet;
   }
@@ -82,110 +81,22 @@ public class ArbrePresentationListener
    * @param e
    */
   public void mouseClicked(MouseEvent e) {
-    int x = e.getX();
-    int y = e.getY();
-    int row = ArbrePresentationListener.lnkArbrePresentation.get_arbre().getRowForLocation(x, y);
-    if (row != -1) {
-      ArbrePresentationListener.lnkArbrePresentation.get_arbre().setSelectionRow(row);
-    }
-    else {
+    int row = lnkArbrePresentation.get_arbre().getRowForLocation(e.getX(), e.getY());
+    if (row == -1) 
       return;
-    }
+      
+	lnkArbrePresentation.get_arbre().setSelectionRow(row);
 
-    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)ArbrePresentationListener.
-        lnkArbrePresentation._arbre.getLastSelectedPathComponent();
-    ArbrePresentationListener._noeudCourantSelectionne = noeud;
+    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)lnkArbrePresentation._arbre.getLastSelectedPathComponent();
+    _noeudCourantSelectionne = noeud;
 
     Object objet = noeud.getUserObject();
-    ArbrePresentationListener._objetCourantSelectionne = objet;
+    _objetCourantSelectionne = objet;
 
-    int aff = 0;
-
-    //cas contenu
-    if (objet instanceof Contenu) {
-      if (e.getButton() == MouseEvent.BUTTON3) {
-        aff = 1;
-      }
-      ArbrePresentationListener.lnkArbrePresentation.get_arbre().setSelectionRow(row - 1);
-      ArbrePresentationListener._noeudCourantSelectionne = (DefaultMutableTreeNode)ArbrePresentationListener.
-          lnkArbrePresentation._arbre.getLastSelectedPathComponent();
-      ArbrePresentationListener._objetCourantSelectionne = _noeudCourantSelectionne.getUserObject();
-      objet = _objetCourantSelectionne;
-      noeud = _noeudCourantSelectionne;
-    }
-
-    // cas guide
-    if (objet instanceof Guide) {
-      lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadCentre("DGuide",
-                                                (Guide)
-                                                _objetCourantSelectionne);
-      if (e.getButton() == MouseEvent.BUTTON3) {
-        afficherMenuGuide_ElementPresentationSimple( (Component) e.getSource(),
-            x, y);
-      }
-    }
-    else if (objet instanceof PresentationElementModele) {
-      // cas racine ou un paquetage du modele
-      if (e.getButton() == MouseEvent.BUTTON3) {
-
-        PresentationElementModele element = (PresentationElementModele) objet;
-        if (element.get_id() ==
-            ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().
-            getlnkPresentation().getIdRacine() ||
-            element.getLnkModelElement()instanceof SPackage) {
-          afficherMenuRacineComposant_Paquetage( (Component) e.getSource(), x,
-                                                y);
-          // cas role, produit, activite, definitin de travail
-        }
-        else {
-          try {
-            this.afficherMenuRPDA( (Component) e.getSource(), x, y);
-          }
-          catch (Exception ex) {
-            // Rien : cas element de modele sans menu specifique.
-          }
-        }
-      }
-      else {
-        ArbrePresentationListener.lnkArbrePresentation.afficherCentreCorrespondant( (
-            PresentationElementModele) objet);
-      }
-    }
-    // cas paquetage de presentation
-    else if (objet instanceof ElementPresentation) {
-      if ( ( (ElementPresentation)ArbrePresentationListener._objetCourantSelectionne).get_id() ==
-          ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().
-          getlnkPresentation().getIdRacine()) {
-        if (e.getButton() == MouseEvent.BUTTON3) {
-          afficherMenuRacinePaquetage( (Component) e.getSource(), x, y);
-        }
-        else {
-          lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.
-              getLnkControleurPanneaux().loadCentre("DElementPresentation",
-              (ElementPresentation)
-              _objetCourantSelectionne);
-        }
-      }
-      else {
-        if (e.getButton() == MouseEvent.BUTTON3) {
-          afficherMenuGuide_ElementPresentationSimple( (Component) e.getSource(),
-              x, y);
-        }
-        lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.
-            getLnkControleurPanneaux().loadCentre("DElementPresentation",
-                                                  (ElementPresentation)
-                                                  _objetCourantSelectionne);
-      }
-    }
-    else { // rien
-    }
-    if (aff == 1) {
-      ArbrePresentationListener.lnkArbrePresentation.get_arbre().setSelectionRow(row);
-      ArbrePresentationListener._noeudCourantSelectionne = (DefaultMutableTreeNode)ArbrePresentationListener.
-          lnkArbrePresentation._arbre.getLastSelectedPathComponent();
-      ArbrePresentationListener._objetCourantSelectionne = _noeudCourantSelectionne.getUserObject();
-    }
+	if (e.getButton() == MouseEvent.BUTTON3)
+		afficherPopup(e);
+	
+	lnkArbrePresentation.afficherCentreCorrespondant(_objetCourantSelectionne);
   }
 
   public void mousePressed(MouseEvent e) {
@@ -212,425 +123,126 @@ public class ArbrePresentationListener
     //  throw new java.lang.UnsupportedOperationException("Method mouseExited() not yet implemented.");
   }
 
-  public void afficherMenuGuide_ElementPresentationSimple(Component compo,
-      int x, int y) {
-    boolean contenuPresent =
-        ( ( (ElementPresentation)ArbrePresentationListener._objetCourantSelectionne).getContenu() != null);
-    JPopupMenu popup = initMenuGuide_ElementPresentationSimple(contenuPresent);
-    popup.show(compo, x, y);
-  }
-
-  public void afficherMenuRPDA(Component compo, int x, int y) {
-    JPopupMenu popup = initMenuRPDA();
-    popup.show(compo, x, y);
-  }
-
-  public void afficherMenuRacinePaquetage(Component compo, int x, int y) {
-    JPopupMenu popup = initMenuRacinePaquetage();
-    popup.show(compo, x, y);
-
-  }
-
-  public void afficherMenuRacineComposant_Paquetage(Component compo, int x,
-      int y) {
-    JPopupMenu popup = initMenuRacineComposant_Paquetage();
-    popup.show(compo, x, y);
-
-  }
-
       /****************************************************************************/
       /**************************** LES MENUS *************************************/
       /****************************************************************************/
 
-  /**
-   * Le Menu pour un guide ou pour un element de presentation simple
-   * (cas paquetage de presentation)
-   */
-  public JPopupMenu initMenuGuide_ElementPresentationSimple(boolean
-      contenuPresent) {
-    JPopupMenu popup = new JPopupMenu();
+	private JPopupMenu _leclickdroit = new JPopupMenu();
+	private JMenuItem _mnuajouterelem;
+	private JMenuItem _mnusupprimer;
+	private JMenuItem _mnucontenu;
+	private	JMenuItem _mnuicone;
+	private JMenuItem _mnurenommer;
+	private JMenu _mnuguide;
 
-    JMenuItem choixOuvrir = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                          lnkFenetrePrincipale.getLnkLangues().
-                                          valeurDe("Ouvrir"));
+	
+	private void initMenus() {
+		_mnuajouterelem = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterElementPresentation"));
+		_mnusupprimer = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("Supprimer"));
+		_mnucontenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterContenu"));
+		_mnuicone = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("ChangerIcone"));
+		_mnurenommer = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("Renommer"));
+		_mnuguide = new JMenu(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterGuide"));
 
-    JMenuItem choixSupprimer = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                             lnkFenetrePrincipale.getLnkLangues().
-                                             valeurDe("Supprimer"));
+		_mnuajouterelem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				lnkArbrePresentation.lnkSysteme.ajouterElementPre();
+  			}
+		});
 
-    JMenuItem choixContenu;
-    if (!contenuPresent) {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("AjouterContenu"));
-    }
-    else {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("ChangerDeContenu"));
-    }
+		_mnusupprimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				lnkArbrePresentation.lnkSysteme.supprimerElement((ElementPresentation)_objetCourantSelectionne);
+			}
+		});
 
-    JMenuItem choixIcone = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                         lnkFenetrePrincipale.getLnkLangues().
-                                         valeurDe("ChangerIcone"));
+		_mnucontenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				lnkArbrePresentation.lnkSysteme.choisirContenu((ElementPresentation)_objetCourantSelectionne);
+			}
+		});
 
-    JMenuItem choixRenommer = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                            lnkFenetrePrincipale.getLnkLangues().
-                                            valeurDe("Renommer"));
+		_mnuicone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.afficheChangerIcone((ElementPresentation)_objetCourantSelectionne);
+			}
+		});
 
-    JMenu choixGuide = new JMenu(lnkArbrePresentation.lnkSysteme.
-                                 lnkFenetrePrincipale.getLnkLangues().
-                                 valeurDe("AjouterGuide"));
+		_mnurenommer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				lnkArbrePresentation.setNodeEditable(_noeudCourantSelectionne);
+			}
+		});
 
-        /* Creer autants de sous-menus que de guides possibles pour l'element courant*/
+		_leclickdroit.add(_mnuajouterelem);
+		_leclickdroit.add(_mnusupprimer);
+		_leclickdroit.add(_mnucontenu);
+		_leclickdroit.add(_mnuicone);
+		_leclickdroit.add(_mnurenommer);
+		_leclickdroit.add(_mnuguide);
+	}
+	
+	private void rempliPopupGuide(String typeg) {
+		_mnuguide.removeAll();
+		Vector vTypes = lnkArbrePresentation.lnkSysteme.getLnkControleurGuide().type(typeg);
+		for (int i = 0; i < vTypes.size(); i++) {
+			JMenuItem choixEnPlus = new JMenuItem((String)vTypes.get(i));
+			choixEnPlus.addActionListener(new listenerSousMenusGuides((String)vTypes.get(i)));
+			_mnuguide.add(choixEnPlus);
+		}
+	}
 
-    if (! (ArbrePresentationListener._objetCourantSelectionne instanceof Guide)) {
-      String typeElement = "ElementDePresentation";
-      Vector vTypes = ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-          getLnkControleurGuide().
-          type(typeElement);
 
-      Enumeration enum = vTypes.elements();
+	private void afficherPopup(MouseEvent e) {
+		_mnuajouterelem.setVisible(false);
+		_mnusupprimer.setVisible(true);
+		_mnucontenu.setVisible(true);
+		_mnuicone.setVisible(true);
+		_mnurenommer.setVisible(true);
+		_mnuguide.setVisible(true);
+		_mnucontenu.setText(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterContenu"));
+		if (((ElementPresentation)_objetCourantSelectionne).getContenu() != null)
+			_mnucontenu.setText(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("changerdecontenu"));
+		if (((ElementPresentation)_objetCourantSelectionne).get_id().equals(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().getlnkPresentation().getIdRacine())) {
+			_mnusupprimer.setVisible(false); 
+			_mnuajouterelem.setVisible(true);
+			rempliPopupGuide("ALL");
+		}
+		else if (_objetCourantSelectionne instanceof Guide)
+			_mnuguide.setVisible(false);
+		else if (_objetCourantSelectionne instanceof PresentationElementModele) {
+			ModelElement em = ((PresentationElementModele)_objetCourantSelectionne).getLnkModelElement();
+			if (em instanceof SpemDiagram) {
+				_mnusupprimer.setVisible(false);
+				_mnucontenu.setVisible(false);
+				_mnuicone.setVisible(false);
+				_mnurenommer.setVisible(false);
+				_mnuguide.setVisible(false);
+				
+			}
+			else {
+				_mnusupprimer.setVisible(false);
+				rempliPopupGuide(em.getClass().getName());
+			}
+		}
+		else
+			rempliPopupGuide("ALL");
+		_leclickdroit.show((Component) e.getSource(), e.getX(), e.getY());
+	}
 
-      while (enum.hasMoreElements()) {
-        String value = (String) enum.nextElement();
-        JMenuItem choixEnPlus = new JMenuItem(value);
-        choixEnPlus.addActionListener(new listenerSousMenusGuides(value));
-        choixGuide.add(choixEnPlus);
-      }
+  class listenerSousMenusGuides
+	  implements ActionListener {
+	String _typeGuide;
 
-    }
+	public listenerSousMenusGuides(String typeGuide) {
+	  this._typeGuide = typeGuide;
+	}
 
-    choixOuvrir.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            lnkFenetrePrincipale.getLnkControleurPanneaux().loadCentre(
-            "DElementPresentation",
-            (ElementPresentation) ArbrePresentationListener.
-            _objetCourantSelectionne);
-      }
-    });
+	public void actionPerformed(ActionEvent evt) {
+	  lnkArbrePresentation.lnkSysteme.ajouterGuide( (ElementPresentation)_objetCourantSelectionne, _typeGuide);
+	}
 
-    choixSupprimer.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            supprimerElement(
-            (ElementPresentation) ArbrePresentationListener.
-            _objetCourantSelectionne);
-      }
-    });
-
-    choixContenu.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            choisirContenu(
-            (ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    choixIcone.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            lnkFenetrePrincipale.afficheChangerIcone( (
-            ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    choixRenommer.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.setNodeEditable(_noeudCourantSelectionne);
-      }
-    });
-
-    popup.add(choixOuvrir);
-    popup.addSeparator();
-    popup.add(choixRenommer);
-    popup.add(choixIcone);
-    popup.addSeparator();
-    if (! (ArbrePresentationListener._objetCourantSelectionne instanceof Guide)) {
-      popup.add(choixGuide);
-    }
-    popup.add(choixContenu);
-    popup.addSeparator();
-    popup.addSeparator();
-    popup.add(choixSupprimer);
-    return popup;
-  }
-
-  /**
-   * Le Menu pour (4 elements provenant d'un modele) :
-   *    - R : role
-   *    - P : produit
-   *    - D : definition de travail
-   *    - A : activite
-   */
-  public JPopupMenu initMenuRPDA() {
-    PresentationElementModele element = (PresentationElementModele)
-        _objetCourantSelectionne;
-    JPopupMenu popup = new JPopupMenu();
-
-    JMenuItem choixOuvrir = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                          lnkFenetrePrincipale.getLnkLangues().
-                                          valeurDe("Ouvrir"));
-    JMenuItem choixIcone = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                         lnkFenetrePrincipale.getLnkLangues().
-                                         valeurDe("ChangerIcone"));
-    JMenuItem choixRenommer = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                            lnkFenetrePrincipale.getLnkLangues().
-                                            valeurDe("Renommer"));
-
-    JMenu choixGuide = new JMenu(lnkArbrePresentation.lnkSysteme.
-                                 lnkFenetrePrincipale.getLnkLangues().
-                                 valeurDe("AjouterGuide"));
-
-        /* Creer autants de sous-menus que de guides possibles pour l'element courant*/
-
-    String typeElement = element.getStringType();
-    Vector vTypes = ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.getLnkControleurGuide().
-        type(typeElement);
-
-    Enumeration enum = vTypes.elements();
-
-    while (enum.hasMoreElements()) {
-      String value = (String) enum.nextElement();
-      JMenuItem choixEnPlus = new JMenuItem(value);
-      choixEnPlus.addActionListener(new listenerSousMenusGuides(value));
-      choixGuide.add(choixEnPlus);
-    }
-
-    JMenuItem choixContenu = null;
-
-    if (element.getContenu() == null) {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("AjouterContenu"));
-    }
-    else {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("changerdecontenu"));
-    }
-    choixContenu.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            choisirContenu(
-            (ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    choixOuvrir.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.afficherCentreCorrespondant( (
-            PresentationElementModele) _objetCourantSelectionne);
-      }
-    });
-
-    choixIcone.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            lnkFenetrePrincipale.afficheChangerIcone( (
-            ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    choixRenommer.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.setNodeEditable(_noeudCourantSelectionne);
-      }
-    });
-
-    popup.add(choixOuvrir);
-    popup.addSeparator();
-    popup.add(choixRenommer);
-    popup.add(choixIcone);
-    popup.addSeparator();
-    popup.add(choixGuide);
-    popup.add(choixContenu);
-    return popup;
-  }
-
-  /**
-   * Le Menu pour la racine si c'est un paquetage de presentation
-   */
-  public JPopupMenu initMenuRacinePaquetage() {
-    JPopupMenu popup = new JPopupMenu();
-    ElementPresentation element = (ElementPresentation)
-        _objetCourantSelectionne;
-
-    JMenuItem choixOuvrir = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                          lnkFenetrePrincipale.getLnkLangues().
-                                          valeurDe("Ouvrir"));
-    JMenuItem choixIcone = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                         lnkFenetrePrincipale.getLnkLangues().
-                                         valeurDe("ChangerIcone"));
-    JMenuItem choixRenommer = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                            lnkFenetrePrincipale.getLnkLangues().
-                                            valeurDe("Renommer"));
-
-    JMenuItem choixContenu = null;
-
-    if (element.getContenu() == null) {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("AjouterContenu"));
-    }
-    else {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("changerdecontenu"));
-    }
-    choixContenu.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            choisirContenu(
-            (ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    JMenuItem choixAjouterElementPre = new JMenuItem(lnkArbrePresentation.
-        lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe(
-        "AjouterElementPresentation"));
-
-    choixOuvrir.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.
-            getLnkControleurPanneaux().loadCentre("DElementPresentation",
-                                                  (ElementPresentation)
-                                                  _objetCourantSelectionne);
-      }
-    });
-
-    choixIcone.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            lnkFenetrePrincipale.afficheChangerIcone( (
-            ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    choixRenommer.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.setNodeEditable(_noeudCourantSelectionne);
-      }
-    });
-
-    choixAjouterElementPre.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            ajouterElementPre();
-      }
-    });
-
-    popup.add(choixOuvrir);
-    popup.addSeparator();
-    popup.add(choixRenommer);
-    popup.add(choixIcone);
-    popup.addSeparator();
-    popup.add(choixContenu);
-    popup.addSeparator();
-    popup.add(choixAjouterElementPre);
-    return popup;
-  }
-
-  /**
-   * Le Menu pour la racine si un composant et pour un paquetage du composant
-   */
-  public JPopupMenu initMenuRacineComposant_Paquetage() {
-    JPopupMenu popup = new JPopupMenu();
-    PresentationElementModele element = (PresentationElementModele)
-        _objetCourantSelectionne;
-
-    JMenuItem choixOuvrir = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                          lnkFenetrePrincipale.getLnkLangues().
-                                          valeurDe("Ouvrir"));
-    JMenuItem choixIcone = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                         lnkFenetrePrincipale.getLnkLangues().
-                                         valeurDe("ChangerIcone"));
-    JMenuItem choixRenommer = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                            lnkFenetrePrincipale.getLnkLangues().
-                                            valeurDe("Renommer"));
-
-    JMenuItem choixContenu = null;
-
-    if (element.getContenu() == null) {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("AjouterContenu"));
-    }
-    else {
-      choixContenu = new JMenuItem(lnkArbrePresentation.lnkSysteme.
-                                   lnkFenetrePrincipale.getLnkLangues().
-                                   valeurDe("changerdecontenu"));
-    }
-    choixContenu.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            choisirContenu(
-            (ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    choixOuvrir.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.afficherCentreCorrespondant( (
-            PresentationElementModele) _objetCourantSelectionne);
-      }
-    });
-
-    choixIcone.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            lnkFenetrePrincipale.afficheChangerIcone( (
-            ElementPresentation) ArbrePresentationListener.
-            _noeudCourantSelectionne.getUserObject());
-      }
-    });
-
-    choixRenommer.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.setNodeEditable(_noeudCourantSelectionne);
-      }
-    });
-
-    popup.add(choixOuvrir);
-    popup.addSeparator();
-    popup.add(choixRenommer);
-    popup.add(choixIcone);
-    popup.addSeparator();
-    popup.add(choixContenu);
-
-    return popup;
-  }
-}
-
-/**
- * Classe pour les listeners des guides
- * <p>Title: POG</p>
- * <p>Description: Presentation Organisation Generation de composant</p>
- * <p>Copyright: Copyright (c) 2003</p>
- * <p>Company: </p>
- * @author non attribuable
- * @version 1.0
- */
-class listenerSousMenusGuides
-    implements ActionListener {
-  String _typeGuide;
-
-  public listenerSousMenusGuides(String typeGuide) {
-    this._typeGuide = typeGuide;
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-        ajouterGuide( (ElementPresentation) ArbrePresentationListener.
-                     _objetCourantSelectionne, _typeGuide);
   }
 
 }
+

@@ -34,6 +34,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
@@ -412,36 +413,32 @@ public class ArbrePresentation
   }
 
 
-  public void afficherCentreCorrespondant(PresentationElementModele o) {
-    ModelElement m = (ModelElement) ( (PresentationElementModele) o).
-        getLnkModelElement();
-
-    if (m instanceof Activity) {
-      this.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadCentre("DActivite", o);
-    }
-    else if (m instanceof WorkProduct) {
-      this.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadCentre("DProduit", o);
-    }
-    else if (m instanceof ProcessRole) {
-      this.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadCentre("DRole", o);
-    }
-    else if (m instanceof WorkDefinition) {
-      this.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadCentre("DDefinitionTravail", o);
-    }
-    else if (m instanceof SPackage) {
-      this.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadCentre("DElementPresentation", o);
-    }
-    else {
-      this.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadVide();
-    }
-
-  }
+	public void afficherCentreCorrespondant(Object obj) {
+		String _centre = "";
+		if (obj instanceof Guide)
+			_centre = "DGuide";
+		else if (obj instanceof PresentationElementModele) {
+			ModelElement m = ((PresentationElementModele)obj).getLnkModelElement();
+			if (m instanceof Activity)
+				_centre = "DActivite";
+			else if (m instanceof WorkProduct)
+				_centre = "DProduit";
+			else if (m instanceof ProcessRole)
+				_centre = "DRole";
+			else if (m instanceof WorkDefinition) 
+				_centre = "DDefinitionTravail";
+			else if (m instanceof SPackage) 
+				_centre = "DPackage";
+			else if (m instanceof SpemDiagram)
+				_centre = "DDiagram";    	
+		}
+		else if (obj instanceof ElementPresentation)
+			_centre = "DElementPresentation";
+		if (_centre == "")
+			lnkSysteme.lnkFenetrePrincipale.getLnkControleurPanneaux().loadVide();
+		else
+			lnkSysteme.lnkFenetrePrincipale.getLnkControleurPanneaux().loadCentre(_centre, (ElementPresentation)obj);
+	}
 
   /**
    * Met editable le noeud pour renomage.
@@ -475,85 +472,83 @@ public class ArbrePresentation
     this._arbre.setModel(tm);
   }
 
-}
+  class IconesRenderer
+	  extends DefaultTreeCellRenderer {
 
-class IconesRenderer
-    extends DefaultTreeCellRenderer {
+	Systeme _systeme;
+	public IconesRenderer(Systeme syst) {
+	  _systeme = syst;
+	}
 
-  Systeme _systeme;
-  public IconesRenderer(Systeme syst) {
-    _systeme = syst;
+	public Component getTreeCellRendererComponent(
+		JTree tree,
+		Object value,
+		boolean sel,
+		boolean expanded,
+		boolean leaf,
+		int row,
+		boolean hasFocus) {
+
+	  super.getTreeCellRendererComponent(
+		  tree, value, sel,
+		  expanded, leaf, row,
+		  hasFocus);
+	  DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
+	  Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
+	  if (objet instanceof Guide || objet instanceof ElementPresentation
+		  || objet instanceof PresentationElementModele) {
+		ImageIcon icone;
+
+		try {
+		  icone = ( (ElementPresentation) objet).get_icone();
+		  java.awt.Image img = icone.getImage().getScaledInstance(14, 14,
+			  Image.SCALE_SMOOTH);
+		  setIcon(new ImageIcon(img));
+
+		}
+		catch (Exception e) {
+		  icone = lnkSysteme.getLnkPreferences().getIconeDefaut("defaut_icon");
+		  setIcon(icone);
+		}
+
+	  }
+	  return this;
+	}
   }
 
-  public Component getTreeCellRendererComponent(
-      JTree tree,
-      Object value,
-      boolean sel,
-      boolean expanded,
-      boolean leaf,
-      int row,
-      boolean hasFocus) {
+  class CellEditor
+	  extends DefaultTreeCellEditor {
+	public CellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
+	  super(tree, renderer);
+	}
 
-    super.getTreeCellRendererComponent(
-        tree, value, sel,
-        expanded, leaf, row,
-        hasFocus);
-    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
-    Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
-    if (objet instanceof Guide || objet instanceof ElementPresentation
-        || objet instanceof PresentationElementModele) {
-      ImageIcon icone;
+	public Component getTreeCellEditorComponent(JTree tree, Object value,
+												boolean sel, boolean expanded,
+												boolean leaf, int row) {
+	  Component c = super.getTreeCellEditorComponent(tree, value, sel, expanded,
+		  leaf, row);
+	  DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
+	  Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
+	  if (objet instanceof Guide || objet instanceof ElementPresentation
+		  || objet instanceof PresentationElementModele) {
+		ImageIcon icone;
+		try {
+		  icone = ( (ElementPresentation) objet).get_icone();
+		  java.awt.Image img = icone.getImage().getScaledInstance(14, 14,
+			  Image.SCALE_SMOOTH);
 
-      try {
-        icone = ( (ElementPresentation) objet).get_icone();
-        java.awt.Image img = icone.getImage().getScaledInstance(14, 14,
-            Image.SCALE_SMOOTH);
-        setIcon(new ImageIcon(img));
+		  editingIcon = new ImageIcon(img);
+		}
+		catch (Exception e) {
+		  icone = lnkSysteme.getLnkPreferences().getIconeDefaut("defaut_icon");
+		  java.awt.Image img = icone.getImage().getScaledInstance(14, 14,
+			  Image.SCALE_SMOOTH);
+		  editingIcon = new ImageIcon(img);
+		}
+	  }
+	  return c;
+	}
 
-      }
-      catch (Exception e) {
-        icone = ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            getLnkPreferences().getIconeDefaut("defaut_icon");
-        setIcon(icone);
-      }
-
-    }
-    return this;
-  }
-}
-
-class CellEditor
-    extends DefaultTreeCellEditor {
-  public CellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
-    super(tree, renderer);
-  }
-
-  public Component getTreeCellEditorComponent(JTree tree, Object value,
-                                              boolean sel, boolean expanded,
-                                              boolean leaf, int row) {
-    Component c = super.getTreeCellEditorComponent(tree, value, sel, expanded,
-        leaf, row);
-    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
-    Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
-    if (objet instanceof Guide || objet instanceof ElementPresentation
-        || objet instanceof PresentationElementModele) {
-      ImageIcon icone;
-      try {
-        icone = ( (ElementPresentation) objet).get_icone();
-        java.awt.Image img = icone.getImage().getScaledInstance(14, 14,
-            Image.SCALE_SMOOTH);
-
-        editingIcon = new ImageIcon(img);
-      }
-      catch (Exception e) {
-        icone = ArbrePresentationListener.lnkArbrePresentation.lnkSysteme.
-            getLnkPreferences().getIconeDefaut("defaut_icon");
-        java.awt.Image img = icone.getImage().getScaledInstance(14, 14,
-            Image.SCALE_SMOOTH);
-        editingIcon = new ImageIcon(img);
-      }
-    }
-    return c;
   }
 
 }

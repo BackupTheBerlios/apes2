@@ -78,6 +78,8 @@ public class Preferences {
   private FenetrePrincipale _lnkFenetrePrincipale ;
   private static java.util.prefs.Preferences prefUser = java.util.prefs.Preferences.userNodeForPackage(Preferences.class);
   private static java.util.prefs.Preferences prefExt = java.util.prefs.Preferences.userNodeForPackage(java.util.HashMap.class);
+	
+	private String _editeurPerso = "PIKA";
 
   public Preferences(FenetrePrincipale fp) throws ClassNotFoundException {
     this._lnkFenetrePrincipale = fp ;
@@ -88,7 +90,12 @@ public class Preferences {
       	System.out.println("Erreur création préférences.");
         //PogToolkit.showErrorMsg(fp.getLnkLangues().valeurDe("errcreationreppref"), fp);
 
-    extractHelp();
+// Mise en téléchargement de l'aide
+//    extractHelp();
+
+	File ff = new File(REPPREF + File.separatorChar + "AidePOG");
+	if (!ff.exists())
+		fp.getLnkDebug().debogage("Vous n'avez pas d'aide installée. Il faut la télécharger à partir du site Internet de POG.");
 
     String fichierLangueDefaut = REPPREF + File.separatorChar + Langues.NOMBASE + "_" + Langues.LANGUEDEFAUT + ".properties";
     if (!PogToolkit.fileExists(fichierLangueDefaut))
@@ -230,8 +237,10 @@ public class Preferences {
     catch (Exception ex) {}
   }
 
-  public String get_editeur(String ext) {
-      return( (String)_associationDocExe.get(ext));
+	public String get_editeur(String ext) {
+		if (ext.endsWith("html") || ext.endsWith("htm"))
+			return _editeurPerso;
+		return( (String)_associationDocExe.get(ext));
   }
 
   public HashMap getAssociations()
@@ -269,7 +278,7 @@ public class Preferences {
       return getIcone("TreeWorkDefFlow");
     if (element instanceof ProcessPerformer)
       return getIcone("ProcessPerformer");
-    _lnkFenetrePrincipale.getLnkDebug().debogage("Icone manquante pour le type : " + element.getClass().getName());
+    _lnkFenetrePrincipale.getLnkDebug().debogage(_lnkFenetrePrincipale.getLnkLangues().valeurDe("iconemanque").replaceFirst("ARG0", element.getClass().getName()));
     return getIcone("POG/interfaceGraphique/utile/icone/defaut/defaut_icon.gif");
   }
 
@@ -309,7 +318,7 @@ public class Preferences {
 
     // Sinon, icone par defaut
     if (ii == null) {
-      _lnkFenetrePrincipale.getLnkDebug().debogage("Icone manquante : " + nom);
+      _lnkFenetrePrincipale.getLnkDebug().debogage(_lnkFenetrePrincipale.getLnkLangues().valeurDe("iconemanque").replaceFirst("ARG0", nom));
       thepath = "POG/interfaceGraphique/utile/icone/defaut/defaut_icon.gif";
       ii = myGetIcon(thepath);
     }

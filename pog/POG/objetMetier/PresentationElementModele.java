@@ -28,13 +28,8 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
-import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
-import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
-import org.ipsquad.apes.model.spem.process.structure.Activity;
-import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
-import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 import POG.interfaceGraphique.utile.trace.Debug;
 
@@ -74,27 +69,6 @@ public class PresentationElementModele extends ElementPresentation {
     return lnkModelElement;
   }
 
-  public String getStringType()
-     {
-       if (this._stringType == null) {
-      if (this.lnkModelElement instanceof ProcessComponent) {
-        this._stringType = "";
-      }
-      else if (this.lnkModelElement instanceof Activity) {
-        this._stringType = "Activite";
-      }
-      else if (this.lnkModelElement instanceof WorkProduct) {
-        this._stringType = "Produit";
-      }
-      else if (this.lnkModelElement instanceof ApesWorkDefinition) {
-        this._stringType = "DefTrav";
-      }
-      else if (this.lnkModelElement instanceof ProcessRole) {
-        this._stringType = "Role";
-      }
-    }
-    return this._stringType;
-  }
 
   public PresentationElementModele(String id, ImageIcon ico, ModelElement element) {
     super(id, ico);

@@ -136,8 +136,7 @@ public class PanneauDefinitionTravail extends PanneauDetail {
   public void afficherMenuGuides(Component compo, int x, int y) {
     JPopupMenu popup = new JPopupMenu();
     popup.setBackground(java.awt.Color.CYAN);
-    Vector vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().
-        type("DefTrav");
+    Vector vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().type("ApesWorkDefinition");
     Enumeration enum = vTypes.elements();
     while (enum.hasMoreElements()) {
       String value = (String) enum.nextElement();

@@ -135,7 +135,7 @@ public class POGMenu extends JMenuBar {
 
     jMenuSynchroniser.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("synchroniser"));
     jMenuSynchroniser.addActionListener(lnkMenuListener);
-    jMenuSynchroniser.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("synchroniser"));
+    jMenuSynchroniser.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("process_tree_node_process"));
 
     jMenuExtraire.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("extraire"));
     jMenuExtraire.addActionListener(lnkMenuListener);

@@ -28,7 +28,6 @@ import java.io.OutputStreamWriter;
 import java.util.Vector;
 
 import POG.interfaceGraphique.action.Systeme;
-import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.utile.trace.Debug;
 import POG.objetMetier.ElementPresentation;
 import POG.utile.PogToolkit;
@@ -49,9 +48,10 @@ public class ControleurExporter extends ControleurSemantique {
     File ff = null;
     try{
         String ancienuserdir = System.getProperty("user.dir");
-        ff = new File(System.getProperty("user.dir") + File.separator + "tempEXP");
-        if (!ff.exists())
-          ff.mkdirs();
+		int j = 0;
+        while ((ff = new File(System.getProperty("user.dir") + File.separator + "tempEXP" + j)).exists())
+        	j++;
+        ff.mkdirs();
 
         //Suppression de l'ancienne archive et creation de la nouvelle
         String pathArchive = new String(destination.getAbsolutePath());
@@ -83,7 +83,7 @@ public class ControleurExporter extends ControleurSemantique {
 			(new File(ff.getAbsolutePath() + File.separator + "images")).mkdirs();
 			File [] sousf = fima.listFiles();
 			for (int i = 0; i < sousf.length; i++) {
-				lnkDebug.patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("duplimg") + Math.abs((i / sousf.length) * 100) + "%");
+				lnkDebug.patienter("duplimg", i, sousf.length);
 				if (sousf[i].isFile()) {
 					PogToolkit.copyFile(sousf[i].getAbsolutePath(), ff.getAbsolutePath() + File.separator + "images" + File.separator + sousf[i].getName());
 					archive.ajouteFichier(new File(ff.getAbsolutePath() + File.separator + "images" + File.separator + sousf[i].getName()), new String("images" + File.separator + sousf[i].getName()), "Fichier images");
@@ -96,12 +96,12 @@ public class ControleurExporter extends ControleurSemantique {
           //lnkDebug.patienter("Copie du modèle...");
           //PogToolkit.copyFile(lnkControleurPresentation.get_pathModele().getAbsolutePath(), ff.getAbsolutePath() + File.separator + lnkControleurPresentation.getlnkPresentation().get_nomPresentation());
 
-		  lnkDebug.patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("dezipmo"));
+		  lnkDebug.patienter("dezipmo", 0, 0);
           ZIP archive2 = new ZIP(lnkControleurPresentation.get_pathModele().getAbsolutePath());
           Vector vv = archive2.contenu();
           archive2.deziper(ff);
 
-		  lnkDebug.patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("metmo"));
+		  lnkDebug.patienter("metmo", 0, 0);
           for (int k = 0; k < vv.size(); k++) {
             File f = new File( (String) ( (Vector) vv.get(k)).get(0));
             if (f.getName().indexOf(".") != -1)
@@ -119,14 +119,14 @@ public class ControleurExporter extends ControleurSemantique {
             archive.ajouteFichier(new File(ff.getAbsolutePath() + File.separator + listFichiers[i]),  (String)listFichiers[i], "Fichier de la presentation");
         }
         // et compression
-        lnkDebug.patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("compression"));
+        lnkDebug.patienter("compression", 0, 0);
         archive.ziper();
 
         PogToolkit.renameFile(archive.getFichier(), destination.getAbsolutePath());
 
         System.setProperty("user.dir", ancienuserdir);
 
-		lnkDebug.patienter("");
+		lnkDebug.patienter("", 0, 0);
 
         try {
           PogToolkit.delFile(ff.getAbsolutePath());
@@ -139,7 +139,7 @@ public class ControleurExporter extends ControleurSemantique {
         return true;
     }
     catch (DelException d) {
-      lnkDebug.debogage("Le dossier temporaire \"" + ff.getAbsolutePath() + "\" n'a pu être supprimé !!");
+      lnkDebug.debogage(lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("dossiertemp").replaceFirst("ARG0", ff.getAbsolutePath()));
       return true;
     }
     catch(Exception e){
@@ -157,7 +157,7 @@ public class ControleurExporter extends ControleurSemantique {
     int index;
 
     for(int i = 0; i < listElmtPres.length; i++){
-    	lnkSysteme.lnkFenetrePrincipale.getLnkDebug().patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("duplfich") + (int)(((float)i / (float)listElmtPres.length) * 100.00) + "%");
+    	lnkSysteme.lnkFenetrePrincipale.getLnkDebug().patienter("duplfich", i, listElmtPres.length);
       if (((ElementPresentation)listElmtPres[i]).getContenu() != null) {
         source = ( (ElementPresentation) listElmtPres[i]).getContenu().getAbsolutePath();
         index = source.lastIndexOf(File.separator);

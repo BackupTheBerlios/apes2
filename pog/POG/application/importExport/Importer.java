@@ -93,7 +93,7 @@ public class Importer{
       parseur monpar = new parseur((float)fileXML.length());
       saxParser.parse( fileXML, monpar);
       ctr.synchroniserApes(true);
-	  FenetrePrincipale.INSTANCE.getLnkDebug().patienter("");
+	  FenetrePrincipale.INSTANCE.getLnkDebug().patienter("", 0, 0);
     }
     catch (Exception e) {
       d.debogage("Erreur lors du chargement du fichier : " + e.getMessage());
@@ -120,14 +120,14 @@ public class Importer{
     public void startElement(String name, AttributeList atts) throws
         SAXException {
 			lgfaite = lgfaite + (float)name.length();
-			FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("parse") + (int)((lgfaite / lgafaire) * 100.0) + "%");
+			FenetrePrincipale.INSTANCE.getLnkDebug().patienter("parse", lgfaite, lgafaire);
       _curnom = _curnom + "." + name;
     }
 
     public void endElement(String name) throws SAXException {
       try {
       	lgfaite = lgfaite + (float)name.length();
-		FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("parse") + (int)((lgfaite / lgafaire) * 100.0) + "%");
+		FenetrePrincipale.INSTANCE.getLnkDebug().patienter("parse", lgfaite, lgafaire);
 		if (!tmpcontent.equals("")) {
 			inittmpstruct(tmpcontent);
 			tmpcontent = "";
@@ -174,7 +174,7 @@ public class Importer{
 
     public void characters(char[] charArray, int start, int length) throws
         SAXException {
-        	FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("parse") + (int)((lgfaite / lgafaire) * 100.0) + "%");
+        	FenetrePrincipale.INSTANCE.getLnkDebug().patienter("parse", lgfaite, lgafaire);
         	lgfaite = lgfaite + (float)length;
       	if (start + length >= charArray.length) {
 			tmpcontent = new String(charArray, start, length);

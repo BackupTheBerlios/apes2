@@ -42,6 +42,7 @@ import POG.interfaceGraphique.action.ControleurPanneaux;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.objetMetier.ElementPresentation;
 import POG.objetMetier.Guide;
+import POG.objetMetier.PresentationElementModele;
 
 public class PanneauElementPresentation extends PanneauDetail {
   JScrollPane scrollpaneGuides;
@@ -104,7 +105,7 @@ public class PanneauElementPresentation extends PanneauDetail {
     JPopupMenu popup = new JPopupMenu();
     popup.setBackground(java.awt.Color.CYAN);
     Vector vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().
-        type("ElementDePresentation");
+        type("ALL");
     Enumeration enum = vTypes.elements();
     while (enum.hasMoreElements()) {
       String value = (String) enum.nextElement();
@@ -118,6 +119,9 @@ public class PanneauElementPresentation extends PanneauDetail {
 
   public void loadElement(ElementPresentation elem) {
     _elementCourant = elem;
+    // Cas des paquetage :
+    if (elem instanceof PresentationElementModele) 
+    	setNom_modele(((PresentationElementModele)elem).getLnkModelElement().getName());
     setLabelNomPres(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nomElemPres"));
     setNom_Pres(elem.get_nomPresentation());
     setDesc(elem.get_description());

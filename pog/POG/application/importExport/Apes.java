@@ -25,13 +25,16 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
+import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
@@ -44,9 +47,10 @@ public class Apes {
 
   private static File mFile;
   private static Vector _lstElement;
+  private static HashMap _hdiag;
 
   public static ProcessComponent loadModel(File nomfich) {
-	FenetrePrincipale.INSTANCE.getLnkDebug().patienter(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("chargeapes"));
+	FenetrePrincipale.INSTANCE.getLnkDebug().patienter("chargeapes", 0, 0);
     mFile = nomfich;
     ApesProcess ap = new ApesProcess("Project");
     try {
@@ -110,6 +114,7 @@ public class Apes {
       ObjIn in = new ObjIn(data);
       Vector v = (Vector) in.readObject();
       ap.addModelElement( (ProcessComponent) v.get(0));
+	  _hdiag = (HashMap)v.get(1);
       projectZip.close();
 
       return true;
@@ -161,5 +166,9 @@ public class Apes {
   public static Vector getListeElementApes() {
     return _lstElement;
   }
+
+	public static SpemGraphAdapter getDiagramme(SpemDiagram sp) {
+		return (SpemGraphAdapter)_hdiag.get(sp);
+	}
 
 }

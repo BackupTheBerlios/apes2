@@ -126,8 +126,8 @@ public class MainToolBar extends JToolBar
   public void setButtonsState(boolean state)
   {
     _btnSave.setEnabled(state);
-    _btnCheckSPEMs.setEnabled(state);
-    _btnExport.setEnabled(state);
+//    _btnCheckSPEMs.setEnabled(state);
+//    _btnExport.setEnabled(state);
   }
 
 }

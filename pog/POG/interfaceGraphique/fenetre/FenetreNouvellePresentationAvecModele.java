@@ -92,7 +92,8 @@ public class FenetreNouvellePresentationAvecModele extends FenetrePOG {
     this.setVisible(false);
     if (this.verifParametres()) {
       lnkFenetrePrincipale.getLnkSysteme().nouvellePresentationAvecModele(this.jTextFieldBiblio.getText(), this.jTextFieldNomModele.getText());
-      lnkFenetrePrincipale.getLnkArbrePresentation().selectionnerRacine();
+// Traitement par thread => erreurs
+//      lnkFenetrePrincipale.getLnkArbrePresentation().selectionnerRacine();
     }
   }
 

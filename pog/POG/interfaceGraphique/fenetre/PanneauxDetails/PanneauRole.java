@@ -131,7 +131,7 @@ public class PanneauRole extends PanneauDetail {
     JPopupMenu popup = new JPopupMenu();
     popup.setBackground(java.awt.Color.CYAN);
     Vector vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().
-        type("Role");
+        type("ProcessRole");
     Enumeration enum = vTypes.elements();
     while (enum.hasMoreElements()) {
       String value = (String) enum.nextElement();

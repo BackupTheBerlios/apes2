@@ -38,6 +38,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -55,7 +56,6 @@ import POG.outil.html.pika.appliTest;
 import POG.utile.PogToolkit;
 import POG.utile.propriete.Langues;
 import POG.utile.propriete.Preferences;
-import javax.swing.JLabel;
 
 public class FenetrePrincipale
     extends JFrame {
@@ -192,7 +192,7 @@ public class FenetrePrincipale
    */
   private ArbreExplorateur lnkArbreExplorateur = null;
   public JLabel jLabelPathBib = new JLabel();
-
+  
   private MainToolBar lnkMainToolBar = null;
 
   private JFileChooser lnkJIconChooser = null;
@@ -234,18 +234,18 @@ public class FenetrePrincipale
       lnkLangues = new Langues(lnkPreferences.get_langue());
       lnkDebug.debogage("Chargement du système :");
       lnkSysteme = new Systeme(lnkPreferences, this);
-      lnkDebug.debogage("...Menu...");
+      lnkDebug.debogage("... Menu ...");
       _menu = new POGMenu(this);
-      lnkDebug.debogage("...Arbres...");
+      lnkDebug.debogage("... Arbres ...");
       lnkArbrePresentation = new ArbrePresentation(lnkSysteme);
       lnkArbreExplorateur = new ArbreExplorateur(lnkSysteme);
       lnkPanneauBibliotheque = new PanneauBibliotheque(this);
-      lnkDebug.debogage("...ToolBar...");
+      lnkDebug.debogage("... ToolBar ...");
       lnkMainToolBar = new MainToolBar(this);
       lnkMainToolBar.setButtonsState(false);
-      lnkDebug.debogage("...Controleur...");
+      lnkDebug.debogage("... Controleur ...");
       lnkControleurPanneaux = new ControleurPanneaux(jSplitPane4, _menu.getMenuCentral(), lnkSysteme);
-      System.out.println("...Interface Graphique");
+      System.out.println("... Interface Graphique");
       try {
         jbInit();
       }
@@ -347,10 +347,51 @@ public class FenetrePrincipale
     jSplitPane4.setDividerLocation(600);
 
     jPanel5.setLayout(borderLayout7);
-    JPanel jPanel6 = new JPanel();
-    jPanel6.setLayout(new BorderLayout());
-    jPanel6.add(jLabelPathBib, BorderLayout.CENTER);
-    jPanel5.add(jPanel6, BorderLayout.NORTH);
+    JPanel panelBiblio = new JPanel();
+	panelBiblio.setLayout(new BorderLayout());
+    
+    
+	JButton btnChangerBib = new JButton();
+	btnChangerBib.setToolTipText(lnkLangues.valeurDe("changerbiblio"));
+	btnChangerBib.setIcon(lnkPreferences.getIconeDefaut("synchroniser"));
+    final FenetrePrincipale fpp = this;
+    
+    btnChangerBib.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			if (lnkSysteme.getlnkControleurPresentation().getlnkPresentation() == null)
+				return;
+			File newBib = PogToolkit.chooseDirectory(fpp);
+			lnkSysteme.changerBibliotheque(newBib);
+		} 
+  	});
+	JButton brefr = new JButton();
+	brefr.setIcon(lnkPreferences.getIconeDefaut("process_tree_node_process"));
+
+	brefr.addActionListener(new ActionListener() {
+	  public void actionPerformed(ActionEvent evt) {
+		lnkArbreExplorateur.load();
+	  }
+	});
+
+	JButton badd = new JButton();
+	badd.setToolTipText(lnkLangues.valeurDe("copierfich"));
+	badd.setIcon(lnkPreferences.getIconeDefaut("menu_item_add_artefact"));
+	
+	badd.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent evt) {
+			if (lnkSysteme.getlnkControleurPresentation().getlnkPresentation() == null)
+				return;
+			File tocopy = PogToolkit.chooseFile(fpp);
+			PogToolkit.copyFile(tocopy.getAbsolutePath(), lnkSysteme.getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath() + File.separator + tocopy.getName());
+			lnkArbreExplorateur.load();
+		}
+  	});
+
+	panelBiblio.add(jLabelPathBib, BorderLayout.NORTH);
+	panelBiblio.add(btnChangerBib, BorderLayout.EAST);
+	panelBiblio.add(badd, BorderLayout.CENTER);
+	panelBiblio.add(brefr, BorderLayout.WEST);
+    jPanel5.add(panelBiblio, BorderLayout.NORTH);
     jPanel5.add(lnkArbreExplorateur.get_arbre(), BorderLayout.CENTER);
 
     jScrollPane1.getViewport().add(jPanel5, null);
@@ -364,9 +405,14 @@ public class FenetrePrincipale
     jPanel4.setLayout(borderLayout6);
 
     JPanel panelOrganiser = new JPanel();
-    JButton bDown = new JButton(this.lnkLangues.valeurDe("descendre"));
-    JButton bUp = new JButton(this.lnkLangues.valeurDe("monter"));
-    JButton brefr = new JButton();
+    JButton bDown = new JButton();
+    bDown.setIcon(lnkPreferences.getIconeDefaut("down"));
+    bDown.setToolTipText(lnkLangues.valeurDe("descendre"));
+    JButton bUp = new JButton();
+    bUp.setToolTipText(lnkLangues.valeurDe("monter"));
+    bUp.setIcon(lnkPreferences.getIconeDefaut("up"));
+    brefr = new JButton();
+    brefr.setToolTipText(lnkLangues.valeurDe("reload"));
     brefr.setIcon(lnkPreferences.getIconeDefaut("process_tree_node_process"));
     panelOrganiser.add(brefr);
     panelOrganiser.add(bUp);

@@ -143,7 +143,7 @@ list_guides.addKeyListener(listenerJtableGuides);
     JPopupMenu popup = new JPopupMenu();
     popup.setBackground(java.awt.Color.CYAN);
     Vector vTypes = lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().
-        type("Produit");
+        type("WorkProduct");
     Enumeration enum = vTypes.elements();
     while (enum.hasMoreElements()) {
       String value = (String) enum.nextElement();

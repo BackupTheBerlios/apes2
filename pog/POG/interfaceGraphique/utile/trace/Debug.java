@@ -34,6 +34,8 @@ import javax.swing.text.StyleContext;
 
 import javax.swing.text.StyleConstants;
 
+import POG.interfaceGraphique.fenetre.FenetrePrincipale;
+
 import java.awt.Color;
 
 
@@ -66,11 +68,9 @@ public class Debug {
 	afficherStyle(message, "normal");
   }
 
-  public void afficher(String [] message) {
+  public void afficher(Object [] message) {
     for (int i = 0; i < message.length; i++)
-      afficher("id: " + message[i]);
-    if (message.length == 0)
-      afficher("NON ARRAY");
+      afficher(message[i].toString());
   }
 
   public void debogage(String message) {
@@ -80,28 +80,12 @@ public class Debug {
 
 	private String _patientermess = null;
 
-	public void patienter(String message) {
-		try {
-			if (_patientermess == null) {
-				_texte.getStyledDocument().insertString(_texte.getStyledDocument().getLength(), message, _texte.getStyledDocument().getStyle("orange"));
-			}
-			else {
-				_texte.getStyledDocument().remove(_texte.getStyledDocument().getLength() - _patientermess.length(), _patientermess.length());
-				_texte.getStyledDocument().insertString(_texte.getStyledDocument().getLength(), message, _texte.getStyledDocument().getStyle("orange"));
-			}
-			_patientermess = new String(message);
-		} catch (Exception e) {
-		  e.printStackTrace();
-		}
-//		System.out.println("PAT: " + message);
-	}
-
-
 	public void verificationMessage(String message) {
 		afficherStyle(message, "bleu");
 	}
 
 	private void afficherStyle(String message, String style) {
+		message = traiteMessage(message);
 		if (_patientermess != null)
 			message = System.getProperty("line.separator") + message;
 		_patientermess = null;
@@ -114,7 +98,38 @@ public class Debug {
 	}
 
 
-  	private JTextPane _texte = new JTextPane();
+  	/**
+	 * @param message
+	 * @return
+	 */
+	private String traiteMessage(String message) {
+		if (message.indexOf(" ") == -1)
+			message = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe(message);
+		return message;
+	}
 
+	private JTextPane _texte = new JTextPane();
+
+	public void patienter(String message, float num, float denum) {
+		int i = -1;
+		if (denum != 0)
+			i = Math.abs((int)((num / denum) * 100.0));
+		message = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe(message);
+		if ((i >= 0) && (i <= 100))
+			message = message + " " + i + "%";
+		try {
+			if (_patientermess == null) {
+				_texte.getStyledDocument().insertString(_texte.getStyledDocument().getLength(), message, _texte.getStyledDocument().getStyle("orange"));
+			}
+			else {
+				_texte.getStyledDocument().remove(_texte.getStyledDocument().getLength() - _patientermess.length(), _patientermess.length());
+				_texte.getStyledDocument().insertString(_texte.getStyledDocument().getLength(), message, _texte.getStyledDocument().getStyle("orange"));
+			}
+			_patientermess = new String(message);
+		} catch (Exception e) {
+		  e.printStackTrace();
+		}
+
+	}
 }
 

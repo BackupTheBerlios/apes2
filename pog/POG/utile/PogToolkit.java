@@ -517,6 +517,7 @@ public class PogToolkit
   }
 
   public static void delFile(String fileName){
+  	System.gc();
   	System.out.println("DEL: " + fileName);
     File fich = new File(fileName);
     if (fich.exists()) {

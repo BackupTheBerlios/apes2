@@ -66,29 +66,15 @@ public class Langues {
   }
 
   public String valeurDe(String cle) {
-    String val = new String("");
-    String[] elem = cle.split(" ");
-    String s = new String();
-    for (int i = 0; i < elem.length; i++) {
-      s = getval(elem[i].toLowerCase());
-      if (s.equals(""))
-        s = elem[i];
-      if (Character.isUpperCase(elem[i].charAt(0)))
-        s = Character.toUpperCase(s.charAt(0)) + s.substring(1);
-      val = val + s + " ";
+    if ((cle.indexOf(" ") == -1) && (!cle.equals(""))) {
+		try {
+			cle = _langue.getString(cle.toLowerCase());
+		} catch (Exception e) {
+	  		System.out.println("Langue : !" + cle.toLowerCase() + "! not found");
+	  		cle = "";
+		}
     }
-    return val.substring(0, val.length() - 1);
-  }
-
-  private String getval(String cle) {
-    String val = new String("");
-    try {
-        val = _langue.getString(cle);
-    } catch (Exception e) {
-      System.out.println("Langue : !" + cle + "! not found");
-      return "";
-    }
-    return val;
+	return cle;
   }
 
   public boolean setLangue(String langue)

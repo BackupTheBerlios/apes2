@@ -36,6 +36,7 @@ import javax.swing.event.MenuListener;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauActivite;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauDefinitionTravail;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauDetail;
+import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauDiagram;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauElementPresentation;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauGuide;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauProduit;
@@ -162,11 +163,11 @@ public class ControleurPanneaux {
       lnkPanneauDetail = lnkPanneauDefinitionTravail;
       lnkPanneauDetail.setVisibleNomModele(true);
     }
-    else if (fenetre.equals("DElementPresentation")) {
+    else if (fenetre.equals("DElementPresentation") || fenetre.equals("DPackage")) {
       if (lnkPanneauElementPresentation == null)
         lnkPanneauElementPresentation = new PanneauElementPresentation(this);
       lnkPanneauDetail = lnkPanneauElementPresentation;
-      lnkPanneauDetail.setVisibleNomModele(false);
+      lnkPanneauDetail.setVisibleNomModele(fenetre.equals("DPackage"));
     }
     else if (fenetre.equals("DGuide")) {
       if (lnkPanneauGuide == null)
@@ -186,6 +187,9 @@ public class ControleurPanneaux {
       lnkPanneauDetail = lnkPanneauRole;
       lnkPanneauDetail.setVisibleNomModele(true);
     }
+	else if (fenetre.equals("DDiagram")) {
+	  lnkPanneauDetail = new PanneauDiagram(this, idelem);
+	}
     else {
     	loadVide();
     	return;
@@ -252,11 +256,12 @@ public class ControleurPanneaux {
 
     public void majMenu(String panneau) {
       _dernierPanneau = panneau ;
-      if (panneau.equals("DPOG"))
+      if (panneau.equals("DPOG") || panneau.equals("DDiagram"))
         _mnu.setVisible(false);
-      else
+      else {
         _mnu.setVisible(true);
-      _mnu.setText(lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe(panneau));
+      	_mnu.setText(lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe(panneau));
+      }
     }
 
     public void majContenuMenu()
@@ -294,15 +299,9 @@ public class ControleurPanneaux {
       {
         Vector vTypes;
         if (ep instanceof PresentationElementModele)
-        {
-          vTypes = getLnkSysteme().getLnkControleurGuide().
-              type( ( (PresentationElementModele) ep).getStringType());
-        }
+          vTypes = getLnkSysteme().getLnkControleurGuide().type( ( (PresentationElementModele) ep).getLnkModelElement().getClass().getName());
         else
-        {
-          vTypes = getLnkSysteme().getLnkControleurGuide().
-              type("ElementDePresentation");
-        }
+          vTypes = getLnkSysteme().getLnkControleurGuide().type("ALL");
         Enumeration enum = vTypes.elements();
         while (enum.hasMoreElements()) {
           String value = (String) enum.nextElement();
