@@ -35,13 +35,14 @@ import org.ipsquad.apes.ui.GraphFrame;
 
 /**
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ApesClipboardManager
 {
 	private static ArrayList mGraphCellsList ;
 	
 	public static  Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard(); 
+	//private static Object [] listCells ;
 	
 	public static void copy() 
 	{
@@ -55,7 +56,7 @@ public class ApesClipboardManager
 		Object [] listCells = (((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getSelectionCells()) ; 
 		ApesTransferable transfer = new ApesTransferable (listCells) ;
 		cb.setContents(transfer, null) ;
-		((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getModel().remove(listCells);
+		((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getModel().remove(listCells) ;
 	}
 	
 	public static void paste()
@@ -71,7 +72,7 @@ public class ApesClipboardManager
 			return;
 		}
 		try 
-		{		
+		{
 			adapter = (SpemGraphAdapter)(((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraphModel());
 			adapter.insert((ArrayList)t.getTransferData(ApesTransferable.arrayFlavor));
 		} 

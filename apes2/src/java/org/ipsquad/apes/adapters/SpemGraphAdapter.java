@@ -75,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -676,6 +676,24 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 		return null;
 	}
+	
+	public void cut( Object[] objects, boolean opaque)
+	{
+		ApesGraphCell cell;
+		Map attr = GraphConstants.createMap();
+		
+		for(int i = 0; i < objects.length;i++)
+		{
+			if( objects[i] instanceof ApesGraphCell)
+			{
+				cell = (ApesGraphCell) objects[i];
+				GraphConstants.setOpaque( cell.getAttributes(), opaque );
+				attr.put( cell, cell.getAttributes() );
+			}
+		}
+		super.edit(attr, null, null, null);
+	}
+	
 	
 	public abstract class Builder implements ModelVisitor, Serializable 
 	{

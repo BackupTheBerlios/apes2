@@ -52,7 +52,6 @@ public class ApesTransferable implements Transferable
 	public ApesTransferable (Object[] list)
 	{
 		//listCell = new List(ApesGraphCell);
-		System.out.println(list.length);
 		for(int i = 0; i < list.length; i++)
 		{
 			listCell.add(list[i]); 
