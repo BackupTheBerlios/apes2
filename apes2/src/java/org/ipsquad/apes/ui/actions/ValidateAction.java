@@ -32,7 +32,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Validate the current project
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ValidateAction extends ApesAction
 {
@@ -52,7 +52,7 @@ public class ValidateAction extends ApesAction
 		
 		TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
 		mTask.setName("Validate");
-		mTask.setLocation(parent.getWidth()/2-mTask.getWidth()/2,parent.getHeight()/2-mTask.getHeight()/2);
+		mTask.setBounds(parent.getWidth()/2-mTask.getWidth()/2,parent.getHeight()/2-mTask.getHeight()/2,300,300);
 		
 		mMonitor.setTask(mTask);
 		

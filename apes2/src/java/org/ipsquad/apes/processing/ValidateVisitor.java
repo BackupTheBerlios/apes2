@@ -49,7 +49,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -153,11 +153,52 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			mProductNames.add(product.getName());
 		}
 		
-		if (product.getResponsible()==null)
+		if( product.getReferences() == WorkProduct.NO_REFERENCES )
 		{
-			ErrorManager.getInstance().println(
-			ResourceManager.getInstance().getString("errorValidateWorkProductWithoutRole")+" : "+product.getName());
-			mHasErrors = true;
+			if( product.getResponsible() == null )
+			{
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateWorkProductWithoutResponsible")+" : "+product.getName());
+				mHasErrors = true;
+			}
+			if( product.getInputCount() == 0 && product.getOutputCount() == 0)
+			{	
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateWorkProductWithoutActivity")+" : "+product.getName());
+				mHasErrors = true;
+			}
+		}
+
+		if( product.getReferences() == WorkProduct.REFERENCES_BY_PROVIDED_INTERFACE )
+		{
+			if( product.getResponsible() == null )
+			{
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateWorkProductWithoutResponsible")+" : "+product.getName());
+				mHasErrors = true;
+			}
+			if( product.getInputCount() == 0 )
+			{
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateProvidedWorkProductActivity")+" : "+product.getName());
+				mHasErrors = true;
+			}
+		}	
+
+		if( product.getReferences() == WorkProduct.REFERENCES_BY_REQUIRED_INTERFACE )
+		{	
+			if( product.getResponsible() != null )
+			{
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductRole")+" : "+product.getName());
+				mHasErrors = true;
+			}
+			if( product.getInputCount() != 0 || product.getOutputCount() == 0 )
+			{
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductActivity")+" : "+product.getName());
+				mHasErrors = true;
+			}	
 		}
 		
 		if( product.getInputCount()==0 && product.getOutputCount()==0 && product.getResponsible()==null)
@@ -440,23 +481,6 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		ErrorManager.getInstance().println(
 		ResourceManager.getInstance().getString("errorValidateEnd"));
 		ErrorManager.getInstance().println("");
-		
-		/*if(!mHasErrors)
-		{
-			JOptionPane.showInternalConfirmDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
-			                        	      ResourceManager.getInstance().getString("msgValidate"),
-							      ResourceManager.getInstance().getString("msgTitleValidate"),
-							      JOptionPane.DEFAULT_OPTION,
-							      JOptionPane.INFORMATION_MESSAGE);
-		}
-		else
-		{
-			JOptionPane.showInternalConfirmDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
-			                        	      ResourceManager.getInstance().getString("errorValidate"),
-							      ResourceManager.getInstance().getString("errorTitleValidate"),
-							      JOptionPane.DEFAULT_OPTION,
-							      JOptionPane.ERROR_MESSAGE);
-		}*/
 	}
 
 };

@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Properties;
 
-
 import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
@@ -78,7 +77,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesMain
 {
@@ -200,32 +199,32 @@ public class ApesMain
 		//Open a file given in parameter
 		if(args.length>0)
 		{
-			if(args[0].endsWith(".apes"))
-			{	
-			try
+			if(args[0].endsWith("."+ResourceManager.getInstance().getString("apesFileExtension")))
 			{
+			  try
+			  {
 				
-				File mFile = new File(args[0]);
+			  	File mFile = new File(args[0]);
 				
 				LoadProject mMonitor = new LoadProject(mFile);
 				
 				ApesFrame parent = (ApesFrame)Context.getInstance().getTopLevelFrame();
 				
 				TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
-				mTask.setName("Loading");
+				mTask.setName(ResourceManager.getInstance().getString("titleLoading"));
 				mTask.setLocation(parent.getWidth()/2-mTask.getWidth() / 2,parent.getHeight()/2-mTask.getHeight()/2);
 				
 				mMonitor.setTask(mTask);
 				
 				mTask.show();
 				mTask.hide();
-			}
+			 }
 			
-			catch(Throwable t)
-			{
-				t.printStackTrace();
+			 catch(Throwable t)
+			 {
+			 	t.printStackTrace();
 				ErrorManager.getInstance().display("errorTitleOpenProcess", "errorOpenProcess");
-			}
+		 	 } 
 			}
 			else
 			{

@@ -59,7 +59,7 @@ import org.jgraph.graph.DefaultPort;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class Context
 {
@@ -73,7 +73,7 @@ public class Context
 	
 	public  static Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard(); 
 	
-	public void copier() 
+	public void copy() 
 	{
 		Object [] a = (((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getSelectionCells()) ; 
 		
@@ -82,7 +82,7 @@ public class Context
 	}
 	
 	
-	public void coller()
+	public void paste()
 	{
 		SpemGraphAdapter adapter ;
 		ApesGraphCell cell;
@@ -99,11 +99,15 @@ public class Context
 			graphCell = (ArrayList)t.getTransferData(ApesTransferable.arrayFlavor);		
 			adapter = (SpemGraphAdapter)(((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraphModel());
 			if (adapter instanceof ActivityGraphAdapter)
+			{	
 				adapter = (ActivityGraphAdapter) adapter ;
+			}
 			else
 			{
 				if (adapter instanceof FlowGraphAdapter)
+				{	
 					adapter = (FlowGraphAdapter) adapter;
+				}
 				else
 				{
 					if (adapter instanceof ResponsabilityGraphAdapter)
@@ -116,7 +120,7 @@ public class Context
 			{
 				if (graphCell.get(i) instanceof ApesGraphCell)
 				{
-					cell = (ApesGraphCell) graphCell.get(i) ;
+					cell = (ApesGraphCell) ((ApesGraphCell)graphCell.get(i)).clone() ;
 					Map attr = cell.getAttributes();
 					Map view = new HashMap();
 					view.put("Attributes", attr);

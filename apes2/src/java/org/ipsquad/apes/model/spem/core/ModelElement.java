@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 /**
  * Base class for the elements of the model
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ModelElement extends Element
 {
@@ -228,6 +228,7 @@ public abstract class ModelElement extends Element
 	public Object clone()
 	{
 		ModelElement me = (ModelElement) super.clone();
+		me.mParent = null;
 		me.mBehavior=new Vector();
 		//me.mPresentation = (Vector) mPresentation.clone();
 		return me;

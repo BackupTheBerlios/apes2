@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 /**
  * Encapsulates information describing inserting to the model, and is used to notify ApesMediator listeners of the change.
  *  
- * @version $Revision: 1.1 $ 
+ * @version $Revision: 1.2 $ 
  */
 public class InsertEvent extends Event
 {
@@ -44,7 +44,7 @@ public class InsertEvent extends Event
 	public String toString()
 	{
 		return "Inserted "+mInserted+" Parent "+mParent+" isAlreadyExist "+mIsAlreadyExistInModel
-		+" diagram "+mDiagram;
+		+" diagram "+mDiagram+" source "+mSource+" target "+mTarget;
 	}
 		
 	protected InsertEvent( SpemDiagram diagram, Object inserted, IPackage parent, boolean isAlreadyExist, Map attr )
