@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a Component cell
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
  
 public class ComponentView extends ApesVertexView
@@ -79,16 +79,16 @@ public class ComponentView extends ApesVertexView
 		int x[]=new int[5];
 		int y[]=new int[5];	
 		
-		x[0]= r.x; //+ r.width/2 - 20;
-		x[1]= r.x +r.width/2+50;//+ r.width/2 + 15;
-		x[2]= r.x +r.width/2+50;//+ r.width/2 + 20;
-		x[3]= r.x ;//+ r.width/2 + 20;
-		x[4]= r.x ;//+ r.width/2 - 20;
+		x[0]= r.x+r.width/2-50; //+ r.width/2 - 20;
+		x[1]= r.x+r.width/2+50;//+ r.width/2 + 15;
+		x[2]= r.x+r.width/2+50;//+ r.width/2 + 20;
+		x[3]= r.x+r.width/2-50;//+ r.width/2 + 20;
+		x[4]= r.x+r.width/2-50 ;//+ r.width/2 - 20;
 		y[0]= r.y;
 		y[1]= r.y;
-		y[2]= r.y +85;//+ 5;
-		y[3]= r.y +85;//+ r.height - 16;
-		y[4]= r.y + r.height - 16;
+		y[2]= r.y+r.height-15;//+ 5;
+		y[3]= r.y+r.height-15;//+ r.height - 16;
+		y[4]= r.y;
 		
 		line2 = new Line2D.Double((double) x[0], (double) y[0], (double) x[1], (double) y[1]);
 		

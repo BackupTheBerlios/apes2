@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a WorkDefinition cell
  *
- * @version $$
+ * @version $revision$
  */
 
 public class WorkDefinitionView extends ApesVertexView
@@ -79,11 +79,11 @@ public class WorkDefinitionView extends ApesVertexView
 		int x[]=new int[5];
 		int y[]=new int[5];	
 		
-		x[0]= r.x ;
-		x[1]= r.x + r.width;
-		x[2]= r.x + r.width;
-		x[3]= r.x;
-		x[4]= r.x;
+		x[0]= r.x+r.width/2-31;
+		x[1]= r.x+r.width/2+31;
+		x[2]= r.x+r.width/2+31;
+		x[3]= r.x+r.width/2-31;
+		x[4]= r.x+r.width/2-31;
 		y[0]= r.y;
 		y[1]= r.y;
 		y[2]= r.y + r.height-16;
