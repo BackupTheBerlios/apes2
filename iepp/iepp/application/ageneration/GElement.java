@@ -106,6 +106,7 @@ public class GElement
 		}
 		else if (this.element.getNiveau() >= this.elementSuivant.getNiveau())
 		{
+			//System.out.println("Mon niveau : " + this.getNiveauSuperieur() + " : " + (String)this.idDossier.get(this.getNiveauSuperieur()));
 			// l'élément courant est le dernier élément pour le niveau courant
 			pwFicTree.println("docAux = insDoc(" + (String)this.idDossier.get(this.getNiveauSuperieur()) + ", gLnk(\"R\",\" " + this.element.getNomPresentation() + "\", \"../" + this.construireNom()  + "\"))");
 			if (this.element.getNomIcone() != null)
@@ -166,7 +167,7 @@ public class GElement
 	{
 
 		File ficHTML = new File (GenerationManager.getInstance().getCheminGeneration() + File.separator + this.construireNom()) ;
-		System.out.println("Fichier  à créér : " + ficHTML);
+		//System.out.println("Fichier  à créér : " + ficHTML);
 		FileWriter fd = new FileWriter(ficHTML);
 		
 		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='../styles/" + GenerationManager.getInstance().getFeuilleCss() + "'>"
