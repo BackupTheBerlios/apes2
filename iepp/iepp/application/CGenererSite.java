@@ -37,6 +37,7 @@ public class CGenererSite extends CommandeNonAnnulable
 	public static final String APPLET_PATH="applet";
 	public static final String DESCRIPTION_PATH="description";
 	public static final String STYLES_PATH="styles";
+	public static final String EXTERIEUR_PATH="exterieur";
 	
 	public boolean executer()
 	{	
