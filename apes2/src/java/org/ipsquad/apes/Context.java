@@ -42,7 +42,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class Context
 {
@@ -146,6 +146,13 @@ public class Context
 			Context.getInstance().getAction("Remove").setEnabled(false);
 			Context.getInstance().getAction("Bigger").setEnabled(false);
 			Context.getInstance().getAction("Smaller").setEnabled(false);
+		}
+		
+		if(Context.getInstance().getAction("AlignH")!=null
+				&& Context.getInstance().getAction("AlignV")!=null)
+		{
+			Context.getInstance().getAction("AlignH").setEnabled(false);
+			Context.getInstance().getAction("AlignV").setEnabled(false);
 		}
 		
 		ApesMediator.getInstance().setProcess(project.getProcess());

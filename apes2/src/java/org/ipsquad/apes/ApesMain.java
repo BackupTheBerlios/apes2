@@ -44,6 +44,8 @@ import org.ipsquad.apes.processing.LoadProject;
 import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.actions.AboutAction;
 import org.ipsquad.apes.ui.actions.AddToModelAction;
+import org.ipsquad.apes.ui.actions.AlignHAction;
+import org.ipsquad.apes.ui.actions.AlignVAction;
 import org.ipsquad.apes.ui.actions.BiggerAction;
 import org.ipsquad.apes.ui.actions.ChangeBoldAction;
 import org.ipsquad.apes.ui.actions.ChangeColorAction;
@@ -77,7 +79,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ApesMain
 {
@@ -149,6 +151,9 @@ public class ApesMain
 		context.registerAction("Copy", new CopyAction());
 		context.registerAction("Paste", new PasteAction());
 		context.registerAction("Remove", new RemoveAction());
+		
+		context.registerAction("AlignH", new AlignHAction());
+		context.registerAction("AlignV", new AlignVAction());
 		
 		context.registerAction("Bigger", new BiggerAction());
 		context.registerAction("Smaller", new SmallerAction());

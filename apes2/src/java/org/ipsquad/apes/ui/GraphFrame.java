@@ -58,7 +58,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Base class for the graph editing internal frames
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class GraphFrame extends JInternalFrame implements InternalFrameListener, GraphModelListener, DropTargetListener, ApesMediator.Listener
 {
@@ -239,6 +239,9 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 		Context.getInstance().getAction("Remove").setEnabled(true);
 		Context.getInstance().getAction("Bigger").setEnabled(true);
 		Context.getInstance().getAction("Smaller").setEnabled(true);
+		
+		Context.getInstance().getAction("AlignH").setEnabled(true);
+		Context.getInstance().getAction("AlignV").setEnabled(true);
 	}
 
 	public void internalFrameDeactivated(InternalFrameEvent e)
@@ -248,6 +251,9 @@ public class GraphFrame extends JInternalFrame implements InternalFrameListener,
 		Context.getInstance().getAction("Remove").setEnabled(false);
 		Context.getInstance().getAction("Bigger").setEnabled(false);
 		Context.getInstance().getAction("Smaller").setEnabled(false);
+		
+		Context.getInstance().getAction("AlignH").setEnabled(false);
+		Context.getInstance().getAction("AlignV").setEnabled(false);
 	}
 
 	public void internalFrameOpened(InternalFrameEvent e) { }
