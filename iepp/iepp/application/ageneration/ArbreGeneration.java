@@ -117,6 +117,7 @@ public class ArbreGeneration
 
 	public static void initialiserMap()
 	{
+		mapCompteur = new HashMap();
 		mapCompteur.put("nbPagesTotal", new Integer(1));
 		mapCompteur.put("nbComposants", new Integer(0));
 		mapCompteur.put("nbRoles", new Integer(0));
@@ -129,6 +130,7 @@ public class ArbreGeneration
 		mapCompteur.put("nbPaquetages", new Integer(0));
 		mapCompteur.put("nbElementPresentation", new Integer(0));
 		
+		mapRecap = new HashMap();
 		mapRecap.put("roles", new Vector());
 		mapRecap.put("produits", new Vector());
 		mapRecap.put("activites", new Vector());

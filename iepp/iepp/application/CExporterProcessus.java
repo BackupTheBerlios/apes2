@@ -94,6 +94,7 @@ public class CExporterProcessus extends CommandeNonAnnulable
 	{
 		GenerationManager.getInstance().setListeAGenerer(Application.getApplication().getProjet().getDefProc().getListeAGenerer());
 		ArbreGeneration arbre = new ArbreGeneration();
+		ArbreGeneration.initialiserMap();
 		GenerationManager.recupererProduitsExterieurs();
 		GenerationManager.construireArbre(arbre, null);
 		File f = new File(GenerationManager.getInstance().getCheminGeneration());
