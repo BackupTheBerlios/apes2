@@ -36,10 +36,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.ipsquad.apes.Context;
 import org.ipsquad.utils.ConfigManager;
+import org.ipsquad.utils.ResourceManager;
+import org.ipsquad.utils.SimpleFileFilter;
 
 /**
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 public class DefaultPathPanel extends OptionPanel
 {
@@ -118,6 +121,17 @@ public class DefaultPathPanel extends OptionPanel
 	public void save ()
 	{
 		String name = new String(this.getName()) ;
+		if (this.getName().equals( PreferencesDialog.resMan.getString("toolsPresentation")))
+		 {
+			if (this.mDefaultPath.getText().equals(""))
+			{
+				Context.getInstance().getAction("ToolPresentation").setEnabled(false);
+			}
+			else
+			{
+				Context.getInstance().getAction("ToolPresentation").setEnabled(true);
+			}
+		 }
 		ConfigManager.getInstance().setProperty(this.mPanelKey+"defaultPath", this.mDefaultPath.getText());
 		try
 		{
@@ -139,11 +153,25 @@ public class DefaultPathPanel extends OptionPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			JFileChooser  chooser = new JFileChooser();
-			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			chooser.setDialogTitle(PreferencesDialog.resMan.getString("DefaultPathChooseLib"));
-			chooser.setAcceptAllFileFilterUsed(false);
-			int result = chooser.showDialog(DefaultPathPanel.this.getParent(),PreferencesDialog.resMan.getString("LibOK"));
+			JFileChooser  chooser ;
+			int result ;
+			if (DefaultPathPanel.this.getName().equals( PreferencesDialog.resMan.getString("toolsPresentation")))
+			{
+				String name = ResourceManager.getInstance().getString("toolsPresentation") ;
+				chooser = new JFileChooser(ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath"));
+				chooser.setDialogTitle(name);
+				chooser.setAcceptAllFileFilterUsed(true);
+				chooser.setFileFilter(new SimpleFileFilter("jar",name));
+				result = chooser.showDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),ResourceManager.getInstance().getString("fileOpen"));
+			}
+			else
+			{
+				chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setDialogTitle(PreferencesDialog.resMan.getString("DefaultPathChooseLib"));
+				chooser.setAcceptAllFileFilterUsed(false);
+				result = chooser.showDialog(DefaultPathPanel.this.getParent(),PreferencesDialog.resMan.getString("LibOK"));
+			}
 			if (result == JFileChooser.APPROVE_OPTION )
 			{
 				mDefaultPath.setText(chooser.getSelectedFile().getAbsolutePath());

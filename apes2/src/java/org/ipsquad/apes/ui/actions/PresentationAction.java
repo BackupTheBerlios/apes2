@@ -21,57 +21,51 @@
 package org.ipsquad.apes.ui.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 
-import javax.swing.JFileChooser;
 
-import org.ipsquad.apes.Context;
-import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.DefaultPathPanel;
 import org.ipsquad.utils.ConfigManager;
-import org.ipsquad.utils.ResourceManager;
-import org.ipsquad.utils.SimpleFileFilter;
 
 
 /**
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class PresentationAction extends ApesAction
 {
 	public PresentationAction()
 	{
-		super("toolsPresentation",  "icons/Empty.gif");
+		super("toolsPresentation",  "icons/Presentation.gif");
+		if ( ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath").equals(""))
+		{
+			setEnabled(false);
+		}
+		else
+		{
+			setEnabled(true);
+		}
 	}
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		String name = ResourceManager.getInstance().getString("toolsPresentation") ;
-		JFileChooser  chooser = new JFileChooser(ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath"));
-		chooser.setDialogTitle(name);
-		chooser.setAcceptAllFileFilterUsed(true);
-		chooser.setFileFilter(new SimpleFileFilter("jar",name));
-		int result = chooser.showDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),ResourceManager.getInstance().getString("fileOpen"));
-		if (result == JFileChooser.APPROVE_OPTION )
-		{
 			try 
 			{
-				File file = chooser.getSelectedFile();
+				String path = ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath");
 				String s = System.getProperty("os.name") ; 
                 if (s.charAt(0) == 'w' || s.charAt(0) == 'W') 
                 { 
-                    Runtime.getRuntime().exec("java -jar "+ " \""+ file.getPath() +"\" " ); 
+                    Runtime.getRuntime().exec("java -jar "+ " \""+ path +"\" " ); 
                 } 
                 else 
                 { 
-                    Runtime.getRuntime().exec("java -jar "+ file.getPath() ); 
+                    Runtime.getRuntime().exec("java -jar "+ path ); 
                 } 
+				
             } 
 			catch (Throwable t) 
 			{
 				t.printStackTrace() ;
 			} 
-		}
 	}
 
 }
