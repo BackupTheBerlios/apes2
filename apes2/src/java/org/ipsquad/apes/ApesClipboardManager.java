@@ -23,15 +23,25 @@ package org.ipsquad.apes;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Vector;
 
+import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.ApesTransferable;
+import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.model.frontend.ApesMediator;
+import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.jgraph.JGraph;
+import org.jgraph.graph.DefaultPort;
 
 /**
  *
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class ApesClipboardManager
 {
@@ -65,14 +75,14 @@ public class ApesClipboardManager
 		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Object [] listCells = graph.getSelectionCells() ; 
 		ApesTransferable transfer = new ApesTransferable(p, listCells) ;
-		
 		cb.setContents(transfer, null) ;
-		graph.getGraphLayoutCache().remove(listCells);
+		SpemGraphAdapter adapter = (SpemGraphAdapter)graph.getModel();		
+		adapter.remove(listCells);
 	}
 	
 	public static void paste()
 	{
-		/*if( Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame() == null )
+		if( Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame() == null )
 		{
 			return;
 		}
@@ -83,6 +93,8 @@ public class ApesClipboardManager
 		int projectHashCode;
 		Vector cells = null;
 		
+		Map attributes = ApesGraphConstants.createMap();
+
 		// Make sure the clipboard is not empty.
 		if (t == null)
 		{
@@ -91,39 +103,35 @@ public class ApesClipboardManager
 		}
 		try 
 		{
-			cells = (Vector)t.getTransferData(ApesTransferable.mArrayFlavor);
+			cells = (Vector)t.getTransferData(ApesTransferable.mArrayFlavor);			
 			projectHashCode = ((Integer)cells.remove(0)).intValue();
 			
-			if( Context.getInstance().getProject().hashCode() != projectHashCode )
-			{	
-				for( int i = 0; i < cells.size(); i++ )
-				{
-					if( cells.get(i) instanceof ApesGraphCell )
-					{
-						ApesGraphCell cell = (ApesGraphCell)cells.get(i);
-						cell.setUserObject(((Element)cell.getUserObject()).clone());
-					}
-				}
-			}
-			else
+				
+			for( int i = 0; i < cells.size(); i++ )
 			{
-				for( int i = 0; i < cells.size(); i++ )
+				if( cells.get(i) instanceof ApesGraphCell )
 				{
-					if( cells.get(i) instanceof ApesGraphCell )
+				    ApesGraphCell cell = (ApesGraphCell)cells.get(i);
+				    cell.add(new DefaultPort());
+				    Element element = (Element) cell.getUserObject();
+				    if( Context.getInstance().getProject().hashCode() != projectHashCode )
 					{
-						ApesGraphCell cell = (ApesGraphCell)cells.get(i);
-						Element element = (Element) cell.getUserObject(); 
+						cell.setUserObject(element.clone());
+					}
+				    else
+				    {
 						Object userObject = ApesMediator.getInstance().findByID(element.getID());
 						if( userObject != null )
 						{
 							cell.setUserObject(userObject);
 						}
-					}
+				    }
+				    Map attr = cell.getAttributes();
+					attributes.put(cell, attr);
 				}
 			}
-			
-
-			adapter.insertCells( cells );
+						
+			adapter.insert(cells.toArray(), attributes, null, null, null);				
 		} 
 		catch (IOException e) 
 		{
@@ -131,7 +139,7 @@ public class ApesClipboardManager
 		} 
 		catch (UnsupportedFlavorException e) {
 			System.out.println("DataFlower de mauvais type");
-		}*/
+		}
 	}
 
 }

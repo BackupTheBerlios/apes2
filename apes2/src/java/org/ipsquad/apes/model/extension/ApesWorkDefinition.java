@@ -35,7 +35,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 /**
  * WorkDefinition which contains an activity diagram and a flow diagram 
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesWorkDefinition extends WorkDefinition implements IPackage
 {
@@ -302,8 +302,8 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 	public Object clone()
 	{
 		ApesWorkDefinition aw = (ApesWorkDefinition)super.clone();
-		mFlowDiagram = null;
-		mActivityDiagram = null;
+		aw.mFlowDiagram = null;
+		aw.mActivityDiagram = null;
 		
 		return aw;
 	}

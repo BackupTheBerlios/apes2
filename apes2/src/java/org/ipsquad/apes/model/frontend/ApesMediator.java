@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -884,9 +884,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			if(elements[i] instanceof ApesWorkDefinition)
 			{
 				ApesWorkDefinition wd = (ApesWorkDefinition)elements[i];
+	
 				ApesEdit edit = createInsertModelEdit(
 						new Object[]{new ActivityDiagram(mConfig.getProperty("ActivityDiagram")), 
-						        new FlowDiagram(mConfig.getProperty("FlowDiagram"))}, 
+						             new FlowDiagram(mConfig.getProperty("FlowDiagram"))}, 
 						new Object[]{wd,wd},
 						null);
 				edit.end();
