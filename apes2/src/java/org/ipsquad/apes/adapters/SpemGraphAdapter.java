@@ -74,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -233,6 +233,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		//System.out.println("SpemGraphAdapter::remove");
 		
 		Vector cells_to_remove = new Vector();
+		Vector notes_to_remove = new Vector();
 		Vector sources_to_remove = new Vector();
 		Vector targets_to_remove = new Vector();
 		Map attr = new HashMap();
@@ -247,6 +248,10 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			{
 				cells_to_remove.add( ((ApesGraphCell)filtered_roots.get(i)).getUserObject());
 			}
+			else if( filtered_roots.get(i) instanceof NoteCell )
+			{
+				notes_to_remove.add(filtered_roots.get(i));
+			}
 			else if ( filtered_roots.get(i) instanceof TransitionEdge )
 			{
 				TransitionEdge te = (TransitionEdge) filtered_roots.get(i);
@@ -254,6 +259,10 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				sources_to_remove.add( t.getInputModelElement() );
 				targets_to_remove.add( t.getOutputModelElement() );
 				edges_to_remove.add( te );
+			}
+			else if ( filtered_roots.get(i) instanceof NoteEdge )
+			{
+				notes_to_remove.add(filtered_roots.get(i));
 			}
 			else if( filtered_roots.get(i) instanceof DefaultEdge )
 			{
@@ -270,7 +279,19 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			attr.put("Links", edges_to_remove.toArray() );
 		}
 		
-		remove( cells_to_remove.toArray(), sources_to_remove.toArray(), targets_to_remove.toArray(), attr );
+		if( cells_to_remove.size() > 0 
+			|| sources_to_remove.size() > 0 
+			|| targets_to_remove.size() > 0)
+		{	
+			remove( cells_to_remove.toArray(), sources_to_remove.toArray(), targets_to_remove.toArray(), attr );
+		}
+		
+		if( notes_to_remove.size() > 0 )
+		{
+			Vector related = new Vector();
+			addRelated( notes_to_remove.toArray(), related );
+			super.remove( related.toArray() );
+		}
 	}
 
 	public void edit(
@@ -320,13 +341,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				related.add(cells[i]);
 			}
 
-			if(cells[i] instanceof ApesGraphCell)
-			{
-				ApesGraphCell vertex = (ApesGraphCell)cells[i];    
-				List children = vertex.getChildren();
-				addRelated(children.toArray(), related);
-			}
-			else if(cells[i] instanceof Port)
+			if(cells[i] instanceof Port)
 			{
 				Iterator it = ((Port)cells[i]).edges();     
 				while(it.hasNext())
@@ -338,6 +353,12 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 						related.add(o);
 					}
 				}
+			}
+			else if(cells[i] instanceof DefaultGraphCell)
+			{
+				DefaultGraphCell vertex = (DefaultGraphCell)cells[i];    
+				List children = vertex.getChildren();
+				addRelated(children.toArray(), related);
 			}
 		}												
 	}

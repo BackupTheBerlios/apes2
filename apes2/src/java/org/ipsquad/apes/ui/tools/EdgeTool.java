@@ -31,20 +31,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ipsquad.apes.adapters.NoteCell;
+import org.ipsquad.apes.adapters.NoteEdge;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.jgraph.JGraph;
 import org.jgraph.graph.BasicMarqueeHandler;
+import org.jgraph.graph.ConnectionSet;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.GraphConstants;
+import org.jgraph.graph.Port;
 import org.jgraph.graph.PortView;
 
 /**
  * This tool allows to create edges in the graph
  * It use the prototype design pattern to clone edges
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class EdgeTool extends Tool
 {
@@ -121,10 +124,11 @@ public class EdgeTool extends Tool
 			if(e!=null && !e.isConsumed() && mPort!=null && mFirstPort!=null && mFirstPort!=mPort)
 			{
 				mGraph.clearSelection();
+				DefaultEdge edge = null;
 				
 				if( mFirstPort.getParentView() != null && mPort.getParentView() != null )
 				{
-					DefaultEdge edge = (DefaultEdge) mPrototype.clone();
+					edge = (DefaultEdge) mPrototype.clone();
 					Map view = new HashMap();
 					view.put( "firstPort",mFirstPort.getCell());
 					view.put( "endPort",mPort.getCell());
@@ -135,14 +139,16 @@ public class EdgeTool extends Tool
 					
 					if (mPort.getParentView().getCell() instanceof NoteCell || mFirstPort.getParentView().getCell() instanceof NoteCell)
 					{	
-						Map map = GraphConstants.createMap();
-						GraphConstants.setDashPattern(map, new float[] { 3, 3 });
-						GraphConstants.setEditable(map, false);
-						GraphConstants.setLineEnd(map,GraphConstants.ARROW_NONE);
-						edge.changeAttributes(map);
-						edge.setSource(mFirstPort.getCell());
-						edge.setTarget(mPort.getCell());
-						((DefaultGraphModel)mGraph.getModel()).insert(new Object[]{edge},attr,null,null,null);
+						Port firstPort = (Port)mFirstPort.getCell();
+						Port port = (Port)mPort.getCell();
+						edge = new NoteEdge();
+						ConnectionSet cs = new ConnectionSet();
+						edge.setSource( firstPort);
+						edge.setTarget( port );
+						firstPort.addEdge( edge );
+						port.addEdge( edge );
+						cs.connect(edge, mFirstPort, mPort );
+						((DefaultGraphModel)mGraph.getModel()).insert(new Object[]{edge},attr,cs,null,null);
 					}
 					else
 					{

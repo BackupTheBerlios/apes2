@@ -54,7 +54,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1310,7 +1310,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		public String toString()
 		{
 			String result = "element "+mElement;
-			result += " parent "+ mParent;
+			result += " parent "+ mParent+" diagram "+mDiagram;
 			return result;
 		}
 	}
