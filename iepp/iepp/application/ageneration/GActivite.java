@@ -51,6 +51,7 @@ public class GActivite extends GElementModele
 	 */
 	public String getNomRacine()
 	{
+		String retour = super.getNomRacine();
 		ArbreGeneration aux = this.arbre;
 		// on remonte jusqu'à un composant ou un paquetage de présentation
 		while (!aux.isRacine() && (! (aux.getElement() instanceof GDefinitionTravail)))
@@ -59,9 +60,9 @@ public class GActivite extends GElementModele
 		}
 		if (aux.isRacine())
 		{
-			return "";
+			return retour + " :: ";
 		}
-		return ( aux.getElement().getElementPresentation().getNomPresentation());
+		return ( retour + " :: " + aux.getElement().getElementPresentation().getNomPresentation());
 	}
 	
 
