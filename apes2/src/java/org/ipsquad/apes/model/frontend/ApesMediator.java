@@ -53,7 +53,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -559,7 +559,17 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				
 				InsertEvent event = (InsertEvent) events.get(i);
 				fireModelUpdated( event );
-				InsertedUndo edit = new InsertedUndo( event.getDiagram(), event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
+				InsertedUndo edit = null;
+				
+				if( event.isAlreadyExistInModel() )
+				{
+					edit = new InsertedUndo( event.getDiagram(), event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
+				}
+				else
+				{
+					edit = new InsertedUndo( null, event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
+				}
+				
 				edit.setIsChained( i == events.size()-1 ? linkedEvent : true );
 				postEdit( edit );
 			}

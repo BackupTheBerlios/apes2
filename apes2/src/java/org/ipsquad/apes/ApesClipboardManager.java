@@ -35,7 +35,7 @@ import org.ipsquad.apes.ui.GraphFrame;
 
 /**
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApesClipboardManager
 {
@@ -63,7 +63,6 @@ public class ApesClipboardManager
 		SpemGraphAdapter adapter ;
 		Vector cells = new Vector(),
 					edges = new Vector();
-		
 		Transferable t = cb.getContents(mGraphCellsList);
 		// Make sure the clipboard is not empty.
 		if (t == null)
