@@ -29,14 +29,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.ApesTransferable;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.model.frontend.ApesMediator;
+import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.jgraph.JGraph;
 
 /**
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ApesClipboardManager
 {
@@ -87,7 +90,6 @@ public class ApesClipboardManager
 		SpemGraphAdapter adapter = (SpemGraphAdapter)graph.getModel();
 		int projectHashCode;
 		Vector cells = null;
-		boolean cloneUserObject = false;
 		
 		// Make sure the clipboard is not empty.
 		if (t == null)
@@ -101,11 +103,35 @@ public class ApesClipboardManager
 			projectHashCode = ((Integer)cells.remove(0)).intValue();
 			
 			if( Context.getInstance().getProject().hashCode() != projectHashCode )
+			{	
+				for( int i = 0; i < cells.size(); i++ )
+				{
+					if( cells.get(i) instanceof ApesGraphCell )
+					{
+						ApesGraphCell cell = (ApesGraphCell)cells.get(i);
+						cell.setUserObject(((Element)cell.getUserObject()).clone());
+					}
+				}
+			}
+			else
 			{
-				cloneUserObject = true;
+				for( int i = 0; i < cells.size(); i++ )
+				{
+					if( cells.get(i) instanceof ApesGraphCell )
+					{
+						ApesGraphCell cell = (ApesGraphCell)cells.get(i);
+						Element element = (Element) cell.getUserObject(); 
+						Object userObject = ApesMediator.getInstance().findByID(element.getID());
+						if( userObject != null )
+						{
+							cell.setUserObject(userObject);
+						}
+					}
+				}
 			}
 			
-			adapter.insertCells( cells, cloneUserObject );
+
+			adapter.insertCells( cells );
 		} 
 		catch (IOException e) 
 		{

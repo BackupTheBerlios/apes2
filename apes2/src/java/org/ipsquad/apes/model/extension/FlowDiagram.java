@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -644,6 +644,14 @@ public class FlowDiagram extends SpemDiagram
 				{
 					ErrorManager.getInstance().printKey("errorActivityAlreadyHaveARole");
 					return false;
+				}
+			}
+			else
+			{
+				if(a.getOwner() != null)
+				{
+					ErrorManager.getInstance().printKey("errorActivityAlreadyHaveARole");
+					return false;				
 				}
 			}
 			

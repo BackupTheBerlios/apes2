@@ -54,7 +54,6 @@ import org.ipsquad.apes.model.spem.ModelVisitor;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
 import org.ipsquad.apes.model.spem.basic.GuidanceKind;
-import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.components.SProcess;
@@ -74,7 +73,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -367,9 +366,8 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	 * Insert a list of elements in this diagram
 	 * 
 	 * @param toInserts the elements to add
-	 * @param cloneUserObject true if the userObject of the cells must be clone, false otherwise
 	 */
-	public void insertCells( Vector toInserts, boolean cloneUserObject )
+	public void insertCells( Vector toInserts )
 	{
 		ApesGraphCell cell;
 		DefaultEdge edge;
@@ -379,7 +377,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		{
 			if (toInserts.get(i) instanceof ApesGraphCell)
 			{
-				addInsertCellToCommands( (ApesGraphCell)toInserts.get(i), cloneUserObject, commands );
+				addInsertCellToCommands( (ApesGraphCell)toInserts.get(i), commands );
 			}
 			if (toInserts.get(i) instanceof DefaultEdge)
 			{				
@@ -398,14 +396,9 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	 * @param cell the cell to add
 	 * @param commands the list of commands
 	 */
-	protected void addInsertCellToCommands( ApesGraphCell cell, boolean cloneUserObject, Vector commands )
+	protected void addInsertCellToCommands( ApesGraphCell cell, Vector commands )
 	{
 		String name = cell.toString();
-		
-		if(cloneUserObject)
-		{	
-			cell.setUserObject(((Element)cell.getUserObject()).clone());
-		}
 		
 		Map attr = cell.getAttributes();
 		Map view = new HashMap();
@@ -415,7 +408,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram, cell.getUserObject(), view ));
 		
 		// try to give the same name to the new object
-		if( cloneUserObject && !cell.toString().equals(name) )
+		if( !cell.toString().equals(name) )
 		{	
 			commands.add(
 					ApesMediator.getInstance().createChangeCommand(cell.getUserObject(),name,null));
@@ -531,7 +524,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	 * @param targets the targets of the edges to remove
 	 * @param attr Attributes to send to the ApesMediator. This attribute is not modified.
 	 */
-	public void remove( Object[] cells, Object[] sources, Object[] targets, Map attr )
+	protected void remove( Object[] cells, Object[] sources, Object[] targets, Map attr )
 	{
 		//System.out.println("Graph::tryRemove");
 		
@@ -597,6 +590,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 						apply =  new HashMap();
 						apply.put( objectToAdd, attr );
 					}
+					
 					super.insert( new Object[]{ objectToAdd }, apply, null, null, null );
 				}
 				else
@@ -724,7 +718,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 	}
 	
-	protected Vector findCellsByUserObject( Object[] userObjects )
+	public Vector findCellsByUserObject( Object[] userObjects )
 	{
 		Vector cells = new Vector();
 		Vector v_user_objets = new Vector();
@@ -760,10 +754,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 
 				Port sourcePort = (Port) edge.getSource();
 				Port targetPort = (Port) edge.getTarget();
-
-				DefaultGraphCell source = (DefaultGraphCell)getParent(sourcePort);
-				DefaultGraphCell target = (DefaultGraphCell)getParent(targetPort);
-
+				
 				sourcePort.addEdge(edge);
 				targetPort.addEdge(edge);
 			}

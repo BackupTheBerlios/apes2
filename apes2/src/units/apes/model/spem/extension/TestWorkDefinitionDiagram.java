@@ -25,8 +25,8 @@ package apes.model.spem.extension;
 import junit.framework.TestCase;
 
 import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
-import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 public class TestWorkDefinitionDiagram extends TestCase

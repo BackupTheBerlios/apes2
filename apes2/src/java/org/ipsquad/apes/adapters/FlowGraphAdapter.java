@@ -32,7 +32,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 /**
  * This adapter allows to display a flow diagram in a JGraph
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class FlowGraphAdapter extends SpemGraphAdapter
 {
@@ -85,6 +85,7 @@ public class FlowGraphAdapter extends SpemGraphAdapter
 
 		};
 	}
+	
 }
 
 

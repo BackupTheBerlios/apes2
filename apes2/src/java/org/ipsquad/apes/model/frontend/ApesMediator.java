@@ -54,7 +54,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -808,7 +808,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		Vector removedSources = new Vector(),
 				removedTargets = new Vector();
 
-		if( sources != null )
+		if( sources != null && sources.length == targets.length )
 		{
 			for( int i = 0; i < sources.length; i++ )
 			{
