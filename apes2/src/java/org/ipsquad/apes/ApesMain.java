@@ -77,7 +77,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesMain
 {
@@ -232,4 +232,5 @@ public class ApesMain
 			}
 		}
 	}
+
 }
