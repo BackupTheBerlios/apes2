@@ -51,7 +51,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -518,7 +518,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				}
 				j++;
 			}
-
+			
 			if(!inputTransitionFind && !outputTransitionFind)
 			{
 				if (me instanceof Activity)

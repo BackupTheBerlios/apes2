@@ -85,6 +85,7 @@ public class ApesUndoManager extends GraphUndoManager
 		{
 			super.redo(edit);
 			edit = nextEditToBeRedone(edit);
+
 			if( edit != null && edit instanceof ApesMediator.UndoableEdit && ((ApesMediator.UndoableEdit)edit).getIsChained())
 			{
 				redo(edit);

@@ -57,7 +57,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -121,10 +121,29 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				
 				loadProcess(ap);	
 			}
+			else
+			{
+				registerAllDiagrams(ap.getComponent());
+			}
 		}
 		else
 		{
 			initNewProcess(ap);
+		}
+	}
+	
+	private void registerAllDiagrams(IPackage p)
+	{
+		for( int i = 0; i < p.modelElementCount(); i++ )
+		{
+			if( p.getModelElement(i) instanceof SpemDiagram )
+			{
+				mDiagrams.add(p.getModelElement(i));
+			}
+			if( p.getModelElement(i) instanceof IPackage )
+			{
+				registerAllDiagrams((IPackage)p.getModelElement(i));
+			}
 		}
 	}
 	
@@ -185,6 +204,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			me = new ApesProcess.RequiredInterface(mConfig.getProperty("Required"));
 			ap.addModelElement(me);
 			fireModelUpdated(new InsertEvent(me,ap,null));
+			System.out.println("requiredInterfaceNull ");
 		}
 		else
 		{
@@ -193,12 +213,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			
 			int i = ap.getRequiredInterface().modelElementCount()-1;
 			int index = 0;
+			System.out.println("requiredInterfaceElement ");
 			while( i >= 0 )
 			{
 				ref = (WorkProductRef)ap.getRequiredInterface().getModelElement(index);
 				me = ref.getReference();
 				ap.getRequiredInterface().removeModelElement(ref);
-				
+				System.out.println("requiredInterfaceElement "+i);
 				Map apply = GraphConstants.createMap();
 				Map attr = GraphConstants.createMap();
 				Rectangle bounds = new Rectangle(10,i*75+10,50,50);
@@ -1563,32 +1584,44 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		{
 			String result = "RemovedUndo : diag "+mDiagram+" elements ";
 			if( mRemovedElements != null )
-			for( int i = 0;i<mRemovedElements.length; i++ )
-				result+=mRemovedElements[i]+" ";
+			{
+				for( int i = 0;i<mRemovedElements.length; i++ )
+				{
+					result+=mRemovedElements[i]+" ";
+				}
+			}
+			
 			result+=" \n Sources targets : ";
 			if( mSources != null )
-			for( int i = 0;i<mSources.length; i++ )
-			{	
-				result+=mSources[i]+" "+mTargets[i]+"\n";
+			{
+				for( int i = 0;i<mSources.length; i++ )
+				{	
+					result+=mSources[i]+" "+mTargets[i]+"\n";
+				}
 			}
-			result+="parents "+mParents;
+			
+			//result+="parents "+mParents.toString();
+
 			return result;
 		}
 		
 		public void undo()
 		{
-			//System.out.println("undoremove "+this);
+			//System.out.println("undoremove "+hashCode());
 			super.undo();
 			
-			for( int i = 0; i < mRemovedElements.length; i++ )
+			if( mRemovedElements != null )
 			{
-				insert( mDiagram, mRemovedElements[i], null, null, mParents.get(mRemovedElements[i]),	null, new Vector() );
-					
-				if( mRemovedElements[i] instanceof SpemDiagram )
+				for( int i = 0; i < mRemovedElements.length; i++ )
 				{
-					Context.getInstance().getProject().setGraphModel( (SpemDiagram)mRemovedElements[i], (SpemGraphAdapter)mParents.get("Diagram"+((Element)mRemovedElements[i]).getID()));
-					for( int j = 0; j < ((SpemDiagram)mRemovedElements[i]).modelElementCount(); j++ )
-						((SpemDiagram)mRemovedElements[i]).getModelElement(j);
+					insert( mDiagram, mRemovedElements[i], null, null, mParents.get(mRemovedElements[i]),	null, new Vector() );
+					
+					if( mRemovedElements[i] instanceof SpemDiagram )
+					{
+						Context.getInstance().getProject().setGraphModel( (SpemDiagram)mRemovedElements[i], (SpemGraphAdapter)mParents.get("Diagram"+((Element)mRemovedElements[i]).getID()));
+						for( int j = 0; j < ((SpemDiagram)mRemovedElements[i]).modelElementCount(); j++ )
+							((SpemDiagram)mRemovedElements[i]).getModelElement(j);
+					}
 				}
 			}
 			
@@ -1605,7 +1638,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		public void redo()
 		{
-			//System.out.println("redoremove "+this);
+			//System.out.println("redoremove "+hashCode());
 			super.redo();
 			super.redoExtraEdits();
 			
