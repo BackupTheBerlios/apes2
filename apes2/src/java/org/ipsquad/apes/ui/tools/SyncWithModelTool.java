@@ -23,13 +23,13 @@ package org.ipsquad.apes.ui.tools;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
 import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.adapters.ActivityGraphAdapter;
 import org.ipsquad.apes.adapters.ApesGraphCell;
-import org.ipsquad.apes.adapters.FinalPointCell;
-import org.ipsquad.apes.adapters.InitialPointCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
@@ -38,34 +38,20 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.utils.ErrorManager;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultGraphCell;
-import org.jgraph.graph.GraphConstants;
 
 /**
  * This tool allows to create cells in the graph It use the prototype design
  * pattern to clone cells
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class SyncWithModelTool extends Tool
 {
     private JGraph mGraph;
 
-    private FinalPointCell mFinalPointCell;
-    private InitialPointCell mInitialPointCell;
-
-
     private int mPosX;
     private int mPosY;
-    
-    /**
-     * 
-     */
-    public SyncWithModelTool()
-    {
-        mFinalPointCell = new FinalPointCell();
-        mInitialPointCell = new InitialPointCell();
-    }
     
     public boolean isStable()
     {
@@ -78,33 +64,34 @@ public class SyncWithModelTool extends Tool
         graph.setMoveable(false);
         graph.setSizeable(false);
         fireToolStarted();
-        mPosX = 0;
+        mPosX = 150;
         
         mGraph.clearSelection();
-        mPosY=mGraph.getBounds().height;
+        //mPosY=mGraph.getBounds().height;
+        mPosY=100;
         boolean hasFinalPoint = false;
         
         ActivityGraphAdapter gModel = (ActivityGraphAdapter)mGraph.getModel();
         ActivityDiagram diagram = (ActivityDiagram)gModel.getDiagram();
         
         ApesWorkDefinition wd = (ApesWorkDefinition)diagram.getParent();
-        
-        
-                
-        
+       
+        Vector toInsert = new Vector();
         int i=0;
         for(i=0; i<wd.subWorkCount();i++)
         {
-            
             if(!diagram.containsModelElement(wd.getSubWork(i)))
             {
-                addElement(wd.getSubWork(i));
+            	toInsert.add(getCell(wd.getSubWork(i))); 
             }
         }
        
         if(!diagram.haveInitialPoint())
         {
-            addElement(mInitialPointCell);
+        	int posY=mPosY;
+        	mPosY=10;
+            toInsert.add(getCell(new ActivityDiagram.InitialPoint()));
+            mPosY=posY;
         }   
         
         for(i=0; i<diagram.modelElementCount(); i++)
@@ -115,11 +102,13 @@ public class SyncWithModelTool extends Tool
                 break;
             }
         }
+        
         if(!hasFinalPoint)
         {
-            addElement(mFinalPointCell);
+        	toInsert.add(getCell(new ActivityDiagram.FinalPoint()));
         }
         
+        insertCells(toInsert);
         fireToolFinished();
     }
 
@@ -131,44 +120,42 @@ public class SyncWithModelTool extends Tool
     }
 
     
-    private void addElement(DefaultGraphCell cell)
+    private void insertCells(Vector cells)
     {
-        Point pt = new Point(mPosX, mPosY);
-        
-        ApesGraphCell vertex = (ApesGraphCell) cell.clone();
-        Map attr = vertex.getAttributes();
-
-        GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
-
-        Map attributes = ApesGraphConstants.createMap();
-        attributes.put(vertex, attr);
-        mPosX += GraphConstants.getSize(attr).width + 50;
-
-        Object[] arg = new Object[] { vertex };
-
-        ((SpemGraphAdapter) mGraph.getModel()).insert(arg, attributes, null, null, null);
+    	Map view = ApesGraphConstants.createMap();
+    	
+    	for (Iterator it = cells.iterator(); it.hasNext();) 
+    	{
+			DefaultGraphCell cell = (DefaultGraphCell) it.next();
+			if(it == null)
+			{
+				it.remove();
+			}
+			else
+			{
+				view.put(cell, cell.getAttributes());
+			}
+		}
+    	
+        ((SpemGraphAdapter) mGraph.getModel()).insert(cells.toArray(), view, null, null, null);
     }
     
-    private void addElement(ModelElement element)
+    private DefaultGraphCell getCell(ModelElement me)
     {
-        Point pt = new Point(mPosX, mPosY);
+    	Point pt = new Point(mPosX, mPosY);
         
          
- 		ApesGraphCell vertex = ((SpemGraphAdapter)mGraph.getModel()).associateGraphCell(element);
+ 		ApesGraphCell vertex = ((SpemGraphAdapter)mGraph.getModel()).associateGraphCell(me);
  		
  		if(vertex==null)
  		{
  			ErrorManager.getInstance().printKey("errorElementForbidden");
- 			return;
+ 			return null;
  		}
  		
- 		Map attr = vertex.getAttributes();
+ 		ApesGraphConstants.setBounds(vertex.getAttributes(), new Rectangle(pt, ApesGraphConstants.getSize(vertex.getAttributes())));
+ 		mPosY += ApesGraphConstants.getSize(vertex.getAttributes()).height + 30;
  		
- 		GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
- 		mPosX += GraphConstants.getSize(attr).width + 50;
- 			
- 		Map view = ApesGraphConstants.createMap();
- 		ApesGraphConstants.setAttributes(view, attr);
- 		mGraph.getModel().insert(new Object[]{vertex}, view, null, null, null);
-    } 
+ 		return vertex;
+    }    
 }
