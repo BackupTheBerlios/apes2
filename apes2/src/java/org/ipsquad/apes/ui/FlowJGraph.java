@@ -42,7 +42,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a FlowDiagram
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class FlowJGraph extends JGraph
 {
@@ -50,6 +50,7 @@ public class FlowJGraph extends JGraph
 	{
 		super(model);
 		setInvokesStopCellEditing(true);
+		getActionMap().put("cut",Context.getInstance().getAction("Cut"));
 		getActionMap().put("copy",Context.getInstance().getAction("Copy"));
 		getActionMap().put("paste",Context.getInstance().getAction("Paste"));
 	}

@@ -36,7 +36,7 @@ import org.jgraph.JGraph;
 
 /**
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ApesClipboardManager
 {
@@ -47,16 +47,26 @@ public class ApesClipboardManager
 	public static void copy() 
 	{
 		Project p = Context.getInstance().getProject();
+		if( Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame() == null )
+		{
+			return;
+		}
+		
 		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Object [] listCells = graph.getSelectionCells() ;
 		ApesTransferable transfer = new ApesTransferable(p, listCells) ;
-		
 		cb.setContents(transfer, null) ;
 	}
 	
 	public static void cut() 
 	{
 		Project p = Context.getInstance().getProject();
+		
+		if( Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame() == null )
+		{
+			return;
+		}
+		
 		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Object [] listCells = graph.getSelectionCells() ; 
 		ApesTransferable transfer = new ApesTransferable(p, listCells) ;
@@ -67,6 +77,11 @@ public class ApesClipboardManager
 	
 	public static void paste()
 	{
+		if( Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame() == null )
+		{
+			return;
+		}
+		
 		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Transferable t = cb.getContents(mGraphCellsList);
 		SpemGraphAdapter adapter = (SpemGraphAdapter)graph.getModel();

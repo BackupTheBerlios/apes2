@@ -34,7 +34,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the activity diagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ActivityDiagram extends SpemDiagram
 {
@@ -67,31 +67,19 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean addModelElement(ModelElement me)
 	{
-		if( ( me instanceof Activity && ( me.getParent() == null || me.getParent() == getParent() ) ) || me instanceof Decision || me instanceof FinalPoint || me instanceof Synchro)
+		if( canAddModelElement(me) )
 		{
-			if(!containsModelElement(me))
-			{
-				mElements.add(me);
-				return true;
-			}
+			mElements.add(me);
+			if(me instanceof InitialPoint) mInitialPoint = true;
+			return true;
 		}
-		else if(me instanceof InitialPoint && !mInitialPoint)
-		{
-			if(!containsModelElement(me))
-			{
-				mElements.add(me);
-				mInitialPoint=true;
-				return true;
-			}
-		}
-
 		return false;
 	}
 
 
 	public boolean canAddModelElement(ModelElement me)
 	{
-		if( ( me instanceof Activity && ( me.getParent() == null || me.getParent() == getParent() ) )
+		if( ( me instanceof Activity && ( me.getParent() == null || me.getParent().equals(getParent()) ) )
 				|| me instanceof Decision
 				|| me instanceof FinalPoint
 				|| me instanceof Synchro)
@@ -190,16 +178,10 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean createLinkModelElements(ModelElement source, ModelElement target)
 	{
-		if(containsModelElement(source))
+		if(areLinkableModelElements(source,target))
 		{
-			if(containsModelElement(target))
-			{
-				if(areLinkableModelElements(source,target))
-				{
-					mTransitions.add(new Transition(source,target,""));
-					return true;
-				}
-			}
+			mTransitions.add(new Transition(source,target,""));
+			return true;
 		}
 		return false;
 	}
@@ -725,6 +707,11 @@ public class ActivityDiagram extends SpemDiagram
 				((ModelVisitor)visitor).visitDecision( this );
 			}
 		}
+		
+		public boolean equals(Object obj) 
+		{
+			return this == obj;
+		}
 	};
 	
 	/**
@@ -754,6 +741,11 @@ public class ActivityDiagram extends SpemDiagram
 				((ModelVisitor)visitor).visitInitialPoint( this );
 			}
 		}
+
+		public boolean equals(Object obj) 
+		{
+			return this == obj;
+		}
 	};
 
 	public static class FinalPoint extends ModelElement
@@ -778,6 +770,11 @@ public class ActivityDiagram extends SpemDiagram
 			{
 				((ModelVisitor)visitor).visitFinalPoint( this );
 			}
+		}
+
+		public boolean equals(Object obj) 
+		{
+			return this == obj;
 		}
 	};	
 
@@ -807,6 +804,11 @@ public class ActivityDiagram extends SpemDiagram
 			{
 				((ModelVisitor)visitor).visitSynchro( this );
 			}	
+		}
+
+		public boolean equals(Object obj) 
+		{
+			return this == obj;
 		}
 	};	
 }

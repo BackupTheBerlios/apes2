@@ -39,7 +39,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a ResponsabilityDiagram
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ResponsabilityJGraph extends JGraph
 {
@@ -47,6 +47,7 @@ public class ResponsabilityJGraph extends JGraph
 	{
 		super(model);
 		setInvokesStopCellEditing(true);
+		getActionMap().put("cut",Context.getInstance().getAction("Cut"));
 		getActionMap().put("copy",Context.getInstance().getAction("Copy"));
 		getActionMap().put("paste",Context.getInstance().getAction("Paste"));
 	}

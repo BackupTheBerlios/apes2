@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkProduct extends ModelElement implements IPackage
 {
@@ -212,16 +212,6 @@ public class WorkProduct extends ModelElement implements IPackage
 		return (WorkDefinition)mOutput.get(i);
 	}
 	
-	public boolean equals(Object obj) 
-	{
-		if( obj == null || !(obj instanceof WorkProduct))
-		{
-			return false;
-		}
-
-		return getName().equals( ((WorkProduct)obj).getName());
-	}
-
 	public boolean addModelElement(ModelElement e)
 	{
 		if( e instanceof StateMachine && addBehavior( (StateMachine)e ) )

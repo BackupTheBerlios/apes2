@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 /**
  * Base class for the elements of the model
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class ModelElement extends Element
 {
@@ -240,5 +240,17 @@ public abstract class ModelElement extends Element
 		me.mBehavior=new Vector();
 		//me.mPresentation = (Vector) mPresentation.clone();
 		return me;
+	}
+	
+	public boolean equals(Object obj) 
+	{
+		if( obj == null || !(obj instanceof ModelElement))
+		{
+			return false;
+		}
+
+		ModelElement me = (ModelElement)obj;
+		return (getParent() == null || getParent().equals(me.getParent()))
+			&& getName().equals( me.getName());
 	}
 }

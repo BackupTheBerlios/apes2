@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 /**
  * WorkDefinition which contains an activity diagram and a flow diagram 
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApesWorkDefinition extends WorkDefinition implements IPackage
 {
@@ -48,7 +48,6 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 	}
 
 	
-	/***************DELPH*****************/
 	public void visit(SpemVisitor visitor)
 	{
 		visitor.visitWorkDefinition(this);
@@ -81,7 +80,7 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 	
 	public boolean addFlowDiagram( FlowDiagram diagram )
 	{
-		if( mFlowDiagram == null )
+		if( canAddFlowDiagram() )
 		{
 			mFlowDiagram = diagram;
 			mFlowDiagram.setParent( this );
@@ -108,7 +107,7 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 
 	public boolean addActivityDiagram( ActivityDiagram diagram )
 	{
-		if( mActivityDiagram == null )
+		if( canAddActivityDiagram() )
 		{
 			mActivityDiagram = diagram;
 			mActivityDiagram.setParent( this );

@@ -28,7 +28,6 @@ import javax.swing.JFileChooser;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.DefaultPathPanel;
-import org.ipsquad.apes.ui.PreferencesDialog;
 import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ResourceManager;
 import org.ipsquad.utils.SimpleFileFilter;
@@ -36,7 +35,7 @@ import org.ipsquad.utils.SimpleFileFilter;
 
 /**
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class PresentationAction extends ApesAction
 {
@@ -52,23 +51,22 @@ public class PresentationAction extends ApesAction
 		chooser.setDialogTitle(name);
 		chooser.setAcceptAllFileFilterUsed(true);
 		chooser.setFileFilter(new SimpleFileFilter("jar",name));
-		int result = chooser.showDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),PreferencesDialog.resMan.getString("fileOpen"));
+		int result = chooser.showDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),ResourceManager.getInstance().getString("fileOpen"));
 		if (result == JFileChooser.APPROVE_OPTION )
 		{
 			try 
 			{
 				File file = chooser.getSelectedFile();
-				String s = System.getProperty("os.name") ;
-				if (s.charAt(0) == 'w' || s.charAt(0) == 'W')
-				{
-					Process proc = Runtime.getRuntime().exec("java -jar "+ " \""+ file.getPath() +"\" " );
-				}
-				else
-				{
-					Process proc = Runtime.getRuntime().exec("java -jar "+ file.getPath() );
-				}
-				
-			} 
+				String s = System.getProperty("os.name") ; 
+                if (s.charAt(1) == 'w' || s.charAt(1) == 'W') 
+                { 
+                    Runtime.getRuntime().exec("java -jar "+ " \""+ file.getPath() +"\" " ); 
+                } 
+                else 
+                { 
+                    Runtime.getRuntime().exec("java -jar "+ file.getPath() ); 
+                } 
+            } 
 			catch (Throwable t) 
 			{
 				t.printStackTrace() ;

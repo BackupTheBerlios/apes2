@@ -54,7 +54,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
  
 class NoteView extends VertexView 
@@ -116,12 +116,14 @@ class NoteView extends VertexView
 
 				public boolean stopCellEditing() 
 				{
-					//set the size of a vertex to that of an editor.
 					CellView view = graph.getGraphLayoutCache().getMapping(graph.getEditingCell(), false);
-					Map map = view.getAllAttributes();
-					Rectangle cellBounds = GraphConstants.getBounds(map);
-					Rectangle editingBounds = editorComponent.getBounds();
-					GraphConstants.setBounds(map, new Rectangle(cellBounds.x, cellBounds.y, editingBounds.width, editingBounds.height));
+					if( view != null )
+					{
+						Map map = view.getAllAttributes();
+						Rectangle cellBounds = GraphConstants.getBounds(map);
+						Rectangle editingBounds = editorComponent.getBounds();
+						GraphConstants.setBounds(map, new Rectangle(cellBounds.x, cellBounds.y, editingBounds.width, editingBounds.height));
+					}
 					return super.stopCellEditing();
 				}
 

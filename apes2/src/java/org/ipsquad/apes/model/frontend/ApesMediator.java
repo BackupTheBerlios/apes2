@@ -54,7 +54,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -562,7 +562,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 					diagram.getParent().addModelElement( me );
 				}
 			}
-
 			extraActions.add(new InsertEvent( diagram, me, me.getParent(), isAlreadyExist, attr ));
 		}
 	}

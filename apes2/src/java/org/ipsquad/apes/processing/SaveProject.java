@@ -58,7 +58,7 @@ public class SaveProject
 		saveComponent();
 		saveInterfaces();
 		//createImagesDirectory();
-		//saveImageAndMap();
+		//saveImages();
 		mZipFile.close();
 	}
 	
@@ -102,7 +102,7 @@ public class SaveProject
 		}
 	}
 	
-	private void saveImageAndMap() throws IOException
+	private void saveImages() throws IOException
 	{
 		ZipEntry entryZip;
 		ZipEntry entryDir = null;
@@ -126,14 +126,6 @@ public class SaveProject
 			data = new DataOutputStream( new BufferedOutputStream(mZipFile) );
 			image = new SaveJPEG(adapter);
 			image.save(data);
-			mZipFile.closeEntry();
-			
-			entryZip = new ZipEntry(IMAGE_PATH+System.getProperty("file.separator")+normalizeName(adapter.getName())+".map");
-			mZipFile.putNextEntry(entryZip);
-			data = new DataOutputStream( new BufferedOutputStream(mZipFile) );
-			map = new SaveJpegWithMap(adapter);
-			data.writeChars(map.createHtmlMap());
-			data.flush();
 			mZipFile.closeEntry();
 		}
 	}

@@ -60,25 +60,16 @@ public class ApesTransferable implements Transferable
 		mElements.add(0, new Integer(p.hashCode()));
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
-	 */
 	public DataFlavor[] getTransferDataFlavors()
 	{
 		return mFlavors; 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.datatransfer.DataFlavor)
-	 */
 	public boolean isDataFlavorSupported(DataFlavor flavor) 
 	{ 
 		return flavor.equals(mArrayFlavor); 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer.DataFlavor)
-	 */
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException 
 	{
 		if (flavor.equals(mArrayFlavor))

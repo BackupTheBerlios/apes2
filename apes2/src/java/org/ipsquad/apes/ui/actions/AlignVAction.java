@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.jgraph.JGraph;
@@ -38,7 +39,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Align the centers of selected objects vertically
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class AlignVAction extends ApesAction
 {
@@ -75,7 +76,7 @@ public class AlignVAction extends ApesAction
 		
 		for( int i = 0; i < listCells.length; i++)
 		{
-			if(listCells[i] instanceof ApesGraphCell)
+			if(listCells[i] instanceof ApesGraphCell || listCells[i] instanceof NoteCell )
 			{	
 				c=(ApesGraphCell)listCells[i];
 				
