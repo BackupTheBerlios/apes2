@@ -19,7 +19,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the responsability diagram
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ResponsabilityDiagram extends SpemDiagram {
 
@@ -174,6 +174,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 			return createLinkProcessRoleWorkProduct( (ProcessRole) source, (WorkProduct) target );
 		}
 		
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 
@@ -186,15 +187,12 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	 */
 	public boolean createLinkProcessRoleWorkProduct(ProcessRole r, WorkProduct w)
 	{
-		if (containsModelElement(r) && containsModelElement(w))
+		if (areLinkableProcessRoleWorkProduct(r, w))
 		{
-			if (!r.containsResponsibility(w) && w.getResponsible()==null)
-			{
-				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::createLinkProcessRoleWorkProduct "+r+" "+w);
-				r.addResponsibility(w);
-				w.setResponsible(r);
-				return true;
-			}
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ResponsabilityDiagram("+getName()+")::createLinkProcessRoleWorkProduct "+r+" "+w);
+			r.addResponsibility(w);
+			w.setResponsible(r);
+			return true;
 		}
 		
 		return false;
@@ -240,6 +238,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 			return areLinkableProcessRoleWorkProduct( (ProcessRole) source, (WorkProduct) target );
 		}
 		
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 
@@ -258,9 +257,15 @@ public class ResponsabilityDiagram extends SpemDiagram {
 			{
 				return true;
 			}
+			
+			if(r.containsResponsibility(w) && w.getResponsible() == r)
+			{
+				ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+				return false;			    
+			}
 		}
 		
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 	

@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1187,23 +1187,32 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		if(edit != null && edit.execute())
 		{
 			fireModelChanged(null, edit);
-			
-			//execute the extra edits
-			if(extraEdits != null)
+			postEdit = true;
+		}
+		
+		//execute the extra edits
+		if(extraEdits != null)
+		{
+			for (Iterator it = extraEdits.iterator(); it.hasNext();) 
 			{
-				for (Iterator it = extraEdits.iterator(); it.hasNext();) 
+				ApesEdit tmpEdit = (ApesEdit) it.next();
+				if(tmpEdit.execute())
 				{
-					ApesEdit tmpEdit = (ApesEdit) it.next();
-					if(tmpEdit.execute())
-					{
-						fireModelChanged(null, tmpEdit);					
-					}
+					fireModelChanged(null, tmpEdit);
+					postEdit = true;
 				}
 			}
-			else
-			{
-				extraEdits = new Vector();
-			}
+		}
+
+		if(postEdit)
+		{
+		    //update edit
+		    if(edit == null)
+		    {
+		        Iterator it = extraEdits.iterator();
+		        edit = (ApesEdit)it.next();
+		        it.remove();
+		    }
 
 		    //postEdit
 			extraEdits.addAll(restoreEdits());
@@ -1249,7 +1258,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	    	edits.add(edit);
 	    }
 	    
-        return !edits.isEmpty()?edits:null;
+        return edits;
 	}
 	
 	/**

@@ -37,6 +37,7 @@ import org.ipsquad.apes.MainFrameInterface;
 import org.ipsquad.apes.Project;
 import org.ipsquad.apes.adapters.ActivityCell;
 import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
@@ -579,5 +580,32 @@ public class TestSpemGraphAdapter extends TestCase
 		assertEquals(0, adapter.getRootCount());
 		
 		assertFalse(undoManager.canRedo());
+	}
+	
+	public void testNoteCell()
+	{
+	    assertEquals(0, adapter.getRootCount());
+		
+		/*
+		 * insert a note cell
+		 */
+	    NoteCell cell = new NoteCell();
+		Map attr = ApesGraphConstants.createMap();
+		attr.put(cell, cell.getAttributes());	
+		
+		adapter.insert( new Object[]{cell}, attr, null, null, null );
+		assertEquals(1, SpemGraphAdapter.getRoots(adapter).length);
+		assertEquals(cell, SpemGraphAdapter.getRoots(adapter)[0]);
+		
+		/*
+		 * adds some text
+		 */
+		Map text = ApesGraphConstants.createMap();
+		ApesGraphConstants.setValue(text, "A short test...");
+		attr.clear();
+		attr.put(cell, text);
+		
+		adapter.edit(attr, null, null, null);
+		assertEquals("A short test...", ApesGraphConstants.getValue(cell.getAttributes()));
 	}
 }

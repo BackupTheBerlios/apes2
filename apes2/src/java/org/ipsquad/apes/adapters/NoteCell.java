@@ -28,13 +28,14 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.ui.ColorFontPanel;
 import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.GraphConstants;
 
 /**
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class NoteCell extends ApesGraphCell
 {
@@ -68,6 +69,6 @@ public class NoteCell extends ApesGraphCell
 	
 	public String toString()
 	{
-		return userObject != null ? userObject.toString() : null;
+		return ApesGraphConstants.getValue(attributes).toString();
 	}
 }

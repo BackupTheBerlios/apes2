@@ -19,7 +19,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the context diagram
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ContextDiagram extends SpemDiagram
 {
@@ -243,11 +243,37 @@ public class ContextDiagram extends SpemDiagram
 	{
 		if( source instanceof ProcessComponent && target instanceof WorkProduct )
 		{
-			return mUnlinkElements.contains(target);
+			if(mUnlinkElements.contains(target))
+			{
+			    return true;
+			}
+			
+			if(mProvidedWorkProduct.contains(target))
+			{
+			    ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			}
+			else
+			{
+			    ErrorManager.getInstance().printKey("errorNotLinkableElements");
+			}
+			return false;
 		}
 		if( source instanceof WorkProduct && target instanceof ProcessComponent )
 		{
-			return mUnlinkElements.contains(source);
+		    if(mUnlinkElements.contains(source))
+			{
+			    return true;
+			}
+			
+			if(mProvidedWorkProduct.contains(target))
+			{
+			    ErrorManager.getInstance().printKey("errorNotLinkableElements");
+			}
+			else
+			{
+			    ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			}
+			return false;
 		}
 		
 		return false;

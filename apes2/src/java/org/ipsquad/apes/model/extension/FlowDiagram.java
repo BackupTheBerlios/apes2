@@ -37,7 +37,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -341,7 +341,7 @@ public class FlowDiagram extends SpemDiagram
 			}
 		}
 		
-		
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 
@@ -377,14 +377,11 @@ public class FlowDiagram extends SpemDiagram
 	public boolean createLinkWorkProductActivityInput(WorkProduct w, Activity a)
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductActivityInput "+w+" "+a);
-		if (containsModelElement(a) && containsModelElement(w))
+		if (areLinkableWorkProductActivityInput(w, a))
 		{
-			if(!a.containsInputWorkProduct(w) && !w.containsOutputWorkDefinition(a))
-			{
-				a.addInputWorkProduct(w);
-				w.addOutputWorkDefinition(a);
-				return true;
-			}
+			a.addInputWorkProduct(w);
+			w.addOutputWorkDefinition(a);
+			return true;
 		}
 		return false;
 	}
@@ -392,17 +389,13 @@ public class FlowDiagram extends SpemDiagram
 	public boolean createLinkWorkProductStateActivityInput( StateMachine sm, Activity a)
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductStateActivityInput "+sm+" "+a);
-		if( sm.getContext() instanceof WorkProduct 
-				&& containsModelElement(sm) 
-				&& containsModelElement(a) )
+		if(areLinkableWorkProductStateActivityInput(sm, a))
 		{
 			WorkProduct w = (WorkProduct)sm.getContext();
-			if(!a.containsInputWorkProduct(w) && !w.containsOutputWorkDefinition(a))
-			{
-				a.addInputWorkProduct(w);
-				w.addOutputWorkDefinition(a);
-				return true;
-			}
+			
+			a.addInputWorkProduct(w);
+			w.addOutputWorkDefinition(a);
+			return true;
 		}
 		return false;
 	}
@@ -417,14 +410,11 @@ public class FlowDiagram extends SpemDiagram
 	public boolean createLinkWorkProductActivityOutput(WorkProduct w, Activity a)
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductActivityOutput "+w+" "+a);
-		if(containsModelElement(a) && containsModelElement(w))
+		if(areLinkableWorkProductActivityOutput(w, a))
 		{
-			if(!a.containsOutputWorkProduct(w) && !w.containsInputWorkDefinition(a))
-			{
-				a.addOutputWorkProduct(w);
-				w.addInputWorkDefinition(a);
-				return true;
-			}
+			a.addOutputWorkProduct(w);
+			w.addInputWorkDefinition(a);
+			return true;
 		}
 		return false;
 	}
@@ -432,18 +422,13 @@ public class FlowDiagram extends SpemDiagram
 	public boolean createLinkWorkProductStateActivityOutput(StateMachine sm, Activity a)
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkWorkProductStateActivityOutput "+sm+" "+a);
-		if( sm.getContext() instanceof WorkProduct
-				&& containsModelElement(a) 
-				&& containsModelElement(sm))
+		if(areLinkableWorkProductStateActivityOutput(sm, a))
 		{
-			WorkProduct w = (WorkProduct)sm.getContext();
-			
-			if(!a.containsOutputWorkProduct(w) && !w.containsInputWorkDefinition(a))
-			{
-				a.addOutputWorkProduct(w);
-				w.addInputWorkDefinition(a);
-				return true;
-			}
+		    WorkProduct w = (WorkProduct)sm.getContext();
+		
+		    a.addOutputWorkProduct(w);
+			w.addInputWorkDefinition(a);
+			return true;
 		}
 		return false;
 	}
@@ -680,9 +665,12 @@ public class FlowDiagram extends SpemDiagram
 			{
 				return true;
 			}
+			
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
 		}
 
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 	
@@ -701,9 +689,11 @@ public class FlowDiagram extends SpemDiagram
 			{
 				return true;
 			}
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
 		}
 		
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 	
@@ -713,15 +703,17 @@ public class FlowDiagram extends SpemDiagram
 				&& containsModelElement(a) 
 				&& containsModelElement(sm))
 		{
-			WorkProduct w = (WorkProduct)sm.getParent();
+			WorkProduct w = (WorkProduct)sm.getContext();
 			
 			if (!a.containsInputWorkProduct(w))
 			{
 				return true;
 			}
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
 		}
 		
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 	
@@ -740,9 +732,11 @@ public class FlowDiagram extends SpemDiagram
 			{
 				return true;
 			}
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
 		}
 		
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 	
@@ -752,14 +746,16 @@ public class FlowDiagram extends SpemDiagram
 				&& containsModelElement(a) 
 				&& containsModelElement(sm))
 		{
-			WorkProduct w = (WorkProduct)sm.getParent();
+			WorkProduct w = (WorkProduct)sm.getContext();
 			if (!a.containsOutputWorkProduct(w))
 			{
 				return true;
 			}
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
 		}
 		
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 	

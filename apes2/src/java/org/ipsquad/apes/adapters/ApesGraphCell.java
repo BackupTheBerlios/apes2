@@ -36,7 +36,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * This is a convenient class which correct problems in the clone method
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class ApesGraphCell extends DefaultGraphCell implements Identity
 {
@@ -70,11 +70,9 @@ public abstract class ApesGraphCell extends DefaultGraphCell implements Identity
 	
 	public Map changeAttributes(Map change)
 	{
-		Element oldUserObject = (Element)userObject;	
-		Map undo = GraphConstants.applyMap(change, attributes);
+	    Map undo = GraphConstants.applyMap(change, attributes);
 		
 		Object tmp = GraphConstants.getValue(attributes);
-		
 		return undo;
 	}
 	
