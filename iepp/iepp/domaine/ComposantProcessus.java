@@ -1126,9 +1126,36 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	 */
 	public Vector getActiviteEntree(int numrang, int numtype)
 	{
-		Vector listeActivites = new Vector();
-		
-		WorkProduct w = (WorkProduct)(this.produits.elementAt(numrang));
+	    Vector listeActivites = new Vector();
+	    WorkProduct w = (WorkProduct)(this.produits.elementAt(numrang));
+	    
+	    if (numtype != 7)
+	    {
+		    // Trouver le bon workproduct
+		    String nomProd;
+		    boolean trouve = false;
+		    if (numtype == 1)
+		    {
+		        nomProd = this.interfaceIn.elementAt(numrang).toString();
+		    }
+		    else
+		    {
+		        nomProd = this.interfaceOut.elementAt(numrang).toString();
+		    }
+		    for (int i = 0; i < this.produits.size() && !trouve; i++ )
+		    {
+		        if ( ((WorkProduct)this.produits.elementAt(i)).toString().equals(nomProd) )
+		        {
+		            trouve = true;
+		            w = (WorkProduct)this.produits.elementAt(i);
+		        }
+		    }
+		    if (!trouve)
+		    {
+		        System.err.println("ERR Match Interface <-> Prod");
+		    }
+	    }
+
 		int nb = w.getOutputCount();
 		for (int i = 0; i < nb; i++)
 		{
@@ -1156,9 +1183,36 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	 */
 	public Vector getActiviteSortie(int numrang, int numtype)
 	{
-		Vector listeActivites = new Vector();
-		
-		WorkProduct w = (WorkProduct)(this.produits.elementAt(numrang));
+	    Vector listeActivites = new Vector();
+	    WorkProduct w = (WorkProduct)(this.produits.elementAt(numrang));
+	    
+	    if (numtype != 7)
+	    {
+		    // Trouver le bon workproduct
+		    String nomProd;
+		    boolean trouve = false;
+		    if (numtype == 1)
+		    {
+		        nomProd = this.interfaceIn.elementAt(numrang).toString();
+		    }
+		    else
+		    {
+		        nomProd = this.interfaceOut.elementAt(numrang).toString();
+		    }
+		    for (int i = 0; i < this.produits.size() && !trouve; i++ )
+		    {
+		        if ( ((WorkProduct)this.produits.elementAt(i)).toString().equals(nomProd) )
+		        {
+		            trouve = true;
+		            w = (WorkProduct)this.produits.elementAt(i);
+		        }
+		    }
+		    if (!trouve)
+		    {
+		        System.err.println("ERR Match Interface <-> Prod");
+		    }
+	    }
+	    
 		int nb = w.getInputCount();
 		for (int i = 0; i < nb; i++)
 		{
