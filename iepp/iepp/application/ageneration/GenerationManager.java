@@ -172,7 +172,7 @@ public class GenerationManager
 	 */
 	public String getFeuilleCss()
 	{
-		return(GenerationManager.feuilleCss);
+		return(GenerationManager.feuilleCss + "." + Application.getApplication().getConfigPropriete("extensionFeuilleStyle"));
 	}
 	
 	/**
