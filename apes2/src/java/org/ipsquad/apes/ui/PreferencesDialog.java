@@ -37,6 +37,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
+
 import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
 import org.ipsquad.utils.ConfigManager;
@@ -45,7 +46,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class PreferencesDialog extends JDialog 
 {

@@ -25,7 +25,6 @@ package apes.adapters;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -55,7 +54,6 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.ipsquad.apes.ui.ToolPalette;
 import org.ipsquad.utils.ConfigManager;
-import org.ipsquad.utils.ResourceManager;
 import org.jgraph.graph.ConnectionSet;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.Edge;
@@ -76,6 +74,8 @@ public class TestSpemGraphAdapter extends TestCase
 	
 	//public TestSpemGraphAdapter()
 	static {
+		ConfigManager.init(ApesMain.createDefaultProperties());
+		
 		Context context = Context.getInstance();
 		
 		model = new SpemTreeAdapter();
@@ -169,9 +169,6 @@ public class TestSpemGraphAdapter extends TestCase
 			public void setFilePath(String filePath) { }//fail(); }
 			public GraphFrame getGraphFrame(GraphModel model) { fail(); return null; }
 		});
-		
-		ConfigManager.init(ApesMain.createDefaultProperties());
-		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
 		
 		context.setProject(new Project());		
 		

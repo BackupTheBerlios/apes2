@@ -32,11 +32,11 @@ import java.io.OutputStream;
 import javax.swing.JFrame;
 
 import org.ipsquad.apes.adapters.ActivityGraphAdapter;
-import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.adapters.ContextGraphAdapter;
 import org.ipsquad.apes.adapters.FlowGraphAdapter;
 import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.ui.ActivityJGraph;
 import org.ipsquad.apes.ui.ContextJGraph;
 import org.ipsquad.apes.ui.FlowJGraph;
@@ -51,7 +51,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 /**
  * Save a graph in a jpeg file
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SaveJPEG
 {

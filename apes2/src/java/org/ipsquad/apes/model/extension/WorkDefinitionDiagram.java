@@ -21,20 +21,20 @@
 
 package org.ipsquad.apes.model.extension;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
-import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.utils.ErrorManager;
-import java.io.Serializable;
 
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 

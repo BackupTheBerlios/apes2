@@ -28,8 +28,8 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
-import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.DefaultModelVisitor;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
@@ -48,7 +48,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This visitor associate an element with an Icon.
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class IconAssociater extends DefaultModelVisitor
 {

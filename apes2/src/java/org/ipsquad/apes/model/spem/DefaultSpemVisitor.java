@@ -27,8 +27,8 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
-import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
 import org.ipsquad.apes.model.spem.basic.GuidanceKind;
@@ -50,7 +50,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Default visitor implementation that does nothing.
  * Its only work is to follow the inheritance tree.
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class DefaultSpemVisitor implements SpemVisitor
 {

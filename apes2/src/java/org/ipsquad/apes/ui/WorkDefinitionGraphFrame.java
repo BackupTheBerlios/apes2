@@ -25,8 +25,8 @@ import java.util.Map;
 
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
-import org.ipsquad.apes.adapters.WorkDefinitionCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionCell;
 import org.ipsquad.apes.adapters.WorkProductCell;
 import org.ipsquad.apes.ui.tools.CellTool;
 import org.ipsquad.apes.ui.tools.EdgeTool;
@@ -38,7 +38,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Work definition graph editing internal frame
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkDefinitionGraphFrame extends GraphFrame {
 	

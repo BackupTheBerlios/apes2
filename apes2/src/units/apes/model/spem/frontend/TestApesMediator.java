@@ -22,7 +22,6 @@
 package apes.model.spem.frontend;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JDesktopPane;
@@ -54,13 +53,12 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.ipsquad.apes.ui.ToolPalette;
 import org.ipsquad.utils.ConfigManager;
-import org.ipsquad.utils.ResourceManager;
 import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.4 $ 
+ * @version $Revision: 1.5 $ 
  */
 public class TestApesMediator extends TestCase
 {
@@ -107,7 +105,6 @@ public class TestApesMediator extends TestCase
 		});
 		
 		ConfigManager.init(ApesMain.createDefaultProperties());
-		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
 		
 		mediator = ApesMediator.getInstance();
 		context.setProject(new Project());		

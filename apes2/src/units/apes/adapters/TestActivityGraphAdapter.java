@@ -30,6 +30,7 @@ import javax.swing.JTree;
 
 import junit.framework.TestCase;
 
+import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.MainFrameInterface;
 import org.ipsquad.apes.Project;
@@ -41,8 +42,8 @@ import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.ipsquad.apes.ui.ToolPalette;
+import org.ipsquad.utils.ConfigManager;
 import org.jgraph.graph.GraphModel;
-
 
 public class TestActivityGraphAdapter extends TestCase
 {
@@ -56,6 +57,8 @@ public class TestActivityGraphAdapter extends TestCase
 	
 	//public TestSpemGraphAdapter()
 	static {
+		ConfigManager.init(ApesMain.createDefaultProperties());
+		
 		Context context = Context.getInstance();
 		
 		model = new SpemTreeAdapter();

@@ -36,16 +36,16 @@ import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.ActivityGraphAdapter;
 import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.ContextGraphAdapter;
-import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.adapters.FlowGraphAdapter;
 import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.ui.ActivityJGraph;
 import org.ipsquad.apes.ui.ContextJGraph;
 import org.ipsquad.apes.ui.FlowJGraph;
-import org.ipsquad.apes.ui.WorkDefinitionJGraph;
 import org.ipsquad.apes.ui.ResponsabilityJGraph;
+import org.ipsquad.apes.ui.WorkDefinitionJGraph;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 import org.jgraph.JGraph;
@@ -55,7 +55,7 @@ import org.jgraph.JGraph;
 /**
  * Print the current graph displayed
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class PrintDiagramAction extends AbstractAction implements Printable

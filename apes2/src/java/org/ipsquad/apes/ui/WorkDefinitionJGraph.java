@@ -28,8 +28,8 @@ import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
-import org.ipsquad.apes.adapters.WorkProductCell;
 import org.ipsquad.apes.adapters.WorkDefinitionCell;
+import org.ipsquad.apes.adapters.WorkProductCell;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.Edge;
@@ -40,7 +40,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a WorkDefinitionDiagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkDefinitionJGraph extends JGraph
 {

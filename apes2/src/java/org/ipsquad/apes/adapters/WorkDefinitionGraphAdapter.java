@@ -25,12 +25,12 @@ import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
-import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {

@@ -28,9 +28,9 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
-import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
 import org.ipsquad.apes.model.spem.basic.GuidanceKind;
@@ -50,7 +50,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {

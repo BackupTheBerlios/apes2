@@ -32,8 +32,8 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
-import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
@@ -80,7 +80,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class ApesMain
 {

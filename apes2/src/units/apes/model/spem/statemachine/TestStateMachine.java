@@ -21,11 +21,11 @@
 
 package apes.model.spem.statemachine;
 
+import junit.framework.TestCase;
+
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
-
-import junit.framework.TestCase;
 
 
 public class TestStateMachine extends TestCase
