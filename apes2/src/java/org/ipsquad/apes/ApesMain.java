@@ -77,7 +77,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ApesMain
 {
@@ -199,7 +199,8 @@ public class ApesMain
 		//Open a file given in parameter
 		if(args.length>0)
 		{
-			if(args[0].endsWith("."+ResourceManager.getInstance().getString("apesFileExtension")))
+			if(args[0].endsWith("."+ResourceManager.getInstance().getString("apesFileExtension")) ||
+					args[0].endsWith("."+ResourceManager.getInstance().getString("apesDosFileExtension")))
 			{
 			  try
 			  {
