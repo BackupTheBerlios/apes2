@@ -173,6 +173,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 			//liste des produits extérieurs: les produits en entrée qui sont en sortie d'aucun composant
 			Vector listeProduitsExterieurs = new Vector();
 			
+			// SP rajouter les produits exétieurs, la langue
 			this.print("Recuperation produits extérieurs");
 			Vector liste = GenerationManager.getInstance().getListeAGenerer();
 			PaquetagePresentation paquet ;
@@ -212,7 +213,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 					}
 				}
 			}
-			GenerationManager.getInstance().setListeProduitsExterieurs(listeProduitsExterieurs);
+			GenerationManager.setListeProduitsExterieurs(listeProduitsExterieurs);
 			System.out.println(listeProduitsExterieurs);
 		}
 		

@@ -18,6 +18,7 @@
  */
  
 package iepp.application.ageneration;
+import iepp.Application;
 import iepp.domaine.ComposantProcessus;
 import iepp.domaine.ElementPresentation;
 import java.io.*;
@@ -99,12 +100,52 @@ public class GDiagramme extends GElementModele
 
 		this.ajouterLienRacine(fd);
 		
+		if (GenerationManager.getInstance().estContenuAvant())
+		{
+		    this.ajouterContenu(fd);
+		}
 		fd.write("<div align=\"center\" class=\"imgdiagramme\">" + this.modele.getMapImage("../../", "./") + "</div>");
 		String description = this.element.getDescription();
 		if (description != null)
 		{
 			fd.write("<br><hr><div class=\"description\">" + description + "</div>\n");
 		}
-		this.ajouterContenu(fd);
+		
+		if (!GenerationManager.getInstance().estContenuAvant())
+		{
+		    this.ajouterContenu(fd);
+		}
+		
+		this.ajouterMail(fd);
+		this.ajouterVersionDate(fd);
+		fd.write("</BODY></HTML>") ;
+		fd.close();
+	}
+	
+	/**
+	 * Méthode permettant d'ajouter le contenu d'un fichier en bas de la page en train
+	 * d'être construite 
+	 * @param fd lien vers le fichier contenu à construire
+	 * @throws IOException
+	 */
+	public void ajouterContenu(FileWriter fd ) throws IOException
+	{
+		String contenu = this.element.getContenu();
+		if (contenu != null)
+		{
+			fd.write("<hr></br>");
+			// si le contenu est un fichier html
+			if (contenu.endsWith(".html") || contenu.endsWith(".htm") || contenu.endsWith(".HTML") || contenu.endsWith(".HTM") || contenu.endsWith(".txt")) 
+			{
+				// recopier le fichier à la suite de la description
+				this.recopierContenu(contenu, fd);
+			}
+			else
+			{
+				fd.write(Application.getApplication().getTraduction("WEB_LINK")+ " : " + "<a href=\"../../contenu/" + this.element.getContenu() + "\" target=\"_new\" >" + this.element.getContenu() + "</a>");
+				fd.write("<hr></br>");
+				this.ajouterMail(fd);
+			}
+		}
 	}
 }

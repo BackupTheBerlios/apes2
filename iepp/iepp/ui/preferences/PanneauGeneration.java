@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,24 +15,34 @@ import java.util.Vector;
 
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import org.ipsquad.apes.ui.PreferencesDialog;
 
 
 public class PanneauGeneration extends PanneauOption 
 {
 	private JTextField mDefaultPath;
-	private String mPanelKey;
 	private JComboBox mStyles;
 	private String mOldStyle;
 	private JButton mBackgroundColorButton;
 	private JButton browseButton;
+	private JRadioButton mAvant;
+	private JRadioButton mApres;
+	
+	
 	
 	public static final String GENERATION_PANEL_KEY = "GenerationTitle";
 	
@@ -126,12 +137,36 @@ public class PanneauGeneration extends PanneauOption
 		makeLabel(" ", gridbag, c);
 		makeLabel(" ", gridbag, c);
 		
+		//Style
+		c.weighty = 1 ;
+		//c.gridheight = 1; //end row
+		c.fill = GridBagConstraints.BOTH;
+		c.anchor = GridBagConstraints.WEST;
+		JPanel style = new JPanel();
+		Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+		TitledBorder titleStyle = BorderFactory.createTitledBorder( loweredetched,Application.getApplication().getTraduction("PlaceContenu"));
+		
+		style.setBorder(titleStyle);
+		gridbag.setConstraints(style, c);
+		mPanel.add(style);
+		ButtonGroup groupe_contenu_html = new ButtonGroup();
+		this.mAvant = new JRadioButton(Application.getApplication().getTraduction("ContenuAvant"),
+				Application.getApplication().getConfigPropriete("place_contenu").equals(GenerationManager.AVANT_CONTENU));
+		this.mApres = new JRadioButton(Application.getApplication().getTraduction("ContenuApres"),
+		        Application.getApplication().getConfigPropriete("place_contenu").equals(GenerationManager.APRES_CONTENU));
+		groupe_contenu_html.add(this.mAvant);
+		groupe_contenu_html.add(this.mApres);
+		
+		style.setLayout(new GridLayout(3,1));
+		style.add(mAvant);
+		style.add(mApres);
+
 		c.fill = GridBagConstraints.VERTICAL;
 		c.weighty = 2.0; 
 		// linefeed     		
 		 c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
-       
+		
 		this.add(new JLabel("    "),BorderLayout.WEST);
 		this.add(mPanel,BorderLayout.CENTER);
 	}
@@ -157,7 +192,11 @@ public class PanneauGeneration extends PanneauOption
 		}
 		// récupère la couleur choisie dans la bd
 		Application.getApplication().setConfigPropriete("couleur_arbre", "" + mBackgroundColorButton.getBackground().getRGB());
-		
+
+		if (this.mAvant.isSelected())
+		    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.AVANT_CONTENU);
+		else if (this.mApres.isSelected())
+		    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.APRES_CONTENU);
 	}
 	
 	private class ManagerButton implements ActionListener

@@ -19,7 +19,6 @@
 package iepp.ui.preferences;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -44,6 +43,9 @@ public class FenetrePreference extends JDialog
 	 */
 	private JPanel panneau ;
 	
+	private PanneauDP panneauDP;
+	private PanneauDPDescription panneauDPDesc;
+	private PanneauDiagramme panneauDiagramme;
 	private PanneauReferentiel panneauReferentiel;
 	private PanneauDescription panneauDescription;
 	private PanneauLangue panneauLangue;
@@ -53,17 +55,25 @@ public class FenetrePreference extends JDialog
 	private JButton ok;
 	private JButton cancel; 
 	
+	private int type_courant;
 	
-	public FenetrePreference (FenetrePrincipale parent)
+	public static final int TYPE_DP = 0;
+	public static final int TYPE_GENERATION = 1;
+	public static final int TYPE_PREFERENCES = 2;
+	
+	
+	public FenetrePreference (FenetrePrincipale parent, int type)
 	{
 		super(parent, Application.getApplication().getTraduction("Preferences"), true);
 		this.setSize(600, 450);
+		
+		this.type_courant = type;
+		
 		// gestionnaire de mise en page
 		this.getContentPane().setLayout(new BorderLayout());
 		
 		// créer l'arbre de navigation
 		ArbrePreferences tree = new ArbrePreferences(this);
-		this.initPreferencesDialog();
 		
 		Container panelMarge = getContentPane();
 		// créer le panneau qui va changer
@@ -87,7 +97,7 @@ public class FenetrePreference extends JDialog
 		
 		tree.setBorder(BorderFactory.createLoweredBevelBorder());
 		this.panneau.add(bottom,BorderLayout.SOUTH);
-		this.panneau.add(this.panneauDescription,BorderLayout.CENTER);
+		//this.panneau.add(this.panneauDescription,BorderLayout.CENTER);
 
 		// create the panel
 		panelMarge.add(this.panneau,BorderLayout.CENTER);
@@ -96,6 +106,7 @@ public class FenetrePreference extends JDialog
 		panelMarge.add(new JLabel("   "),BorderLayout.WEST);
 		panelMarge.add(new JLabel(" "),BorderLayout.SOUTH);
 		
+		this.initPreferencesDialog();
 		
 		Rectangle bounds = parent.getBounds();
 		this.setLocation(bounds.x+ (int) bounds.width / 2 - this.getWidth() / 2,
@@ -107,8 +118,7 @@ public class FenetrePreference extends JDialog
 	public void initPreferencesDialog ()
 	{
 		this.panneauDescription = new PanneauDescription(Application.getApplication().getTraduction(PanneauDescription.GENERAL_KEY)) ;
-		this.panneauDescription.openPanel(PanneauDescription.GENERAL_KEY);
-		this.panneauDescription.setVisible(true);
+		this.panneauDescription.setVisible(false);
 		
 		this.panneauLangue = new PanneauLangue(Application.getApplication().getTraduction(PanneauLangue.LANGUAGE_PANEL_KEY)); 
 		this.panneauLangue.setVisible(false);
@@ -118,19 +128,41 @@ public class FenetrePreference extends JDialog
 		
 		this.panneauReferentiel= new PanneauReferentiel(Application.getApplication().getTraduction(PanneauReferentiel.REPOSITORY_PANEL_KEY)); 
 		this.panneauReferentiel.setVisible(false);
+		
+		this.panneauDiagramme= new PanneauDiagramme(Application.getApplication().getTraduction(PanneauDiagramme.DIAGRAM_PANEL_KEY)); 
+		this.panneauDiagramme.setVisible(false);
+		
+		this.panneauDP= new PanneauDP(Application.getApplication().getTraduction(PanneauDP.DP_PANEL_KEY)); 
+		this.panneauDP.setVisible(false);
+		
+		this.panneauDPDesc = new PanneauDPDescription(Application.getApplication().getTraduction(PanneauDPDescription.DP_DESCRIPTION_PANEL_KEY)); 
+		this.panneauDPDesc.setVisible(false);
+	   
+		switch (this.type_courant)
+		{
+		    case FenetrePreference.TYPE_PREFERENCES:
+		        this.panneauDescription.setVisible(true);
+		        this.setInnerPanel(PreferenceTreeItem.DESC_PANEL, PanneauDescription.GENERAL_KEY);
+						break;
+			case FenetrePreference.TYPE_DP:
+			    this.panneauDescription.setVisible(true);
+			    this.setInnerPanel(PreferenceTreeItem.DESC_PANEL, PanneauDescription.DP_KEY);
+						break;
+			case FenetrePreference.TYPE_GENERATION:
+					
+						break;
+		}
 	}
 	
 	public void setInnerPanel(int panel,String key)
 	{
-		/*
-		if (panel == PreferenceTreeItem.COLOR_PANEL)
-			panneau.add(mColorFontOption.openPanel(key),BorderLayout.CENTER);
-		if(panel == PreferenceTreeItem.PATH_PANEL)
-			panneau.add(mDefaultOption.openPanel(key),BorderLayout.CENTER);
-		if(panel == PreferenceTreeItem.ERROR_PANEL)
-			panneau.add(mWindowsOption.openPanel(key),BorderLayout.CENTER);
-		*/
-		if(panel == PreferenceTreeItem.REPOSITORY_PANEL)
+	    if(panel == PreferenceTreeItem.DP_DESCRIPTION_PANEL)
+			panneau.add(this.panneauDPDesc.openPanel(key),BorderLayout.CENTER);
+	    else if(panel == PreferenceTreeItem.DP_PANEL)
+			panneau.add(this.panneauDP.openPanel(key),BorderLayout.CENTER);
+	    else if(panel == PreferenceTreeItem.DIAGRAM_PANEL)
+			panneau.add(this.panneauDiagramme.openPanel(key),BorderLayout.CENTER);
+		else if(panel == PreferenceTreeItem.REPOSITORY_PANEL)
 			panneau.add(this.panneauReferentiel.openPanel(key),BorderLayout.CENTER);
 		else if(panel == PreferenceTreeItem.GENERATION_PANEL)
 			panneau.add(this.panneauGeneration.openPanel(key),BorderLayout.CENTER);
@@ -138,6 +170,16 @@ public class FenetrePreference extends JDialog
 			panneau.add(this.panneauDescription.openPanel(key),BorderLayout.CENTER);
 		else if(panel == PreferenceTreeItem.LANGUAGE_PANEL)   
 			panneau.add(this.panneauLangue.openPanel(key),BorderLayout.CENTER);
+	}
+	
+	public PanneauDPDescription getDPDescPanel()
+	{
+	    return this.panneauDPDesc;
+	}
+	
+	public PanneauDP getDPPanel()
+	{
+	    return this.panneauDP;
 	}
 	
 	public PanneauDescription getDescriptionPanel()
@@ -156,18 +198,39 @@ public class FenetrePreference extends JDialog
 	{
 		return this.panneauReferentiel;
 	}
+	public PanneauDiagramme getDiagrammePanel()
+	{
+		return this.panneauDiagramme;
+	}
+	
+	public int getType()
+	{
+	    return this.type_courant;
+	}
 	
 	private void save()
 	{
-		// sauver tous les paramètres
-		this.panneauReferentiel.save();
-	 	this.panneauLangue.save();
-	 	this.panneauGeneration.save();
-	 	if (this.panneauLangue.hasLanguageChanged())
-	 	{
-	 		Application.getApplication().getFenetrePrincipale().rafraichirLangue();
-	 		this.dispose();
-	 	}
+	    switch (this.type_courant)
+		{
+		    case FenetrePreference.TYPE_PREFERENCES:
+								//sauver tous les paramètres
+								this.panneauReferentiel.save();
+							 	this.panneauLangue.save();
+							 	this.panneauGeneration.save();
+							 	if (this.panneauLangue.hasLanguageChanged())
+							 	{
+							 		Application.getApplication().getFenetrePrincipale().rafraichirLangue();
+							 		this.dispose();
+							 	}
+								break;
+			case FenetrePreference.TYPE_DP:
+			    				
+								break;
+			case FenetrePreference.TYPE_GENERATION:
+			    				this.panneauDP.save();
+			    				break;
+		}
+		
 	}
 	
 	private class ManagerButton implements ActionListener

@@ -32,7 +32,6 @@ import java.awt.*;
  * c'est-à-dire, toutes les options de génération que l'utilisateur
  * a rentré dans la boîte de dialogue de génération.
  * Pour accéder à une propriété, il faut faire GenerationManager.getInstance().getxxxx()
- * AJOUTER DES COMMENTAIRES JAVADOC ET AUTRES
  */
 public class GenerationManager 
 {
@@ -48,6 +47,7 @@ public class GenerationManager
 	private static Vector listeAGenerer;
 	private static Color couleur_surlign;
 	private static Vector listeProduitsExterieurs;
+	private static String place_contenu;
 	
 	// mettre tous les autres attributs en private static
 
@@ -63,6 +63,9 @@ public class GenerationManager
 	public static final int TYPE_DEFP_TABLEAU = 3 ;
 	public static final int TYPE_DEFP_ACT = 4 ;
 	public static final int TYPE_DEFP_FLOT = 5 ;
+	
+	public static final String AVANT_CONTENU = "0";
+	public static final String APRES_CONTENU = "1";
     
 
 	
@@ -77,6 +80,7 @@ public class GenerationManager
 		this.setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
 		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
 		GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
+		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
 		GenerationManager.brancheObjet = false;
 	}
 
@@ -198,11 +202,27 @@ public class GenerationManager
 		return result;
 	}
 	
+	/**
+	 * Indique si le contenu doit être placé avant ou après le diagramme
+	 * @return
+	 */
+	public boolean estContenuAvant()
+	{
+	    return (GenerationManager.place_contenu.equals(GenerationManager.AVANT_CONTENU));
+	}
+	
+	/**
+	 * Renvoie la couleur de surlignement dans l'arbre de navigation
+	 */
 	public Color getCouleur()
 	{
 		return GenerationManager.couleur_surlign;
 	}
 	
+	/**
+	 * Renvoie la liste à générer (A remplacer par l'arbre)
+	 * @return
+	 */
 	public Vector getListeAGenerer()
 	{
 		return(GenerationManager.listeAGenerer);

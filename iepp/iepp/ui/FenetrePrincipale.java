@@ -625,7 +625,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 			 
 			else if ((source == this.propriete ) || source == this.bpreferences)
 			{
-				JDialog dialogueProp = new FenetrePreference(this);
+				JDialog dialogueProp = new FenetrePreference(this, FenetrePreference.TYPE_PREFERENCES);
 			}
 			else if (source == this.propos)
 			{

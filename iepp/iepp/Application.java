@@ -45,7 +45,7 @@ public class Application {
 	/**
 	 * Numéro de version de IEPP
 	 */
-	public static String NUMVESION = "1.1";
+	public static String NUMVESION = "1.1.1";
 	
 	/**
 	 * Lien vers l'instance courante de l'application
@@ -160,8 +160,7 @@ public class Application {
 		this.fenetrePpale.rafraichirLangue();
 		this.fenetrePpale.show();
 		this.chargerReferentiel();
-		//
-		
+
 		// initialiser le gestionnaire d'erreur
 		ErrorManager.getInstance().setOwner(this.fenetrePpale);
 	}
@@ -248,6 +247,7 @@ public class Application {
 		this.config.put("repertoire_generation", "./");
 		this.config.put("chemingeneration","./");
 		this.config.put("chemin_referentiel","./Referentiels/");
+		this.config.put("place_contenu","1");
 		this.sauvegarderConfig();
 	}
 	

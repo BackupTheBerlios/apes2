@@ -22,6 +22,7 @@ public class PanneauDescription extends PanneauOption
 	public static final String GENERAL_KEY = "GeneralTitle" ;
 	public static final String GENERATION_KEY = "GenerationTitle" ;
 	public static final String REPOSITORY_KEY = "RepositoryTitle" ;
+	public static final String DP_KEY = "Propriete_DPTitle" ;
 	
 	public PanneauDescription(String name)
 	{
@@ -83,13 +84,17 @@ public class PanneauDescription extends PanneauOption
 		{
 			this.mDescriptionLabel.setText(Application.getApplication().getTraduction("GeneralTitleDesc"));
 		}
-		if (key.equals(GENERATION_KEY))
+		else if (key.equals(GENERATION_KEY))
 		{
 			this.mDescriptionLabel.setText(Application.getApplication().getTraduction("GenerationTitleDesc"));
 		}
-		if (key.equals(REPOSITORY_KEY))
+		else if (key.equals(REPOSITORY_KEY))
 		{
 			this.mDescriptionLabel.setText(Application.getApplication().getTraduction("RepositoryTitleDesc"));
+		}
+		else if (key.equals(DP_KEY))
+		{
+			this.mDescriptionLabel.setText(Application.getApplication().getTraduction("DPTitleDesc"));
 		}
 	}
 

@@ -146,7 +146,7 @@ Creer_DP=Create new process
 Ouvrir_DP=Open this process
 
 #Fenetre Propriete
-Propriete_DP=Processus properties
+
 Proprietes_Generales_DP=General properties
 Nom_DP=Processus name :
 Auteur_DP=Author name :
@@ -301,6 +301,7 @@ propos_texte4=\n  either version 2 of the License, or any later version.  \n
 GeneralTitleDesc=Les paramètres généraux
 GenerationTitleDesc=Paramètres de génération du site Web
 RepositoryTitleDesc=Paramètres concernant le référentiel
+DPTitleDesc=General properties of the courant process
 GeneralTitle=General
 GenerationTitle=Génération
 RepositoryTitle=Référentiel
@@ -309,3 +310,10 @@ CheminReferentiel=Default path :
 ReferentielDefaut=Loaded repository on startup :
 RepComposantDefaut=Default path of incoming component :
 RepPaquetageDefaut=Default path of incoming presentation package :
+DiagramTitle=Diagram
+PlaceContenu=In generated pages, content is placed 
+ContenuAvant=Before diagram
+ContenuApres=After diagram
+Propriete_DPTitle=Processus properties
+Propriete_DP=Processus
+Propriete_DP_Desc=Process description

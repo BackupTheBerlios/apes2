@@ -40,6 +40,9 @@ public class ArbrePreferences extends JTree
 		generalItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauLangue.LANGUAGE_PANEL_KEY,Application.getApplication().getTraduction(PanneauLangue.LANGUAGE_PANEL_KEY),PreferenceTreeItem.LANGUAGE_PANEL)));    
 	
+		generalItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauDiagramme.DIAGRAM_PANEL_KEY,Application.getApplication().getTraduction(PanneauDiagramme.DIAGRAM_PANEL_KEY),PreferenceTreeItem.DIAGRAM_PANEL)));    
+	
 		DefaultMutableTreeNode generationItem = new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauDescription.GENERATION_KEY,Application.getApplication().getTraduction(PanneauDescription.GENERATION_KEY),PreferenceTreeItem.DESC_PANEL));
 		
@@ -52,11 +55,30 @@ public class ArbrePreferences extends JTree
 		referentielItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauReferentiel.REPOSITORY_PANEL_KEY,Application.getApplication().getTraduction(PanneauReferentiel.REPOSITORY_PANEL_KEY),PreferenceTreeItem.REPOSITORY_PANEL)));    
 	
+		DefaultMutableTreeNode DPItem = new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauDescription.DP_KEY,Application.getApplication().getTraduction(PanneauDescription.DP_KEY),PreferenceTreeItem.DESC_PANEL));
 		
+		DPItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauDP.DP_PANEL_KEY,Application.getApplication().getTraduction(PanneauDP.DP_PANEL_KEY),PreferenceTreeItem.DP_PANEL)));    
 		
-		root.add(generalItem);
-		root.add(generationItem);
-		root.add(referentielItem);
+		DPItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauDPDescription.DP_DESCRIPTION_PANEL_KEY,Application.getApplication().getTraduction(PanneauDPDescription.DP_DESCRIPTION_PANEL_KEY),PreferenceTreeItem.DP_DESCRIPTION_PANEL)));    
+	
+		
+		switch (this.mPrefDiag.getType())
+		{
+		    case FenetrePreference.TYPE_PREFERENCES:
+						        root.add(generalItem);
+								root.add(generationItem);
+								root.add(referentielItem);
+								break;
+			case FenetrePreference.TYPE_DP:
+			    				root.add(DPItem);
+								break;
+			case FenetrePreference.TYPE_GENERATION:
+			    				break;
+		}
+		
 		this.setRootVisible(false);
 		this.addTreeSelectionListener(gp);
 		this.setModel (new DefaultTreeModel(root));
@@ -74,53 +96,72 @@ public class ArbrePreferences extends JTree
 				Object o = e.getSource () ;
 				int panel = ((PreferenceTreeItem)node.getUserObject()).getPanel();		
 				String key = ((PreferenceTreeItem)node.getUserObject()).getKey();
-				/*
-				if (panel == PreferenceTreeItem.COLOR_PANEL)
+
+				if(panel == PreferenceTreeItem.DP_DESCRIPTION_PANEL)
 				{
+				    mPrefDiag.getDPDescPanel().setVisible(true);
+				    mPrefDiag.getDPPanel().setVisible(false);
+				    mPrefDiag.getDiagrammePanel().setVisible(false);
+					mPrefDiag.getReferentielPanel().setVisible(false);
+					mPrefDiag.getGenerationPanel().setVisible(false);
 					mPrefDiag.getDescriptionPanel().setVisible(false);
 					mPrefDiag.getLanguagePanel().setVisible(false);
 				}
-				
-				if(panel == PreferenceTreeItem.PATH_PANEL)
+				else if(panel == PreferenceTreeItem.DIAGRAM_PANEL)
 				{
-					mPrefDiag.getColorFontPanel().setVisible(false);
-					mPrefDiag.getDefaultPathPanel().setVisible(true);
-					mPrefDiag.getWindowsPanel().setVisible(false);
+				    mPrefDiag.getDPDescPanel().setVisible(false);
+				    mPrefDiag.getDPPanel().setVisible(false);
+				    mPrefDiag.getDiagrammePanel().setVisible(true);
+					mPrefDiag.getReferentielPanel().setVisible(false);
+					mPrefDiag.getGenerationPanel().setVisible(false);
 					mPrefDiag.getDescriptionPanel().setVisible(false);
 					mPrefDiag.getLanguagePanel().setVisible(false);
 				}
-				if(panel == PreferencesTreeItem.ERROR_PANEL)
+				else if(panel == PreferenceTreeItem.DP_PANEL)
 				{
-					mPrefDiag.getColorFontPanel().setVisible(false);
-					mPrefDiag.getDefaultPathPanel().setVisible(false);
-					mPrefDiag.getWindowsPanel().setVisible(true);
+				    mPrefDiag.getDPDescPanel().setVisible(false);
+				    mPrefDiag.getDPPanel().setVisible(true);
+				    mPrefDiag.getDiagrammePanel().setVisible(false);
+					mPrefDiag.getReferentielPanel().setVisible(false);
+					mPrefDiag.getGenerationPanel().setVisible(false);
 					mPrefDiag.getDescriptionPanel().setVisible(false);
 					mPrefDiag.getLanguagePanel().setVisible(false);
 				}
-				*/
-				if(panel == PreferenceTreeItem.REPOSITORY_PANEL)
+				else if(panel == PreferenceTreeItem.REPOSITORY_PANEL)
 				{
+				    mPrefDiag.getDPDescPanel().setVisible(false);
+				    mPrefDiag.getDPPanel().setVisible(false);
+				    mPrefDiag.getDiagrammePanel().setVisible(false);
 					mPrefDiag.getReferentielPanel().setVisible(true);
 					mPrefDiag.getGenerationPanel().setVisible(false);
 					mPrefDiag.getDescriptionPanel().setVisible(false);
 					mPrefDiag.getLanguagePanel().setVisible(false);
 				}
-				if(panel == PreferenceTreeItem.GENERATION_PANEL)
+				else if(panel == PreferenceTreeItem.GENERATION_PANEL)
 				{
+				    mPrefDiag.getDPDescPanel().setVisible(false);
+				    mPrefDiag.getDPPanel().setVisible(false);
+				    mPrefDiag.getDiagrammePanel().setVisible(false);
 					mPrefDiag.getGenerationPanel().setVisible(true);
 					mPrefDiag.getDescriptionPanel().setVisible(false);
 					mPrefDiag.getLanguagePanel().setVisible(false);
 					mPrefDiag.getReferentielPanel().setVisible(false);
 				}
-				if(panel == PreferenceTreeItem.DESC_PANEL)
+				else if(panel == PreferenceTreeItem.DESC_PANEL)
 				{
+				    mPrefDiag.getDPDescPanel().setVisible(false);
+				    mPrefDiag.getDPPanel().setVisible(false);
+				    mPrefDiag.getDiagrammePanel().setVisible(false);
 					mPrefDiag.getDescriptionPanel().setVisible(true);
 					mPrefDiag.getLanguagePanel().setVisible(false);
 					mPrefDiag.getGenerationPanel().setVisible(false);
 					mPrefDiag.getReferentielPanel().setVisible(false);
 				}
-				if( panel == PreferenceTreeItem.LANGUAGE_PANEL)
+				else if( panel == PreferenceTreeItem.LANGUAGE_PANEL)
 				{
+				    mPrefDiag.getDPDescPanel().setVisible(false);
+				    mPrefDiag.getDPPanel().setVisible(false);
+				    mPrefDiag.getDiagrammePanel().setVisible(false);
 					mPrefDiag.getDescriptionPanel().setVisible(false);
 					mPrefDiag.getLanguagePanel().setVisible(true);
 					mPrefDiag.getGenerationPanel().setVisible(false);
