@@ -105,7 +105,10 @@ public class GRecapitulatifObject extends GElement
 		{
 			GElementModele elem = (GElementModele)listeElement.elementAt(i);
 			IdObjetModele id = elem.getElementPresentation().getElementModele();
-			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			if (id != null && id.getChemin() != null)
+			{
+				fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			}
 		}
 		
 		this.ajouterMail(fd);
