@@ -229,7 +229,9 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 
 		private boolean isProprietes = false;
 		private boolean isElement = false;
+		private boolean isGuide = false;
 		private ElementPresentation element = null;
+		private Guide guide = null;
 		private String baliseCourante ;
 
 				
@@ -254,13 +256,21 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 			{
 				this.isProprietes = true;
 			}
+			else if(baliseName=="guide")
+			{
+				this.isGuide = true;
+				this.isElement = false;
+				this.guide = new Guide();
+				ChargeurPaquetagePresentation.this.paquetage.ajouterElement(this.guide);
+				this.element.ajouterGuide(this.guide);
+			}
 		}
 
 		public void endElement(String namespace, String name, String raw) 
 		{
 			if(raw == "proprietes") this.isProprietes = false; 
+			if(raw == "guide") this.isGuide = false;
 			if(raw == "element") this.isElement = false;
-
 		}
 		
 		public void characters(char buf[], int offset, int len) throws SAXException
@@ -306,6 +316,23 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 						this.element.setContenu(valeur);
 					else if (this.baliseCourante.equals("description"))
 						this.element.setDescription(valeur);	
+				}
+				else if(this.isGuide)
+				{
+					if (this.baliseCourante.equals("nom_presentation"))
+						this.guide.setNomPresentation(valeur);
+					else if (this.baliseCourante.equals("identificateur_externe"))
+						this.guide.setIdExterne(new Integer(valeur).intValue());
+					else if (this.baliseCourante.equals("identificateur_interne"))
+						this.guide.setIdInterne(valeur);
+					else if (this.baliseCourante.equals("icone"))
+						this.guide.setIcone(valeur);
+					else if (this.baliseCourante.equals("contenu"))
+						this.guide.setContenu(valeur);
+					else if (this.baliseCourante.equals("type"))
+						this.guide.setType(valeur);
+					else if (this.baliseCourante.equals("description"))
+						this.guide.setDescription(valeur);
 				}
 			} 
 		}

@@ -65,37 +65,14 @@ public class GDefinitionTravail extends GElementModele
 
 		this.ajouterLienRacine(fd);
 
-		//---------------------SELON OPTION-----------------//
-		switch (GenerationManager.getInstance().getTypeDefTravail())
+		// tableau
+		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ACTIVITES") + " </div>\n");
+		Vector listeActivites = this.modele.getActivite();
+		for (int i = 0; i < listeActivites.size(); i++)
 		{
-			case GenerationManager.TYPE_DEFP_TABLEAU:
-				fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ACTIVITES") + " </div>\n");
-				Vector listeActivites = this.modele.getActivite();
-				for (int i = 0; i < listeActivites.size(); i++)
-				{
-					IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
-					fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
-				}
-				break;
-			
-			case GenerationManager.TYPE_DEFP_ACT:
-				// diagramme d'activité
-				IdObjetModele idDiagramme = this.modele.getDiagrammeActivite();
-				if (idDiagramme != null)
-				{
-					fd.write("<div align=\"center\" class=\"imgdiagramme\">" + idDiagramme.getMapImage("../../","../diagrammes/") + "</div>");
-				}
-				break;
-			case GenerationManager.TYPE_DEFP_FLOT:
-				// diagramme d'activité de flot de produit
-				IdObjetModele idDiag = this.modele.getDiagrammeFlotProduit();
-				if (idDiag != null)
-				{
-					fd.write("<div align=\"center\" class=\"imgdiagramme\">" + idDiag.getMapImage("../../","../diagrammes/") + "</div>");
-				}
-				break;
+			IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
+			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
-		//---------------------FIN OPTION-----------------//
 		
 		String description = this.element.getDescription();
 		if (description != null)

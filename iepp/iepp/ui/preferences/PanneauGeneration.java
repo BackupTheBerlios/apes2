@@ -1,7 +1,9 @@
 package iepp.ui.preferences;
 
 import iepp.Application;
+import iepp.Projet;
 import iepp.application.ageneration.GenerationManager;
+import iepp.domaine.DefinitionProcessus;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,6 +24,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -34,20 +37,29 @@ import org.ipsquad.apes.ui.PreferencesDialog;
 
 public class PanneauGeneration extends PanneauOption 
 {
-	private JTextField mDefaultPath;
+	private JTextField sRepGen;
 	private JComboBox mStyles;
 	private String mOldStyle;
 	private JButton mBackgroundColorButton;
 	private JButton browseButton;
 	private JRadioButton mAvant;
 	private JRadioButton mApres;
+	private JCheckBox bInfoBulles;
+	private JCheckBox bstatistique;
+	private JCheckBox brecap;
 	
+	private DefinitionProcessus defProc;
 	
-	
-	public static final String GENERATION_PANEL_KEY = "GenerationTitle";
+	public static final String GENERATION_PANEL_KEY = "Generation_DP_Desc";
 	
 	public PanneauGeneration(String name)
 	{
+		Projet p = Application.getApplication().getProjet();
+	    if (p != null)
+	    {
+	        this.defProc = Application.getApplication().getProjet().getDefProc();
+	    }
+	    
 		// lien vers l'ancienne feuille de style utilisée
 		this.mOldStyle = Application.getApplication().getConfigPropriete("feuille_style");
 		boolean trouve = false;
@@ -77,33 +89,41 @@ public class PanneauGeneration extends PanneauOption
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
 		
-		// rep generation
+//		 fichier contenu
 		c.weighty = 0;
 		c.weightx = 0 ;
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = GridBagConstraints.REMAINDER;
-		JLabel label = new JLabel(Application.getApplication().getTraduction("rep_site"));
+		JLabel label = new JLabel(Application.getApplication().getTraduction("Dossier_Generation"));
 		gridbag.setConstraints(label, c);
 		mPanel.add(label);
 		c.weightx = 3 ;
-		c.gridwidth = GridBagConstraints.RELATIVE;
-		mDefaultPath = new JTextField(25);
-		mDefaultPath.setText(Application.getApplication().getConfigPropriete("repertoire_generation"));
-		mPanel.add(mDefaultPath);
-		gridbag.setConstraints(mDefaultPath, c);
+		c.gridwidth = 6;
+		sRepGen = new JTextField(25);
+		mPanel.add(sRepGen);
+		gridbag.setConstraints(sRepGen, c);
 		c.weightx = 0 ;
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		this.browseButton = new JButton(Application.getApplication().getTraduction("Parcourir"));
 		browseButton.addActionListener(man);
 		gridbag.setConstraints(browseButton, c);
-		mPanel.add(browseButton);			
+		mPanel.add(browseButton);		
 
-		c.fill = GridBagConstraints.VERTICAL;    		
+		c.fill = GridBagConstraints.VERTICAL;
+		c.weighty = 2.0;   		
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
+		this.add(new JLabel("    "),BorderLayout.WEST);
+		this.add(mPanel,BorderLayout.CENTER);   
+		
+		// initialiser les champs
+		if (this.defProc != null)
+		{
+		    sRepGen.setText(this.defProc.getRepertoireGeneration());
+		}
 		
 		// Styles
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridwidth = 3 ;//next-to-last in row
+		c.gridwidth = 6 ;//next-to-last in row
 		makeLabel(Application.getApplication().getTraduction("style_pages"), gridbag, c);
 		
 		Vector styles = Application.getApplication().getStyles();
@@ -136,12 +156,13 @@ public class PanneauGeneration extends PanneauOption
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
 		makeLabel(" ", gridbag, c);
+
 		
 		//Style
-		c.weighty = 1 ;
-		//c.gridheight = 1; //end row
+		c.weightx = 1.0;
+		c.weighty = 0 ;
 		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.WEST;
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row			//	title
 		JPanel style = new JPanel();
 		Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
 		TitledBorder titleStyle = BorderFactory.createTitledBorder( loweredetched,Application.getApplication().getTraduction("PlaceContenu"));
@@ -157,18 +178,55 @@ public class PanneauGeneration extends PanneauOption
 		groupe_contenu_html.add(this.mAvant);
 		groupe_contenu_html.add(this.mApres);
 		
-		style.setLayout(new GridLayout(3,1));
+		style.setLayout(new GridLayout(2,1));
 		style.add(mAvant);
 		style.add(mApres);
 
-		c.fill = GridBagConstraints.VERTICAL;
-		c.weighty = 2.0; 
-		// linefeed     		
-		 c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		//	linefeed
+		c.weighty = 0;      		
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
 		
+		// Info bulles sur les diagrammes
+		this.bInfoBulles = new JCheckBox("Info-bulle sur les diagrammes");
+		c.gridwidth = 6 ;//next-to-last in row
+		
+		gridbag.setConstraints(bInfoBulles, c);
+		mPanel.add(bInfoBulles);
+		
+		//	linefeed
+		c.weighty = 0;      		
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		
+		// Statistiques sur la génération
+		this.bstatistique = new JCheckBox("Générer une page de statistiques");
+		c.gridwidth = 6 ;//next-to-last in row
+		
+		gridbag.setConstraints(bstatistique, c);
+		mPanel.add(bstatistique);
+		
+		//linefeed
+		c.weighty = 0;      		
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		
+		// Récapitulatif des roles, produits, et activités
+		this.brecap = new JCheckBox("Insérer un récapitulatif (rôles, produits, activités)");
+		c.gridwidth = 6 ;//next-to-last in row
+		
+		gridbag.setConstraints(brecap, c);
+		mPanel.add(brecap);
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		makeLabel(" ", gridbag, c);
+		
+		c.fill = GridBagConstraints.VERTICAL;
+		c.weighty = 2.0;   		
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
 		this.add(new JLabel("    "),BorderLayout.WEST);
-		this.add(mPanel,BorderLayout.CENTER);
+		this.add(mPanel,BorderLayout.CENTER);  
 	}
 	
 	
@@ -181,22 +239,40 @@ public class PanneauGeneration extends PanneauOption
 	
 	public void save ()
 	{
-		Application.getApplication().setConfigPropriete("repertoire_generation", mDefaultPath.getText());
-		if ( mStyles.getSelectedItem().toString() != null)
+		if (this.verifierDonnees())
 		{
-			Application.getApplication().setConfigPropriete("feuille_style", mStyles.getSelectedItem().toString());
+			this.defProc.setRepertoireGeneration(this.sRepGen.getText());
+			if ( mStyles.getSelectedItem().toString() != null)
+			{
+				Application.getApplication().setConfigPropriete("feuille_style", mStyles.getSelectedItem().toString());
+			}
+			else
+			{
+				Application.getApplication().setConfigPropriete("feuille_style","");
+			}
+			// récupère la couleur choisie dans la bd
+			Application.getApplication().setConfigPropriete("couleur_arbre", "" + mBackgroundColorButton.getBackground().getRGB());
+	
+			if (this.mAvant.isSelected())
+			    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.AVANT_CONTENU);
+			else if (this.mApres.isSelected())
+			    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.APRES_CONTENU);
 		}
-		else
-		{
-			Application.getApplication().setConfigPropriete("feuille_style","");
+	}
+	
+	/**
+	 * Vérifie les informations saisies 
+	 * @return
+	 */
+	public boolean verifierDonnees()
+	{
+		if(this.sRepGen.getText().equals("")){
+			JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_repGen"),
+										Application.getApplication().getTraduction("M_creer_proc_titre"),
+										JOptionPane.WARNING_MESSAGE);
+			return false;
 		}
-		// récupère la couleur choisie dans la bd
-		Application.getApplication().setConfigPropriete("couleur_arbre", "" + mBackgroundColorButton.getBackground().getRGB());
-
-		if (this.mAvant.isSelected())
-		    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.AVANT_CONTENU);
-		else if (this.mApres.isSelected())
-		    Application.getApplication().setConfigPropriete("place_contenu", GenerationManager.APRES_CONTENU);
+		return true;
 	}
 	
 	private class ManagerButton implements ActionListener
@@ -206,16 +282,7 @@ public class PanneauGeneration extends PanneauOption
 			//récupérer l'objet source de l'évènement reçu
 			Object source = e.getSource();
 			// selon cet objet, réagir en conséquence
-			if (source == PanneauGeneration.this.browseButton)
-			{
-				JFileChooser fileChooser = new JFileChooser(PanneauGeneration.this.mDefaultPath.getText());
-				fileChooser.setDialogTitle(Application.getApplication().getTraduction("titre_choix_rep"));
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int res = fileChooser.showDialog(PanneauGeneration.this, Application.getApplication().getTraduction("OK"));
-				if(res == JFileChooser.APPROVE_OPTION)
-					PanneauGeneration.this.mDefaultPath.setText(fileChooser.getSelectedFile().getAbsolutePath());
-			}
-			else if (source == PanneauGeneration.this.mBackgroundColorButton)
+			if (source == PanneauGeneration.this.mBackgroundColorButton)
 			{
 				Color couleur_choisie = JColorChooser.showDialog(PanneauGeneration.this,Application.getApplication().getConfigPropriete("choix_couleur"), new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre"))));
 				// si l'utilisateur choisit annuler, la bd renvoie null, donc on vérifie le retour
@@ -223,6 +290,15 @@ public class PanneauGeneration extends PanneauOption
 				{
 					PanneauGeneration.this.mBackgroundColorButton.setBackground(couleur_choisie);
 				}
+			}
+			else if (source == PanneauGeneration.this.browseButton)
+			{
+				JFileChooser fileChooser = new JFileChooser(PanneauGeneration.this.sRepGen.getText());
+				fileChooser.setDialogTitle(Application.getApplication().getTraduction("titre_choix_rep"));
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int res = fileChooser.showDialog(PanneauGeneration.this, Application.getApplication().getTraduction("OK"));
+				if(res == JFileChooser.APPROVE_OPTION)
+					PanneauGeneration.this.sRepGen.setText(fileChooser.getSelectedFile().getAbsolutePath());
 			}
 		}
 	}

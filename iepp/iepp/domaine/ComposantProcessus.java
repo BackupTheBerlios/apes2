@@ -1376,14 +1376,9 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 							}
 							mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + id.getChemin()+ "\" " + description + ">\n");
 						}
-						else
-						{
-							System.out.println("BOH : " + elem.getNomPresentation());
-						}
 					}
 					else
 					{
-						System.err.println("BouhOU : " + ID_Apes);
 						// S'il s'agit d'un produit exterieur (sans element de presentation)
 						if (o[i] instanceof WorkProductCell)
 						{

@@ -156,8 +156,10 @@ public class FenetrePreference extends JDialog
 			    this.setTitle(Application.getApplication().getTraduction("Proprietes_DP"));
 			    break;
 			case FenetrePreference.TYPE_GENERATION:
-					
-						break;
+				this.panneauGeneration.setVisible(true);
+				this.setInnerPanel(PreferenceTreeItem.GENERATION_PANEL, PanneauGeneration.GENERATION_PANEL_KEY);
+				this.setTitle(Application.getApplication().getTraduction("titre_generer_site"));
+				break;
 		}
 	}
 	
@@ -230,7 +232,6 @@ public class FenetrePreference extends JDialog
 								//sauver tous les paramètres
 								this.panneauReferentiel.save();
 							 	this.panneauLangue.save();
-							 	this.panneauGeneration.save();
 							 	if (this.panneauLangue.hasLanguageChanged())
 							 	{
 							 		Application.getApplication().getFenetrePrincipale().rafraichirLangue();
@@ -241,9 +242,13 @@ public class FenetrePreference extends JDialog
 			    				this.panneauDP.save();
 								this.panneauDPDesc.save();
 								this.panneauDPGeneration.save();
+								this.panneauGeneration.save();
 								break;
 			case FenetrePreference.TYPE_GENERATION:
-			    				this.panneauDP.save();
+								this.panneauDP.save();
+								this.panneauDPDesc.save();
+								this.panneauDPGeneration.save();
+								this.panneauGeneration.save();
 			    				break;
 		}
 		

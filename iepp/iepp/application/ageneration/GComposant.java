@@ -70,59 +70,29 @@ public class GComposant extends GElementModele
 				+ "</p></td></tr></table></center><BR><BR>\n");
 		
 		
-		//---------------------SELON OPTION-----------------//
-		switch (GenerationManager.getInstance().getTypeComposant())
+		// tableau
+		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ROLES") + " </div>\n");
+		Vector listeRole = this.modele.getRole();
+		for (int i = 0; i < listeRole.size(); i++)
 		{
-			case GenerationManager.TYPE_COMP_TABLEAU:
-					fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ROLES") + " </div>\n");
-					Vector listeRole = this.modele.getRole();
-					for (int i = 0; i < listeRole.size(); i++)
-					{
-						IdObjetModele id = (IdObjetModele) listeRole.elementAt(i);
-						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
-					}
-					fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
-					Vector listeProduits = this.modele.getProduit();
-					for (int i = 0; i < listeProduits.size(); i++)
-					{
-						IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
-					}
-					fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_DEFINITIONS") + " </div>\n");
-					Vector listeDefinition = this.modele.getDefinitionTravail();
-					for (int i = 0; i < listeDefinition.size(); i++)
-					{
-						IdObjetModele id = (IdObjetModele) listeDefinition.elementAt(i);
-						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
-					}
-					break;
-				
-			case GenerationManager.TYPE_COMP_RESP:
-					Vector liste = this.modele.getListeDiagrammeResponsabilite();
-					for (int i = 0; i < liste.size(); i++)
-					{
-						IdObjetModele id = (IdObjetModele)liste.elementAt(i);
-						fd.write("<div align=\"center\" class=\"imgdiagramme\">" + id.getMapImage("../","./diagrammes/") + "</div><br>");
-					}
-					break;
-				
-			case GenerationManager.TYPE_COMP_FLOT:
-					//diagramme de flot de définition de travail
-					IdObjetModele idDiagramme = this.modele.getDiagrammeFlot();
-					if (idDiagramme == null)
-					{				
-						//	ou contexte s'il n'y est pas
-						idDiagramme = this.modele.getDiagrammeContexte();
-					}
-					// on a réussi à avoir au-moins un diagramme
-					if (idDiagramme != null)
-					{
-						fd.write("<div align=\"center\" class=\"imgdiagramme\">" + idDiagramme.getMapImage("../","./diagrammes/") + "</div>");
-					}
-					break;
+			IdObjetModele id = (IdObjetModele) listeRole.elementAt(i);
+			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
-		//---------------------FIN OPTION-----------------//
-		
+		fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
+		Vector listeProduits = this.modele.getProduit();
+		for (int i = 0; i < listeProduits.size(); i++)
+		{
+			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
+			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+		}
+		fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_DEFINITIONS") + " </div>\n");
+		Vector listeDefinition = this.modele.getDefinitionTravail();
+		for (int i = 0; i < listeDefinition.size(); i++)
+		{
+			IdObjetModele id = (IdObjetModele) listeDefinition.elementAt(i);
+			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+		}
+
 		// voir pour les diagrammes
 
 		this.ajouterContenu(fd);

@@ -43,12 +43,6 @@ public class ArbrePreferences extends JTree
 		generalItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauDiagramme.DIAGRAM_PANEL_KEY,Application.getApplication().getTraduction(PanneauDiagramme.DIAGRAM_PANEL_KEY),PreferenceTreeItem.DIAGRAM_PANEL)));    
 	
-		DefaultMutableTreeNode generationItem = new DefaultMutableTreeNode(new PreferenceTreeItem
-				(PanneauDescription.GENERATION_KEY,Application.getApplication().getTraduction(PanneauDescription.GENERATION_KEY),PreferenceTreeItem.DESC_PANEL));
-		
-		generationItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
-				(PanneauGeneration.GENERATION_PANEL_KEY,Application.getApplication().getTraduction(PanneauGeneration.GENERATION_PANEL_KEY),PreferenceTreeItem.GENERATION_PANEL)));    
-	
 		DefaultMutableTreeNode referentielItem = new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauDescription.REPOSITORY_KEY,Application.getApplication().getTraduction(PanneauDescription.REPOSITORY_KEY),PreferenceTreeItem.DESC_PANEL));
 		
@@ -64,7 +58,13 @@ public class ArbrePreferences extends JTree
 		DPItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauDPDescription.DP_DESCRIPTION_PANEL_KEY,Application.getApplication().getTraduction(PanneauDPDescription.DP_DESCRIPTION_PANEL_KEY),PreferenceTreeItem.DP_DESCRIPTION_PANEL)));    
 	
-		DPItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+		DefaultMutableTreeNode generationItem = new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauDescription.GENERATION_KEY,Application.getApplication().getTraduction(PanneauDescription.GENERATION_KEY),PreferenceTreeItem.DESC_PANEL));
+		
+		generationItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauGeneration.GENERATION_PANEL_KEY,Application.getApplication().getTraduction(PanneauGeneration.GENERATION_PANEL_KEY),PreferenceTreeItem.GENERATION_PANEL)));    
+	
+		generationItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauDPGeneration.DP_GENERATION_PANEL_KEY,Application.getApplication().getTraduction(PanneauDPGeneration.DP_GENERATION_PANEL_KEY),PreferenceTreeItem.DP_GENERATION_PANEL)));    
 	
 		
@@ -72,13 +72,15 @@ public class ArbrePreferences extends JTree
 		{
 		    case FenetrePreference.TYPE_PREFERENCES:
 						        root.add(generalItem);
-								root.add(generationItem);
 								root.add(referentielItem);
 								break;
 			case FenetrePreference.TYPE_DP:
 			    				root.add(DPItem);
+								root.add(generationItem);		
 								break;
 			case FenetrePreference.TYPE_GENERATION:
+								root.add(DPItem);
+								root.add(generationItem);	
 			    				break;
 		}
 		
