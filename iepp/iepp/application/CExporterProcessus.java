@@ -29,10 +29,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 
+import iepp.application.ageneration.ArbreGeneration;
 import iepp.application.ageneration.GenerationManager;
+import iepp.application.ageneration.TacheGeneration;
 import util.ErrorManager;
 import util.SimpleFileFilter;
 import util.SmartChooser;
+import util.ToolKit;
 import iepp.Application;
 import iepp.domaine.ComposantProcessus;
 import iepp.domaine.IdObjetModele;
@@ -88,6 +91,14 @@ public class CExporterProcessus extends CommandeNonAnnulable
 	
 	public boolean exporter(String filePath)
 	{
+		GenerationManager.getInstance().setListeAGenerer(Application.getApplication().getProjet().getDefProc().getListeAGenerer());
+		ArbreGeneration arbre = new ArbreGeneration();
+		GenerationManager.recupererProduitsExterieurs();
+		GenerationManager.construireArbre(arbre, null);
+		File f = new File(GenerationManager.getInstance().getCheminGeneration());
+		// permet d'iniatialiser les chemins des élements à exporter
+		arbre.initialiserArbre(ToolKit.removeSlashTerminatedPath(f.getAbsolutePath()));
+		
 		// récupérer la liste des composants du processus
 		Vector listeComposant = Application.getApplication().getProjet().getDefProc().getListeComp();
 		

@@ -932,59 +932,6 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 		return listeId;
 	}
 
-	/**
-	 * Renvoie le chemin de la page html générée pour un élément donné 
-	 * à partir de la racine du site
-	 * @param numrang
-	 * @param numtype
-	 * @return
-	 */
-	public String getChemin(int numrang, int numtype)
-	{
-		// récupérer le chemin d'un composant
-		if (numrang == -1)
-		{
-			return CodeHTML.normalizeName(this.nom) + "/" + CodeHTML.normalizeName(this.nom) + ".html";
-		}
-		String comp =  CodeHTML.normalizeName(this.nom);
-		switch (numtype)
-		{
-			case ACTIVITE: return ( comp + REP_ACTIVITES 
-									+ CodeHTML.normalizeName(((Element)(this.activites.elementAt(numrang))).getName()) 
-									+ "_" + ((Element)(this.activites.elementAt(numrang))).getID() + ".html");
-			case ROLE: return ( comp + REP_ROLES
-									+ CodeHTML.normalizeName(((Element)(this.roles.elementAt(numrang))).getName())
-									+ "_" + ((Element)(this.roles.elementAt(numrang))).getID() + ".html");
-			case PRODUIT : return ( comp + REP_PRODUITS
-									+ CodeHTML.normalizeName(((Element)(this.produits.elementAt(numrang))).getName())
-									+ "_" + ((Element)(this.produits.elementAt(numrang))).getID() + ".html");
-			case DEFINITION_TRAVAIL: return ( comp + REP_DEF_TRAVAIL
-									+ CodeHTML.normalizeName(((Element)(this.listeDefinition.elementAt(numrang))).getName())
-									+ "_" + ((Element)(this.listeDefinition.elementAt(numrang))).getID() + ".html");
-			case DIAGRAMME: return ( comp + REP_DIAGRAMMES
-									+ CodeHTML.normalizeName(((Element)(this.listeDiagramme.elementAt(numrang))).getName()) 
-									+ "_" + ((Element)(this.listeDiagramme.elementAt(numrang))).getID() + ".html");
-			case PAQUETAGE: return ( comp + REP_PAQUETAGES
-									+ CodeHTML.normalizeName(((Element)(this.listePaquetage.elementAt(numrang))).getName()) 
-									+ "_" + ((Element)(this.listePaquetage.elementAt(numrang))).getID() + ".html");
-			case PRODUITS_ENTREE:
-			case PRODUITS_SORTIE:	
-									// Retrouver le produit correspondant
-									String nomProd = this.toString(numrang, numtype);
-									for (int i = 0; i<this.produits.size(); i++)
-									{
-										if (nomProd.equals( ( (Element)this.produits.elementAt(i) ).getName()))
-										{
-											// Retourner le chemin de ce produit
-											return ( comp + REP_PRODUITS + CodeHTML.normalizeName(((Element)(this.produits.elementAt(i))).getName())
-													+ "_" + ((Element)(this.produits.elementAt(i))).getID() + ".html");	
-										}
-									}
-									
-									
-		}
-		return "";
-	}
 
 	public int getIDRole(int numrang, int numtype)
 	{

@@ -21,12 +21,20 @@
 package iepp.application.ageneration;
 
 import iepp.Application;
+import iepp.domaine.ComposantProcessus;
+import iepp.domaine.ElementPresentation;
+import iepp.domaine.Guide;
+import iepp.domaine.IdObjetModele;
+import iepp.domaine.LienProduits;
+import iepp.domaine.PaquetagePresentation;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  * Classe permettant de garder la configuration de la génération
@@ -308,4 +316,276 @@ public class GenerationManager
     {
         return listeProduitsSortie;
     }
+    
+    /**
+	 * récupérer la liste des produits en entrée et vérifier s'ils sont extérieurs au processus
+	 * @param idComposant
+	 */
+	public static void recupererProduitsExterieurs()
+	{
+		//liste des produits extérieurs: les produits en entrée qui sont en sortie d'aucun composant
+		Vector listeProduitsExterieurs = new Vector();
+		
+		// Liste des produits en entree lies avec d'autres
+		HashMap listeProduitsChanges = new HashMap();
+		
+		// Liste des produits en sortie de composants
+		Vector listeProduitsSortie = new Vector();
+		
+		// TODO SP rajouter les produits exétieurs, la langue
+		Vector liste = GenerationManager.getInstance().getListeAGenerer();
+		PaquetagePresentation paquet ;
+		IdObjetModele idComposant ;
+		for (int i = 0; i < liste.size(); i++)
+		{
+			if (liste.elementAt(i) instanceof IdObjetModele)
+			{
+				// composant publiable
+				//on recupere l'ID du ième composant de la definition de Processus
+				idComposant = (IdObjetModele)liste.elementAt(i);
+				Vector listeProduits = idComposant.getProduitEntree();
+				Vector listeLiens = ((ComposantProcessus)idComposant.getRef()).getLien();
+				
+				// Ajouter tous les noms des produits en sortie
+				Vector sortie = idComposant.getProduitSortie();
+				for (int j = 0; j < sortie.size(); j++)
+				{
+				    listeProduitsSortie.add(idComposant.getRef().toString() + "::" + sortie.elementAt(j).toString());
+				}
+				
+				// Verifier s'il s'agit d'un composant vide, auquel cas il faut verifier les produits en sortie
+				if (idComposant.estComposantVide())
+				{
+				    listeProduits.addAll(idComposant.getProduitSortie());
+				}
+				for(int j = 0; j < listeProduits.size(); j++)
+				{
+				 	IdObjetModele idProduit = (IdObjetModele)listeProduits.elementAt(j);
+				 	// Si le composant n'a pas de lien, les produits ne peuvent etre lies
+				 	if (listeLiens.size() == 0)
+				 	{
+				 		listeProduitsExterieurs.addElement(idProduit);
+				 	}
+				 	else
+				 	{
+					 	for (int k = 0; k < listeLiens.size(); k++)
+					 	{
+					 		LienProduits lien = (LienProduits)listeLiens.elementAt(k);
+					 		if (!lien.contient(idProduit))
+					 		{
+					 			listeProduitsExterieurs.addElement(idProduit);
+					 		}
+					 		else
+					 		{
+					 		    // Si le produit en entree est lie, on le note pour changer son lien vers le produit lie
+					 		    IdObjetModele produitCible;
+					 		    if (lien.getProduitEntree() == idProduit)
+					 		    {
+					 		        produitCible = lien.getProduitSortie();
+					 		    }
+					 		    else
+					 		    {
+					 		        produitCible = lien.getProduitEntree();
+					 		    }
+					 		    listeProduitsChanges.put(idProduit.getRef().toString() +"::"+ idProduit.toString(),produitCible);
+					 		}
+					 	}
+				 	}
+				}
+			}
+		}
+		GenerationManager.setListeProduitsChanges(listeProduitsChanges);
+		GenerationManager.setListeProduitsExterieurs(listeProduitsExterieurs);
+		GenerationManager.setListeProduitsSortie(listeProduitsSortie);
+		System.out.println("Produits exterieurs " + listeProduitsExterieurs);
+	}
+	
+	/**
+	 * 
+	 */
+	public static void construireArbre(ArbreGeneration arbre, PrintWriter fd) 
+	{
+		//TODO ajouter u print
+		Vector liste = GenerationManager.getInstance().getListeAGenerer();
+		PaquetagePresentation paquet ;
+		IdObjetModele idComposant ;
+
+		for (int i = 0; i < liste.size(); i++)
+		{
+			if (liste.elementAt(i) instanceof PaquetagePresentation)
+			{
+				paquet = (PaquetagePresentation)liste.elementAt(i);
+				construireArbrePaquetage(arbre, paquet, fd);
+			}
+			else
+			{
+				// composant publiable
+				//on recupere l'ID du ième composant de la definition de Processus
+				idComposant = (IdObjetModele)liste.elementAt(i);
+				paquet = idComposant.getPaquetagePresentation();
+				if (paquet != null && !paquet.getNomFichier().equals(""))
+				{
+					construireArbreComposant(arbre, paquet, fd);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Construire l'arbre correspondant au paquetage de présentation
+	 * @param fd
+	 */
+	public static void construireArbrePaquetage(ArbreGeneration arbre, PaquetagePresentation paquetage, PrintWriter pwFicTree) 
+	{
+		Vector liste ; // liste en cours de traitement
+		int i;
+		ArbreGeneration nouvelArbre = null;
+		
+		paquetage.trierElement();
+		liste = paquetage.getListeElement();
+		
+		// le premier élément est la racine du paquetage
+		if (liste.size() >= 1)
+		{
+			ElementPresentation elem = (ElementPresentation)liste.elementAt(0);
+			GElement noeud = new GPaquetagePresentation(elem, paquetage, pwFicTree);
+			nouvelArbre = new ArbreGeneration(noeud);
+			arbre.ajouterSousArbre(nouvelArbre);
+		}
+			
+		for (i = 0; i < liste.size() ; i++)
+		{
+			ElementPresentation elem = (ElementPresentation)liste.elementAt(i);
+			GElement noeud = new GElement(elem, pwFicTree);
+			if (elem.getNiveau() == 2)
+			{
+				// rajoute directement au nouvel arbre
+				ArbreGeneration n = new ArbreGeneration(noeud);
+				nouvelArbre.ajouterSousArbre(n);
+			}
+			else if (elem.getNiveau() >= 2)
+			{
+				String nouvelID = elem.getID_interne().substring(elem.getID_interne().indexOf("-") + 1);
+				nouvelArbre.ajouterSousArbre(noeud, nouvelID);
+			}
+		}
+	}
+	
+	/**
+	 * @param generation
+	 * @param fd
+	 * @param paquet
+	 */
+	public static void construireArbreComposant(ArbreGeneration generation, PaquetagePresentation paquetage, PrintWriter fd) 
+	{
+		Vector liste ; // liste en cours de traitement
+		int i;
+		ArbreGeneration nouvelArbre = null;
+		
+		// trier
+		paquetage.trierElement();
+		liste = paquetage.getListeElement();
+		
+		// le premier élément est la racine du composant
+		if (liste.size() >= 1)
+		{
+			ElementPresentation elem = (ElementPresentation)liste.elementAt(0);
+			GElement noeud = getGenerateurCorrepondant(elem, fd);
+			nouvelArbre = new ArbreGeneration(noeud);
+			generation.ajouterSousArbre(nouvelArbre);
+		}
+			
+		for (i = 0; i < liste.size() ; i++)
+		{
+			ElementPresentation elem = (ElementPresentation)liste.elementAt(i);
+			GElement noeud = getGenerateurCorrepondant(elem, fd);
+			if (elem.getNiveau() == 2)
+			{
+				// rajoute directement au nouvel arbre
+				ArbreGeneration n = new ArbreGeneration(noeud);
+				nouvelArbre.ajouterSousArbre(n);
+			}
+			else if (elem.getNiveau() >= 2)
+			{
+				String nouvelID = elem.getID_interne().substring(elem.getID_interne().indexOf("-") + 1);
+				nouvelArbre.ajouterSousArbre(noeud, nouvelID);
+			}
+		}
+	}
+	
+	/**
+	 * Construit les gestionnaires de publication associés au type des éléments à traiter
+	 * @param elem element de présentation qu'il faut traiter
+	 */
+	public static GElement getGenerateurCorrepondant(ElementPresentation elem, PrintWriter pwFicTree) 
+	{
+		// selon le type de l'élément de présentation
+		if (elem instanceof Guide)
+		{
+			GGuide guide = new GGuide(elem,pwFicTree);
+			return guide;		
+		}
+		
+		// on vérifie que l'on ait bien un modèle associé
+		if(elem.getElementModele() != null)
+		{
+			// c'est un élément normal il faut récupérer le type du modèle associé
+			IdObjetModele id = elem.getElementModele();
+			
+			if (id.estComposant())
+			{
+				// composant
+				GComposantPubliable compo = new GComposantPubliable(id, elem, pwFicTree ); 
+				return compo;
+			}
+			
+			if (id.estActivite())
+			{
+				// activite 
+				GActivite activite = new GActivite(elem, pwFicTree ); 
+				return activite;
+			}
+			
+			if (id.estProduit())
+			{
+				// produit
+				GProduit produit = new GProduit(elem, pwFicTree ); 
+				return produit;
+			}
+			
+			if (id.estDefinitionTravail())
+			{
+				// deftravail
+				GDefinitionTravail defTrav = new GDefinitionTravail(elem, pwFicTree ); 
+				return defTrav;
+			}
+			
+			if (id.estDiagramme())
+			{
+				// diagramme
+				GDiagramme diag = new GDiagramme((ComposantProcessus)id.getRef(), elem, pwFicTree ); 
+				return diag;	
+			}
+			
+			if (id.estRole())
+			{
+				// role
+				GRole role = new GRole(elem, pwFicTree ); 
+				return role;
+			}
+			
+			if (id.estPaquetage())
+			{
+				GPaquetage gelem = new GPaquetage(elem, pwFicTree ); 
+				return gelem;
+			}
+		
+			else
+			{
+				GElementModele gelem = new GElementModele(elem, pwFicTree ); 
+				return gelem;
+			}
+		}
+		return null;
+	}
 }
