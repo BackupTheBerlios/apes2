@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -439,15 +439,10 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			WorkProduct w = (WorkProduct)sm.getContext();
 			
 			
-			//if((!existsLinkWorkProductWorkDefinition(w,wd)) && (!existsLinkWorkProductStateWorkDefinition(sm,wd)))
-			if(!existsLinkWorkProductStateWorkDefinition(sm,wd))
+			if((!existsLinkWorkProductWorkDefinition(w,wd)) && (!existsLinkWorkDefinitionWorkProductState(wd,sm)))
 			{	
-				
-				
 				mTransitions.add(new Transition(w,wd));
-				
 				mTransitions.add(new Transition(sm,wd));
-				
 				return true;
 			}
 		}
@@ -463,12 +458,9 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			WorkProduct w = (WorkProduct)sm.getContext();
 			
-			//if((!existsLinkWorkDefinitionWorkProduct(wd,w)) && (!existsLinkWorkDefinitionWorkProductState(wd,sm)))
-			if(!existsLinkWorkDefinitionWorkProductState(wd,sm))
+			if((!existsLinkWorkDefinitionWorkProduct(wd,w)) && (!existsLinkWorkProductStateWorkDefinition(sm,wd)))
 			{
-				
 				mTransitions.add(new Transition(wd,w));
-				
 				mTransitions.add(new Transition(wd,sm));
 				return true;
 			}

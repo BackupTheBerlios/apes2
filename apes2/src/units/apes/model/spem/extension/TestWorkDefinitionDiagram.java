@@ -518,8 +518,9 @@ public class TestWorkDefinitionDiagram extends TestCase
 		wdd.addWorkDefinition(wd3);
 		wdd.createLinkWorkDefinitionWorkProductState(wd3,sm);
 		
-		//assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm,wd3));
-		
+		assertTrue(wdd.existsLinkWorkDefinitionWorkProductState(wd3,sm));
+		assertFalse(wdd.areLinkableWorkProductStateWorkDefinition(sm,wd3));
+		assertFalse(wdd.createLinkWorkProductStateWorkDefinition(sm,wd3));
 	}
 	
 	public void testRemoveLinkProcessRoleWorkDefinition()
