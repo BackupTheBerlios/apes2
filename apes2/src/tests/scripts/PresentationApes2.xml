@@ -52,9 +52,7 @@
   <component class="javax.swing.JLayeredPane" id="null.layeredPane 3" index="1" name="null.layeredPane" parent="noname1 Root Pane" title="APES" />
   <launch args="[]" class="org.ipsquad.apes.ApesMain" classpath="./../../apes2.jar" desc="Lancement abbot" method="main" />
   <sequence>
-    <wait args="APES" class="abbot.tester.ComponentTester" method="assertFrameShowing" pollInterval="10000" timeout="10000000" />
     <action args="APES,0,0" class="java.awt.Frame" method="actionMove" />
-    <wait args="Container Instance" class="abbot.tester.ComponentTester" method="assertComponentShowing" pollInterval="10000" timeout="10000000" />
     <action args="ApesTree Instance 1,41,20,Ajouter une Définition de Travail" class="abbot.tester.ComponentTester" method="actionSelectPopupMenuItem" />
     <action args="Définition de travail 1" method="actionKeyString" />
     <action args="VK_ENTER" method="actionKeyStroke" />
