@@ -26,7 +26,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 /**
  * An incomplete implementation of the StateMachine 
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class StateMachine extends ModelElement
 {
@@ -55,10 +55,11 @@ public class StateMachine extends ModelElement
 		return mContext;
 	}
 	
-	public String getName()
+	/*public String getName()
 	{
-		return '('+super.getName()+')';
-	}
+		//return '('+super.getName()+')';
+		return super.getName();
+	}*/
 	
 	public String toString()
 	{

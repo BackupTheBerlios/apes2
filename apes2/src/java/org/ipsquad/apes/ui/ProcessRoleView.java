@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a Process Role cell
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
  
 public class ProcessRoleView extends ApesVertexView
@@ -52,16 +52,9 @@ public class ProcessRoleView extends ApesVertexView
 	public ProcessRoleView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
-	}
-
-
-
-	protected Dimension calculateSize()
-	{
-		int width=calculateLabelLength();
-		if(width<55)
-			width=55;
-		return new Dimension(width, 70);
+		mMinimumWidth = 55;
+		mMinimumHeight = 70;
+		init();
 	}
 	
 	/**

@@ -42,7 +42,7 @@ import org.jgraph.graph.VertexRenderer;
 /**
  * Display a Decision cell
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
  
 public class DecisionView extends ApesVertexView
@@ -53,17 +53,10 @@ public class DecisionView extends ApesVertexView
 	public DecisionView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
-	}
-	
-	
-	protected Dimension calculateSize()
-	{
-		/*int width=calculateLabelLength();
-		if(width<75)
-			width=75;*/
-		return new Dimension(50, 35);
-	}
-	
+		mMinimumWidth = 50;
+		mMinimumHeight = 35;
+		init();
+	}	
 	
 	/**
 	 * Returns the intersection of the bounding rectangle and the

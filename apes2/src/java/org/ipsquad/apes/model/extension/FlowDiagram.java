@@ -37,7 +37,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -310,10 +310,11 @@ public class FlowDiagram extends SpemDiagram
 			{
 				return createLinkProcessRoleActivity((ProcessRole)source,(Activity)target);
 			}
-			/*else if(target instanceof WorkProduct)
-			 {
-			 return createLinkProcessRoleWorkProduct((ProcessRole)source,(WorkProduct)target);
-			 }*/
+			else if(target instanceof WorkProduct)
+			{
+				ErrorManager.getInstance().printKey("errorLinkRoleWorkProductInResponsabilityDiagram");
+				return false;
+			}
 		}
 		else if(source instanceof WorkProduct)
 		{

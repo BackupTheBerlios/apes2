@@ -30,28 +30,29 @@ import javax.swing.BorderFactory;
 
 import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.ui.ColorFontPanel;
-import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.GraphConstants;
 
 /**
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class NoteCell extends ApesGraphCell
 {
 	public NoteCell()
 	{
 		super(null);
+		init();
 	}
 	
 	public NoteCell(Object userObject) 
 	{
 		super(userObject);
+		init();
 	}
 	
-	protected void init()
+	final private void init()
 	{
-		add(new DefaultPort());
+		//add(new DefaultPort());
 		// Create a Map that holds the attributes for the Vertex
 		Map map = GraphConstants.createMap();
 		// Even though it is opaque, set it to transparent so that renderer's super.paint() won't paint background.
@@ -70,5 +71,15 @@ public class NoteCell extends ApesGraphCell
 	public String toString()
 	{
 		return ApesGraphConstants.getValue(attributes).toString();
+	}
+	
+	public Object clone()
+	{
+		//Object o = userObject != null? ((String)userObject).clone() : null;
+		NoteCell c = (NoteCell) super.clone();
+		c.setUserObject(null);
+		c.init();
+		
+		return c;
 	}
 }

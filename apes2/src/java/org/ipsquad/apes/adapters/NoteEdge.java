@@ -27,7 +27,7 @@ import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.GraphConstants;
 
 /**
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class NoteEdge extends DefaultEdge
 {
@@ -37,7 +37,7 @@ public class NoteEdge extends DefaultEdge
 		init();
 	}
 	
-	public void init()
+	final private void init()
 	{
 		Map map = ApesGraphConstants.createMap();
 		ApesGraphConstants.setDashPattern(map, new float[] { 3, 3 });

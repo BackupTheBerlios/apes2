@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display an Activity cell
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
  
 public class ActivityView extends ApesVertexView
@@ -52,17 +52,9 @@ public class ActivityView extends ApesVertexView
 	public ActivityView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
+		mMinimumWidth = 75;
+		init();
 	}
-	
-	
-	protected Dimension calculateSize()
-	{
-		int width=calculateLabelLength();
-		if(width<75)
-			width=75;
-		return new Dimension(width, 50);
-	}
-	
 	
 	/**
 	 * Returns the intersection of the bounding rectangle and the

@@ -41,7 +41,7 @@
     <javac srcdir="${java}" destdir="${build}" >
     	<classpath>
     		<pathelement location="${src}/lib/jgraph.jar"/>
-    		<pathelement location="${src}/lib/JSX.jar"/>    		
+    		<pathelement location="${src}/lib/JSX-java1.4.jar"/>    		
     	</classpath>
     </javac>
   </target>
@@ -53,7 +53,7 @@
     	<classpath>
     		<pathelement path="${build}"/>
     		<pathelement location="${src}/lib/jgraph.jar"/>
-    		<pathelement location="${src}/lib/JSX.jar"/>    		
+    		<pathelement location="${src}/lib/JSX-java1.4.jar"/>    		
     	</classpath>
   	</java>
   </target>
@@ -61,7 +61,7 @@
   <target name="jar" depends="build,resources"
     description="make apes2.jar">
     <!--Make apes.jar-->
-    <unjar src="${src}/lib/JSX.jar" dest="${build}"/>
+    <unjar src="${src}/lib/JSX-java1.4.jar" dest="${build}"/>
     <unjar src="${src}/lib/jgraph.jar" dest="${build}"/>
   	<jar destfile="apes2.jar" basedir="${build}">
     	<manifest>

@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -446,8 +446,12 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 */
 	public Collection getLinks( SpemDiagram diagram, Object element )
     {
-	    Set set = new HashSet();
-        if(element instanceof ModelElement)
+		Set set = new HashSet();
+        
+		if(diagram == null || element == null)
+			return set;
+	    
+		if(element instanceof ModelElement)
         {
             ModelElement me = (ModelElement) element;
             if(diagram.containsModelElement(me))
@@ -1265,10 +1269,14 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	        }
 	    }
 	    
-	    Vector edits = new Vector();
-	    ApesEdit edit = createRemoveModelEdit(activities.toArray(),extras);
-	    if(edit != null)
-	    {
+	    //Remove all links to moved activities
+	    Vector edits = new Vector();	    
+	    edits = removeAllLinks( activities.toArray() );
+	    
+	    //execute all edits
+	    ApesEdit edit = createRemoveModelEdit(activities.toArray(), extras);
+		if(edit != null)
+		{
 	    	edit.end();
 	    	edits.add(edit);
 	    	edit = createInsertModelEdit(activities.toArray(), newParents.toArray(), extras);
@@ -1561,15 +1569,16 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		Vector result = new Vector();
 		for (int i = 0; i < elements.length; i++)
 		{
+			result.add(null);
 			if(elements[i] instanceof ModelElement && ((ModelElement)elements[i]).getParent() == null
 		            && parents.length > i && parents[i] != null && parents[i] instanceof IPackage)
 		    {
-		        if(((IPackage)parents[i]).addModelElement((ModelElement)elements[i]))
+				if(((IPackage)parents[i]).addModelElement((ModelElement)elements[i]))
 		        {
-		        	result.add(elements[i]);
+		        	result.set(result.size()-1, elements[i]);
 		        }
 		    }
-		    
+			
 		    if(elements[i] instanceof SpemDiagram)
 		    {
 		    	mDiagrams.add(elements[i]);
@@ -1764,7 +1773,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				undo.put(me, me.getName());
 				me.setName((String)entry.getValue());
 
-				//if it's not possible to readd the element (due to duplicated names) rollback to previous state 
+				//if it's not possible to read the element (due to duplicated names) rollback to previous state 
 				if(parent != null && !parent.addModelElement(me))
 				{
 					me.setName((String)undo.remove(me));

@@ -53,6 +53,7 @@ public class PreferencesTree extends JTree
 						(ColorFontPanel.NOTES_KEY,resMan.getString(ColorFontPanel.NOTES_KEY),PreferencesTreeItem.COLOR_PANEL)));
 			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 						(ColorFontPanel.GUARD_KEY,resMan.getString(ColorFontPanel.GUARD_KEY),PreferencesTreeItem.COLOR_PANEL)));
+		
 		DefaultMutableTreeNode defaultTree = new DefaultMutableTreeNode(new PreferencesTreeItem
 				(DescriptionPanel.DEFAULT_PATH_KEY,resMan.getString(DescriptionPanel.DEFAULT_PATH_KEY),PreferencesTreeItem.DESC_PANEL));
 			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
@@ -60,8 +61,11 @@ public class PreferencesTree extends JTree
 			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 				(DefaultPathPanel.WORKSPACE_KEY,resMan.getString(DefaultPathPanel.WORKSPACE_KEY),PreferencesTreeItem.PATH_PANEL)));	
 			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
+					(DefaultPathPanel.TEMPLATE_KEY,resMan.getString(DefaultPathPanel.TEMPLATE_KEY),PreferencesTreeItem.PATH_PANEL)));	
+			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 				(DefaultPathPanel.PICTURES_KEY,resMan.getString(DefaultPathPanel.PICTURES_KEY),PreferencesTreeItem.PATH_PANEL)));	
 				//defaultTree.setAllowsChildren(false);
+		
 		DefaultMutableTreeNode windowsTree = new DefaultMutableTreeNode(new PreferencesTreeItem
 					(DescriptionPanel.WINDOWS_KEY,resMan.getString(DescriptionPanel.WINDOWS_KEY),PreferencesTreeItem.DESC_PANEL));
 				windowsTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem

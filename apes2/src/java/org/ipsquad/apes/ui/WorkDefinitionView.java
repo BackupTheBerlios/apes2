@@ -52,20 +52,11 @@ public class WorkDefinitionView extends ApesVertexView
 	public WorkDefinitionView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
+		mMinimumWidth = 70;
+		mMinimumHeight = 70;
+		init();
 	}
 
-
-
-	protected Dimension calculateSize()
-	{
-		int width=calculateLabelLength();
-		if(width<70)
-			width=70;
-		return new Dimension(width, 70);
-	}
-	
-	
-	
 	/**
 	 * Returns the intersection of the bounding rectangle and the
 	 * straight line between the source and the specified point p.

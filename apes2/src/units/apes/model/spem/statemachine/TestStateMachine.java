@@ -58,7 +58,7 @@ public class TestStateMachine extends TestCase
 	{
 		StateMachine sm = createStateMachine("testWithName");
 		
-		assertTrue(sm.getName().equals("(testWithName)"));
+		assertEquals("testWithName", sm.getName());
 	}
 	
 	public void testNoName()
@@ -66,19 +66,17 @@ public class TestStateMachine extends TestCase
 		StateMachine sm = createStateMachine();
 		String name = sm.getName();
 		
-		assertTrue(name.substring(0,7).equals("(noname"));
-		assertTrue(name.charAt(name.length()-1)==')');
+		assertEquals("noname", name.substring(0,6));
 		
-		int init = Integer.parseInt(name.substring(7,name.length()-1));
+		int init = Integer.parseInt(name.substring(6,name.length()));
 		
 		for(int i=0; i<100; i++)
 		{
 			sm = createStateMachine();
 			name = sm.getName();
-			assertTrue(name.substring(0,7).equals("(noname"));
-			assertTrue(name.charAt(name.length()-1)==')');
+			assertEquals("noname", name.substring(0,6));
 			
-			int cnt = Integer.parseInt(name.substring(7,name.length()-1));
+			int cnt = Integer.parseInt(name.substring(6,name.length()));
 			assertTrue(cnt == (i+init+1) );
 		}
 	}

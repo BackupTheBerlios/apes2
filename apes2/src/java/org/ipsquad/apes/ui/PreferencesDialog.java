@@ -45,7 +45,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class PreferencesDialog extends JDialog 
 {
@@ -151,10 +151,10 @@ public class PreferencesDialog extends JDialog
 	private void copyProperties()
 	{
 		propTemp = new Properties() ;
-		Enumeration enum = ConfigManager.getInstance().getProperties().propertyNames();
-		while ( enum.hasMoreElements())
+		Enumeration tmpEnum = ConfigManager.getInstance().getProperties().propertyNames();
+		while ( tmpEnum.hasMoreElements())
 		{
-			String key = (String) enum.nextElement();
+			String key = (String) tmpEnum.nextElement();
 			String value = ConfigManager.getInstance().getProperty(key) ;
 			propTemp.setProperty(key,value) ;
 				
@@ -190,17 +190,17 @@ public class PreferencesDialog extends JDialog
 		}
 		f.setBounds(mainFrame.getBounds());
 		f.getErrorPane().setDividerLocation(mainFrame.getErrorPane().getDividerLocation());
-		f.show();
+		f.setVisible(true);
 		mainFrame.dispose();
 	}   
 	
 	public void cancelSave()
 	{
 		Properties prop = ConfigManager.getInstance().getProperties();
-		Enumeration enum = prop.propertyNames();
-		while ( enum.hasMoreElements())
+		Enumeration tmpEnum = prop.propertyNames();
+		while ( tmpEnum.hasMoreElements())
 		{
-			String key = (String) enum.nextElement();
+			String key = (String) tmpEnum.nextElement();
 			String value = propTemp.getProperty(key) ;
 			String cfgValue = ConfigManager.getInstance().getProperty(key);
 			if( ! cfgValue.equals(value))

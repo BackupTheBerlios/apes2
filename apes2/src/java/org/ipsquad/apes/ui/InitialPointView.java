@@ -42,7 +42,7 @@ import org.jgraph.graph.VertexRenderer;
 /**
  * Display a Decision cell
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
  
 public class InitialPointView extends ApesVertexView
@@ -53,14 +53,10 @@ public class InitialPointView extends ApesVertexView
 	public InitialPointView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
+		mMinimumWidth = 25;
+		mMinimumHeight = 25;
+		init();
 	}
-	
-	
-	protected Dimension calculateSize()
-	{
-		return new Dimension(25,25);
-	}
-	
 	
 	/**
 	 * Returns the intersection of the bounding rectangle and the

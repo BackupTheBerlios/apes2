@@ -33,6 +33,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.adapters.WorkProductStateCell;
 import org.ipsquad.utils.IconManager;
 import org.jgraph.JGraph;
@@ -44,60 +45,20 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a WorkProductState cell
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
  
 public class WorkProductStateView extends ApesVertexView
 {
-	static WorkProductRenderer renderer = new WorkProductRenderer();
-	
-	protected int calculateLabelLength()
-	{
-		WorkProductStateCell cell = (WorkProductStateCell)getCell();
-		
-		String to_use = cell.getContextName();
-		WorkProductRenderer.name = to_use;
-		
-		if( to_use.length() < cell.getName().length()) 
-		{
-			to_use = cell.getName();
-		}
-		
-		Graphics2D g = (Graphics2D)getGraph().getGraphics();
-		Font f = GraphConstants.getFont(getAllAttributes());
-		
-		if(g!=null)
-		{
-			WorkProductRenderer.length = 
-				(int) f.getStringBounds(WorkProductRenderer.name, g.getFontRenderContext()).getWidth(); 
-			
-			Rectangle2D rect = f.getStringBounds(to_use, g.getFontRenderContext());
-			return (int)rect.getWidth()+10;
-		}
-		else
-		{
-			return 10+cell.toString().length()*10;
-		}
-	}
-
-	// Constructor for Superclass
+	static WorkProductStateRenderer renderer = new WorkProductStateRenderer();
 	
 	public WorkProductStateView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
-	}
-
-
-
-	protected Dimension calculateSize()
-	{
-		int width=calculateLabelLength();
-		if(width<45)
-			width=45;
-		return new Dimension(width, 90);
-	}
-	
-	
+		mMinimumWidth = 45;
+		mMinimumHeight = 90;
+		init();
+	}	
 	
 	/**
 	 * Returns the intersection of the bounding rectangle and the
@@ -206,6 +167,39 @@ public class WorkProductStateView extends ApesVertexView
 		
 		return getCenterPoint();
 	}
+
+	protected int calculateLabelLength()
+	{
+		WorkProductStateCell cell = (WorkProductStateCell)getCell();
+		
+		String to_use = cell.getContextName();
+		WorkProductStateRenderer.name = to_use;
+		
+		if( to_use.length() < cell.getName().length()) 
+		{
+			to_use = cell.getName();
+		}
+		
+		Graphics2D g = (Graphics2D)getGraph().getGraphics();
+		Font f = GraphConstants.getFont(getAllAttributes());
+		
+		if(g!=null)
+		{
+			WorkProductStateRenderer.length = 
+				(int) f.getStringBounds("("+WorkProductStateRenderer.name+")", g.getFontRenderContext()).getWidth(); 
+			
+			Rectangle2D rect = f.getStringBounds(to_use, g.getFontRenderContext());
+			return (int)rect.getWidth()+10;
+		}
+		else
+		{
+			//if g is not available, just return width of the cell
+			//else the alignement is lost when a file is loaded    
+			
+			//return 10+user_object.toString().length()*10;
+			return ApesGraphConstants.getBounds(allAttributes).width;
+		}
+	}
 	
 	// Returns the Renderer for this View
 	public CellViewRenderer getRenderer()
@@ -213,8 +207,8 @@ public class WorkProductStateView extends ApesVertexView
   		return renderer;
 	}
 
-	// Define the Renderer for a WorkProductView
-	static class WorkProductRenderer extends ApesVertexView.ApesVertexRenderer
+	// Define the Renderer for a WorkProductStateView
+	static class WorkProductStateRenderer extends ApesVertexView.ApesVertexRenderer
 	{
 		public static String name = "";
 		public static Font font = null;
@@ -223,6 +217,11 @@ public class WorkProductStateView extends ApesVertexView
 		
 		public void paint(Graphics g)
 		{
+			if(mCurrentView != null && mCurrentView.getCell().toString().equals(getText()))
+			{
+				setText("("+getText()+")");
+			}
+				
 			IconManager im = IconManager.getInstance();
 			int b = borderWidth;
 			Graphics2D g2 = (Graphics2D) g;
@@ -258,6 +257,7 @@ public class WorkProductStateView extends ApesVertexView
 				setBorder(null);
 				setOpaque(false);
 				selected = false;
+				
 				super.paint(g);
 			} 
 			finally 

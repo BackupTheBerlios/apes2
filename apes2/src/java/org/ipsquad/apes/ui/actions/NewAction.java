@@ -40,7 +40,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Create a new project in the application
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class NewAction extends ProjectManagementAction
 {
@@ -88,10 +88,14 @@ public class NewAction extends ProjectManagementAction
 	{
 		try
 		{
-			String templateDirPath = ConfigManager.getInstance().getProperty("WorkspaceTitledefaultPath") + File.separator + "Templates";
+			String templateDirPath = ConfigManager.getInstance().getProperty("TemplateTitledefaultPath");
+			if("Templates".equals(templateDirPath))
+			{
+				templateDirPath = ConfigManager.getInstance().getProperty("TemplateTitledefaultPath") + System.getProperty("file.separator") + templateDirPath;
+			}
+			
 			File templateDir = new File(templateDirPath);
 			
-				
 			if(templateDir.exists() && templateDir.isDirectory() && templateDir.listFiles().length != 0)
 			{
 				int choice=JOptionPane.showInternalConfirmDialog(
@@ -117,18 +121,18 @@ public class NewAction extends ProjectManagementAction
 						
 						File file = chooser.getSelectedFile();
 						
-						LoadProject mMonitor = new LoadProject(file);
+						LoadProject monitor = new LoadProject(file);
 						
 						ApesFrame parent = (ApesFrame)Context.getInstance().getTopLevelFrame();
 						
-						TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
-						mTask.setName(ResourceManager.getInstance().getString("titleLoading"));
-						mTask.setLocation(parent.getWidth()/2-mTask.getWidth() / 2,parent.getHeight()/2-mTask.getHeight()/2);
+						TaskMonitorDialog task = new TaskMonitorDialog(parent,monitor);
+						task.setName("Loading");
+						task.setLocation(parent.getWidth()/2-task.getWidth()/2,parent.getHeight()/2-task.getHeight()/2);
 						
-						mMonitor.setTask(mTask);
+						monitor.setTask(task);
 						
-						mTask.show();
-						mTask.hide();
+						task.show();
+						context.getAction("TreeOpenDiagram").actionPerformed(null);
 					}
 
 				}
@@ -138,15 +142,14 @@ public class NewAction extends ProjectManagementAction
 					context.setProject(newProject);
 					context.setFilePath(null);
 				}
-				else
-				{
-				    return;
-				}
 			}
-			Project newProject=new Project();
-			context.setProject(newProject);
-			context.setFilePath(null);
-			context.getAction("TreeOpenDiagram").actionPerformed(null);
+			else
+			{
+				Project newProject=new Project();
+				context.setProject(newProject);
+				context.setFilePath(null);
+				context.getAction("TreeOpenDiagram").actionPerformed(null);
+			}
 		}
 		catch(Throwable t)
 		{

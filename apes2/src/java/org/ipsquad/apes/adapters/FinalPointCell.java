@@ -28,7 +28,7 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.jgraph.graph.GraphConstants;
 
 /**
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class FinalPointCell extends ApesGraphCell
 {
@@ -36,18 +36,13 @@ public class FinalPointCell extends ApesGraphCell
 	{
 		super(new ActivityDiagram.FinalPoint());
 		GraphConstants.setEditable(attributes, false);
+		GraphConstants.setSize(attributes, new Dimension(25,25));
 	}
 	
 	public FinalPointCell(ActivityDiagram.FinalPoint fp)
 	{
 		super(fp);
 		GraphConstants.setEditable(attributes, false);
-	}
-	
-
-	protected void init() 
-	{
-		super.init();
 		GraphConstants.setSize(attributes, new Dimension(25,25));
-	}
+	}	
 }

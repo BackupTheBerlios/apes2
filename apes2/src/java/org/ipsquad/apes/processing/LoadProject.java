@@ -45,6 +45,7 @@ import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.utils.ConfigManager;
+import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.MonitoredTaskBase;
 import org.ipsquad.utils.ResourceManager;
 import org.ipsquad.utils.TaskMonitorDialog;
@@ -56,13 +57,15 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
 	private File mFile = null;
 	private TaskMonitorDialog mTask = null;
 	private ResourceManager mResource = ResourceManager.getInstance();
+	private ErrorManager mError = ErrorManager.getInstance();
+	
 	private Project mProject = new Project();
 	
 	public LoadProject(File file)
@@ -141,19 +144,21 @@ public class LoadProject extends MonitoredTaskBase
 			print(mResource.getString("loadComponent"));
 			ObjIn in = new ObjIn(data);
 			Vector v = (Vector)in.readObject();
-			
+
 			if( v.size() == 4 )
 			{	
 				adapter.setRoot((ApesTreeNode)v.get(2));
 				mProject.setProcess((ApesProcess)((ApesTreeNode)adapter.getRoot()).getUserObject());
 				mProject.getProcess().addModelElement((ProcessComponent)v.get(0));
 				mProject.setDiagramMap((HashMap)v.get(1));
-			
+				
 				Activity ref = (Activity)v.get(3);
 				int nb = new Integer(ref.getName().substring(6)).intValue();
 				Element.setNoNameCounter(nb);	
 				Element.setNoID(ref.getID());
 				projectZip.close();
+				
+				checkVersion();
 				
 				print(mResource.getString("loadComponentSuccess"));
 				return true;
@@ -161,8 +166,41 @@ public class LoadProject extends MonitoredTaskBase
 		}
 
 		print(mResource.getString("loadComponentFailed"));
+		mError.printKey("loadComponentFailed");
 		projectZip.close();
 		return false;
+	}
+
+	protected void checkVersion() 
+	{
+		ProcessComponent component = mProject.getProcess().getComponent();
+		
+		if(component.getVersion() != null)
+		{
+			int comp = mResource.getString("Version").compareTo(component.getVersion()); 
+			if(comp < 0)
+			{
+				print(mResource.getString("warningNewerVersion"));
+				mError.printKey("warningNewerVersion");
+				mError.println("\t"+mResource.getString("warningCurrentVersion")+" -> "+mResource.getString("Version"));
+				mError.println("\t"+mResource.getString("warningFoundVersion")+" -> "+component.getVersion());
+			}
+			else if(comp > 0)
+			{
+				print(mResource.getString("warningOlderVersion"));
+				mError.printKey("warningOlderVersion");
+				mError.println("\t"+mResource.getString("warningCurrentVersion")+" -> "+mResource.getString("Version"));
+				mError.println("\t"+mResource.getString("warningFoundVersion")+" -> "+component.getVersion());
+			}
+		}
+		else
+		{
+			print(mResource.getString("warningOlderVersion"));	
+			mError.printKey("warningOlderVersion");
+			mError.println("\t"+mResource.getString("warningCurrentVersion")+" -> "+mResource.getString("Version"));
+			mError.println("\t"+mResource.getString("warningFoundVersion")+" -> < 2.5.1");
+		}
+		component.updateVersion();
 	}
 	
 	/**

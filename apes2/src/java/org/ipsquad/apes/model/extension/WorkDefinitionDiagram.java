@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -158,6 +158,15 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if(!containsModelElement(p))
 		{
+			/*for( int i = 0; i < p.behaviorCount(); i++ )
+			{
+				if( mElements.contains(p.getBehavior(i)) )
+				{
+					ErrorManager.getInstance().printKey("errorStateContextPresentInDiagram");
+					return false;
+				}
+			}*/
+		
 			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addWorkProduct "+p);
 			mElements.add(p);
 			return true;
@@ -334,6 +343,12 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			return createLinkProcessRoleWorkDefinition( (ProcessRole) source, (WorkDefinition) target );
 		}
 		
+		if( source instanceof ProcessRole && target instanceof WorkProduct )
+		{
+			ErrorManager.getInstance().printKey("errorLinkRoleWorkProductInResponsabilityDiagram");
+			return false;
+		}
+
 		if( source instanceof WorkProduct && target instanceof WorkDefinition )
 		{
 			return createLinkWorkProductWorkDefinition( (WorkProduct) source, (WorkDefinition) target );

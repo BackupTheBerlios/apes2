@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Map;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.Identity;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.jgraph.graph.DefaultGraphCell;
@@ -36,7 +37,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * This is a convenient class which correct problems in the clone method
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class ApesGraphCell extends DefaultGraphCell implements Identity
 {
@@ -46,7 +47,7 @@ public abstract class ApesGraphCell extends DefaultGraphCell implements Identity
 		init();
 	}
 	
-	protected void init()
+	final private void init()
 	{
 		add(new DefaultPort());
 
@@ -55,25 +56,25 @@ public abstract class ApesGraphCell extends DefaultGraphCell implements Identity
 		GraphConstants.setSizeable(map, false);
 		GraphConstants.setLineWidth(map, 2);
 		GraphConstants.setBorderColor(map, Color.black);
-		
-		ColorAssociater ca = new ColorAssociater();
-		((Element)userObject).visit(ca);
-
-		GraphConstants.setForeground(map, ca.getForeground());
-		GraphConstants.setBackground(map, ca.getBackground());
-		GraphConstants.setFont(map,new Font((String)map.get(GraphConstants.EDITABLE),ca.getFont(),13));
-		 
 		GraphConstants.setOpaque(map, true);
+		
+		if(userObject != null)
+		{
+			ColorAssociater ca = new ColorAssociater();
+			((Element)userObject).visit(ca);
+		
+			GraphConstants.setForeground(map, ca.getForeground());
+			GraphConstants.setBackground(map, ca.getBackground());
+			GraphConstants.setFont(map,new Font((String)map.get(GraphConstants.EDITABLE),ca.getFont(),13));
+		}
+		
 		changeAttributes(map);
 		//JOptionPane.showMessageDialog((ApesFrame)Context.getInstance().getTopLevelFrame(),"apes1");
 	}
-	
-	public Map changeAttributes(Map change)
+
+	public Map changeAttributes(Map attr)
 	{
-	    Map undo = GraphConstants.applyMap(change, attributes);
-		
-		Object tmp = GraphConstants.getValue(attributes);
-		return undo;
+		return ApesGraphConstants.applyMap(attr, attributes);
 	}
 	
 	public int getID()
@@ -87,12 +88,17 @@ public abstract class ApesGraphCell extends DefaultGraphCell implements Identity
 	
 	public String toString()
 	{	
-		return userObject != null? ((Element)userObject).getName() : null;
+		return userObject == null? null : userObject.toString();
 	}
 	
 	public Object clone()
 	{
-		Object o = userObject != null? ((Element)userObject).clone() : null;
+		Object o = null;
+		if(userObject != null && userObject instanceof Element)
+		{
+			o = ((Element)userObject).clone();
+		}
+		
 		ApesGraphCell c = (ApesGraphCell) super.clone();
 		c.setUserObject(o);
 		c.init();

@@ -315,12 +315,65 @@ public class TestSpemGraphAdapter extends TestCase
 
 	public void testRemove()
 	{
+		assertEquals(0, adapter.getRootCount());
+		
+		vertex1 = adapter.associateGraphCell(new Activity());
+		Map attr = ApesGraphConstants.createMap();
+		attr.put(vertex1, vertex1.getAttributes());	
+		adapter.insert( new Object[]{vertex1}, attr, null, null, null );
+		
+		Activity a = new Activity();
+		mediator.insertIn(adapter.getDiagram(), new Object[]{a}, null);
+		Object[] cells = SpemGraphAdapter.getRoots(adapter);
+		vertex2 = adapter.associateGraphCell(new ProcessRole());
+		attr.clear();
+		attr.put(vertex2, vertex2.getAttributes());
+		adapter.insert( new Object[]{vertex2}, attr, null, null, null );
+		
+		vertex3 = adapter.associateGraphCell(new WorkProduct());
+		attr.clear();
+		attr.put(vertex3, vertex3.getAttributes());
+		adapter.insert( new Object[]{vertex3}, attr, null, null, null );
+		
+		ConnectionSet cs = new ConnectionSet();
+		DefaultEdge edge1 = new DefaultEdge();
+		source1 = (Port)vertex2.getFirstChild();
+		target1 = (Port)vertex1.getFirstChild();
+		edge1.setSource(source1);
+		edge1.setTarget(target1);
+		cs.connect(edge1, source1, target1);
+		attr.clear();
+		attr.put(edge1, edge1.getAttributes());		
+		adapter.insert( new Object[]{edge1}, attr, cs, null, null);
+		
+		cs = new ConnectionSet();
+		DefaultEdge edge2 = new DefaultEdge();
+		source1 = (Port)vertex1.getFirstChild();
+		target1 = (Port)vertex3.getFirstChild();
+		edge2.setSource(source1);
+		edge2.setTarget(target1);
+		cs.connect(edge2, source1, target1);
+		attr.clear();
+		attr.put(edge1, edge1.getAttributes());		
+		adapter.insert( new Object[]{edge2}, attr, cs, null, null);
+		
+		//Remove
+		assertTrue(adapter.contains(edge1));
 		adapter.remove(new Object[]{edge1});
 		assertFalse(adapter.contains(edge1));
-
+		Iterator it = source1.edges();
+		assertNotSame(edge1, it.next());
+		assertFalse(it.hasNext());
+		it = target1.edges();
+		assertNotSame(edge1, it.next());
+		assertFalse(it.hasNext());
+		assertFalse( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
+		assertTrue( diagram.areLinkableModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
+		
 		adapter.remove(new Object[]{vertex2});
 		assertFalse(adapter.contains(vertex2));
-
+		
+		
 		adapter.remove(new Object[]{vertex3});
 		assertFalse(adapter.contains(vertex3));
 		assertFalse(adapter.contains(edge2));
@@ -328,6 +381,26 @@ public class TestSpemGraphAdapter extends TestCase
 		adapter.remove(new Object[]{vertex1});
 		assertFalse(adapter.contains(vertex1));
 		assertFalse(adapter.contains(edge2));
+	}
+	
+	public void testRename()
+	{
+		assertEquals(0, adapter.getRootCount());
+		
+		vertex1 = adapter.associateGraphCell(new Activity());
+		Map attr = ApesGraphConstants.createMap();
+		attr.put(vertex1, vertex1.getAttributes());	
+		adapter.insert( new Object[]{vertex1}, attr, null, null, null );
+		
+		double centerX = ApesGraphConstants.getBounds(vertex1.getAttributes()).getCenterX();
+		
+		Map newName = ApesGraphConstants.createMap();
+		ApesGraphConstants.setValue(newName, "a name more longer than the width of the vertex...");
+		Map edit = ApesGraphConstants.createMap();
+		edit.put(vertex1, newName);
+		adapter.edit(edit, null, null, null);
+		assertEquals(centerX, ApesGraphConstants.getBounds(vertex1.getAttributes()).getCenterX());
+		assertEquals("a name more longer than the width of the vertex...", vertex1.getUserObject().toString());
 	}
 	
 	public void testUndoRedo()
@@ -635,6 +708,5 @@ public class TestSpemGraphAdapter extends TestCase
 		attr.clear();
 		attr.put(vertex2, name);
 		assertEquals("a2", vertex2.toString());
-		
 	}
 }

@@ -27,11 +27,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
@@ -45,16 +45,22 @@ import org.jgraph.graph.VertexView;
 
 /**
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ApesVertexView extends VertexView
 {
+	protected int mMinimumWidth = 50;
+	protected int mMinimumHeight = 50;
+	
 	public ApesVertexView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
-		GraphConstants.setVerticalAlignment(attributes, 3); // 3 => BOTTOM
-		
-		Rectangle r = GraphConstants.getBounds(allAttributes);
+		GraphConstants.setVerticalAlignment(attributes, 3); // 3 => BOTTOM		
+	}
+
+	protected void init()
+	{
+		Rectangle r = ApesGraphConstants.getBounds(allAttributes);
 		if( r != null && r.getSize() != calculateSize() && cell instanceof DefaultGraphCell )
 		{
 			Map apply = GraphConstants.createMap();
@@ -63,17 +69,17 @@ public class ApesVertexView extends VertexView
 			((DefaultGraphCell)cell).changeAttributes(apply);
 		}
 	}
-
+	
 	protected Dimension calculateSize()
 	{
-		return new Dimension(calculateLabelLength(), 50);
+		return new Dimension(Math.max(calculateLabelLength(),mMinimumWidth), mMinimumHeight);
 	}
 	
 	protected int calculateLabelLength()
 	{
 		Object user_object = ((ApesGraphCell)getCell()).getUserObject();
 		Graphics2D g = (Graphics2D)getGraph().getGraphics();
-		Font f = GraphConstants.getFont(getAllAttributes());
+		Font f = ApesGraphConstants.getFont(getAllAttributes());
 		
 		if(g!=null)
 		{
@@ -82,44 +88,42 @@ public class ApesVertexView extends VertexView
 		}
 		else
 		{
-			return 10+user_object.toString().length()*10;
+			//if g is not available, just return width of the cell
+			//else the alignement is lost when a file is loaded    
+			
+			//return 10+user_object.toString().length()*10;
+			return ApesGraphConstants.getBounds(allAttributes).width;
 		}
 	}
-	
-	public Map getAttributes()
-	{
-		Dimension d = calculateSize();
-		GraphConstants.setSize(attributes, d);
-		GraphConstants.setSize(((ApesGraphCell)cell).getAttributes(), d);
 
-		if(GraphConstants.getBounds(attributes)!=null)
-		{
-			Rectangle r = GraphConstants.getBounds(attributes);
-			Point p = r.getLocation();
-			
-			p.x-= (d.width - r.width)/2;
-			
-			GraphConstants.setBounds(attributes, new Rectangle(p, d));
-		}
-
-		update();
-		
-		return super.getAttributes();
-	}
-	
 	public Rectangle getBounds()
 	{
 		Rectangle rect = super.getBounds();
 		
 		if(rect != null)
 		{	
-			rect.setSize(calculateSize());
+			Dimension newSize = calculateSize();
+			
+			//the new size is different if the name of the element have changed
+			//we must center the cell to not modify potential previous alignements
+			if(!rect.getSize().equals(newSize))
+			{
+				double centerX = rect.getCenterX();
+				
+				rect.setSize(newSize);
+				rect.setLocation((int)centerX - newSize.width / 2, rect.y);
+				
+				//update the bounds and the size of the cell to center it
+				ApesGraphConstants.setBounds(((ApesGraphCell)cell).getAttributes(), rect);
+				ApesGraphConstants.setSize(((ApesGraphCell)cell).getAttributes(), rect.getSize());
+			}
+			
 			return rect;
 		}
 	
 		return null;
 	}
-
+	
 	public GraphCellEditor getEditor()
 	{
 		return new ApesGraphCellEditor((GraphCell)cell);
@@ -127,7 +131,7 @@ public class ApesVertexView extends VertexView
 
 	protected static class ApesVertexRenderer extends VertexRenderer
 	{
-		private CellView mCurrentView = null;
+		protected CellView mCurrentView = null;
 		
 		public Component getRendererComponent(JGraph graph, CellView view, boolean sel, 
 											  boolean focus, boolean preview)

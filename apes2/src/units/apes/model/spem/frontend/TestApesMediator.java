@@ -30,6 +30,7 @@ import javax.swing.JTree;
 
 import junit.framework.TestCase;
 
+import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.MainFrameInterface;
@@ -59,7 +60,7 @@ import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.9 $ 
+ * @version $Revision: 1.10 $ 
  */
 public class TestApesMediator extends TestCase
 {
@@ -768,6 +769,121 @@ public class TestApesMediator extends TestCase
 		assertFalse(diagram.containsModelElement(sm3));
 		assertFalse(diagram.existsLinkModelElements(w1, wd1));
 		assertFalse(diagram.existsLinkModelElements(sm3, wd1));		
+	}
+	
+	public void testMove()
+	{
+		/*
+		 * Activity moved tests
+		 */
+		SPackage p = new SPackage("p");
+		mediator.insertInModel(new Object[]{p}, new Object[]{root}, null);
+		ApesWorkDefinition wd1 = new ApesWorkDefinition("wd1");
+		ApesWorkDefinition wd2 = new ApesWorkDefinition("wd2");
+		mediator.insertInModel(new Object[]{wd1, wd2}, new Object[]{p,p}, null);
+		assertTrue(p.containsModelElement(wd1));
+		assertTrue(p.containsModelElement(wd2));
+		assertEquals(2, p.modelElementCount());
+		
+		Activity a = new Activity("a");
+		Activity a1 = new Activity("a1");
+		Activity a2 = new Activity("a2");
+		
+		ProcessRole r = new ProcessRole("r");
+		ProcessRole r1 = new ProcessRole("r1");
+		ProcessRole r2 = new ProcessRole("r2");
+		WorkProduct wp = new WorkProduct("wp");
+		
+		mediator.insertInModel(new Object[]{r,r1,r2,wp,a1,a2}, new Object[]{p,p,p,p,wd1,wd1}, null);
+		assertTrue(p.containsModelElement(r));
+		assertTrue(p.containsModelElement(r1));
+		assertTrue(p.containsModelElement(r2));
+		assertTrue(p.containsModelElement(wp));
+		assertTrue(wd1.containsModelElement(a1));
+		assertTrue(wd1.containsModelElement(a2));
+		
+		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{a2,wp,r}, null);
+		assertTrue(wd1.getFlowDiagram().containsModelElement(a2));
+		assertTrue(wd1.getFlowDiagram().containsModelElement(wp));
+		assertTrue(wd1.getFlowDiagram().containsModelElement(r));
+		
+		Link r_a2 = new Link(r,a2);
+		Link wp_a2 = new Link(wp,a2);
+		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{r_a2, wp_a2},null);
+		assertEquals(a2.getOwner(), r);
+		assertEquals(a2.getInputCount(), 1);
+		assertEquals(a2.getInput(0), wp);
+		
+		Map moves = ApesGraphConstants.createMap();
+		moves.put(a1, wd2);
+		moves.put(a2, wd2);
+		mediator.move(null, moves, null);
+		assertEquals(wd2, a1.getParent());
+		assertEquals(wd2, a2.getParent());
+		assertNull(a1.getOwner());
+		assertNull(a2.getOwner());
+		assertEquals(a1.getInputCount(),0);
+		assertEquals(a1.getOutputCount(),0);
+		assertEquals(a2.getInputCount(),0);
+		assertEquals(a2.getOutputCount(),0);
+		assertFalse(wd1.getFlowDiagram().containsModelElement(a1));
+		assertFalse(wd1.getFlowDiagram().containsModelElement(a2));
+		
+		moves.put(a1, wd1);
+		moves.put(a2, wd1);
+		mediator.move(null, moves, null);
+		assertEquals(wd1, a1.getParent());
+		assertEquals(wd1, a2.getParent());
+		assertNull(a1.getOwner());
+		assertNull(a2.getOwner());
+		assertEquals(a1.getInputCount(),0);
+		assertEquals(a1.getOutputCount(),0);
+		assertEquals(a2.getInputCount(),0);
+		assertEquals(a2.getOutputCount(),0);
+		
+		wd2.setOwner(r1);
+		r1.addFeature(wd2);
+		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{a2},null);
+		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{r_a2, wp_a2},null);
+		moves.put(a1, wd2);
+		moves.put(a2, wd2);
+		mediator.move(null, moves, null);
+		assertEquals(wd2, a1.getParent());
+		assertEquals(wd2, a2.getParent());
+		assertEquals(a1.getOwner(),r1);
+		assertEquals(a2.getOwner(),r1);
+		assertEquals(a1.getInputCount(),0);
+		assertEquals(a1.getOutputCount(),0);
+		assertEquals(a2.getInputCount(),0);
+		assertEquals(a2.getOutputCount(),0);
+		
+		moves.put(a1, wd1);
+		moves.put(a2, wd1);
+		mediator.move(null, moves, null);
+		assertEquals(wd1, a1.getParent());
+		assertEquals(wd1, a2.getParent());
+		assertNull(a1.getOwner());
+		assertNull(a2.getOwner());
+		assertEquals(a1.getInputCount(),0);
+		assertEquals(a1.getOutputCount(),0);
+		assertEquals(a2.getInputCount(),0);
+		assertEquals(a2.getOutputCount(),0);
+	
+		wd1.setOwner(r2);
+		r2.addFeature(wd);
+		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{a2},null);
+		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{r_a2, wp_a2},null);
+		moves.put(a1, wd2);
+		moves.put(a2, wd2);
+		mediator.move(null, moves, null);
+		assertEquals(wd2, a1.getParent());
+		assertEquals(wd2, a2.getParent());
+		assertEquals(a1.getOwner(),r1);
+		assertEquals(a2.getOwner(),r1);
+		assertEquals(a1.getInputCount(),0);
+		assertEquals(a1.getOutputCount(),0);
+		assertEquals(a2.getInputCount(),0);
+		assertEquals(a2.getOutputCount(),0);
 	}
 	
 	public void testUndoRedo()

@@ -26,7 +26,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkProductStateCell extends ApesGraphCell
 {
@@ -57,7 +57,6 @@ public class WorkProductStateCell extends ApesGraphCell
 	public Object clone()
 	{
 		WorkProductStateCell c = (WorkProductStateCell) super.clone();
-		c.init();
 		
 		return c;
 	}

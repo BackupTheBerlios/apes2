@@ -81,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 public class ApesMain
 {
@@ -166,7 +166,8 @@ public class ApesMain
 		properties.setProperty("NotesTitlebold","false");
 		properties.setProperty("NotesTitleitalic","false");
 		properties.setProperty("ToolPresentationTitledefaultPath","");
-		properties.setProperty("WorkspaceTitledefaultPath","");
+		properties.setProperty("WorkspaceTitledefaultPath",".");
+		properties.setProperty("TemplateTitledefaultPath","Templates");
 		properties.setProperty("PicturesTitledefaultPath","");
 		properties.setProperty("ErrorPanelTitleyes","true");
 		properties.setProperty("Language",Locale.getDefault().getLanguage());
@@ -194,7 +195,7 @@ public class ApesMain
 		
 		context.setProject(project);
 		
-		f.show();
+		f.setVisible(true);
 		
 		
 		//Open a file given in parameter
@@ -218,8 +219,8 @@ public class ApesMain
 				
 				mMonitor.setTask(mTask);
 				
-				mTask.show();
-				mTask.hide();
+				mTask.setVisible(true);
+				mTask.setVisible(false);
 			 }
 			
 			 catch(Throwable t)

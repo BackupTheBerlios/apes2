@@ -32,7 +32,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class DescriptionPanel extends OptionPanel
 {
@@ -40,6 +40,7 @@ public class DescriptionPanel extends OptionPanel
 	
 	public static final String APPEARANCE_KEY = "AppearanceTitle" ;
 	public static final String DEFAULT_PATH_KEY = "DefaultPathTitle" ;
+	public static final String TEMPLATE_PATH_KEY = "TemplatePathTitle" ;
 	public static final String WINDOWS_KEY = "WindowsTitle" ;
 	
 	public DescriptionPanel(String name)
@@ -107,6 +108,10 @@ public class DescriptionPanel extends OptionPanel
 		if (key.equals(DEFAULT_PATH_KEY))
 		{
 			this.mDescriptionLabel.setText(PreferencesDialog.resMan.getString("LibDefaultPath"));
+		}
+		if (key.equals(TEMPLATE_PATH_KEY))
+		{
+			this.mDescriptionLabel.setText(PreferencesDialog.resMan.getString("LibTemplatePath"));
 		}
 		if (key.equals(WINDOWS_KEY))
 		{

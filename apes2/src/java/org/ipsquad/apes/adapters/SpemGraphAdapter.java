@@ -75,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesModelListener
 {
@@ -260,9 +260,26 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	    			elements.add(userObject);
 	    		}
 	    	}
-	    	else if(cells[i] instanceof NoteEdge)
+	    	else if(cells[i] instanceof NoteEdge && cs != null)
 	    	{
-	    		noteEdges.add(cells[i]);	
+	    		NoteEdge edge = (NoteEdge)cells[i];
+	    		//to add a note edge in the diagram we doesn't pass through the ApesMediator
+	    		//thus we must check if added the note edge is allowed here 
+	    		int found = 0;
+	    		Iterator it = cs.connections();
+	    		while (it.hasNext()) 
+	    		{
+					ConnectionSet.Connection connection = (ConnectionSet.Connection) it.next();
+					if(connection.getEdge() == edge && contains(getParent(connection.getPort())))
+					{
+						++found;						
+					}
+				}
+	    		
+	    		if(found == 2)
+	    		{
+	    			noteEdges.add(edge);
+	    		}
 	    	}
 	    	else if(cells[i] instanceof DefaultEdge)
 	    	{
@@ -592,15 +609,15 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		for ( int i = 0; i < cells.length; i++ )
 		{
 			Object tmp = cells[i];
-			
-			if(tmp instanceof DefaultGraphCell)
+			if(tmp instanceof ApesGraphCell && contains(tmp))
 			{
-				DefaultGraphCell cell = (DefaultGraphCell) tmp;
+				ApesGraphCell cell = (ApesGraphCell) tmp;
 				Map oldAttr = ApesGraphConstants.createMap();
 				Map newAttr = ApesGraphConstants.createMap();
 				ApesGraphConstants.setValue(oldAttr, cell.getUserObject().toString());
 				ApesGraphConstants.setValue(newAttr, changed.get(cell.getUserObject()));
 				cell.changeAttributes(newAttr);
+				
 				change.put(cell, oldAttr);
 			}
 		}

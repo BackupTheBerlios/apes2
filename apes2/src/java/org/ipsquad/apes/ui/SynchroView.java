@@ -42,7 +42,7 @@ import org.jgraph.graph.VertexRenderer;
 /**
  * Display a Synchro cell
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
  
 public class SynchroView extends ApesVertexView
@@ -53,18 +53,9 @@ public class SynchroView extends ApesVertexView
 	public SynchroView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
+		mMinimumWidth = 80;
+		mMinimumHeight = 5;
 	}
-	
-	
-	protected Dimension calculateSize()
-	{
-		/*int width=calculateLabelLength();
-		if(width<75)
-			width=75;*/
-		//return new Dimension(50, 35);
-		return new Dimension(80, 5);
-	}
-	
 	
 	/**
 	 * Returns the intersection of the bounding rectangle and the

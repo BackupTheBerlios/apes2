@@ -37,6 +37,7 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.utils.ErrorManager;
+import org.ipsquad.utils.ResourceManager;
 
 import JSX.ObjOut;
 
@@ -137,7 +138,7 @@ public class SaveProject
 		mZipFile.putNextEntry( entryZip );	
 		DataOutputStream data = new DataOutputStream(mZipFile);
 		
-		data.writeChars("<?apes2 version=\"0.1\"?>\n");
+		data.writeChars("<?apes2 version=\""+ResourceManager.getInstance().getString("Version")+"\"?>\n");
 		data.writeChars("<Interfaces>\n");
 		data.writeChars("\t<ProvidedInterface>\n");
 		
@@ -198,6 +199,8 @@ public class SaveProject
 		//add an extra element to know the current max id
 		Activity a = new Activity();
 		v.add(new Activity());
+		//add the apes version
+		//v.add(ResourceManager.getInstance().getString("Version"));
 		
 		out.writeObject(v);
 		mZipFile.closeEntry();

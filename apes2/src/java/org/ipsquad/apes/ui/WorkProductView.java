@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a WorkProductState cell
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
  
 public class WorkProductView extends ApesVertexView
@@ -52,19 +52,10 @@ public class WorkProductView extends ApesVertexView
 	public WorkProductView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
-	}
-
-
-
-	protected Dimension calculateSize()
-	{
-		int width=calculateLabelLength();
-		if(width<45)
-			width=45;
-		return new Dimension(width, 70);
-	}
-	
-	
+		mMinimumWidth = 45;
+		mMinimumHeight = 70;
+		init();
+	}	
 	
 	/**
 	 * Returns the intersection of the bounding rectangle and the

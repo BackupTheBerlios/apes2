@@ -69,7 +69,8 @@ public class TestActivityGraphAdapter extends TestCase
 	static ProcessComponent root;
 	
 	//public TestSpemGraphAdapter()
-	static {
+	protected void setUp()
+	{
 		ConfigManager.init(ApesMain.createDefaultProperties());
 		
 		context = Context.getInstance();
@@ -93,11 +94,9 @@ public class TestActivityGraphAdapter extends TestCase
 			public GraphFrame getGraphFrame(GraphModel model) { fail(); return null; }
 			
 		});
-	}
 	
-	protected void setUp()
-	{
 		context.setProject(new Project());
+
 		root = context.getProject().getProcess().getComponent();
 		wd1 = new ApesWorkDefinition();
 		wd2 = new ApesWorkDefinition();

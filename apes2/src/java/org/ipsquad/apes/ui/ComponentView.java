@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a Component cell
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
  
 public class ComponentView extends ApesVertexView
@@ -52,20 +52,11 @@ public class ComponentView extends ApesVertexView
 	public ComponentView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
+		mMinimumWidth = 100;
+		mMinimumHeight = 100;
+		init();
 	}
 
-
-
-	protected Dimension calculateSize()
-	{
-		int width=calculateLabelLength();
-		if(width<100)
-			width=100;
-		return new Dimension(width, 100);
-	}
-	
-	
-	
 	/**
 	 * Returns the intersection of the bounding rectangle and the
 	 * straight line between the source and the specified point p.

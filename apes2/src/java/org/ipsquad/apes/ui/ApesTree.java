@@ -75,7 +75,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Application tree view
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {
@@ -337,7 +337,7 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 				((JTextField)editingComponent).setSelectedTextColor(fc);
 				((JTextField)editingComponent).setBackground(bc);
 				((JTextField)editingComponent).setFont( font );
-				((JTextField)editingComponent).selectAll();
+				((JTextField)editingComponent).selectAll();				
 			}
 			
 			return c;

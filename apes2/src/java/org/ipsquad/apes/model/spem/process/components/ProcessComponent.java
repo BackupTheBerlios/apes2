@@ -31,12 +31,14 @@ import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.ipsquad.utils.ResourceManager;
 
 /**
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ProcessComponent extends SPackage
 {
+	private String mVersion = ResourceManager.getInstance().getString("Version");
 	private long mValidateTime = 0;
 	
 	public ProcessComponent()
@@ -85,5 +87,15 @@ public class ProcessComponent extends SPackage
 	public long getValidate()
 	{
 		return mValidateTime;
+	}
+	
+	public void updateVersion()
+	{
+		mVersion = ResourceManager.getInstance().getString("Version");
+	}
+	
+	public String getVersion()
+	{
+		return mVersion;
 	}
 };

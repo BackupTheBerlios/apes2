@@ -42,7 +42,7 @@ import org.ipsquad.utils.ResourceManager;
 import org.ipsquad.utils.SimpleFileFilter;
 
 /**
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 public class DefaultPathPanel extends OptionPanel
 {
@@ -52,7 +52,8 @@ public class DefaultPathPanel extends OptionPanel
 	public static final String TOOL_PRESENTATION_KEY = "ToolPresentationTitle" ;
 	public static final String WORKSPACE_KEY = "WorkspaceTitle" ;
 	public static final String PICTURES_KEY = "PicturesTitle" ;
-		
+	public static final String TEMPLATE_KEY = "TemplateTitle";
+	
 	public  DefaultPathPanel (String name)
 	{
 			this.mTitleLabel = new JLabel (name) ;

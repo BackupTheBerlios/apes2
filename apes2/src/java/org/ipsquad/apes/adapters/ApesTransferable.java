@@ -25,7 +25,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import org.ipsquad.apes.Project;
@@ -39,7 +40,7 @@ import org.ipsquad.apes.Project;
 public class ApesTransferable implements Transferable 
 {
 	public static DataFlavor mArrayFlavor ;
-	private Vector mElements;
+	private Map mElements;
 	
 	private DataFlavor[] mFlavors = {mArrayFlavor};
 	
@@ -54,12 +55,14 @@ public class ApesTransferable implements Transferable
 		}
 	}
 	
-	public ApesTransferable( Project p, Object[] list )
+	public ApesTransferable( Project p, Vector cells, Vector edges )
 	{
-		if(p != null && list != null)
+		if(p != null && cells != null && edges != null)
 		{
-			mElements = new Vector(Arrays.asList(list));
-			mElements.add(0, new Integer(p.hashCode()));
+			mElements = new HashMap();
+			mElements.put("HASHCODE", new Integer(p.hashCode()));
+			mElements.put("CELLS", cells);
+			mElements.put("EDGES", edges);
 		}
 	}
 	
