@@ -74,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -760,8 +760,8 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				Port sourcePort = (Port) edge.getSource();
 				Port targetPort = (Port) edge.getTarget();
 
-				ApesGraphCell source = (ApesGraphCell)getParent(sourcePort);
-				ApesGraphCell target = (ApesGraphCell)getParent(targetPort);
+				DefaultGraphCell source = (DefaultGraphCell)getParent(sourcePort);
+				DefaultGraphCell target = (DefaultGraphCell)getParent(targetPort);
 
 				sourcePort.addEdge(edge);
 				targetPort.addEdge(edge);
@@ -781,8 +781,8 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			{
 				Edge edge = (Edge)cells[i];
 
-				ApesGraphCell source = (ApesGraphCell)getParent((Port)getSource(edge));
-				ApesGraphCell target = (ApesGraphCell)getParent((Port)getTarget(edge));
+				DefaultGraphCell source = (DefaultGraphCell)getParent((Port)getSource(edge));
+				DefaultGraphCell target = (DefaultGraphCell)getParent((Port)getTarget(edge));
 
 				((Port)getSource(edge)).removeEdge(edge);
 				((Port)getTarget(edge)).removeEdge(edge);
