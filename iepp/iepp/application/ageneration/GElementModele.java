@@ -98,7 +98,7 @@ public class GElementModele extends GElement
 			}
 			else
 			{
-				fd.write(Application.getApplication().getTraduction("WEB_LINK")+ " : " + "<a href=\"../../contenu/" + this.element.getContenu() + "\">" + this.element.getContenu() + "</a>");
+				fd.write(Application.getApplication().getTraduction("WEB_LINK")+ " : " + "<a href=\"../../contenu/" + this.element.getContenu() + "\" target=\"_new\" >" + this.element.getContenu() + "</a>");
 				fd.write("<hr></br>");
 				this.ajouterMail(fd);
 			}

@@ -72,7 +72,7 @@ public class GProduit extends GElementModele
 		for (int i = 0; i < listeActivites.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_SORTIE_ACT") + " </div>\n");
 		
@@ -80,7 +80,7 @@ public class GProduit extends GElementModele
 		for (int i = 0; i < listeActivites.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 		
 		//affiche le rôle responsable de l'activité
@@ -88,7 +88,7 @@ public class GProduit extends GElementModele
 		 IdObjetModele id = this.modele.getRoleResponsable();
 		 if (id != null)
 		 {
-			 fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+			 fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		 }
 		
 		String description = this.element.getDescription();

@@ -1310,10 +1310,6 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 				}
 				// récupérer l'ID de l'élément courant
 				int ID_Apes = ((ApesGraphCell)o[i]).getID();
-				if (mAdapter instanceof ContextGraphAdapter)
-				{
-					System.out.println(ID_Apes);
-				}
 				ElementPresentation elem = (ElementPresentation)this.mapId.get(new Integer(ID_Apes));
 				if ( elem != null )
 				{

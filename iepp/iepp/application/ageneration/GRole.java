@@ -55,7 +55,7 @@ public class GRole extends GElementModele
 		for (int i = 0; i < listeActivites.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
@@ -65,7 +65,7 @@ public class GRole extends GElementModele
 		for (int i = 0; i < listeProduits.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 
 		String description = this.element.getDescription();

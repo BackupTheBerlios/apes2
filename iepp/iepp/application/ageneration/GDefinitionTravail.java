@@ -73,7 +73,7 @@ public class GDefinitionTravail extends GElementModele
 				for (int i = 0; i < listeActivites.size(); i++)
 				{
 					IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
-					fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+					fd.write("<div class=\"elementliste\"><a href=\"../../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 				}
 				break;
 			

@@ -79,21 +79,21 @@ public class GComposant extends GElementModele
 					for (int i = 0; i < listeRole.size(); i++)
 					{
 						IdObjetModele id = (IdObjetModele) listeRole.elementAt(i);
-						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 					}
 					fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
 					Vector listeProduits = this.modele.getProduit();
 					for (int i = 0; i < listeProduits.size(); i++)
 					{
 						IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 					}
 					fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_DEFINITIONS") + " </div>\n");
 					Vector listeDefinition = this.modele.getDefinitionTravail();
 					for (int i = 0; i < listeDefinition.size(); i++)
 					{
 						IdObjetModele id = (IdObjetModele) listeDefinition.elementAt(i);
-						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\">" + id.toString() + "</a></div>\n");
+						fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 					}
 					break;
 				

@@ -100,7 +100,7 @@ public class GenerationManager
 	public void debuterGeneration()
 	{
 		Date current_date = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		GenerationManager.dateGeneration =  "[" + formatter.format(current_date) + "] ";
 	}
 	
@@ -117,7 +117,6 @@ public class GenerationManager
 	 */
 	public void setFeuilleCss(String nomFeuille)
 	{
-		System.out.println("nom de la feuille du manager : " + nomFeuille);
 		GenerationManager.feuilleCss = nomFeuille;
 	}
 	
