@@ -1320,7 +1320,13 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 					IdObjetModele id = elem.getElementModele();
 					if (id != null)
 					{
-						mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + id.getChemin()+"\">\n");
+						// rajouté: info-bulle contenant la description de l'élément
+						String description = "ALT=\"\"";
+						if (elem.getDescription() != null)
+						{
+							description = "ALT=\"" + elem.getDescription() + "\"";
+						}
+						mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ niveauLien + id.getChemin()+ "\" " + description + ">\n");
 					}
 				}
 			}

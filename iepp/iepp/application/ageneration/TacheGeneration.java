@@ -136,7 +136,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 					paquet.trierElement();
 					// récupérer les icones et les contenuts pour chaque paquetage
 					extraireIconeContenu(paquet);
-					// on traite la génération de ce composant
+					// on traite la génération de ce paquetage
 					GPaquetagePresentation paquetCourant = new GPaquetagePresentation (paquet, pwFicTree);
 					paquetCourant.traiterGeneration();
 				}
