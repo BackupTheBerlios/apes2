@@ -42,13 +42,14 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a FlowDiagram
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class FlowJGraph extends JGraph
 {
 	public FlowJGraph(SpemGraphAdapter model)
 	{
 		super(model);
+		setInvokesStopCellEditing(true);
 		getActionMap().put("copy",Context.getInstance().getAction("Copy"));
 		getActionMap().put("paste",Context.getInstance().getAction("Paste"));
 	}

@@ -22,13 +22,11 @@
 
 package org.ipsquad.apes.adapters;
 
-import java.awt.Dimension;
-
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.jgraph.graph.GraphConstants;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class InitialPointCell extends ApesGraphCell
 {
@@ -42,11 +40,5 @@ public class InitialPointCell extends ApesGraphCell
 	{
 		super(ip);
 		GraphConstants.setEditable(attributes, false);
-	}
-	
-	protected void init() 
-	{
-		super.init();
-		GraphConstants.setSize(attributes, new Dimension(25,25));
 	}
 }

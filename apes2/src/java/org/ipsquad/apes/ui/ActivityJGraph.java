@@ -40,13 +40,14 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for an ActivityDiagram
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ActivityJGraph extends JGraph
 {
 	public ActivityJGraph(SpemGraphAdapter model)
 	{
 		super(model);
+		setInvokesStopCellEditing(true);
 		getActionMap().put("copy",Context.getInstance().getAction("Copy"));
 		getActionMap().put("paste",Context.getInstance().getAction("Paste"));
 	}

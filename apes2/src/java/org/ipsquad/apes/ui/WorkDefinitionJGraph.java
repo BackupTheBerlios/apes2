@@ -40,13 +40,14 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a WorkDefinitionDiagram
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class WorkDefinitionJGraph extends JGraph
 {
 	public WorkDefinitionJGraph( SpemGraphAdapter model )
 	{
 		super(model);
+		setInvokesStopCellEditing(true);
 		getActionMap().put("copy",Context.getInstance().getAction("Copy"));
 		getActionMap().put("paste",Context.getInstance().getAction("Paste"));
 	}
