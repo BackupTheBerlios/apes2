@@ -53,7 +53,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesMediator.Listener
 {
@@ -155,7 +155,8 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	 */
 	public void valueForPathChanged(TreePath path, Object newValue)
 	{
-		if( newValue instanceof String && path.getLastPathComponent() != mRoot )
+		if( newValue instanceof String && path.getLastPathComponent() != mRoot 
+				&& ! newValue.equals(path.getLastPathComponent().toString()))
 		{
 			change( (ApesTreeNode)path.getLastPathComponent(), (String)newValue );
 		}
