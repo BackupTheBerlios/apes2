@@ -30,12 +30,12 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.ui.ApesEdgeView;
 import org.jgraph.JGraph;
 import org.jgraph.graph.BasicMarqueeHandler;
 import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.PortView;
 
@@ -43,7 +43,7 @@ import org.jgraph.graph.PortView;
  * This tool allows to create edges in the graph
  * It use the prototype design pattern to clone edges
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class EdgeTool extends Tool
 {
@@ -135,7 +135,7 @@ public class EdgeTool extends Tool
 
 					view.put("Attributes", attr);
 					
-					((SpemGraphAdapter)mGraph.getModel()).insertEdge( (ApesGraphCell)mFirstPort.getParentView().getCell(), (ApesGraphCell)mPort.getParentView().getCell(), view);
+					((SpemGraphAdapter)mGraph.getModel()).insertEdge( (DefaultGraphCell)mFirstPort.getParentView().getCell(), (DefaultGraphCell)mPort.getParentView().getCell(), view);
 				}
 				
 				e.consume();

@@ -21,29 +21,56 @@
 
 package org.ipsquad.apes.adapters;
 
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
+import org.jgraph.graph.GraphConstants;
 
 /**
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-public class NoteCell extends DefaultGraphCell{
-
+public class NoteCell extends DefaultGraphCell
+{
 	public NoteCell()
 	{
-		add(new DefaultPort());
+		super();
+		init();
 	}
 	
 	public NoteCell(Object userObject) 
 	{
 		super(userObject);
+		init();
+	}
+	
+	protected void init()
+	{
+		add(new DefaultPort());
+		// Create a Map that holds the attributes for the Vertex
+		Map map = GraphConstants.createMap();
+		// Add a Bounds Attribute to the Map
+		GraphConstants.setBounds(map, new Rectangle(50, 50, 130, 32));
+		// Even though it is opaque, set it to transparent so that renderer's super.paint() won't paint background.
+		GraphConstants.setOpaque(map, false);
+		//resizable cells.
+		GraphConstants.setSizeable(map, true);
+		//outline it with a border.
+		GraphConstants.setBorder(map, BorderFactory.createLineBorder(Color.BLACK, 2));
+		//GraphConstants.setBackground(attributes, new Color(235,190,190));
+		
+		changeAttributes(map);
 	}
 	
 	public Object clone()
 	{
 		NoteCell c = (NoteCell) super.clone();
-		c.add(new DefaultPort());
+		init();
 		return c;
 	}
 	

@@ -22,8 +22,6 @@
 
 package org.ipsquad.apes.adapters;
 
-import java.awt.Color;
-import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
 import javax.swing.undo.UndoableEdit;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
@@ -78,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -228,8 +225,8 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			}
 			else if( filtered_roots.get(i) instanceof DefaultEdge )
 			{
-				ApesGraphCell source = (ApesGraphCell) getParent(((DefaultEdge)filtered_roots.get(i)).getSource());
-				ApesGraphCell target = (ApesGraphCell) getParent(((DefaultEdge)filtered_roots.get(i)).getTarget());
+				DefaultGraphCell source = (DefaultGraphCell) getParent(((DefaultEdge)filtered_roots.get(i)).getSource());
+				DefaultGraphCell target = (DefaultGraphCell) getParent(((DefaultEdge)filtered_roots.get(i)).getTarget());
 				sources_to_remove.add( source.getUserObject() );
 				targets_to_remove.add( target.getUserObject() );
 				edges_to_remove.add( filtered_roots.get(i) );
@@ -364,30 +361,24 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		else if( vertex instanceof NoteCell )
 		{
 			NoteCell cell = new NoteCell("");
-			// Create a Map that holds the attributes for the Vertex
-			Map map = GraphConstants.createMap();
-			// Add a Bounds Attribute to the Map
-			GraphConstants.setBounds(map, new Rectangle(50, 50, 130, 32));
-			// Even though it is opaque, set it to transparent so that renderer's super.paint() won't paint background.
-			GraphConstants.setOpaque(map, false);
-			//resizable cells.
-			GraphConstants.setSizeable(map, true);
-			//outline it with a border.
-			GraphConstants.setBorder(map, BorderFactory.createLineBorder(Color.BLACK, 1));
+			
 			// Construct a Map from cells to Maps (for insert)
 			Hashtable attributes = new Hashtable();
 			// Associate the Vertex with its Attributes
-			attributes.put(cell, map);
+			attributes.put(cell, cell.getAttributes());
 			// Insert the Vertex and its Attributes
 			super.insert(new Object[]{cell}, attributes, null, null, null);
 		}
 	}
 	
-	public void insertEdge( ApesGraphCell source, ApesGraphCell target, Map attr )
+	public void insertEdge( DefaultGraphCell source, DefaultGraphCell target, Map attr )
 	{
 		//System.out.println("Graph::tryInsertEdge");
-		ApesMediator.getInstance().update( 
-				ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, source.getUserObject(), target.getUserObject(), attr ) );		
+		if( source instanceof ApesGraphCell && target instanceof ApesGraphCell )
+		{	
+			ApesMediator.getInstance().update( 
+				ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, source.getUserObject(), target.getUserObject(), attr ) );
+		}
 	}
 	
 	public void moveEdge( DefaultEdge edge, ApesGraphCell newCell, boolean isSource )
@@ -636,8 +627,8 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				Port sourcePort = (Port) ((Edge)c.getEdge()).getSource();
 				Port targetPort = (Port) ((Edge)c.getEdge()).getTarget();
 
-				ApesGraphCell source = (ApesGraphCell)getParent(sourcePort);
-				ApesGraphCell target = (ApesGraphCell)getParent(targetPort);
+				DefaultGraphCell source = (DefaultGraphCell)getParent(sourcePort);
+				DefaultGraphCell target = (DefaultGraphCell)getParent(targetPort);
 				
 				sourcePort.addEdge(c.getEdge());
 				targetPort.addEdge(c.getEdge());

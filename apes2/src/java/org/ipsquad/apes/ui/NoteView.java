@@ -54,7 +54,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
  
 class NoteView extends VertexView 
@@ -87,7 +87,7 @@ class NoteView extends VertexView
 					editorComponent.setBorder(UIManager.getBorder("Tree.editorBorder"));
 					editorComponent.setLineWrap(true);
 					editorComponent.setWrapStyleWord(true);
-
+					
 					//substitute a JTextArea's VK_ENTER action with our own that will stop an edit.
 					editorComponent.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter");
 					editorComponent.getActionMap().put("enter", new AbstractAction(){
