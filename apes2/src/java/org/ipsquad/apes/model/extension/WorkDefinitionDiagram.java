@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -378,7 +378,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 	
@@ -648,7 +648,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if (containsModelElement(r) && containsModelElement(w))
 		{
-			if (!r.containsFeature(w))
+			if (!r.containsFeature(w) && w.getOwner() == null)
 			{
 				boolean canLink = true;
 				for(int i = 0; i < w.subWorkCount(); i++)
@@ -661,6 +661,9 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				}
 				return canLink;
 			}
+			
+			ErrorManager.getInstance().printKey("errorWorkDefinitionAlreadyHaveRole");
+			return false;			
 		}
 
 		ErrorManager.getInstance().printKey("errorNotLinkableElements");

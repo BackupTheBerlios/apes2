@@ -50,7 +50,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -292,8 +292,8 @@ public class ValidateVisitor implements RoutedSpemVisitor
 	{
 		visitSpemDiagram(diagram);
 		
-		WorkProduct wp;
-		WorkDefinition wd;
+		WorkProduct wp = null;
+		WorkDefinition wd = null;
 		boolean isUsed, isProvided;
 		
 		for( int i = 0; i < diagram.getTransitionCount(); i++ )
@@ -325,7 +325,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 						mHasErrors = true;
 				}
 			}
-			else
+			else if( diagram.getTransition(i).getOutputModelElement() instanceof WorkProduct )
 			{
 				wp = (WorkProduct)diagram.getTransition(i).getOutputModelElement();
 				wd = (WorkDefinition)diagram.getTransition(i).getInputModelElement();

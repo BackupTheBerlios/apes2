@@ -36,15 +36,10 @@ import org.jgraph.graph.GraphConstants;
 /**
  * This is a convenient class which correct problems in the clone method
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class ApesGraphCell extends DefaultGraphCell implements Identity
 {
-/*	public ApesGraphCell()
-	{
-		init();
-	}*/
-
 	public ApesGraphCell(Object userObject)
 	{
 		super(userObject);

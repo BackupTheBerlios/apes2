@@ -33,13 +33,14 @@ import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.jgraph.JGraph;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 
 
 /**
  * Align the centers of selected objects vertically
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class AlignVAction extends ApesAction
 {
@@ -66,7 +67,7 @@ public class AlignVAction extends ApesAction
 	//Perform vertical alignment
 	public void alignV(Object [] listCells)
 	{
-		ApesGraphCell c;
+		DefaultGraphCell c;
 		Rectangle newRect, oldRect = null;
 		JGraph mGraph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Map attr, myMap = new HashMap();
@@ -78,7 +79,7 @@ public class AlignVAction extends ApesAction
 		{
 			if(listCells[i] instanceof ApesGraphCell || listCells[i] instanceof NoteCell )
 			{	
-				c=(ApesGraphCell)listCells[i];
+				c=(DefaultGraphCell)listCells[i];
 				
 				if( oldRect == null )
 				{

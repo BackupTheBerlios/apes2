@@ -35,7 +35,7 @@ import org.ipsquad.utils.SimpleFileFilter;
 
 /**
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class PresentationAction extends ApesAction
 {
@@ -58,7 +58,7 @@ public class PresentationAction extends ApesAction
 			{
 				File file = chooser.getSelectedFile();
 				String s = System.getProperty("os.name") ; 
-                if (s.charAt(1) == 'w' || s.charAt(1) == 'W') 
+                if (s.charAt(0) == 'w' || s.charAt(0) == 'W') 
                 { 
                     Runtime.getRuntime().exec("java -jar "+ " \""+ file.getPath() +"\" " ); 
                 } 
@@ -71,9 +71,7 @@ public class PresentationAction extends ApesAction
 			{
 				t.printStackTrace() ;
 			} 
-			
 		}
-
 	}
 
 }

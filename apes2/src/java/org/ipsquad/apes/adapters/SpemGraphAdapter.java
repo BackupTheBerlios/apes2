@@ -74,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -673,6 +673,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			
 			if( to_remove.size() > 0 )
 			{
+				//add the port of each cell being removed
 				Vector related = new Vector();
 				addRelated( to_remove.toArray(), related );
 				super.remove( related.toArray() );
@@ -746,6 +747,51 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return cells;
 	}
 	
+	protected Object[] handleInsert(Object[] cells)
+	{
+		if(cells==null) return super.handleInsert(cells);
+
+		for(int i=0; i<cells.length; i++)
+		{
+			if((cells[i] instanceof Edge))
+			{
+				Edge edge = (Edge)cells[i];
+
+				Port sourcePort = (Port) edge.getSource();
+				Port targetPort = (Port) edge.getTarget();
+
+				ApesGraphCell source = (ApesGraphCell)getParent(sourcePort);
+				ApesGraphCell target = (ApesGraphCell)getParent(targetPort);
+
+				sourcePort.addEdge(edge);
+				targetPort.addEdge(edge);
+			}
+		}
+
+		return super.handleInsert(cells);
+	}
+	
+	protected Object[] handleRemove(Object[] cells)
+	{
+		if(cells==null) return super.handleRemove(cells);
+
+		for(int i=0; i<cells.length; i++)
+		{
+			if(cells[i] instanceof Edge)
+			{
+				Edge edge = (Edge)cells[i];
+
+				ApesGraphCell source = (ApesGraphCell)getParent((Port)getSource(edge));
+				ApesGraphCell target = (ApesGraphCell)getParent((Port)getTarget(edge));
+
+				((Port)getSource(edge)).removeEdge(edge);
+				((Port)getTarget(edge)).removeEdge(edge);
+			}
+		}
+
+		return super.handleRemove(cells);
+	}
+
 	protected ConnectionSet handleConnectionSet(ConnectionSet cs)
 	{
 		if(cs==null) return super.handleConnectionSet(cs);
