@@ -73,7 +73,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -824,7 +824,8 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			{
 				ApesWorkDefinition wd = (ApesWorkDefinition)elements[i];
 				ApesEdit edit = createInsertModelEdit(
-						new Object[]{new ActivityDiagram(), new FlowDiagram()}, 
+						new Object[]{new ActivityDiagram(mConfig.getProperty("ActivityDiagram")), 
+						        new FlowDiagram(mConfig.getProperty("FlowDiagram"))}, 
 						new Object[]{wd,wd},
 						null);
 				edit.end();
