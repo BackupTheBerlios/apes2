@@ -177,7 +177,7 @@ Fichier_ref=Repository files (*.ref)
 #Fenetre choix processus
 Choix_processus= Choose one process
 Charger_proc=Load a saved process
-Creer_proc=Create a new repository
+Creer_proc=Create a new process
 Fichier_apes=Process files (*.apes)
 
 #Fenetre creer processus

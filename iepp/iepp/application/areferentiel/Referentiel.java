@@ -367,7 +367,11 @@ public class Referentiel extends Observable implements TreeModel
 						// Permet de savoir si le fichier est un composant ou pas
 						// Renvoie -2 si c'est pas le cas
 						if (nomElt == null)
-						{ return -2; }
+						{
+						    // Supprimer le repertoire cree
+						    fic.delete();
+						    return -2;
+						}
 						/*
 						else
 						{
@@ -376,10 +380,12 @@ public class Referentiel extends Observable implements TreeModel
 						*/
 						
 						// Verifie que ce nom n'existe pas deja
-						if (nomComposantToId(nomElt) != -1)
-						{
-						    return -3;
-						}
+                        if (nomComposantToId(nomElt) != -1)
+                        {
+                            // Supprimer le repertoire cree
+                            fic.delete();
+                            return -3;
+                        }
 						
 						
 						//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
@@ -414,6 +420,14 @@ public class Referentiel extends Observable implements TreeModel
 					// Verifie que ce nom n'existe pas deja
 					if (nomDefProcToId(nomElt) != -1)
 					{
+					    // Supprimer le repertoire et les fichiers crees
+					    if (fic.exists())
+                        {
+                            File[] files = fic.listFiles();
+                            files[0].delete();
+                        }
+                        fic.delete();
+					    
 					    return -3;
 					}
 					
@@ -430,7 +444,11 @@ public class Referentiel extends Observable implements TreeModel
 					// Permet de savoir si le fichier est un composant ou pas
 					// Renvoie -2 si c'est pas le cas
 					if (nomElt == null)
-					{ return -2; }
+                    {
+                        // Supprimer le repertoire cree
+                        fic.delete();
+                        return -2;
+                    }
 					/*
 					else
 					{
@@ -439,9 +457,11 @@ public class Referentiel extends Observable implements TreeModel
 					*/
 					// Verifie que ce nom n'existe pas deja
 					if (nomPresentationToId(nomElt) != -1)
-					{
-					    return -3;
-					}
+                    {
+                        // Supprimer le repertoire cree
+                        fic.delete();
+                        return -3;
+                    }
 					
 					//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
 					pathFic += File.separator + nomElt + ".pre";
@@ -492,7 +512,9 @@ public class Referentiel extends Observable implements TreeModel
 		catch(Exception e)
 		{ 
 			e.printStackTrace();
-			ErrorManager.getInstance().displayError(e.getMessage()); 
+			ErrorManager.getInstance().displayError(e.getMessage());
+			// Supprimer le repertoire cree
+		    fic.delete();
 			return -1;
 		}
 	}

@@ -382,11 +382,18 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 	 */
 	public String chercherNomPresentation(String projectZip) throws FichierException 
 	{
+	    boolean fini = false;
 		this.presentationTrouve = false;
 		ZipInputStream zipFile = null ;
 		try
 		{
 			// récupérer un flux vers le fichier zip
+		    zipFile = new ZipInputStream( new FileInputStream (new File(projectZip)));
+		    
+		    // Verifier qu'il s'agisse bien d'un paquetage de presentation
+		    this.verifierPaquetage(zipFile);
+		    zipFile.close();
+		    
 			zipFile = new ZipInputStream( new FileInputStream (new File(projectZip)));
 			ZipEntry zipEntry = zipFile.getNextEntry();
 			while( zipEntry != null && !this.presentationTrouve )
@@ -406,6 +413,21 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 				}
 			}
 			zipFile.close();
+			fini = true;
+		}
+		catch (FichierException e)
+		{
+			String fic = e.getMessage();
+			this.traiterErreur();
+			if (! fic.equals("Presentation"))
+			{
+				ErrorManager.getInstance().display("ERR","ERR_" + fic + "_Trouve");
+			}
+			else
+			{
+				ErrorManager.getInstance().display("ERR","ERR_" + fic + "_Pas_Trouve");
+			}
+			
 		}
 		catch (FileNotFoundException e)
 		{
@@ -434,11 +456,11 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 			ErrorManager.getInstance().displayError(e.getMessage());
 		}
 		
-		if (! this.presentationTrouve )
+		if (fini && !this.presentationTrouve)
 		{
-			throw new FichierException ("Presentation");
+		    // Afficher une erreur
+		    ErrorManager.getInstance().display("ERR","ERR_Presentation_Pas_Trouve");
 		}
-	
 		return  this.nomPresentation;
 	}
 	

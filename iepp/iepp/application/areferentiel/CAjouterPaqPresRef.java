@@ -58,10 +58,13 @@ public class CAjouterPaqPresRef extends CommandeNonAnnulable
 		long id = ref.ajouterElement(chooser.getSelectedFile().getAbsolutePath(), ElementReferentiel.PRESENTATION) ;
 		if (id == -2)
 		{
+		    // L'erreur a deja ete affichee normalement
+		    /*
 			JOptionPane.showMessageDialog ( Application.getApplication().getFenetrePrincipale(),
 				Application.getApplication().getTraduction("ERR_Non_Presentation"),
 				Application.getApplication().getTraduction("ERR"),
 				JOptionPane.ERROR_MESSAGE );
+			*/
 		}
 		if (id == -3)
 		{
