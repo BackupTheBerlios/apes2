@@ -52,7 +52,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -507,13 +507,14 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		boolean inputTransitionFind;
 		boolean outputTransitionFind;
 		int nbDecisionExit;
+		int nbDecisionEntry;
 		int i = 0;
 		int j;
 		
 		if(!diagram.haveInitialPoint())
 		{
 			ErrorManager.getInstance().println(
-			ResourceManager.getInstance().getString("errorValidateNoInitialPoint"));
+			ResourceManager.getInstance().getString("errorValidateNoInitialPoint")+" : \""+diagram.getName()+"\"");
 			mHasErrors = true;
 		}
 		
@@ -523,6 +524,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			inputTransitionFind = false;
 			outputTransitionFind = false;
 			nbDecisionExit = 0;
+			nbDecisionEntry = 0;
 			
 			if (me instanceof Activity)
 			{
@@ -553,9 +555,13 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				else if(me == tr.getOutputModelElement())
 				{
 					outputTransitionFind = true;
-					if (!(me instanceof ActivityDiagram.Decision))
+					if (me instanceof ActivityDiagram.Decision)
 					{
-						nbDecisionExit=2;
+						nbDecisionEntry++;
+					}
+					else
+					{
+						nbDecisionEntry=2;
 					}					
 				}
 				j++;
@@ -566,31 +572,31 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				if (me instanceof Activity)
 				{	
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : \""+((Activity)me).getName()+"\"");
+					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : \""+((Activity)me).getName()+"\""+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.Decision)
 				{
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateDecisionAlone"));
+					ResourceManager.getInstance().getString("errorValidateDecisionAlone")+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.InitialPoint)
 				{
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateInitialPointAlone"));
+					ResourceManager.getInstance().getString("errorValidateInitialPointAlone")+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.FinalPoint)
 				{
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateFinalPointAlone"));
+					ResourceManager.getInstance().getString("errorValidateFinalPointAlone")+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.Synchro)
 				{
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateSynchroAlone"));
+					ResourceManager.getInstance().getString("errorValidateSynchroAlone")+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 			}
@@ -599,43 +605,49 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				if (me instanceof Activity)
 				{	
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateActivityNoEntry")+" : "+((Activity)me).getName());
+					ResourceManager.getInstance().getString("errorValidateActivityNoEntry")+" : "+((Activity)me).getName()+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.Decision)
 				{
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateDecisionNoEntry"));
+					ResourceManager.getInstance().getString("errorValidateDecisionNoEntry")+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.Synchro)
 				{
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateSynchroNoEntry"));
+					ResourceManager.getInstance().getString("errorValidateSynchroNoEntry")+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}				
 			}
-			else if(!inputTransitionFind || nbDecisionExit!=2)
+			else if(!inputTransitionFind)
 			{
 				if (me instanceof Activity)
 				{	
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateActivityNoExit")+" : "+((Activity)me).getName());
-					mHasErrors = true;
-				}
-				if (me instanceof ActivityDiagram.Decision)
-				{
-					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateDecisionNoExit"));
+					ResourceManager.getInstance().getString("errorValidateActivityNoExit")+" : "+((Activity)me).getName()+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.Synchro)
 				{
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateSynchroNoExit"));
+					ResourceManager.getInstance().getString("errorValidateSynchroNoExit")+" : \""+diagram.getName()+"\"");
 					mHasErrors = true;
 				}
 			}
+			
+			if( (nbDecisionEntry == 1 && nbDecisionExit < 2)
+					|| (nbDecisionExit == 1 && nbDecisionEntry < 2))
+			{
+				if (me instanceof ActivityDiagram.Decision)
+				{
+					ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateDecisionNoExit")+" : \""+diagram.getName()+"\"");
+					mHasErrors = true;
+				}
+			}
+			
 			i++;
 		}
 		if (haveActivity == false)

@@ -57,7 +57,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -157,7 +157,7 @@ public class LoadProject extends MonitoredTaskBase
 				Element.setNoNameCounter(nb);	
 				Element.setNoID(ref.getID());
 				projectZip.close();
-				
+		
 				checkVersion();
 				
 				print(mResource.getString("loadComponentSuccess"));

@@ -29,7 +29,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class WorkDefinition extends ModelElement
 {
@@ -63,7 +63,7 @@ public class WorkDefinition extends ModelElement
 	{
 		if(mOwner==null || owner==null)
 		{
-			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinition("+getName()+")::setOwner"+owner);
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinition("+getName()+")::setOwner "+owner);
 			mOwner = owner;
 			return true;
 		}

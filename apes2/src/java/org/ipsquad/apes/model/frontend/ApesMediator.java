@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1682,8 +1682,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	    		Link link = (Link) elements[i];
 	    		if(link.getSource() instanceof ModelElement
 	    			&& link.getTarget() instanceof ModelElement
-					&& source.createLinkModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget()))
+					&& source.areLinkableModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget()))
 	    		{
+	    			source.createLinkModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget());
 	    			inserted.add(0, link);	    		
 	    		}
 	    	}		

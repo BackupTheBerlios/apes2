@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
@@ -36,7 +37,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -390,7 +391,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				r.addFeature(w);
 				w.setOwner(r);
 				
-				/*for(int i=0; i < w.subWorkCount(); i++)
+				for(int i=0; i < w.subWorkCount(); i++)
 				{
 					Activity a = w.getSubWork(i); 
 					if( a.getOwner() == null && !r.containsFeature(a) )
@@ -398,7 +399,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 						r.addFeature(a);
 						a.setOwner(r);
 					}
-				}*/
+				}
 				return true;
 			}
 		}
@@ -545,14 +546,14 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			{
 				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkProcessRoleWorkDefinition "+r+" "+w);
 				w.setOwner(null);
-				/*for(int i = 0; i < w.subWorkCount(); i++)
+				for(int i = 0; i < w.subWorkCount(); i++)
 				{
 					Activity a = w.getSubWork(i);
 					if(r.removeFeature(a))
 					{
 						a.setOwner(null);
 					}
-				}*/
+				}
 				return true;
 			}
 		}

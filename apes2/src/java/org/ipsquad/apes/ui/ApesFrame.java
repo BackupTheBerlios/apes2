@@ -52,7 +52,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
@@ -228,10 +228,18 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 			{
 				return;
 			}
-			
 			Rectangle bounds = mDesktop.getGraphicsConfiguration().getBounds();
-			w.setBounds(bounds.x+10,bounds.y+10,bounds.width/3,bounds.height/3);
+			w.setBounds(bounds.x+10,bounds.y+10,bounds.width/2,bounds.height/2);
 			mDesktop.add(w);
+			
+			//Fit the diagram into the graphframe bounds
+			if(w.getGraph().getWidth() > w.getWidth()
+					|| w.getGraph().getHeight() > w.getHeight())
+			{
+				double scale = Math.min((double)w.getWidth()/(double)w.getGraph().getWidth(),
+						(double)w.getHeight()/(double)w.getGraph().getHeight());
+				w.getGraph().setScale(scale);
+			}
 		}
 		
 		try

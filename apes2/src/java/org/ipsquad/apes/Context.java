@@ -48,7 +48,7 @@ import org.jgraph.graph.GraphModel;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class Context
 {
@@ -146,11 +146,14 @@ public class Context
 		
 		if(Context.getInstance().getAction("Remove")!=null
 		&& Context.getInstance().getAction("Bigger")!=null
-		&& Context.getInstance().getAction("Smaller")!=null)
+		&& Context.getInstance().getAction("Smaller")!=null
+		//&& Context.getInstance().getAction("FitToWindow")!=null
+		)
 		{
 			Context.getInstance().getAction("Remove").setEnabled(false);
 			Context.getInstance().getAction("Bigger").setEnabled(false);
 			Context.getInstance().getAction("Smaller").setEnabled(false);
+			//Context.getInstance().getAction("FitToWindow").setEnabled(false);
 		}
 		
 		if(Context.getInstance().getAction("AlignH")!=null
@@ -159,7 +162,7 @@ public class Context
 			Context.getInstance().getAction("AlignH").setEnabled(false);
 			Context.getInstance().getAction("AlignV").setEnabled(false);
 		}
-		
+
 		ApesMediator.getInstance().setProcess(project.getProcess());
 		
 		mUndoManager.discardAllEdits();

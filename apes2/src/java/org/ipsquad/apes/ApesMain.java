@@ -81,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 public class ApesMain
 {
@@ -219,8 +219,8 @@ public class ApesMain
 				
 				mMonitor.setTask(mTask);
 				
-				mTask.setVisible(true);
-				mTask.setVisible(false);
+				mTask.show();
+				mTask.hide();
 			 }
 			
 			 catch(Throwable t)
@@ -257,6 +257,9 @@ public class ApesMain
 		
 		context.registerAction("Bigger", new BiggerAction());
 		context.registerAction("Smaller", new SmallerAction());
+		
+		//context.registerAction("FitToWindow", new FitToWindowAction());
+
 		context.registerAction("Preferences",new PreferencesAction());
 		
 		context.registerAction("Validate", new ValidateAction());

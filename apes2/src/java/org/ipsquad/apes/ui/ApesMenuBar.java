@@ -35,7 +35,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Application menu bar
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ApesMenuBar extends JMenuBar
 {
@@ -78,7 +78,7 @@ public class ApesMenuBar extends JMenuBar
 		menu.add(context.getAction("Validate"));
 		
 		menu.add(context.getAction("ToolPresentation"));
-		menu.addSeparator();
+		//menu.addSeparator();
 		//menu.add(context.getAction("Generate"));
 
 		//menu.add(context.getAction("Color"));

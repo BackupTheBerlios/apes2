@@ -45,7 +45,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class PreferencesDialog extends JDialog 
 {
@@ -203,7 +203,7 @@ public class PreferencesDialog extends JDialog
 			String key = (String) tmpEnum.nextElement();
 			String value = propTemp.getProperty(key) ;
 			String cfgValue = ConfigManager.getInstance().getProperty(key);
-			if( ! cfgValue.equals(value))
+			if( key != null && !cfgValue.equals(value))
 			{
 				ConfigManager.getInstance().setProperty(key,value);
 				try

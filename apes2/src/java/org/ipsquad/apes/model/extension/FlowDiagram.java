@@ -37,7 +37,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -360,8 +360,12 @@ public class FlowDiagram extends SpemDiagram
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkProcessRoleActivity "+r+" "+a);
 		if(areLinkableProcessRoleActivity(r,a))
 		{
+			if(a.getOwner() != null)
+			{
+				a.getOwner().removeFeature(a);
+				a.setOwner(null);	
+			}
 			r.addFeature(a);
-			a.setOwner(null);
 			a.setOwner(r);
 			return true;	
 		}
