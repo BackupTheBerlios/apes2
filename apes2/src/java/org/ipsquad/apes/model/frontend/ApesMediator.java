@@ -53,7 +53,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -71,11 +71,15 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		return mInstance;
 	}
 	
-	public void setDiagram( Vector diagrams )
+	/*public void setDiagram( Vector diagrams )
 	{
 		mDiagrams = diagrams;
-	}
+	}*/
 	
+	/**
+	 * Register a diagram which has been created
+	 * @param diagram
+	 */
 	public void registerDiagram( SpemDiagram diagram )
 	{
 		if( !mDiagrams.contains(diagram) )
@@ -84,10 +88,15 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Set a new process
+	 * @param ap the process
+	 */
 	public void setProcess(ApesProcess ap)
 	{
 		if( ap.getComponent() != null || ap.getProvidedInterface() != null || ap.getRequiredInterface() != null )
 		{
+			// if there is no component, create the interfaces then create a new component
 			if(ap.getComponent() == null)
 			{
 				ModelElement me = new ProcessComponent(ResourceManager.getInstance().getString("component"));
@@ -113,6 +122,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Create or load the provided interface
+	 * @param ap
+	 */
 	private void loadProvidedInterface(ApesProcess ap)
 	{
 		WorkProductRef ref = null;
@@ -144,6 +157,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Create or load the required interface
+	 * @param ap
+	 */
 	private void loadRequiredInterface(ApesProcess ap)
 	{
 		WorkProductRef ref = null;
@@ -175,6 +192,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Create a new process
+	 * @param ap
+	 */
 	private void initNewProcess( ApesProcess ap )
 	{
 		ModelElement me = new ProcessComponent(mResource.getString("component"));
@@ -190,6 +211,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		update(createInsertCommand(me,ap,null));
 	}
 	
+	/**
+	 * Load an existing process
+	 * @param parent
+	 */
 	private void loadProcess( IPackage parent )
 	{
 		for( int i = 0; i < parent.modelElementCount(); i++ )
@@ -198,6 +223,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			if( parent.getModelElement(i) instanceof IPackage )
 			{
 				loadProcess((IPackage)parent.getModelElement(i));
+			}
+			if( parent.getModelElement(i) instanceof SpemDiagram )
+			{
+				mDiagrams.add(parent.getModelElement(i));
 			}
 		}
 	}
@@ -229,17 +258,29 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		return mListeners.remove( l );
 	}
 
+	/**
+	 * Clear all current ApesMediator listeners
+	 */
 	public void clearListeners()
 	{
 		mListeners.clear();
 	}
 	
+	/**
+	 * Clear all listeners and all registered diagrams
+	 */
 	public void clearAll()
 	{
 		mListeners.clear();
 		mDiagrams.clear();
 	}
 	
+	/**
+	 * Notify all listeners that have registered interest for
+	 * notification on this event type.  
+	 * 
+	 * @param e the event
+	 */
 	protected void fireModelUpdated( Event e )
 	{
 		for( int i = 0; i < mListeners.size(); i++ )
@@ -342,9 +383,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	}
 	
 	/**
-	 * execute a list of commands
+	 * execute a list of commands. All commands are undo in one action
 	 * 
-	 * @param commands
+	 * @param commands the commands to execute
 	 */
 	public void execute( Vector commands )
 	{
@@ -377,7 +418,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		update( c, false );
 	}
 	
-	public void update( Command c, boolean linked )
+	protected void update( Command c, boolean linked )
 	{
 		if( c instanceof InsertCommand )
 		{
@@ -397,46 +438,36 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
-	protected InsertEvent insertModelElementToDiagram( SpemDiagram diagram, ModelElement me, Map attr )
-	{
-		boolean isAlreadyExist = me.getParent() == null ? false : true;
-
-		if( diagram.addModelElement( me ) )
-		{
-			if( me.getParent() == null )
-			{
-				if( diagram instanceof FlowDiagram && ( me instanceof WorkProduct || me instanceof ProcessRole ) )
-				{
-					((ModelElement)diagram.getParent()).getParent().addModelElement( me );
-				}
-				else
-				{
-					diagram.getParent().addModelElement( me );
-				}
-			}
-
-			return new InsertEvent( diagram, me, me.getParent(), isAlreadyExist, attr );
-		}
-
-		return null;
-	}
-	
+	/**
+	 * Insert a model element into a package
+	 * @param me the element to insert
+	 * @param p the concerned package
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 */
 	protected void insertModelElementToIPackage( ModelElement me, IPackage p, Map attr, Vector events )
 	{
 		if( !p.containsModelElement( me ) && me.getParent() == null )
 		{
-			if(me instanceof ApesWorkDefinition)
-			{
-				insertModelElementToIPackage(new ActivityDiagram(ResourceManager.getInstance().getString("activityDiagram")),(IPackage)me,null,events);
-				insertModelElementToIPackage(new FlowDiagram(ResourceManager.getInstance().getString("flowDiagram")),(IPackage)me,null,events);
+			if(p.addModelElement(me))
+			{	
+				if(me instanceof ApesWorkDefinition)
+				{
+					insertModelElementToIPackage(new ActivityDiagram(ResourceManager.getInstance().getString("activityDiagram")),(IPackage)me,null,events);
+					insertModelElementToIPackage(new FlowDiagram(ResourceManager.getInstance().getString("flowDiagram")),(IPackage)me,null,events);
+				}
+				events.add( new InsertEvent( me, p, attr ) );
 			}
-			p.addModelElement(me);
-			events.add( new InsertEvent( me, p, attr ) );
 		}
 	}
 	
-	
-	
+	/**
+	 * Insert an element in the model
+	 * @param parent the parent 
+	 * @param e the element
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 */
 	protected void insertElementToModel( Object parent, Element e, Map attr, Vector events )
 	{
 		if( ( e instanceof Activity
@@ -453,6 +484,14 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Insert a link in a diagram
+	 * @param diagram the concerned diagram
+	 * @param source the source of the link
+	 * @param target the target of the link
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 */
 	protected void insertLinkToDiagram( SpemDiagram diagram, ModelElement source, ModelElement target, 
 											   Map attr, Vector events )
 	{
@@ -489,6 +528,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Inser a model element in a diagram
+	 * @param diagram the concerned diagram
+	 * @param me the element to insert
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @return the corresponding event
+	 */
 	protected void insertModelElementToDiagram( SpemDiagram diagram, ModelElement me, Map attr, Vector events )
 	{
 		boolean isAlreadyExist = me.getParent() == null ? false : true;
@@ -511,6 +557,17 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Insert an element in the model
+	 * @param diagram the concerned diagram or null
+	 * @param element the element to insert or null
+	 * @param source the source of a link or null
+	 * @param target the target of a link or null
+	 * @param parent the parent of the element or null
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 * @return the corresponding event
+	 */
 	protected InsertEvent insert( SpemDiagram diagram, Object element, 
 								  Object source, Object target, Object parent, Map attr, 
 								  Vector events )
@@ -603,6 +660,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 
+	/**
+	 * Move an element to a new parent 
+	 * @param element the element to move
+	 * @param newParent the new parent
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @return the corresponding event
+	 */
 	protected MoveEvent move( Object element, Object newParent, Map attr )
 	{
 		if( element instanceof Activity || element instanceof FlowDiagram 
@@ -716,6 +780,15 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		return false;
 	}
 	
+	/**
+	 * Remove elements and links from diagram
+	 * @param diagram the concerned diagram
+	 * @param elements the elements to remove
+	 * @param sources the sources to remove
+	 * @param targets the targets to remove
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 */
 	protected void removeFromDiagram( SpemDiagram diagram, Object[] elements, Object[] sources, Object[] targets, Map attr, Vector events )
 	{
 		HashSet removeElements = new HashSet();
@@ -773,6 +846,11 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Remove an element from all diagrams
+	 * @param element the element to remove
+	 * @param events the corresponding events
+	 */
 	protected void removeElementFromDiagrams( Element element, Vector events )
 	{
 		for( int i = 0; i < mDiagrams.size(); i++ )
@@ -781,6 +859,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Remove an element from the model
+	 * @param element the element to remove
+	 * @param parent the parent
+	 * @param index the index of the element
+	 * @return true if the element was removed, false otherwise
+	 */
 	protected boolean removeElementFromModel( Element element, Map parent, Map index )
 	{
 		ModelElement me;
@@ -809,6 +894,12 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		return false;
 	}
 	
+	/**
+	 * Remove elements from model
+	 * @param elements the elements to remove
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 */
 	protected void removeElementsFromModel( Object[] elements, Map attr, Vector events )
 	{
 		ModelElement me = null;
@@ -850,6 +941,15 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}		
 	}
 	
+	/**
+	 * Remove elements or links from the model
+	 * @param diagram the concerned diagrams or null
+	 * @param elements the elements to remove or null
+	 * @param sources the sources to remove or null
+	 * @param targets the targets to remove or null
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 */
 	protected void remove( SpemDiagram diagram, Object[] elements,  Object[] sources, Object[] targets, Map attr, Vector events )
 	{
 		if( diagram == null )
@@ -862,6 +962,12 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Remove elements or links from the model according to the RemoveCommand.
+	 * Emit an RemoveEvent if the model changed.
+	 * 
+	 * @param c the command which contains the elements or links to remove
+	 */
 	protected void remove( RemoveCommand c, boolean linkedEvent )
 	{
 		//System.out.println("Mediator::remove "+c);	
@@ -915,6 +1021,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+	/**
+	 * Change the name of an element
+	 * @param to_change the element to change
+	 * @param newValue the new name
+	 * @param attr Attributes to send in the event. This attribute is not modified.
+	 * @param events the corresponding events
+	 */
 	protected void change( Object to_change, String newValue, Map attr, Vector events )
 	{
 		if( to_change instanceof WorkProductRef )
@@ -1095,12 +1208,25 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		return 0;
 	}
 	
+	/**
+	 * Find an element by its id
+	 * 
+	 * @param id the id of the element to find
+	 * @return the corresponding node or null
+	 */
 	public Object findByID( int id )
 	{
 		ApesProcess ap = Context.getInstance().getProject().getProcess();
 		return findByID( id, ap );
 	}
 	
+	/**
+	 * Recursive search by the id of an element
+	 * 
+	 * @param id the id of the element to find
+	 * @param element the current element
+	 * @return the corresponding node or null
+	 */
 	private Identity findByID( int id, Element element )
 	{
 		if( element.getID() == id )

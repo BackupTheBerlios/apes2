@@ -120,7 +120,7 @@ public class SaveProject
 
 			adapter = (SpemGraphAdapter)entry.getValue();
 
-			entryZip = new ZipEntry(IMAGE_PATH+System.getProperty("file.separator")+normalizeName(adapter.getName())+".jpeg");
+			entryZip = new ZipEntry(IMAGE_PATH+System.getProperty("file.separator")+normalizeName(adapter.getName())+adapter.getID()+".jpeg");
 			mZipFile.putNextEntry(entryZip);
 			data = new DataOutputStream( new BufferedOutputStream(mZipFile) );
 			image = new SaveJPEG(adapter);

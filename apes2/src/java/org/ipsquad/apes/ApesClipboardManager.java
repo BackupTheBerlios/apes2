@@ -32,39 +32,48 @@ import java.util.Vector;
 import org.ipsquad.apes.adapters.ApesTransferable;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.ui.GraphFrame;
+import org.jgraph.JGraph;
 
 /**
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesClipboardManager
 {
 	private static ArrayList mGraphCellsList ;
 	
 	public static  Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard(); 
-	//private static Object [] listCells ;
 	
 	public static void copy() 
 	{
-		Object [] listCells = (((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getSelectionCells()) ; 
-		ApesTransferable transfer = new ApesTransferable (listCells) ;
+		Project p = Context.getInstance().getProject();
+		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
+		Object [] listCells = graph.getSelectionCells() ; 
+		ApesTransferable transfer = new ApesTransferable(p, listCells) ;
+		
 		cb.setContents(transfer, null) ;
 	}
 	
 	public static void cut() 
 	{
-		Object [] listCells = (((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getSelectionCells()) ; 
-		ApesTransferable transfer = new ApesTransferable (listCells) ;
+		Project p = Context.getInstance().getProject();
+		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
+		Object [] listCells = graph.getSelectionCells() ; 
+		ApesTransferable transfer = new ApesTransferable(p, listCells) ;
+		
 		cb.setContents(transfer, null) ;
-		((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getModel().remove(listCells) ;
+		graph.getGraphLayoutCache().remove(listCells);
 	}
 	
 	public static void paste()
 	{
-		SpemGraphAdapter adapter ;
-		Vector cells = new Vector(),
-					edges = new Vector();
+		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Transferable t = cb.getContents(mGraphCellsList);
+		SpemGraphAdapter adapter = (SpemGraphAdapter)graph.getModel();
+		int projectHashCode;
+		Vector cells = null;
+		boolean cloneUserObject = false;
+		
 		// Make sure the clipboard is not empty.
 		if (t == null)
 		{
@@ -73,8 +82,15 @@ public class ApesClipboardManager
 		}
 		try 
 		{
-			adapter = (SpemGraphAdapter)(((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraphModel());
-			adapter.insert((ArrayList)t.getTransferData(ApesTransferable.arrayFlavor));
+			cells = (Vector)t.getTransferData(ApesTransferable.mArrayFlavor);
+			projectHashCode = ((Integer)cells.remove(0)).intValue();
+			
+			if( Context.getInstance().getProject().hashCode() != projectHashCode )
+			{
+				cloneUserObject = true;
+			}
+			
+			adapter.insertCells( cells, cloneUserObject );
 		} 
 		catch (IOException e) 
 		{
@@ -82,7 +98,7 @@ public class ApesClipboardManager
 		} 
 		catch (UnsupportedFlavorException e) {
 			System.out.println("DataFlower de mauvais type");
-		} 
+		}
 	}
 
 }

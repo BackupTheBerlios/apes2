@@ -25,7 +25,6 @@ package org.ipsquad.apes;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 
 import org.ipsquad.apes.adapters.ActivityGraphAdapter;
 import org.ipsquad.apes.adapters.ContextGraphAdapter;
@@ -47,7 +46,7 @@ import org.ipsquad.utils.ResourceManager;
  *
  * This class represent a project in the application
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Project implements Serializable
 {
@@ -195,7 +194,7 @@ public class Project implements Serializable
 		ApesMediator.getInstance().addUndoableEditListener(Context.getInstance().getUndoManager());
 	}
 	
-	public void initApesMediator()
+	/*public void initApesMediator()
 	{
 		Vector diagrams = new Vector();
 		Iterator it = mDiagramMap.keySet().iterator();
@@ -207,5 +206,5 @@ public class Project implements Serializable
 		}
 		
 		ApesMediator.getInstance().setDiagram( diagrams );
-	}
+	}*/
 }

@@ -23,7 +23,6 @@
 package org.ipsquad.apes.adapters;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -49,7 +48,6 @@ import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.frontend.ChangeEvent;
 import org.ipsquad.apes.model.frontend.Event;
 import org.ipsquad.apes.model.frontend.InsertEvent;
-import org.ipsquad.apes.model.frontend.MoveEvent;
 import org.ipsquad.apes.model.frontend.RemoveEvent;
 import org.ipsquad.apes.model.spem.ModelVisitor;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
@@ -75,13 +73,17 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
 	protected SpemDiagram mDiagram;
 	protected Builder mBuilder;
 	
+	/**
+	 * Creates a graph adapter and initializes it with the specified diagram
+	 * @param diagram a diagram that constitutes the diagram's data
+	 */
 	public SpemGraphAdapter(SpemDiagram diagram )
 	{
 		super();
@@ -103,6 +105,10 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return mDiagram.getID();
 	}
 	
+	/**
+	 * Return the diagram of this adapter
+	 * @return the diagram store in this adapter
+	 */
 	public SpemDiagram getDiagram()
 	{
 		return mDiagram;
@@ -114,6 +120,9 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		mBuilder = b;
 	}
 	
+	/**
+	 * Call when a diagram was remove from the project
+	 */
 	public void destroy()
 	{
 		Vector sources = new Vector();
@@ -128,11 +137,21 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 	}
 	
+	/**
+	 * Retrieve an element of the graph by its id
+	 * @param id the id of the element
+	 * @return the corresponding element 
+	 */
 	public Object findWithID( int id )
 	{
 		return ApesMediator.getInstance().findByID(id);
 	}
 	
+	/**
+	 * Return the ApesGraphCell corresponding to the object
+	 * @param o the object to encapsulate
+	 * @return the corrsponding ApesGraphCell
+	 */
 	public ApesGraphCell associateGraphCell(Object o)
 	{
 		Object cell = mBuilder.create( o );
@@ -145,6 +164,12 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return null;
 	}
 	
+	/**
+	 * Find all edges linked to the cells
+	 * @param cells
+	 * @param sources the sources of the found edges
+	 * @param targets the targets of the found edges
+	 */
 	public void recursivelyFindEdges(Object[] cells, Vector sources, Vector targets )
 	{
 		recursivelyFindEdges( cells, sources, targets, new Vector() );
@@ -274,6 +299,11 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		super.edit(attributes, cs, pm, edits);
 	}
 
+	/**
+	 * Retrieve all elements linked directly or indirectly to the cells
+	 * @param cells
+	 * @param related
+	 */
 	public void addRelated(Object[] cells, Vector related)
 	{
 		for(int i=0; i<cells.length; i++)
@@ -308,50 +338,91 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	/**
 	 * Insert a list of elements in this diagram
 	 * 
-	 * @param to_inserts the elements to add
+	 * @param toInserts the elements to add
+	 * @param cloneUserObject true if the userObject of the cells must be clone, false otherwise
 	 */
-	public void insert( ArrayList to_inserts )
+	public void insertCells( Vector toInserts, boolean cloneUserObject )
 	{
 		ApesGraphCell cell;
 		DefaultEdge edge;
 		Vector commands = new Vector();
 		
-		for( int i = 0; i < to_inserts.size(); i++ )
+		for( int i = 0; i < toInserts.size(); i++ )
 		{
-			if (to_inserts.get(i) instanceof ApesGraphCell)
+			if (toInserts.get(i) instanceof ApesGraphCell)
 			{
-				cell = (ApesGraphCell)to_inserts.get(i);
-				String name = cell.toString();
-				cell.setUserObject(((Element)cell.getUserObject()).clone());
-				Map attr = cell.getAttributes();
-				Map view = new HashMap();
-				view.put("Attributes", attr);
-				commands.add(
-						ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram, cell.getUserObject(), view ));
-				
-				if( !cell.toString().equals(name) )
-				{	
-					commands.add(
-							ApesMediator.getInstance().createChangeCommand(cell.getUserObject(),name,null));
-				}
+				addInsertCellToCommands( (ApesGraphCell)toInserts.get(i), cloneUserObject, commands );
 			}
-			if (to_inserts.get(i) instanceof DefaultEdge)
+			if (toInserts.get(i) instanceof DefaultEdge)
 			{				
-				edge = (DefaultEdge)to_inserts.get(i) ;
-				Map attr = edge.getAttributes() ;
-				Map view = new HashMap();
-				view.put("Attributes", attr);
-				DefaultPort sourcePort = (DefaultPort) edge.getSource();
-				DefaultPort targetPort = (DefaultPort) edge.getTarget();
-				ApesGraphCell target = (ApesGraphCell) targetPort.getParent();
-				ApesGraphCell source = (ApesGraphCell) sourcePort.getParent();
-				commands.add(
-						ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram,source.getUserObject(), target.getUserObject(), view) );
+				addInsertEdgeToCommands( (DefaultEdge)toInserts.get(i), commands ) ;
 			}
 		}
-		ApesMediator.getInstance().execute(commands);
+		
+		if(commands.size() > 0)
+		{	
+			ApesMediator.getInstance().execute(commands);
+		}
 	}
 	
+	/**
+	 * Add the insert cell command to the list
+	 * @param cell the cell to add
+	 * @param commands the list of commands
+	 */
+	protected void addInsertCellToCommands( ApesGraphCell cell, boolean cloneUserObject, Vector commands )
+	{
+		String name = cell.toString();
+		
+		if(cloneUserObject)
+		{	
+			cell.setUserObject(((Element)cell.getUserObject()).clone());
+		}
+		
+		Map attr = cell.getAttributes();
+		Map view = new HashMap();
+		view.put("Attributes", attr);
+		
+		commands.add(
+				ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram, cell.getUserObject(), view ));
+		
+		// try to give the same name to the new object
+		if( cloneUserObject && !cell.toString().equals(name) )
+		{	
+			commands.add(
+					ApesMediator.getInstance().createChangeCommand(cell.getUserObject(),name,null));
+		}
+	}
+	
+	/**
+	 * Add the insert edge command to the list
+	 * @param edge the edge to add
+	 * @param commands the list of commands
+	 */
+	protected void addInsertEdgeToCommands( DefaultEdge edge, Vector commands )
+	{
+		Map attr = edge.getAttributes() ;
+		Map view = new HashMap();
+		view.put("Attributes", attr);
+
+		DefaultPort sourcePort = (DefaultPort) edge.getSource();
+		DefaultPort targetPort = (DefaultPort) edge.getTarget();
+		
+		ApesGraphCell target = (ApesGraphCell) targetPort.getParent();
+		ApesGraphCell source = (ApesGraphCell) sourcePort.getParent();
+		
+		if( target != null && source != null )
+		{	
+			commands.add(
+				ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram,source.getUserObject(), target.getUserObject(), view) );
+		}
+	}
+	
+	/**
+	 * Insert a cell in the diagram. If the cell is an ApesGraphCell, calls the ApesMediator
+	 * @param vertex the cell to insert
+	 * @param attr Attributes to send to the ApesMediator. This attribute is not modified.
+	 */
 	public void insertCell( DefaultGraphCell vertex, Map attr )
 	{
 		//System.out.println("Graph::tryInsertCell "+vertex.getUserObject());
@@ -373,6 +444,12 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 	}
 	
+	/**
+	 * Insert an edge to the diagram
+	 * @param source the source of the edge
+	 * @param target the target of the edge
+	 * @param attr Attributes to send to the ApesMediator. This attribute is not modified.
+	 */
 	public void insertEdge( DefaultGraphCell source, DefaultGraphCell target, Map attr )
 	{
 		//System.out.println("Graph::tryInsertEdge");
@@ -383,6 +460,12 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 	}
 	
+	/**
+	 * Move the end, indicating by isSource, of an edge to the new cell 
+	 * @param edge the edge to move
+	 * @param newCell the new cell to connecting
+	 * @param isSource true if the concerned end is the source of the edge, false otherwise 
+	 */
 	public void moveEdge( DefaultEdge edge, ApesGraphCell newCell, boolean isSource )
 	{
 		//System.out.println("Graph::moveEdge "+edge+" "+newCell+" "+isSource);
@@ -409,6 +492,13 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		ApesMediator.getInstance().execute(commands);
 	}
 	
+	/**
+	 * Remove elements from the model
+	 * @param cells the cells to remove
+	 * @param sources the sources of the edges to remove
+	 * @param targets the targets of the edges to remove
+	 * @param attr Attributes to send to the ApesMediator. This attribute is not modified.
+	 */
 	public void remove( Object[] cells, Object[] sources, Object[] targets, Map attr )
 	{
 		//System.out.println("Graph::tryRemove");
@@ -416,6 +506,12 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				ApesMediator.getInstance().createRemoveCommand( mDiagram, cells, sources, targets, attr ) );
 	}
 	
+	/**
+	 * Change the name of an element
+	 * @param element the concerned element 
+	 * @param newName the new name
+	 * @param attr Attributes to send to the ApesMediator. This attribute is not modified.
+	 */
 	public void change( Object element, String newName, Map attr )
 	{
 		ApesMediator.getInstance().update( 
@@ -436,12 +532,12 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		{
 			changed( (ChangeEvent)e );
 		}
-		else if( e instanceof MoveEvent )
-		{
-			moved( (MoveEvent)e );
-		}
 	}
 	
+	/**
+	 * Insert the element define by this event
+	 * @param e the received event
+	 */
 	protected void inserted( InsertEvent e ) 
 	{ 
 		if( e.getDiagram() != mDiagram || (e.getInserted() != null && ! mBuilder.shouldGoInGraph(e.getInserted())) )
@@ -519,8 +615,10 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 	}
 	
-	protected void moved( MoveEvent e ) {}
-	
+	/**
+	 * Remove the elements concerned by this event
+	 * @param e the received event
+	 */
 	protected void removed( RemoveEvent e )
 	{
 		//System.out.println("Graph::remove "+mDiagram+" "+e);
@@ -550,6 +648,10 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 	}
 	
+	/**
+	 * Change the attributes of the element concerned by this event
+	 * @param e the received event
+	 */
 	protected void changed( ChangeEvent e )
 	{
 		//System.out.println("Graph::edit "+e);
@@ -677,28 +779,19 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return null;
 	}
 	
-	public void cut( Object[] objects, boolean opaque)
-	{
-		ApesGraphCell cell;
-		Map attr = GraphConstants.createMap();
-		
-		for(int i = 0; i < objects.length;i++)
-		{
-			if( objects[i] instanceof ApesGraphCell)
-			{
-				cell = (ApesGraphCell) objects[i];
-				GraphConstants.setOpaque( cell.getAttributes(), opaque );
-				attr.put( cell, cell.getAttributes() );
-			}
-		}
-		super.edit(attr, null, null, null);
-	}
-	
-	
+	/**
+	 * The bulider create the cell corresponding to an element of the model.
+	 * He implements the ModelVisitor.
+	 */
 	public abstract class Builder implements ModelVisitor, Serializable 
 	{
 		protected Object mCreated = null;
 		
+		/**
+		 * Create the cell corresponding to the given object
+		 * @param o an object of the model to encapsulate in a cell
+		 * @return the coresponding cell
+		 */
 		public abstract Object create( Object o );
 		
 		public abstract boolean shouldGoInGraph(Object o);

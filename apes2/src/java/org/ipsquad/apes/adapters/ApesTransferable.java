@@ -25,7 +25,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
+
+import org.ipsquad.apes.Project;
 
 
 /**
@@ -35,38 +38,34 @@ import java.util.ArrayList;
  */
 public class ApesTransferable implements Transferable 
 {
-	public static DataFlavor arrayFlavor ;
-	static ActivityGraphAdapter adapter ;
-	private ArrayList listCell = new ArrayList() ;
+	public static DataFlavor mArrayFlavor ;
+	private Vector mElements;
 	
-	static {
+	private DataFlavor[] mFlavors = {mArrayFlavor};
+	
+	static 
+	{
 		try
 		{
-			arrayFlavor = new DataFlavor(Class.forName("[Lorg.ipsquad.apes.adapters.ApesGraphCell;"), "Tableau de String");
+			mArrayFlavor = new DataFlavor(Class.forName("[Lorg.ipsquad.apes.adapters.ApesGraphCell;"), "Tableau de String");
 		}
 		catch (ClassNotFoundException e) 
 		{ 
 		}
 	}
 	
-	public ApesTransferable (Object[] list)
+	public ApesTransferable( Project p, Object[] list )
 	{
-		//listCell = new List(ApesGraphCell);
-		for(int i = 0; i < list.length; i++)
-		{
-			listCell.add(list[i]); 
-		}
+		mElements = new Vector(Arrays.asList(list));
+		mElements.add(0, new Integer(p.hashCode()));
 	}
-	
-	DataFlavor[] flavors = {arrayFlavor};
-	
 	
 	/* (non-Javadoc)
 	 * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
 	 */
 	public DataFlavor[] getTransferDataFlavors()
 	{
-		return flavors; 
+		return mFlavors; 
 	}
 
 	/* (non-Javadoc)
@@ -74,7 +73,7 @@ public class ApesTransferable implements Transferable
 	 */
 	public boolean isDataFlavorSupported(DataFlavor flavor) 
 	{ 
-		return flavor.equals(arrayFlavor); 
+		return flavor.equals(mArrayFlavor); 
 	}
 
 	/* (non-Javadoc)
@@ -82,10 +81,14 @@ public class ApesTransferable implements Transferable
 	 */
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException 
 	{
-		if (flavor.equals(arrayFlavor)) 
-			return listCell;
-		else 
+		if (flavor.equals(mArrayFlavor))
+		{
+			return mElements;
+		}
+		else
+		{
 			throw new UnsupportedFlavorException(flavor);
+		}
 	}
 
 }

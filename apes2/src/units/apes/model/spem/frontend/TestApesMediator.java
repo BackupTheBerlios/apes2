@@ -59,7 +59,7 @@ import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.2 $ 
+ * @version $Revision: 1.3 $ 
  */
 public class TestApesMediator extends TestCase
 {
@@ -105,7 +105,9 @@ public class TestApesMediator extends TestCase
 			public GraphFrame getGraphFrame(GraphModel model) { fail(); return null; }
 		});
 		
-		ResourceManager.setResourceFile("resources/Apes", Locale.getDefault());
+		ConfigManager.init(null);
+		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
+		
 		mediator = ApesMediator.getInstance();
 		context.setProject(new Project());		
 		listener = new TestListener();
@@ -156,18 +158,21 @@ public class TestApesMediator extends TestCase
 		listener.event = null;
 		listener.count = 0;
 		
-		mediator.update( mediator.createInsertCommand( w, root, attr ) );
-		mediator.update( mediator.createInsertCommand( p, root, attr ) );
-		mediator.update( mediator.createInsertCommand( aw1, root, attr ) );
-		mediator.update( mediator.createInsertCommand( aw2, root, attr ) );
-		mediator.update( mediator.createInsertCommand( a1, aw1, attr ) );
-		mediator.update( mediator.createInsertCommand( a2, aw1,attr ) );
-		mediator.update( mediator.createInsertCommand( a3, aw2,attr ) );
-		mediator.update( mediator.createInsertCommand( flow, aw1, attr ) );
-		mediator.update( mediator.createInsertCommand( act, aw1, attr ) );
-		mediator.update( mediator.createInsertCommand( resp, root, attr ) );
+		mediator.update( mediator.createInsertCommand( w, root, attr ) );//count == 1
+		mediator.update( mediator.createInsertCommand( p, root, attr ) );//count == 2
+		mediator.update( mediator.createInsertCommand( aw1, root, attr ) );//count == 5
+		mediator.update( mediator.createInsertCommand( aw2, root, attr ) );//count == 8
+		mediator.update( mediator.createInsertCommand( a1, aw1, attr ) );//count == 9
+		mediator.update( mediator.createInsertCommand( a2, aw1,attr ) );//count == 10
+		mediator.update( mediator.createInsertCommand( a3, aw2,attr ) );//count == 11
+		mediator.update( mediator.createInsertCommand( flow, aw1, attr ) );//count == 11
+		mediator.update( mediator.createInsertCommand( act, aw1, attr ) );//count == 11
+		mediator.update( mediator.createInsertCommand( resp, root, attr ) );//count == 12
+
+		assertEquals(listener.count, 12);
 		
-		assertEquals(listener.count, 10);
+		act = aw1.getActivityDiagram();
+		flow = aw1.getFlowDiagram();
 		
 		listener.event = null;
 		listener.count = 0;

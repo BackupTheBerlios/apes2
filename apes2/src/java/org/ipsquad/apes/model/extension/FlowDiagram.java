@@ -35,7 +35,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -58,7 +58,7 @@ public class FlowDiagram extends SpemDiagram
 
 	public boolean addModelElement(ModelElement me)
 	{
-		if(me instanceof Activity )
+		if(me instanceof Activity && (me.getParent() == null || me.getParent() == getParent()) )
 		{
 			return addActivity((Activity)me);
 		}
