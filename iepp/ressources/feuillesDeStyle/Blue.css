@@ -1,0 +1,63 @@
+td.titrePage {
+	background-color:silver;
+	border-style:solid;
+	border-color:gray;
+	color:white
+}
+
+BODY {
+	BACKGROUND: #6c8fba;
+	scrollbar-base-color: #6c8fba; 
+	scrollbar-arrow-color: #FFF788;
+	scrollbar-highlight-color: #0000000; 
+	scrollbar-track-color: #6699CC;
+	scrollbar-3dlight-color: #000000; 
+	scrollbar-shadow-color: #000000;
+	scrollbar-darkshadow-color: #6699CC;
+	font-family: "Arial", "Helvetica", sans-serif;
+	font-size: 11pt;
+}
+
+H1 {
+	font-family: "Arial", "Helvetica", sans-serif;
+	font-size: 18pt;
+	color: #FFF788
+}
+
+.titreProcessus {
+	font-family: "Verdana", "Helvetica", sans-serif;
+	font-size: 24pt;
+	color: #FFF788
+}
+
+.entete {
+	font-family: "Verdana", "Helvetica", sans-serif;
+	font-size: 18pt;
+	color: #FFF788
+}
+.imgdiagramme {
+	margin-top:30px;
+	margin-bottom:30px;
+  	border-color:#FFF788;
+}
+
+.titreliste {
+	PADDING-RIGHT: 5px; MARGIN-TOP: 25; PADDING-LEFT: 5px; FONT-WEIGHT: 700; FONT-SIZE: 10pt; MARGIN-BOTTOM: 20; PADDING-BOTTOM: 5px; TEXT-TRANSFORM: uppercase; BORDER-LEFT: #69c 2px solid; PADDING-TOP: 5px; BORDER-BOTTOM: #69c 2px solid ;
+	FONT-STYLE: normal; BACKGROUND-COLOR: silver; MARGIN-RIGHT: 25%; BORDER-COLOR: #FFF788
+}
+
+.elementListe {
+	PADDING-LEFT: 20px; MARGIN-LEFT: 130px; BORDER-LEFT: #69c 2px solid, BORDER_COLOR: #FFF788
+}
+
+HR {
+	background-color: gray;
+	width:84%;
+	height: 5px;
+	margin-bottom:20px;
+	margin-top:20px;
+}
+	
+
+A          {text-decoration:underline; color: black}
+A:hover    {text-decoration:none; color: #FFF788}

@@ -1,0 +1,295 @@
+# @(#)english.lng
+#
+# Iepp English traduction 
+
+
+# Application Menu
+Fichier=File
+Nouveau=New Process
+Nouveau_referentiel=New Repository
+Ouvrir_ref=Open a repository...
+Ouvrir_proc=Open a process...
+Fermer=Close
+Sauver=Save Process
+SauverSous=Save Process As
+Exporter=Export Process
+Quitter=Exit
+Preferences=Preferences
+Edition=Edition
+Reduire=Zoom out
+Agrandir=Zoom in
+Outils=Tools
+Langues=Language
+Aide=Help
+Propos=About...
+
+#Sous-Menu d'edition
+Annuler=Cancel
+Refaire=Redo
+Supprimer=Delete
+
+#Sous-Menu Outils
+Valider_le_projet=Check the project
+Generer_le_site_Web=Generate the web site
+
+#Dialog Box
+BD_NVX_PROC_SUPRR_ANC=You are opening a new process, the current process will be delete. Do you want to proceed ?
+BD_OUV_PROC_SUPRR_ANC=You are opening an existing process, the current process will be delete. Do you want to proceed ?
+BD_NVX_REF_SUPRR_ANC=You are opening a new repository, the current process will be delete. Do you want to proceed ?
+BD_SAUV_AVAT_OUVRIR=Do you want to save the current process before opening?
+BD_SAUV_AVAT_CREER=Do you want to save the current process before creating a new one?
+BD_SAUV_AVAT_CREER_REF=You are creating a new repository, the current process will be delete. Do you want to save it ?
+BD_SAUV_AVAT_OUVRIR_REF=You are opening a new repository, the current process will be delete. Do you want to save it ?
+BD_SAUV_AVAT_FERMER=Do you want to save the current process before closing?
+Confirmation=Confirmation
+OK=Ok
+Annuler=Cancel
+Choisir_Dossier=Choose directory
+msgSauvegarde=Save
+msgConfirmEcrasement=This file already exists, do you want to delete it?
+Chargement=Loading...
+FusionName=Name of fusion product
+FusionRename=Rename fusion product
+Suivant=Next >
+Valider=Finish
+BD_SUPP_DP_REF=This will definitely delete the process. Do you want to proceed ?
+BD_SUPP_COMP_REF=This will definitely delete the component. Do you want to proceed ?
+BD_SUPP_PRES_REF=This will definitely delete the presentation package. Do you want to proceed ?
+BD_CONF_SUPPR_COMP=WARNING ! This component will be removed from current process.
+Composants_Publiables=Publishable components
+Presentations=Presentation packages
+Generation_ok=Web site successfully generated
+Generation_site_titre=Web site generation
+Composants_pub_vides=Publishable components & Empty components
+
+# Errors
+ERR_INSTANCE_EXISTANTE=this application is already running
+ERR_Imprimante=Error while printing
+ERR=Error
+ERR_Export=Can't export diagram
+ERR_Fichier_Non_Trouve=Can't find this file
+ERR_Non_Composant=This file does not contain a publishable component.
+ERR_Non_Presentation=This file does not contain a presentation package.
+ERR_Component_Non_Trouve=This file is not a publishable component. The Component.xml file is not in the .pre file.
+ERR_Interface_Non_Trouve=This file is not a publishable component. The Interfaces.xml file is not in the .pre file.
+ERR_Presentation_Non_Trouve=This file is not a publishable component. The Presentation.xml file is not in the .pre file.
+ERR_Component_Trouve=This file is not a presentation package. The Component.xml file must not be in the .pre file.
+ERR_Interface_Trouve=This file is not a presentation package. The Interfaces.xml file  must not be in the .pre file.
+ERR_Presentation_Pas_Trouve=This file is not a presentation package. The Presentation.xml file is not in the .pre file.
+ERR_Pas_Repertoire=The file is not a directory
+ERR_Impos_Creer_Rep=Unable to create directory
+ERR_Rep_Source_Non_Trouve=Source directory doesn't exist
+ERR_Rep_Dest_Non_Trouve=Target directory doesn't exist
+ERR_Fichier_DP_Non_Trouve=The DefinitionProcessus.xml file is missing. Can't open the chosen process.
+ERR_Fichier_DP_Corrompu=This save file is corrupted. Can't open the chosen process.
+ERR_Composant_Present=This component is already in the assembly diagram.
+ERR_Composant_Deja_DP=This component is already in the process.
+ERR_SUP_REF_ED=Unable to delete a component being edited.
+ERR_Fic_Ref_Corromp=This repository file is corrupted.
+ERR_Composant_Supprimer_partie1=The component
+ERR_Composant_Supprimer_partie2=has been removed from the repository. It will now be removed from the current process definition.
+
+ERR_Ann_CP_separ=Unable to undo the action: separator not found
+ERR_Ann_CP_param=Unable to undo the action: parameter not found
+ERR_Nom_Proc_Incorrect=A process name can't contain one of the following characters : \n \/:*?"<>|
+ERR_Nom_Ref_Incorrect=A repository name can't contain one of the following characters : \n \/:*?"<>|
+ERR_AucuneDP=No process has been recorded in this repository.
+ERR_DpInexistante=The specified process does not exist !
+
+# Verification titles
+TITREVERIF_NOM_LIBRE=Component name unused
+TITREVERIF_NOMS_UNIQUES=Component names uniqueness
+
+# Verification errors
+MSGERR_NOM_EXISTANT=A component with this name already exists
+
+# Tree
+nomDefinitionDefaut=New Process
+Interface_Requise=Required interface
+Interface_Fournie=Provided interface
+Composant=Component
+
+# Noms des onglets
+Processus=Process
+Referentiel=Repository
+
+#aide sur les onglets
+Processus_courant=Curent process
+Referentiel=Repository
+
+#popups menu
+Proprietes=Properties
+Renommer=Rename
+Ajouter_Composant=Add the component to the diagram
+Ajouter_Composant_DP=Add an existing component
+Ajouter_Composant_DP2=Add component to process
+Ajouter_Composant_Ref=Add component to repository
+Ajouter_Presentation_Ref=Add presentation package to repository
+Retirer_Composant_Ref=Remove component from repository
+Exporter_PNG=Export to PNG
+Exporter_JPEG=Export to JPEG
+Imprimer=Print diagram
+Selectionner_Tout=Select all
+Ajouter_Composant_Vide_DP=Add an empty component
+Enregistrer_Interface=Save the interfaces as...
+Ajouter_produit=Add a product to this interface
+Modifier_Couleur=Change background color
+Ajouter_Paquetage_DP=Add a presentation package
+Supprimer_Element=Delete element
+Supprimer_Lien=Remove link
+Supprimer_Composant=Remove component
+Retirer_DP_Ref=Remove process from repository
+Retirer_Pres_Ref=Remove presentation package from repository
+Creer_DP=Create new process
+Ouvrir_DP=Open this process
+
+#Fenetre Propriete
+Propriete_DP=Processus properties
+Proprietes_Generales_DP=General properties
+Nom_DP=Processus name :
+Auteur_DP=Author name :
+Commentaire_DP=Comments :
+Dossier_Generation=Website generation directory
+Proprietes_Generation_DP=Website directories
+Parcourir=Browse
+E_mail_DP=Author E-mail :
+Creer_DP=Create new process
+
+#fenetre edition
+Selection=Selection
+Lien=Link
+
+#Fenetre choix referentiel
+Choix_referentiel=Choose one repository
+Charger_ref= Load a saved repository
+Creer_ref= Create a new repository
+Fichier_ref=Repository files (*.ref)
+
+#Fenetre choix processus
+Choix_processus= Choose one process
+Charger_proc=Load a saved process
+Creer_proc=Create a new repository
+Fichier_apes=Process files (*.apes)
+
+#Fenetre creer processus
+FCreer_processus=Create one process
+Nom_proc=*Process name :
+Commentaire_proc=Comment :
+Auteur_proc=*Author name :
+E_mail_proc=*Author E-mail :
+Champs_obligatoires=*Required entries
+
+M_nomprocessus=This new process needs a name.
+M_nomauteur=You have to enter an author name for this process.
+M_emailauteur=You have to enter author E-mail.
+M_emailinvalide=Author E-mail is invalid.
+M_creer_proc_titre=Wrong data entry
+
+
+#Fenetre propriete note
+Proprietes_Note=Edit the note
+Couleur_Note=Background color
+Contenu_Note=Note content
+Proprietes_Note_BD=Note properties
+
+#Fenetre lister processus
+FLister_processus=Choose one process
+Liste_processus=Existing process list
+
+#Fenetre creer referentiel
+FCreer_referentiel= Create a new repository
+Nom_ref= Repository name
+
+M_creer_ref_nom= The new repository has no name !
+M_ref_existe= A repository with this name already exists.
+
+#Fenetre generer site
+titre_generer_site=Site generation options
+rep_site=Site directory : 
+serveur_ftp=Ftp server name : 
+transfert_ftp=Transfer by FTP
+style_pages=Web pages style : 
+branche_objet="Object" branch
+ajouter_referentiel=Add
+retirer_referentiel=Remove
+generer=Generate
+parcourir=Browse...
+repertoire_cadre=Directory
+transfert_cadre=Ftp Transfert
+style_cadre=Site style
+options_gen_cadre=generation options
+compo_menu_cadre=Menu Composition
+titre_choix_rep=Site directory
+options_comp=Components
+options_def=Work definitions
+comp_tableau=Table (roles, products and work definitions)
+comp_diag_flots=Work definitions floods chart
+comp_diag_resp=Responsabilities chart
+def_tableau=Table listing activities
+def_activites=Activities chart
+def_produits=Products floods chart
+couleur_surlign=Color of selected elements in the tree : 
+choix_couleur=Color choice
+
+#barre de progression pour la génération du site
+generation_en_cours=Site generation...
+creation_rep=Creating directories
+creation_pages=Generating HTML pages
+traitement_paquetage=Presentation package processing :
+traitement_comp=Component processing
+creation_page_acc=Creating welcome page
+creation_menu=Creating menu
+extraction_icone=Icons and contents extraction
+
+#barre de progression pour les chargements
+Initialisation_chargement=Starting to load
+Component_charge=Component.xml loaded
+SAX_initialisation=SAX initialisation
+interfaces_parsing=Parsing interfaces
+Interfaces_charge=Interfaces.xml loaded
+Presentation_charge=Presentation.xml loaded
+presentation_parsing=Parsing presentation file
+component_succes=Component successfully loaded
+liste_composants=Component list Ok
+liste_figures=Diagram figures list Ok
+liste_elements=Diagram elements list Ok
+liste_liens=Links between components list Ok
+dp_succes=Process definition successfully loaded
+paquetage_succes=Presentation package successfully loaded
+dp_trouve=XML file found
+creation_parseur=Creating parser
+recupere_donnees=Loading data...
+
+
+#panneau de verification
+Produits_entree_non_lies=Unlinked incoming workproducts
+Produits_sortie_non_lies=Unlinked outgoing workproducts
+Composants_non_lies=Component with unresolved interface
+Cacher=Hide
+Vider=Clear
+
+#site web
+WEB_DIAG_ASM=Process component assembly diagram
+WEB_MAIL=Click here to submit a comment
+WEB_DATE_GEN=Generation date :
+WEB_PROD_ENTREE=Incoming workproducts :
+WEB_PROD_SORTIE=Outgoing workproducts :
+WEB_ROLE_RESP=Role in charge :
+WEB_ROLES=Roles :
+WEB_PRODUITS=Workproducts :
+WEB_DEFINITIONS=Work Definitions :
+WEB_ACTIVITES=Activities :
+WEB_LINK=Link :
+WEB_ENTREE_ACT=Required for these activities :
+WEB_SORTIE_ACT=Provided by these activities :
+
+#Boite de propriétés
+couleur_fond_diagramme=Diagram's background color
+Choix_langue=Choose a language : 
+Choix_couleur_fond=Choose a background color : 
+
+#propos
+propos_texte=\n  This program is a free software.
+propos_texte2=\n  You can redistribute it and/or modify it under terms of the
+propos_texte3=\n  GNU General Public License as published by the Free Software Foundation,  
+propos_texte4=\n  either version 2 of the License, or any later version.  \n
