@@ -431,7 +431,7 @@ public class Referentiel extends Observable implements TreeModel
 					
 					// On récupère le nom du fichier de l'élément
 					nomElt = this.extraireNomFichier(pathFic);
-//					 Verifie que ce nom n'existe pas deja
+					// Verifie que ce nom n'existe pas deja
 					if (nomDefProcToId(nomElt) != -1)
 					{
 					    return -3;
@@ -457,8 +457,8 @@ public class Referentiel extends Observable implements TreeModel
 						nomElt = this.extraireNomFichier(chemin);	
 					}
 					*/
-//					 Verifie que ce nom n'existe pas deja
-					if (nomDefProcToId(nomElt) != -1)
+					// Verifie que ce nom n'existe pas deja
+					if (nomPresentationToId(nomElt) != -1)
 					{
 					    return -3;
 					}
