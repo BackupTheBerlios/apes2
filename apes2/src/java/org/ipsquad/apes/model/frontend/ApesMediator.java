@@ -73,7 +73,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -286,8 +286,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		insertInModel(new Object[]{pc}, new Object[]{ap}, null);
 		insertInModel(new Object[]{cd,wd}, new Object[]{pc,pc}, null);		
 		insertInModel(new Object[]{api,ari}, new Object[]{ap,ap}, null);
-		SpemGraphAdapter wdModel = Context.getInstance().getProject().getGraphModel(wd);
-		Context.getInstance().getTopLevelFrame().openDiagram(wdModel);
 	}
 		
 	/**
