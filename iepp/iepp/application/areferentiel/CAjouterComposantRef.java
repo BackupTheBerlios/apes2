@@ -63,6 +63,13 @@ public class CAjouterComposantRef extends CommandeNonAnnulable
 				Application.getApplication().getTraduction("ERR"),
 				JOptionPane.ERROR_MESSAGE );
 		}
+		if (id == -3)
+		{
+			JOptionPane.showMessageDialog ( Application.getApplication().getFenetrePrincipale(),
+				Application.getApplication().getTraduction("ERR_Composant_Deja"),
+				Application.getApplication().getTraduction("ERR"),
+				JOptionPane.ERROR_MESSAGE );
+		}
 		// Retourner vrai si ça s'est bien passé
 		return (id >= 0) ;
 	}

@@ -335,7 +335,7 @@ public class Referentiel extends Observable implements TreeModel
 	 * Pour un composant vide, mettre UNIQUEMENT le nom du composant vide à créer
 	 * @param cheminComp : chemin de l'élément sur le disque
 	 * @param type : type de l'élément (ElementReferentiel.COMPOSANT, ElementReferentiel.COMPOSANT_VIDE, ElementReferentiel.DP ou ElementReferentiel.PRESENTATION)
-	 * @return l'id de l'élément ajouté, -1 en cas d'erreur, -2 si le fichier choisi n'est pas de bon type
+	 * @return l'id de l'élément ajouté, -1 en cas d'erreur, -2 si le fichier choisi n'est pas de bon type, -3 si le composant est deja insere
 	 */
 	public long ajouterElement (String chemin, int type)
 	{
@@ -395,6 +395,13 @@ public class Referentiel extends Observable implements TreeModel
 						}
 						*/
 						
+						// Verifie que ce nom n'existe pas deja
+						if (nomComposantToId(nomElt) != -1)
+						{
+						    return -3;
+						}
+						
+						
 						//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
 						pathFic += File.separator + nomElt + ".pre";
 						Copie.copieFicCh(chemin, pathFic);
@@ -424,6 +431,11 @@ public class Referentiel extends Observable implements TreeModel
 					
 					// On récupère le nom du fichier de l'élément
 					nomElt = this.extraireNomFichier(pathFic);
+//					 Verifie que ce nom n'existe pas deja
+					if (nomDefProcToId(nomElt) != -1)
+					{
+					    return -3;
+					}
 					
 					this.getNoeudDp().add(new ElementReferentiel(nomElt, this.getLastId(), pathFic, ElementReferentiel.DP));				
 					break;
@@ -445,6 +457,11 @@ public class Referentiel extends Observable implements TreeModel
 						nomElt = this.extraireNomFichier(chemin);	
 					}
 					*/
+//					 Verifie que ce nom n'existe pas deja
+					if (nomDefProcToId(nomElt) != -1)
+					{
+					    return -3;
+					}
 					
 					//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
 					pathFic += File.separator + nomElt + ".pre";
