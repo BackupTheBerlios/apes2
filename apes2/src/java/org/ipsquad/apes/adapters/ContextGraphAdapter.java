@@ -21,7 +21,9 @@
 
 package org.ipsquad.apes.adapters;
 
+import java.awt.Rectangle;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Vector;
 
 import org.ipsquad.apes.Context;
@@ -33,11 +35,12 @@ import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.jgraph.graph.ConnectionSet;
+import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a context diagram in a JGraph
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -79,6 +82,11 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 		};
 
 		ApesGraphCell cell = (ApesGraphCell)mBuilder.create(Context.getInstance().getProject().getProcess().getComponent());
+		Map apply = GraphConstants.createMap();
+		Map attr = cell.getAttributes();
+		Rectangle bounds = GraphConstants.getBounds(attr);
+		bounds.setLocation(200,100);
+		apply.put(cell,attr);
 		super.insert(new Object[]{cell},null,null,null,null);		
 	}
 	

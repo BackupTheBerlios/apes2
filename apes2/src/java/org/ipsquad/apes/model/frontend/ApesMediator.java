@@ -20,6 +20,7 @@
  */
 package org.ipsquad.apes.model.frontend;
 
+import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,10 +53,11 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
+import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -154,7 +156,14 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				ref = (WorkProductRef)ap.getProvidedInterface().getModelElement(index);
 				me = ref.getReference();
 				ap.getProvidedInterface().removeModelElement(ref);
-				update(createInsertCommandToSpemDiagram(diag,me,null));
+				
+				Map apply = GraphConstants.createMap();
+				Map attr = GraphConstants.createMap();
+				Rectangle bounds = new Rectangle(350,i*75+10,50,50);
+				GraphConstants.setBounds(attr,bounds);
+				apply.put("Attributes",attr);
+				
+				update(createInsertCommandToSpemDiagram(diag,me,apply));
 				update(createInsertCommandToSpemDiagram(diag,c,me,null));
 				--i;
 			}
@@ -179,7 +188,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 		else
 		{
-			System.out.println("begin loadRequired");
 			SpemDiagram diag = (SpemDiagram)ap.getComponent().getModelElement(0);
 			Map link = new HashMap();
 			
@@ -187,11 +195,17 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			int index = 0;
 			while( i >= 0 )
 			{
-				System.out.println("loadRequire");
 				ref = (WorkProductRef)ap.getRequiredInterface().getModelElement(index);
 				me = ref.getReference();
 				ap.getRequiredInterface().removeModelElement(ref);
-				update(createInsertCommandToSpemDiagram(diag,me,null));
+				
+				Map apply = GraphConstants.createMap();
+				Map attr = GraphConstants.createMap();
+				Rectangle bounds = new Rectangle(10,i*75+10,50,50);
+				GraphConstants.setBounds(attr,bounds);
+				apply.put("Attributes",attr);
+				
+				update(createInsertCommandToSpemDiagram(diag,me,apply));
 				update(createInsertCommandToSpemDiagram(diag,me,c,null));
 				--i;
 			}

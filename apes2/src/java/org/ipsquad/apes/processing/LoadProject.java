@@ -43,6 +43,7 @@ import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.MonitoredTaskBase;
 import org.ipsquad.utils.ResourceManager;
 import org.ipsquad.utils.TaskMonitorDialog;
@@ -54,7 +55,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -213,8 +214,8 @@ public class LoadProject extends MonitoredTaskBase
 		print(mResource.getString("loadParsing"));
 		analyzer.parse( data, handler );
 		
-		ApesProcess.ProvidedInterface pi = new ApesProcess.ProvidedInterface(mResource.getString("provided"));
-		ApesProcess.RequiredInterface ri = new ApesProcess.RequiredInterface(mResource.getString("required"));
+		ApesProcess.ProvidedInterface pi = new ApesProcess.ProvidedInterface(ConfigManager.getInstance().getProperty("Provided"));
+		ApesProcess.RequiredInterface ri = new ApesProcess.RequiredInterface(ConfigManager.getInstance().getProperty("Required"));
 		
 		Vector names = handler.getProvidedProductNames();
 		for( int i = 0; i < names.size(); i++ )
