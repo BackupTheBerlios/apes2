@@ -600,7 +600,7 @@ public class ChargeurComposant extends MonitoredTaskBase
 					if (this.baliseCourante.equals("nom_presentation"))
 					{
 						ChargeurComposant.this.cp.getPaquetage().setNomPresentation(valeur);
-						ChargeurComposant.this.nomComposant = valeur;
+						//ChargeurComposant.this.nomComposant = valeur;
 					}
 					else if (this.baliseCourante.equals("chemin_contenus"))
 					{
