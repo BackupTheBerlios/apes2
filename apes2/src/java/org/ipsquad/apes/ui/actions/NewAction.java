@@ -40,7 +40,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Create a new project in the application
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class NewAction extends ProjectManagementAction
 {
@@ -138,8 +138,14 @@ public class NewAction extends ProjectManagementAction
 					context.setProject(newProject);
 					context.setFilePath(null);
 				}
-
+				else
+				{
+				    return;
+				}
 			}
+			Project newProject=new Project();
+			context.setProject(newProject);
+			context.setFilePath(null);
 		}
 		catch(Throwable t)
 		{

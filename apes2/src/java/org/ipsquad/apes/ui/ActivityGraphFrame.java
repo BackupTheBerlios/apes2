@@ -33,6 +33,7 @@ import org.ipsquad.apes.adapters.SynchroCell;
 import org.ipsquad.apes.adapters.TransitionEdge;
 import org.ipsquad.apes.ui.tools.CellTool;
 import org.ipsquad.apes.ui.tools.EdgeTool;
+import org.ipsquad.apes.ui.tools.SyncWithModelTool;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
@@ -40,7 +41,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * Activity graph editing internal frame
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ActivityGraphFrame extends GraphFrame
 {
@@ -79,6 +80,7 @@ public class ActivityGraphFrame extends GraphFrame
 		vertex = new NoteCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
 		
+		palette.addToolButton(new SyncWithModelTool(), "icons/PaletteSyncModel.gif","paletteSyncModel");
 		return palette;
 		
 	}
