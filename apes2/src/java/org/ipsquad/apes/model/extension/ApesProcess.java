@@ -34,7 +34,7 @@ import org.ipsquad.utils.ConfigManager;
 
 /**
  * 
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesProcess extends ModelElement implements IPackage 
 {
@@ -272,7 +272,9 @@ public class ApesProcess extends ModelElement implements IPackage
 
 		public void setName( String name )
 		{
-			if( name != null && name.indexOf( ConfigManager.getInstance().getProperty("Interface") ) == 0 )
+			if( name != null 
+					&& ConfigManager.getInstance().getProperty("Interface") != null 
+					&& name.indexOf( ConfigManager.getInstance().getProperty("Interface") ) == 0 )
 			{
 				super.setName( name );
 			}

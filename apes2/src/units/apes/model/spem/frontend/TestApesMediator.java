@@ -58,7 +58,7 @@ import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.6 $ 
+ * @version $Revision: 1.7 $ 
  */
 public class TestApesMediator extends TestCase
 {
@@ -197,7 +197,7 @@ public class TestApesMediator extends TestCase
 		i_e = (InsertEvent)listener.event;
 		assertEquals(i_e.getAttributes().size(), 1);
 		assertNotNull(i_e.getAttributes().get("Attributes"));
-		assertEquals(i_e.getDiagram(), flow);
+		assertTrue(i_e.getDiagram()==flow);
 		assertEquals(i_e.getInserted(), w);
 		assertEquals(i_e.getParent(), root);
 		assertTrue(i_e.isAlreadyExistInModel());
@@ -279,7 +279,7 @@ public class TestApesMediator extends TestCase
 		
 		assertTrue( listener.event != null );
 		r_e = (RemoveEvent) listener.event;
-		assertEquals(r_e.getDiagram(), flow);
+		assertTrue(r_e.getDiagram()==flow);
 		assertEquals(r_e.getElements().length, 3);
 		assertTrue( r_e.getElements()[0] == a1 || r_e.getElements()[0] == r || r_e.getElements()[0] == w);
 		assertTrue( r_e.getElements()[1] == a1 || r_e.getElements()[1] == r || r_e.getElements()[1] == w);

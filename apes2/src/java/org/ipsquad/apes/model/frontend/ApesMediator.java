@@ -55,7 +55,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -204,19 +204,24 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 */
 	private void initNewProcess( ApesProcess ap )
 	{
-		ModelElement me = new ProcessComponent(mConfig.getProperty("Component"));
+		String name = mConfig.getProperty("Component");
+		ModelElement me = new ProcessComponent(name!=null?name:"");
 		update(createInsertCommand(me,ap,null));
 		
-		me = new ContextDiagram(mConfig.getProperty("ContextDiagram"));
+		name = mConfig.getProperty("ContextDiagram");
+		me = new ContextDiagram(name!=null?name:"");
 		update(createInsertCommand(me,ap.getComponent(),null));
 		
-		me = new WorkDefinitionDiagram(mConfig.getProperty("WorkDefinitionDiagram"));
+		name = mConfig.getProperty("WorkDefinitionDiagram");
+		me = new WorkDefinitionDiagram(name!=null?name:"");
 		update(createInsertCommand(me,ap.getComponent(),null));
 		
-		me = new ApesProcess.ProvidedInterface(mConfig.getProperty("Provided"));
+		name = mConfig.getProperty("Provided");
+		me = new ApesProcess.ProvidedInterface(name!=null?name:"");
 		update(createInsertCommand(me,ap,null));
 		
-		me = new ApesProcess.RequiredInterface(mConfig.getProperty("Required"));
+		name = mConfig.getProperty("Required");
+		me = new ApesProcess.RequiredInterface(name!=null?name:"");
 		update(createInsertCommand(me,ap,null));
 	}
 	
@@ -1101,7 +1106,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	
 	protected void changeWorkProductName( WorkProduct w, String newValue )
 	{
-		String reference = ResourceManager.getInstance().getString("reference");
+		String reference = ConfigManager.getInstance().getProperty("Reference");
 		ApesProcess ap = Context.getInstance().getProject().getProcess();
 		
 		WorkProductRef ref = ap.getProvidedInterface().getWorkProductRef(w);

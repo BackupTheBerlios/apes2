@@ -48,12 +48,12 @@ import org.ipsquad.utils.ConfigManager;
  *
  * This class represent a project in the application
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class Project implements Serializable
 {
 	//private ProcessComponent mProcess = new ProcessComponent();
-	private ApesProcess mProcess = new ApesProcess(ConfigManager.getInstance().getProperty("Project"));
+	private ApesProcess mProcess = new ApesProcess(ConfigManager.getInstance().getProperty("Project")!=null?ConfigManager.getInstance().getProperty("Project"):"");
 	private HashMap mDiagramMap = new HashMap();
 	
 	/**
