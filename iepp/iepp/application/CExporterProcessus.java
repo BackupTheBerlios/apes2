@@ -93,7 +93,9 @@ public class CExporterProcessus extends CommandeNonAnnulable
 	
 	public boolean exporter(String filePath)
 	{
+		// récupérer la liste des composants de processus et des paquetages de présentation du processus courant
 		GenerationManager.getInstance().setListeAGenerer(Application.getApplication().getProjet().getDefProc().getListeAGenerer());
+		// l'arbre de génération sert aussi à associer
 		ArbreGeneration arbre = new ArbreGeneration();
 		ArbreGeneration.initialiserMap();
 		GenerationManager.recupererProduitsExterieurs();

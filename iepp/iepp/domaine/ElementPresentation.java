@@ -192,12 +192,6 @@ public class ElementPresentation implements Comparable, Serializable
 		return nomIcone;
 	}
 
-	/**
-	 * @param string
-	 */
-	public void setNomIcone(String string) {
-		nomIcone = string;
-	}
 
 	/**
 	 * @return
