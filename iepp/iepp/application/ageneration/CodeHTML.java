@@ -139,11 +139,11 @@ public class CodeHTML
 		String result = "<map name=\"diag_principal\">";
 
 		// recuperer toutes les figures presentes sur le diagrammes
-		Enumeration enum = Application.getApplication().getProjet().getFenetreEdition().getVueDPGraphe().getModele().modeleFigures() ;
+		Enumeration enumer = Application.getApplication().getProjet().getFenetreEdition().getVueDPGraphe().getModele().modeleFigures() ;
 		// parcours de la liste et verification de l'existence des activites
-		while (enum.hasMoreElements ()) {
+		while (enumer.hasMoreElements ()) {
 			
-			Object aux = enum.nextElement();
+			Object aux = enumer.nextElement();
 			IdObjetModele io = null;
 			int x, y, l, h = 0;
 			if ( aux instanceof MDComposantProcessus )

@@ -80,11 +80,85 @@ public class GComposant extends GElementModele
 		}
 		fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
 		Vector listeProduits = this.modele.getProduit();
+		
+		// Separer les produits en deux tableaux
+		fd.write("<TABLE border=\"0\" width=\"100%\">");
+		fd.write("<TR><TH>Produits en entr&eacute;e</TH><TH>Produits internes</TH><TH>Produits en sortie</TH></TR>");
+		
+		String entree = "";
+		String internes = "";
+		String sortie = "";
+		String ajout;
+		
+		boolean trouve;
+		boolean in;
+		
+		// Recuperer la liste des produit exterieurs a ne pas lier
+		Vector externe = GenerationManager.getListeProduitsExterieurs();
+		
 		for (int i = 0; i < listeProduits.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			// Construire les chaines
+			ajout = "<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
+			
+			trouve = false;
+			in = false;
+			
+			// Chercher les produits exterieurs (sans liens)
+			for (int j = 0; j < externe.size() && !trouve ; j++)
+			{
+			    if (externe.elementAt(j).toString().equals(id.toString()) && (((IdObjetModele)externe.elementAt(j)).getRef() == id.getRef()))
+			    {
+			        // Le produit est exterieur, il ne faut pas mettre de lien
+			        trouve = true;
+			        ajout = "<div class=\"elementliste\"> " + id.toString() + "</div>\n";
+			        if (((IdObjetModele)externe.elementAt(j)).estProduitEntree())
+			        {
+			            in = true;
+			        }
+			    }
+			}
+			// S'ils ne sont pas exterieurs, ils n'ont peut etre pas de presentation mais sont des produits en entree lies
+			HashMap listeProduitsChanges = GenerationManager.getListeProduitsChanges();
+			if (listeProduitsChanges.containsKey(id.getRef().toString() +"::"+ id.toString()))
+			{
+			    trouve = true;
+			    in = true;
+			    ajout = "<div class=\"elementliste\"><a href=\"../" + ((IdObjetModele)listeProduitsChanges.get(id.getRef().toString() + "::"+ id.toString())).getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
+			}
+			
+			// ou des produits en sortie qui ont une presentation
+			Vector listeProduitsSortie = GenerationManager.getListeProduitsSortie();
+			for (int j = 0; j < listeProduitsSortie.size() && ! trouve; j++)
+			{
+			    if (listeProduitsSortie.elementAt(j).toString().equals(id.getRef().toString() + "::"+ id.toString()))
+			    {
+			        trouve = true;
+			    }
+			}
+			
+			if (trouve)
+			{
+			    if (in)
+			    {
+			        entree += ajout;
+			    }
+			    else
+			    {
+				    sortie += ajout;
+				} 
+			}
+			else
+			{
+			    // ou enfin des produits internes
+			    internes += ajout;
+			}
 		}
+		// Ecrire le tableau les liens
+		fd.write("<TR><TD valign=top>"+ entree +"</TD><TD valign=top>"+ internes +"</TD><TD valign=top>"+ sortie +"</TD></TR>");
+		fd.write("</TABLE>");
+		
 		fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_DEFINITIONS") + " </div>\n");
 		Vector listeDefinition = this.modele.getDefinitionTravail();
 		for (int i = 0; i < listeDefinition.size(); i++)

@@ -24,6 +24,7 @@ import iepp.Application;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Vector;
 import java.awt.*;
 
@@ -46,6 +47,8 @@ public class GenerationManager
 	private static Vector listeAGenerer;
 	private static Color couleur_surlign;
 	private static Vector listeProduitsExterieurs;
+	private static HashMap listeProduitsChanges;
+    private static Vector listeProduitsSortie;
 	private static String place_contenu;
 	
 	// mettre tous les autres attributs en private static
@@ -61,6 +64,8 @@ public class GenerationManager
 	public static final String EXTERIEUR_PATH = "exterieur";
 	public static final String APPLET_PATH = "applet";
 	public static final String STYLES_PATH = "styles";
+
+    
 	
     
 
@@ -267,4 +272,40 @@ public class GenerationManager
         return (GenerationManager.listeProduitsExterieurs);
     }
 
+
+
+    /**
+     * Remplie la liste des produits en entree lies
+     * @param listeProduitsChanges
+     */
+    public static void setListeProduitsChanges(HashMap listeProduitsChanges)
+    {
+        GenerationManager.listeProduitsChanges = listeProduitsChanges;
+    }
+
+    /**
+     * Recupere la liste des produits en entree lies
+     */
+    public static HashMap getListeProduitsChanges()
+    {
+        return listeProduitsChanges;
+    }
+
+    /**
+     * Remplie la liste des produits en sortie
+     * @param listeProduitsSortie
+     */
+    public static void setListeProduitsSortie(Vector listeProduitsSortie)
+    {
+        GenerationManager.listeProduitsSortie = listeProduitsSortie;
+    }
+    
+    /**
+     * Recupere la liste des produits en sortie
+     * @return la liste des produits en sortie
+     */
+    public static Vector getListeProduitsSortie()
+    {
+        return listeProduitsSortie;
+    }
 }

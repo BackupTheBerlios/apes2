@@ -33,7 +33,7 @@ import javax.swing.JTextArea;
 /**
  * The ErrorManager contains all the methods needed to log messages and errors
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ErrorManager {
 
@@ -42,7 +42,10 @@ public class ErrorManager {
 	private Component mOwner = null;
 	private JTextArea mErrorArea = null;
 
-	private ErrorManager() { }
+	private ErrorManager()
+	{
+	    this.setOwner(Application.getApplication().getFenetrePrincipale());
+	}
 
 	public static ErrorManager getInstance()
 	{

@@ -20,6 +20,7 @@
 package iepp.application.ageneration;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -180,6 +181,12 @@ public class TacheGeneration extends MonitoredTaskBase {
 			//liste des produits extérieurs: les produits en entrée qui sont en sortie d'aucun composant
 			Vector listeProduitsExterieurs = new Vector();
 			
+			// Liste des produits en entree lies avec d'autres
+			HashMap listeProduitsChanges = new HashMap();
+			
+			// Liste des produits en sortie de composants
+			Vector listeProduitsSortie = new Vector();
+			
 			// SP rajouter les produits exétieurs, la langue
 			this.print("Recuperation produits extérieurs");
 			Vector liste = GenerationManager.getInstance().getListeAGenerer();
@@ -194,6 +201,14 @@ public class TacheGeneration extends MonitoredTaskBase {
 					idComposant = (IdObjetModele)liste.elementAt(i);
 					Vector listeProduits = idComposant.getProduitEntree();
 					Vector listeLiens = ((ComposantProcessus)idComposant.getRef()).getLien();
+					
+					// Ajouter tous les noms des produits en sortie
+					Vector sortie = idComposant.getProduitSortie();
+					for (int j = 0; j < sortie.size(); j++)
+					{
+					    listeProduitsSortie.add(idComposant.getRef().toString() + "::" + sortie.elementAt(j).toString());
+					}
+					
 					// Verifier s'il s'agit d'un composant vide, auquel cas il faut verifier les produits en sortie
 					if (idComposant.estComposantVide())
 					{
@@ -202,6 +217,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 					for(int j = 0; j < listeProduits.size(); j++)
 					{
 					 	IdObjetModele idProduit = (IdObjetModele)listeProduits.elementAt(j);
+					 	// Si le composant n'a pas de lien, les produits ne peuvent etre lies
 					 	if (listeLiens.size() == 0)
 					 	{
 					 		listeProduitsExterieurs.addElement(idProduit);
@@ -215,12 +231,28 @@ public class TacheGeneration extends MonitoredTaskBase {
 						 		{
 						 			listeProduitsExterieurs.addElement(idProduit);
 						 		}
+						 		else
+						 		{
+						 		    // Si le produit en entree est lie, on le note pour changer son lien vers le produit lie
+						 		    IdObjetModele produitCible;
+						 		    if (lien.getProduitEntree() == idProduit)
+						 		    {
+						 		        produitCible = lien.getProduitSortie();
+						 		    }
+						 		    else
+						 		    {
+						 		        produitCible = lien.getProduitEntree();
+						 		    }
+						 		    listeProduitsChanges.put(idProduit.getRef().toString() +"::"+ idProduit.toString(),produitCible);
+						 		}
 						 	}
 					 	}
 					}
 				}
 			}
+			GenerationManager.setListeProduitsChanges(listeProduitsChanges);
 			GenerationManager.setListeProduitsExterieurs(listeProduitsExterieurs);
+			GenerationManager.setListeProduitsSortie(listeProduitsSortie);
 			System.out.println(listeProduitsExterieurs);
 		}
 		
