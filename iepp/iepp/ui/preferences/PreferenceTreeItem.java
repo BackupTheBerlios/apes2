@@ -11,6 +11,7 @@ public class PreferenceTreeItem
 	public static final int DP_PANEL = 6;
 	public static final int DP_DESCRIPTION_PANEL = 7;
 	public static final int DP_GENERATION_PANEL = 8;
+	public static final int GENERATION_OPTION_PANEL_KEY = 9;
 	
 	private String mKey;
 	private String mValue;

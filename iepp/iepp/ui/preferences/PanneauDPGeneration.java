@@ -57,6 +57,8 @@ public class PanneauDPGeneration extends PanneauOption
 	private JScrollPane scrollPaneRef = new JScrollPane();
 	private JScrollPane scrollPaneArbre = new JScrollPane();
 	
+	private Vector oldListe = null;
+	
 	
 	public static final String DP_GENERATION_PANEL_KEY = "ContenuTitle";
 	
@@ -67,6 +69,8 @@ public class PanneauDPGeneration extends PanneauOption
 	    if (p != null)
 	    {
 	        this.defProc = Application.getApplication().getProjet().getDefProc();
+	        //sauvegarder la liste si l'utilisateur annule
+	        this.oldListe = (Vector)this.defProc.getListeAGenerer().clone();	        
 	    }
 		this.mTitleLabel = new JLabel (name) ;
 		this.setLayout(new BorderLayout());
@@ -237,7 +241,7 @@ public class PanneauDPGeneration extends PanneauOption
 		// initialiser
 		if (this.defProc != null)
 		{
-			this.ComposantsListModel.setListe(this.defProc.getListeAGenerer());
+			this.ComposantsListModel.setListe(this.oldListe);
 		}
 	}
 	

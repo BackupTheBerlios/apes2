@@ -43,6 +43,7 @@ public class FenetrePreference extends JDialog
 	 */
 	private JPanel panneau ;
 	
+	private PanneauGenerationOption panneauGenOption;
 	private PanneauDP panneauDP;
 	private PanneauDPGeneration panneauDPGeneration;
 	private PanneauDPDescription panneauDPDesc;
@@ -142,6 +143,10 @@ public class FenetrePreference extends JDialog
 		this.panneauDPGeneration = new PanneauDPGeneration(Application.getApplication().getTraduction(PanneauDPGeneration.DP_GENERATION_PANEL_KEY)); 
 		this.panneauDPGeneration.setVisible(false);
 		
+		this.panneauGenOption = new PanneauGenerationOption(Application.getApplication().getTraduction(PanneauGenerationOption.GENERATION_OPTION_PANEL_KEY)); 
+		this.panneauGenOption.setVisible(false);
+		
+		
 	   
 		switch (this.type_courant)
 		{
@@ -165,7 +170,9 @@ public class FenetrePreference extends JDialog
 	
 	public void setInnerPanel(int panel,String key)
 	{
-		if(panel == PreferenceTreeItem.DP_GENERATION_PANEL)
+		if(panel == PreferenceTreeItem.GENERATION_OPTION_PANEL_KEY)
+			panneau.add(this.panneauGenOption.openPanel(key),BorderLayout.CENTER);
+		else if(panel == PreferenceTreeItem.DP_GENERATION_PANEL)
 			panneau.add(this.panneauDPGeneration.openPanel(key),BorderLayout.CENTER);
 	    else if(panel == PreferenceTreeItem.DP_DESCRIPTION_PANEL)
 			panneau.add(this.panneauDPDesc.openPanel(key),BorderLayout.CENTER);
@@ -181,6 +188,11 @@ public class FenetrePreference extends JDialog
 			panneau.add(this.panneauDescription.openPanel(key),BorderLayout.CENTER);
 		else if(panel == PreferenceTreeItem.LANGUAGE_PANEL)   
 			panneau.add(this.panneauLangue.openPanel(key),BorderLayout.CENTER);
+	}
+	
+	public PanneauGenerationOption getGenOptionPanel()
+	{
+	    return this.panneauGenOption;
 	}
 	
 	public PanneauDPGeneration getDPGenPanel()
@@ -242,13 +254,13 @@ public class FenetrePreference extends JDialog
 			    				this.panneauDP.save();
 								this.panneauDPDesc.save();
 								this.panneauDPGeneration.save();
-								this.panneauGeneration.save();
+								this.panneauGenOption.save();
 								break;
 			case FenetrePreference.TYPE_GENERATION:
 								this.panneauDP.save();
 								this.panneauDPDesc.save();
 								this.panneauDPGeneration.save();
-								this.panneauGeneration.save();
+								this.panneauGenOption.save();
 			    				break;
 		}
 		

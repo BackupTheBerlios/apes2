@@ -28,7 +28,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 import iepp.Application;
-import iepp.application.CGenererSite;
 import iepp.domaine.ElementPresentation;
 
 /**
@@ -157,7 +156,7 @@ public class GElement
 	 */
 	public String construireNom()
 	{
-		return ( CGenererSite.DESCRIPTION_PATH + "/" + CodeHTML.normalizeName(this.element.getNomPresentation()+  "_" + this.element.getID_interne()) + ".html");
+		return ( GenerationManager.DESCRIPTION_PATH + "/" + CodeHTML.normalizeName(this.element.getNomPresentation()+  "_" + this.element.getID_interne()) + ".html");
 	}
 	
 	/**

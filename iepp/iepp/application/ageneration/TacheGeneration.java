@@ -26,7 +26,6 @@ import java.util.zip.ZipInputStream;
 import iepp.domaine.*;
 import iepp.ui.iedition.VueDPGraphe;
 
-import iepp.application.CGenererSite;
 import iepp.Application;
 import util.*;
 import util.ImageUtil;
@@ -97,28 +96,28 @@ public class TacheGeneration extends MonitoredTaskBase {
 			rep.mkdirs();
 				
 			// Création du dossier contenu
-			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.CONTENU_PATH );
+			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.CONTENU_PATH );
 			rep.mkdirs();
 		
 			// Création du dossier description
-			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.DESCRIPTION_PATH );
+			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.DESCRIPTION_PATH );
 			rep.mkdirs();
 			
 			// Création du dossier pour le contenu extérieur au processus
-			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.EXTERIEUR_PATH );
+			rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.EXTERIEUR_PATH );
 			rep.mkdirs();
 				
 			// copie des répertoires ressource (javascript ...)
-			Copie.copieRep(Application.getApplication().getConfigPropriete("site"), GenerationManager.getInstance().getCheminGeneration()+ File.separator + CGenererSite.APPLET_PATH);
+			Copie.copieRep(Application.getApplication().getConfigPropriete("site"), GenerationManager.getInstance().getCheminGeneration()+ File.separator + GenerationManager.APPLET_PATH);
 		
 			//copie du répertoire des feuilles de styles
-			Copie.copieRep(Application.getApplication().getConfigPropriete("styles"), GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.STYLES_PATH);
+			Copie.copieRep(Application.getApplication().getConfigPropriete("styles"), GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.STYLES_PATH);
 		
 			//Création des pages contenues dans la page d'accueil
 			this.creerPageAccueil();
 			
 			//Création du fichier tree.dat
-			this.creerFicTree(GenerationManager.getInstance().getCheminGeneration() + File.separator + CGenererSite.APPLET_PATH);	
+			this.creerFicTree(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.APPLET_PATH);	
 		}
 
 
@@ -246,7 +245,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 			fd.close();
 		
 			// création du fichier arbre.html
-			nom = GenerationManager.getInstance().getCheminGeneration()+ File.separator + CGenererSite.APPLET_PATH + File.separator + "arbre.html"  ;
+			nom = GenerationManager.getInstance().getCheminGeneration()+ File.separator + GenerationManager.APPLET_PATH + File.separator + "arbre.html"  ;
 			ficHTML = new File (nom) ;
 		
 			fd = new FileWriter(nom);
@@ -318,7 +317,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 					 	
 						 // Créer un flux de sortie pour le fichier de l'entrée courante
 						 fout = new FileOutputStream(GenerationManager.getInstance().getCheminGeneration() 
-												 + File.separator + CGenererSite.APPLET_PATH + File.separator + "images" + File.separator + fichier);
+												 + File.separator + GenerationManager.APPLET_PATH + File.separator + "images" + File.separator + fichier);
 					 }
 					 else
 					 {
@@ -327,7 +326,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 						+ "/" + CGenererSite.CONTENU_PATH + "/" + fichier);
 						*/
 						fout = new FileOutputStream(GenerationManager.getInstance().getCheminGeneration() 
-												+ File.separator + CGenererSite.CONTENU_PATH + File.separator + fichier);
+												+ File.separator + GenerationManager.CONTENU_PATH + File.separator + fichier);
 					 }
 					 dezipper(zin, fout);
 				 }

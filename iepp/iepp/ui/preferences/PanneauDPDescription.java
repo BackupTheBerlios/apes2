@@ -113,6 +113,7 @@ public class PanneauDPDescription extends PanneauOption
 		c.weighty = 2.0;   		
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
+		
 		this.add(new JLabel("    "),BorderLayout.WEST);
 		this.add(mPanel,BorderLayout.CENTER);   
 		

@@ -52,19 +52,16 @@ public class GenerationManager
 
 	private static int type_page_composant = 0 ;
 	private static int type_page_deftravail = 3 ;
-
-	// options pour les pages diagrammes
-	public static final int TYPE_COMP_TABLEAU = 0 ;
-	public static final int TYPE_COMP_FLOT = 1 ;
-	public static final int TYPE_COMP_RESP = 2 ;
-	
-	// options pour les pages definitions de travail
-	public static final int TYPE_DEFP_TABLEAU = 3 ;
-	public static final int TYPE_DEFP_ACT = 4 ;
-	public static final int TYPE_DEFP_FLOT = 5 ;
 	
 	public static final String AVANT_CONTENU = "0";
 	public static final String APRES_CONTENU = "1";
+	
+	public static final String CONTENU_PATH = "contenu";
+	public static final String DESCRIPTION_PATH = "description";
+	public static final String EXTERIEUR_PATH = "exterieur";
+	public static final String APPLET_PATH = "applet";
+	public static final String STYLES_PATH = "styles";
+	
     
 
 	
@@ -110,26 +107,6 @@ public class GenerationManager
 		//this.setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
 		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
 		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
-		
-		if (Application.getApplication().getProjet() != null)
-		{
-			if (Application.getApplication().getProjet().getDefProc() != null)
-			{
-				//GenerationManager.cheminGeneration = Application.getApplication().getProjet().getDefProc().getRepertoireGeneration();
-			}
-			else
-			{
-				GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
-			}
-		}
-		else
-		{
-			GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
-		}
-		if (GenerationManager.cheminGeneration.equals(""))
-		{
-			GenerationManager.cheminGeneration = "./";
-		}
 	}
 	
 	/**
@@ -137,7 +114,14 @@ public class GenerationManager
 	 */
 	public void setCheminGeneration(String chemin)
 	{
-		GenerationManager.cheminGeneration = chemin;
+		if (!chemin.equals(""))
+		{
+			GenerationManager.cheminGeneration = chemin;
+		}
+		else
+		{
+			GenerationManager.cheminGeneration = "./";
+		}
 	}
 	
 	/**
@@ -224,6 +208,10 @@ public class GenerationManager
 		return result;
 	}
 	
+	public void setPlaceContenu( String place )
+	{
+		GenerationManager.place_contenu = place;
+	}
 	/**
 	 * Indique si le contenu doit être placé avant ou après le diagramme
 	 * @return
