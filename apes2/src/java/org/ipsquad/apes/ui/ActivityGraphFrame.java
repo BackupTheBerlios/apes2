@@ -29,6 +29,7 @@ import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.DecisionCell;
 import org.ipsquad.apes.adapters.FinalPointCell;
 import org.ipsquad.apes.adapters.InitialPointCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SynchroCell;
 import org.ipsquad.apes.adapters.TransitionEdge;
@@ -36,12 +37,13 @@ import org.ipsquad.apes.ui.tools.CellTool;
 import org.ipsquad.apes.ui.tools.EdgeTool;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 
 /**
  * Activity graph editing internal frame
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ActivityGraphFrame extends GraphFrame
 {
@@ -68,7 +70,7 @@ public class ActivityGraphFrame extends GraphFrame
 		palette.addSeparator();
 
 		
-		ApesGraphCell vertex = new ActivityCell();
+		DefaultGraphCell vertex = new ActivityCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteActivity.gif", "paletteActivity");
 		
 		vertex = new DecisionCell();
@@ -82,7 +84,12 @@ public class ActivityGraphFrame extends GraphFrame
 
 		vertex = new SynchroCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteSynchro.gif","paletteSynchro");
+		
+		vertex = new NoteCell();
+		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
+		
 		return palette;
+		
 	}
 	
 	public JGraph createGraph(SpemGraphAdapter model)

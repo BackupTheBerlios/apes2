@@ -26,6 +26,7 @@ import java.awt.Dimension;
 import java.util.Map;
 
 import org.ipsquad.apes.adapters.ActivityCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
@@ -40,7 +41,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a FlowDiagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FlowJGraph extends JGraph
 {
@@ -67,6 +68,10 @@ public class FlowJGraph extends JGraph
 		if(v instanceof WorkProductStateCell)
 		{
 			return new WorkProductStateView(v, this, cm);
+		}
+		if(v instanceof NoteCell)
+		{
+			return new NoteView(v, this, cm);
 		}
 		// Else Call Superclass
 		return super.createVertexView(v, cm);

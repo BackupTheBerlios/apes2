@@ -24,6 +24,7 @@ package org.ipsquad.apes.ui;
 import java.util.Map;
 
 import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
@@ -31,12 +32,13 @@ import org.ipsquad.apes.ui.tools.CellTool;
 import org.ipsquad.apes.ui.tools.EdgeTool;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 
 /**
  * Responsability graph editing internal frame
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ResponsabilityGraphFrame extends GraphFrame {
 	
@@ -65,13 +67,17 @@ public class ResponsabilityGraphFrame extends GraphFrame {
 		palette.addSeparator();
 
 		
-		ApesGraphCell vertex = new WorkProductCell();
+		DefaultGraphCell vertex = new WorkProductCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteWorkProduct.gif", "paletteWorkProduct");
 
 
 		vertex = new ProcessRoleCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteRole.gif", "paletteRole");
 
+		vertex = new NoteCell();
+		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
+		
+		
 		return palette;
 	}
 	

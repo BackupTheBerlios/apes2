@@ -24,6 +24,7 @@ package org.ipsquad.apes.ui;
 import java.awt.Dimension;
 import java.util.Map;
 
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
@@ -37,7 +38,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a ResponsabilityDiagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ResponsabilityJGraph extends JGraph
 {
@@ -56,6 +57,14 @@ public class ResponsabilityJGraph extends JGraph
 		if(v instanceof WorkProductCell)
 		{
 			return new WorkProductView(v, this, cm);
+		}
+		if(v instanceof NoteCell)
+		{
+			return new NoteView(v, this, cm);
+		}
+		else if(v instanceof NoteCell)
+		{
+			return new NoteView(v, this, cm);
 		}
 		// Else Call Superclass
 		return super.createVertexView(v, cm);

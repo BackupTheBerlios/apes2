@@ -28,6 +28,7 @@ import org.ipsquad.apes.adapters.ActivityCell;
 import org.ipsquad.apes.adapters.DecisionCell;
 import org.ipsquad.apes.adapters.FinalPointCell;
 import org.ipsquad.apes.adapters.InitialPointCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SynchroCell;
 import org.jgraph.JGraph;
@@ -38,7 +39,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for an ActivityDiagram
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ActivityJGraph extends JGraph
 {
@@ -70,10 +71,15 @@ public class ActivityJGraph extends JGraph
 		{
 			return new SynchroView(v, this, cm);
 		}
+		else if(v instanceof NoteCell)
+		{
+			return new NoteView(v, this, cm);
+		}
 		// Else Call Superclass
 		return super.createVertexView(v, cm);
 	}
 
+	
 	protected EdgeView createEdgeView(Object e, CellMapper cm) 
 	{
 		return new TransitionEdgeView(e, this, cm);

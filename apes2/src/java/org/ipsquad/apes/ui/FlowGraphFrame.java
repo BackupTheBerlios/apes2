@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.ipsquad.apes.adapters.ActivityCell;
 import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
@@ -33,12 +34,13 @@ import org.ipsquad.apes.ui.tools.CellTool;
 import org.ipsquad.apes.ui.tools.EdgeTool;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 
 /**
  * Flow graph editing internal frame
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class FlowGraphFrame extends GraphFrame
 {
@@ -67,7 +69,7 @@ public class FlowGraphFrame extends GraphFrame
 		palette.addSeparator();
 
 		
-		ApesGraphCell vertex = new ActivityCell();
+		DefaultGraphCell vertex = new ActivityCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteActivity.gif", "paletteActivity");
 
 		
@@ -78,6 +80,10 @@ public class FlowGraphFrame extends GraphFrame
 		vertex = new ProcessRoleCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteRole.gif", "paletteRole");
 
+		vertex = new NoteCell();
+		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
+		
+		
 		return palette;
 	}
 	

@@ -32,18 +32,19 @@ import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.jgraph.JGraph;
 import org.jgraph.graph.BasicMarqueeHandler;
+import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 
 /**
  * This tool allows to create cells in the graph
  * It use the prototype design pattern to clone cells
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class CellTool extends Tool
 {
 	private JGraph mGraph;
-	private ApesGraphCell mPrototype;
+	private DefaultGraphCell mPrototype;
 	private CellHandler mHandler = new CellHandler();
 
 	/**
@@ -51,7 +52,7 @@ public class CellTool extends Tool
 	 *
 	 * @param prototype the cell to clone
 	 */
-	public CellTool(ApesGraphCell prototype)
+	public CellTool(DefaultGraphCell prototype)
 	{
 		mPrototype = prototype;
 	}
@@ -91,14 +92,17 @@ public class CellTool extends Tool
 			mGraph.clearSelection();
 			Point pt = mGraph.fromScreen(e.getPoint());
 
-			ApesGraphCell vertex = (ApesGraphCell) mPrototype.clone();
+			DefaultGraphCell vertex = (DefaultGraphCell) mPrototype.clone();
 
-			Map attr = vertex.getAttributes();
+			Map view = new HashMap(), 
+				attr = vertex.getAttributes();
+			
+			if( vertex instanceof ApesGraphCell)
+			{	
+				GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
 
-			GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
-
-			Map view = new HashMap();
-			view.put("Attributes", attr);
+				view.put("Attributes", attr);
+			}
 			
 			((SpemGraphAdapter)mGraph.getModel()).insertCell( vertex, view );
 		}

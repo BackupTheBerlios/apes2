@@ -79,7 +79,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ApesMain
 {
@@ -251,7 +251,7 @@ public class ApesMain
 		context.registerAction("TreeAddResponsabilityDiagram", new AddToModelAction("treeAddResponsabilityDiagram",  new ApesTreeNode(new ResponsabilityDiagram(""), true)));
 		context.registerAction("TreeAddContextDiagram", new AddToModelAction("treeAddContextDiagram",  new ApesTreeNode(new ContextDiagram(""), true)));
 		context.registerAction("TreeOpenDiagram", new InteractWithModelAction("treeOpenDiagram"));
-		context.registerAction("TreeAddRole", new AddToModelAction("treeAddRole",  new ApesTreeNode(new ProcessRole(""), true)));
+		context.registerAction("TreeAddRole", new AddToModelAction("treeAddRole",  new ApesTreeNode(new ProcessRole(""), true)));		
 		context.registerAction("TreeAddActivity", new AddToModelAction("treeAddActivity",  new ApesTreeNode(new Activity(""), true)));
 		context.registerAction("TreeAddWorkProduct", new AddToModelAction("treeAddWorkProduct",  new ApesTreeNode(new WorkProduct(""), true)));
 		context.registerAction("TreeAddWorkProductRef", new AddToModelAction("treeAddWorkProductRef",  new ApesTreeNode(new WorkProductRef(""), true)));

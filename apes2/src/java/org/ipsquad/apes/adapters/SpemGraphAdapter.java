@@ -22,6 +22,8 @@
 
 package org.ipsquad.apes.adapters;
 
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.undo.UndoableEdit;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
@@ -75,7 +78,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -350,11 +353,34 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		ApesMediator.getInstance().execute(commands);
 	}
 	
-	public void insertCell( ApesGraphCell vertex, Map attr )
+	public void insertCell( DefaultGraphCell vertex, Map attr )
 	{
 		//System.out.println("Graph::tryInsertCell "+vertex.getUserObject());
-		ApesMediator.getInstance().update( 
-				ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, vertex.getUserObject(), attr ) );		
+		if( vertex instanceof ApesGraphCell )
+		{	
+			ApesMediator.getInstance().update( 
+				ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, vertex.getUserObject(), attr ) );
+		}
+		else if( vertex instanceof NoteCell )
+		{
+			NoteCell cell = new NoteCell("");
+			// Create a Map that holds the attributes for the Vertex
+			Map map = GraphConstants.createMap();
+			// Add a Bounds Attribute to the Map
+			GraphConstants.setBounds(map, new Rectangle(50, 50, 130, 32));
+			// Even though it is opaque, set it to transparent so that renderer's super.paint() won't paint background.
+			GraphConstants.setOpaque(map, false);
+			//resizable cells.
+			GraphConstants.setSizeable(map, true);
+			//outline it with a border.
+			GraphConstants.setBorder(map, BorderFactory.createLineBorder(Color.BLACK, 1));
+			// Construct a Map from cells to Maps (for insert)
+			Hashtable attributes = new Hashtable();
+			// Associate the Vertex with its Attributes
+			attributes.put(cell, map);
+			// Insert the Vertex and its Attributes
+			super.insert(new Object[]{cell}, attributes, null, null, null);
+		}
 	}
 	
 	public void insertEdge( ApesGraphCell source, ApesGraphCell target, Map attr )

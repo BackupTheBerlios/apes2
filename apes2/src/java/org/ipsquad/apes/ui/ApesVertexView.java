@@ -32,6 +32,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
 
+
 import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
@@ -44,10 +45,11 @@ import org.jgraph.graph.VertexView;
 
 /**
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApesVertexView extends VertexView
 {
+	
 	public ApesVertexView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
@@ -125,8 +127,7 @@ public class ApesVertexView extends VertexView
 			mCurrentView = view;
 			return super.getRendererComponent(graph, view, sel, focus, preview);
 		}
-		
-		
+			
 		public void paint(Graphics g) 
 		{
 			if(mCurrentView != null && mCurrentView.getCell().toString().equals(getText()))
