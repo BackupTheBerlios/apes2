@@ -97,6 +97,8 @@ ERR_Nom_Proc_Incorrect=A process name can't contain one of the following charact
 ERR_Nom_Ref_Incorrect=A repository name can't contain one of the following characters : \n \/:*?"<>|+
 ERR_AucuneDP=No process has been recorded in this repository.
 ERR_DpInexistante=The specified process does not exist !
+ERR_Composant_Deja=This component is already in the repository
+ERR_Presentation_Deja=This package is already in the repository
 
 # Verification titles
 TITREVERIF_NOM_LIBRE=Component name unused

@@ -99,6 +99,8 @@ ERR_Nom_Ref_Incorrect=Un nom de référentiel ne peut contenir l'un des caractères
 ERR_AucuneDP=Aucune définition de processus n'a été enregistrée dans ce référentiel.
 ERR_DpInexistante=Il n'existe aucune définition de processus de ce nom !
 ERR_Fic_Ref_Corromp=Ce fichier référentiel est corrompu.
+ERR_Composant_Deja=Ce composant est deja dans le referentiel.
+ERR_Presentation_Deja=Cette presentation est deja dans le referentiel.
 
 # Titres vérification
 TITREVERIF_NOM_LIBRE=Nom de composant inutilisé
