@@ -53,7 +53,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -425,10 +425,17 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	{
 		if( !p.containsModelElement( me ) && me.getParent() == null )
 		{
+			if(me instanceof ApesWorkDefinition)
+			{
+				insertModelElementToIPackage(new ActivityDiagram(ResourceManager.getInstance().getString("activityDiagram")),(IPackage)me,null,events);
+				insertModelElementToIPackage(new FlowDiagram(ResourceManager.getInstance().getString("flowDiagram")),(IPackage)me,null,events);
+			}
 			p.addModelElement(me);
 			events.add( new InsertEvent( me, p, attr ) );
 		}
 	}
+	
+	
 	
 	protected void insertElementToModel( Object parent, Element e, Map attr, Vector events )
 	{
@@ -849,7 +856,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	{
 		//System.out.println("Mediator::remove "+c);	
 		Vector events = new Vector();
-		
 		remove( c.getDiagram(), c.getElements(), c.getSources(), c.getTargets(), c.getAttributes(), events );
 		
 		if( events != null )

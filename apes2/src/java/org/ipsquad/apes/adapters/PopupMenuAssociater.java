@@ -25,9 +25,11 @@ package org.ipsquad.apes.adapters;
 import javax.swing.JPopupMenu;
 
 import org.ipsquad.apes.Context;
+import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
+import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.DefaultModelVisitor;
@@ -42,7 +44,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This visitor associates an element with a poup menu.
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PopupMenuAssociater extends DefaultModelVisitor
 {
@@ -72,7 +74,11 @@ public class PopupMenuAssociater extends DefaultModelVisitor
 		if(!(element instanceof ProcessComponent 
 				|| element instanceof ApesProcess 
 				|| element instanceof ContextDiagram
-				|| element instanceof WorkProductRef ))
+				|| element instanceof WorkProductRef
+				|| element instanceof ApesProcess.ProvidedInterface
+				|| element instanceof ApesProcess.RequiredInterface
+				|| element instanceof ActivityDiagram
+				|| element instanceof FlowDiagram))
 		{
 			mResult.addSeparator();
 			mResult.add(msContext.getAction("TreeRemove"));
@@ -130,14 +136,14 @@ public class PopupMenuAssociater extends DefaultModelVisitor
 			ApesWorkDefinition aw = (ApesWorkDefinition) w;
 			mResult.add(msContext.getAction("TreeAddActivity"));
 			
-			if( aw.canAddActivityDiagram() )
+			/*if( aw.canAddActivityDiagram() )
 			{
 				mResult.add(msContext.getAction("TreeAddActivityDiagram"));
 			}
 			if( aw.canAddFlowDiagram() )
 			{
 				mResult.add(msContext.getAction("TreeAddFlowDiagram"));
-			}
+			}*/
 		}
 		
 		super.visitWorkDefinition(w);
