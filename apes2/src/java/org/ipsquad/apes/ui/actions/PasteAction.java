@@ -30,7 +30,7 @@ import org.ipsquad.apes.ApesClipboardManager;
 /**
  * Paste the clipboard into the current graph
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class PasteAction extends ApesAction
 {
@@ -41,7 +41,6 @@ public class PasteAction extends ApesAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		//ApesTransferable t = new ApesTransferable () ;
 		ApesClipboardManager.paste();
 		
 	}

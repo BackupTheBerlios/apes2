@@ -29,7 +29,7 @@ import org.ipsquad.apes.ApesClipboardManager;
 /**
  * Copy the current selection to the clipboard
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class CopyAction extends ApesAction
 {
@@ -41,7 +41,6 @@ public class CopyAction extends ApesAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println("copy Action Performed");
 		ApesClipboardManager.copy();
 		
 	}

@@ -24,10 +24,12 @@ package org.ipsquad.apes.ui.actions;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 
+import org.ipsquad.apes.ApesClipboardManager;
+
 /**
  * Cut the current selection to the clipboard
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class CutAction extends ApesAction
 {
@@ -38,6 +40,6 @@ public class CutAction extends ApesAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println("Cut Action Performed");
+		ApesClipboardManager.cut();
 	}
 }

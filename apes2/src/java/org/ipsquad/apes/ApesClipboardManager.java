@@ -38,10 +38,17 @@ public class ApesClipboardManager
 	public static void copy() 
 	{
 		Object [] listCells = (((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getSelectionCells()) ; 
-		ApesTransferable t = new ApesTransferable (listCells) ;
-		cb.setContents(t, null) ;
+		ApesTransferable transfer = new ApesTransferable (listCells) ;
+		cb.setContents(transfer, null) ;
 	}
 	
+	public static void cut() 
+	{
+		Object [] listCells = (((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getSelectionCells()) ; 
+		ApesTransferable transfer = new ApesTransferable (listCells) ;
+		cb.setContents(transfer, null) ;
+		((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getModel().remove(listCells);
+	}
 	
 	public static void paste()
 	{
