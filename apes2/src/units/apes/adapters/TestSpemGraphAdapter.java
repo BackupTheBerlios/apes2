@@ -43,10 +43,12 @@ import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
+import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
@@ -64,7 +66,7 @@ import org.jgraph.graph.Port;
 public class TestSpemGraphAdapter extends TestCase
 {
 	static SpemTreeAdapter model;
-	static SPackage parentParent, parent;
+	static IPackage parentParent, parent;
 	static FlowDiagram diagram;
 	static SpemGraphAdapter adapter;
 	static ApesGraphCell vertex1, vertex2, vertex3;
@@ -81,9 +83,9 @@ public class TestSpemGraphAdapter extends TestCase
 		model = new SpemTreeAdapter();
 		diagram = new FlowDiagram();
 		parentParent = new SPackage();
-		parent = new SPackage();
+		parent = new ApesWorkDefinition();
 		
-		parentParent.addModelElement( parent );
+		parentParent.addModelElement( (ModelElement)parent );
 		parent.addModelElement( diagram );
 		
 		adapter = new SpemGraphAdapter(diagram)

@@ -46,7 +46,7 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellView;
 import org.jgraph.graph.CellViewRenderer;
-import org.jgraph.graph.DefaultGraphCellEditor;
+import org.jgraph.graph.GraphCell;
 import org.jgraph.graph.GraphCellEditor;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.VertexView;
@@ -54,13 +54,13 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
  
 class NoteView extends VertexView 
 {
 		static final NoteRenderer renderer = new NoteRenderer();
-		static final NoteEditor editor = new NoteEditor();
+		private NoteEditor editor = new NoteEditor();
 
 		public NoteView(Object cell, JGraph graph, CellMapper cm) 
 		{
@@ -77,7 +77,7 @@ class NoteView extends VertexView
 			return editor;
 		}
 
-		static class NoteEditor extends DefaultGraphCellEditor 
+		class NoteEditor extends ApesGraphCellEditor 
 		{
 			class RealCellEditor extends AbstractCellEditor implements GraphCellEditor 
 			{
@@ -133,7 +133,7 @@ class NoteView extends VertexView
 
 			public NoteEditor() 
 			{
-				super();
+				super((GraphCell)cell);
 			}
 			/**
 			 * Overriding this in order to set the size of an editor to that of an edited view.

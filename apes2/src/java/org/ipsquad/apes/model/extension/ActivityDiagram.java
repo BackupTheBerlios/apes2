@@ -34,7 +34,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the activity diagram
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ActivityDiagram extends SpemDiagram
 {
@@ -60,7 +60,7 @@ public class ActivityDiagram extends SpemDiagram
 	
 	
 	/**
-	 * Add a role to the class diagram
+	 * Add a model element to the activity diagram
 	 *
 	 * @param me the model element to associate
 	 * @return true if the model element can be added, false otherwise

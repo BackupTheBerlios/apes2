@@ -33,9 +33,12 @@ public class ApesUndoManager extends GraphUndoManager
 {
 	private boolean mBegin = false;
 	private Vector action = new Vector();
+	private long mLastActionTime = System.currentTimeMillis();
 	
 	public synchronized boolean addEdit(UndoableEdit anEdit)
 	{
+		mLastActionTime = System.currentTimeMillis();
+		
 		if(mBegin)
 		{
 			action.add(anEdit);
@@ -59,6 +62,8 @@ public class ApesUndoManager extends GraphUndoManager
 	
 	public void undo( Object undo )
 	{
+		mLastActionTime = System.currentTimeMillis();
+		
 		UndoableEdit edit = editToBeUndone(undo);
 		if(canUndo(edit))
 		{
@@ -73,6 +78,8 @@ public class ApesUndoManager extends GraphUndoManager
 	
 	public void redo( Object redo )
 	{
+		mLastActionTime = System.currentTimeMillis();
+		
 		UndoableEdit edit = editToBeRedone(redo);
 		if(canRedo(redo))
 		{
@@ -83,5 +90,10 @@ public class ApesUndoManager extends GraphUndoManager
 				redo(edit);
 			}
 		}
+	}
+	
+	public long getLastActionTime()
+	{
+		return mLastActionTime;
 	}
 }

@@ -43,7 +43,7 @@ import javax.swing.Timer;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class TaskMonitorDialog extends JDialog
 {
@@ -148,6 +148,8 @@ public class TaskMonitorDialog extends JDialog
 			mProgressBar.setValue(100);
 
 			mClose.setEnabled(true);
+			setDefaultCloseOperation( DISPOSE_ON_CLOSE);
+			
 			Toolkit.getDefaultToolkit().beep();
 			return;
 		}

@@ -50,7 +50,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -291,6 +291,57 @@ public class ValidateVisitor implements RoutedSpemVisitor
 	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
 	{
 		visitSpemDiagram(diagram);
+		
+		WorkProduct wp;
+		WorkDefinition wd;
+		boolean isUsed;
+		
+		for( int i = 0; i < diagram.getTransitionCount(); i++ )
+		{
+			isUsed = false;
+			
+			if( diagram.getTransition(i).getInputModelElement() instanceof WorkProduct )
+			{
+				wp = (WorkProduct)diagram.getTransition(i).getInputModelElement();
+				wd = (WorkDefinition)diagram.getTransition(i).getOutputModelElement();
+				
+				for( int j = 0; j < wd.subWorkCount(); j++ )
+				{
+					if( wd.getSubWork(j).containsOutputWorkProduct(wp) )
+					{	
+						ErrorManager.getInstance().println(
+							ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByWorkDefinition")
+								+" : "+diagram.getName()+" "+wp.getName()+" "+wd.getName());
+						mHasErrors = true;
+					}
+					if( wd.getSubWork(j).containsInputWorkProduct(wp) )
+					{
+						isUsed = true;
+					}
+				}
+			}
+			else
+			{
+				wp = (WorkProduct)diagram.getTransition(i).getOutputModelElement();
+				wd = (WorkDefinition)diagram.getTransition(i).getInputModelElement();
+				
+				for( int j = 0; j < wd.subWorkCount(); j++ )
+				{
+					if( wd.getSubWork(j).containsOutputWorkProduct(wp) )
+					{
+						isUsed = true;
+					}
+				}
+			}
+			
+			if( !isUsed )
+			{
+				ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateWorkProductNotUsedInWorkDefinition")
+						+" : "+diagram.getName()+" "+wp.getName()+" "+wd.getName());
+				mHasErrors = true;
+			}
+		}
 	}
 	
 	public void visitResponsabilityDiagram(ResponsabilityDiagram diagram) 

@@ -25,11 +25,11 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ProcessComponent extends SPackage
 {
-	private boolean mIsValidate = false;
+	private long mValidateTime = 0;
 	
 	public ProcessComponent()
 	{
@@ -52,13 +52,13 @@ public class ProcessComponent extends SPackage
 		return pc;
 	}
 
-	public void setValidate( boolean isValidate )
+	public void setValidate( long validateTime )
 	{
-		mIsValidate = isValidate;
+		mValidateTime = validateTime;
 	}
 	
-	public boolean getValidate()
+	public long getValidate()
 	{
-		return mIsValidate;
+		return mValidateTime;
 	}
 };

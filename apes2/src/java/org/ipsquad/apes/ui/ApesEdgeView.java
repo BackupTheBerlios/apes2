@@ -43,8 +43,6 @@ import org.jgraph.graph.PortView;
  */
 public class ApesEdgeView extends EdgeView
 {
-	//static boolean mIsMove = true;
-	
 	public ApesEdgeView(Object cell, JGraph graph, CellMapper mapper) 
 	{	
 		super(cell, graph, mapper);
@@ -55,11 +53,6 @@ public class ApesEdgeView extends EdgeView
 		return new ApesEdgeHandle(this, context);
 	}
 
-	/*public static void setIsMove( boolean isMove )
-	{
-		mIsMove = isMove;
-	}*/
-	
 	public class ApesEdgeHandle extends EdgeView.EdgeHandle
 	{
 		private PortView mPort = null, mFirstPort = null;
@@ -72,109 +65,87 @@ public class ApesEdgeView extends EdgeView
 		
 		public void mousePressed(MouseEvent event)
 		{
-			//if( mIsMove )
-			//{
-				int index = indexOfPoint(event.getPoint());
+			int index = indexOfPoint(event.getPoint());
 				
-				if( index != -1 )
+			if( index != -1 )
+			{
+				if( index == 0 )
 				{
-					if( index == 0 )
-					{
-						mFirstPort = (PortView)getTarget();
-						mStart = edge.getPoint(r.length-1);
-					}
-					else
-					{
-						mFirstPort = (PortView)getSource();
-						mStart = edge.getPoint(0);
-					}
-					event.consume();			
+					mFirstPort = (PortView)getTarget();
+					mStart = edge.getPoint(r.length-1);
 				}
-			//}
-			//else
-			//{
-				super.mousePressed(event);
-			//}
+				else
+				{
+					mFirstPort = (PortView)getSource();
+					mStart = edge.getPoint(0);
+				}
+				event.consume();			
+			}
+
+			super.mousePressed(event);
 		}
 		
 		public void mouseReleased(MouseEvent e)
 		{
-			//if( mIsMove )
-			//{	
-				if( e!=null && !e.isConsumed() && mPort!=null && mFirstPort!=null && mFirstPort!=mPort)
-				{
-					graph.clearSelection();
+			if( e!=null && !e.isConsumed() && mPort!=null && mFirstPort!=null && mFirstPort!=mPort)
+			{
+				graph.clearSelection();
 				
-					if( mFirstPort != null && mPort != null )
-					{
-						((SpemGraphAdapter)graph.getModel()).moveEdge( (DefaultEdge)getCell(),(ApesGraphCell)mPort.getParentView().getCell(), mFirstPort == getTarget() );
-					}
-				
-					graph.repaint();
-				}
-				else
+				if( mFirstPort != null && mPort != null )
 				{
-					graph.repaint();
+					((SpemGraphAdapter)graph.getModel()).moveEdge( (DefaultEdge)getCell(),(ApesGraphCell)mPort.getParentView().getCell(), mFirstPort == getTarget() );
 				}
+				
+				graph.repaint();
+			}
+			else
+			{
+				graph.repaint();
+			}
 			
-				//e.consume();
-			
-				mFirstPort = mPort = null;
-				mStart = mCurrent = null;
-			//}
-			//else
-			//{
-				super.mouseReleased(e);
-			//}
+			mFirstPort = mPort = null;
+			mStart = mCurrent = null;
+
+			super.mouseReleased(e);
 		}
 		
 		public void mouseDragged(MouseEvent e)
 		{
-			//if( mIsMove )
-			//{
-				if( mStart!=null && !e.isConsumed())
+			if( mStart!=null && !e.isConsumed())
+			{
+				Graphics g = graph.getGraphics();
+				
+				paintConnector(Color.black, graph.getBackground(), g);
+				
+				mPort = getTargetPortAt(e.getPoint());
+					
+				if(mPort != null)
 				{
-					Graphics g = graph.getGraphics();
-				
-					paintConnector(Color.black, graph.getBackground(), g);
-				
-					mPort = getTargetPortAt(e.getPoint());
-					
-					if(mPort != null)
-					{
-						mCurrent = graph.toScreen(mPort.getLocation(null));
-					}
-					else
-					{
-						mCurrent = graph.snap(e.getPoint());
-					}
-					
-					paintConnector(graph.getBackground(), Color.black, g);
-				
-					e.consume();
+					mCurrent = graph.toScreen(mPort.getLocation(null));
 				}
-			//}
-			//else
-			//{
-				super.mouseDragged(e);
-			//}
+				else
+				{
+					mCurrent = graph.snap(e.getPoint());
+				}
+					
+				paintConnector(graph.getBackground(), Color.black, g);
+				
+				e.consume();
+			}
+			super.mouseDragged(e);
 		}
 		
 		public void mouseMoved(MouseEvent e)
 		{
-			//if( mIsMove )
-			//{
-			
-				if( e != null && indexOfPoint(e.getPoint()) != -1 )
-				{
-					graph.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			//		e.consume();
-				}
-			//}
-			//else
-			//{
+			if( e != null && indexOfPoint(e.getPoint()) != -1 )
+			{
+				graph.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				e.consume();
+			}
+			else
+			{
 				super.mouseMoved(e);
-			//}
+			}
 		}
 		
 		private void paintConnector(Color fg, Color bg, Graphics g)

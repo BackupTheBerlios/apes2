@@ -28,6 +28,7 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 import org.ipsquad.utils.ErrorManager;
@@ -35,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -95,8 +96,6 @@ public class FlowDiagram extends SpemDiagram
 		return false;
 	}
 
-
-
 	/**
 	 * Add an activity to the flow diagram
 	 *
@@ -108,13 +107,22 @@ public class FlowDiagram extends SpemDiagram
 		if(!containsModelElement(a))
 		{
 			mElements.add(a);
+			
+			if(getParent()!=null && getParent() instanceof WorkDefinition)
+			{
+				WorkDefinition w = (WorkDefinition)getParent();
+				
+				if(w.getOwner() != null && w.getOwner().addFeature(a))
+				{	
+					a.setOwner(w.getOwner());
+				}
+			}
+			
 			return true;
 		}
 		
 		return false;
 	}
-	
-	
 	
 	/**
 	 * Add a work product to the flow diagram
@@ -339,43 +347,15 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean createLinkProcessRoleActivity(ProcessRole r, Activity a)
 	{
-		if (containsModelElement(r) && containsModelElement(a))
+		if(areLinkableProcessRoleActivity(r,a))
 		{
-			if (!r.containsFeature(a) && a.getOwner()==null)
-			{
-				r.addFeature(a);
-				a.setOwner(r);
-				return true;
-			}
+			r.addFeature(a);
+			a.setOwner(null);
+			a.setOwner(r);
+			return true;	
 		}
 		return false;
 	}
-	
-	
-	
-	
-	/**
-	 * Create a link between a process role and a work product
-	 *
-	 * @param r the Process Role to be linked
-	 * @param a the Work Product to be linked
-	 * @return true if the link can be created, false otherwise
-	 */
-	/*public boolean createLinkProcessRoleWorkProduct(ProcessRole r, WorkProduct w)
-	 {
-	 if (containsModelElement(r) && containsModelElement(w))
-	 {
-	 if (!r.containsResponsibility(w) && w.getResponsible()==null)
-	 {
-	 r.addResponsibility(w);
-	 w.setResponsible(r);
-	 return true;
-	 }
-	 }
-	 return false;
-	 }*/
-	
-	
 	
 	/**
 	 * Create a link with a work product in input of an activity
@@ -462,10 +442,6 @@ public class FlowDiagram extends SpemDiagram
 			{
 				return removeLinkProcessRoleActivity((ProcessRole)source,(Activity)target);
 			}
-			/*else if(target instanceof WorkProduct)
-			 {
-			 return removeLinkProcessRoleWorkProduct((ProcessRole)source,(WorkProduct)target);
-			 }*/
 		}
 		else if(source instanceof WorkProduct)
 		{
@@ -495,8 +471,6 @@ public class FlowDiagram extends SpemDiagram
 		return false;
 	}
 	
-	
-	
 	/**
 	 * Remove a link between a process role and an activity
 	 *
@@ -511,35 +485,22 @@ public class FlowDiagram extends SpemDiagram
 			if(r.removeFeature(a))
 			{
 				a.setOwner(null);
+				
+				if( a.getParent() != null && a.getParent() instanceof WorkDefinition )
+				{
+					WorkDefinition w = (WorkDefinition)a.getParent();
+					
+					if( w.getOwner() != null && w.getOwner().addFeature(a) )
+					{
+						a.setOwner(w.getOwner());
+					}
+				}
+				
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	
-	
-	/**
-	 * Remove a link between a process role and an work product
-	 *
-	 * @param r the Process Role to be unlinked
-	 * @param a the WorkProduct to be unlinked
-	 * @return true if the link can be removed, false otherwise
-	 */
-	/*public boolean removeLinkProcessRoleWorkProduct(ProcessRole r, WorkProduct w)
-	 {
-	 if (containsModelElement(r) && containsModelElement(w))
-	 {
-	 if (r.removeResponsibility(w))
-	 {
-	 w.setResponsible(null);
-	 return true;
-	 }
-	 }
-	 return false;
-	 }*/
-	
-	
 	
 	/**
 	 * Remove a link with a work product in input of an activity
@@ -629,10 +590,6 @@ public class FlowDiagram extends SpemDiagram
 			{
 				return areLinkableProcessRoleActivity((ProcessRole)source,(Activity)target);
 			}
-			/*else if(target instanceof WorkProduct)
-			 {
-			 return areLinkableProcessRoleWorkProduct((ProcessRole)source,(WorkProduct)target);
-			 }*/
 		}
 		else if(source instanceof WorkProduct)
 		{
@@ -664,8 +621,6 @@ public class FlowDiagram extends SpemDiagram
 		return false;
 	}
 	
-	
-	
 	/**
 	 * Test if a link between a process role and an activity can be created
 	 *
@@ -677,6 +632,22 @@ public class FlowDiagram extends SpemDiagram
 	{
 		if (containsModelElement(r) && containsModelElement(a))
 		{
+			if( a.getParent() instanceof WorkDefinition )
+			{
+				WorkDefinition w = (WorkDefinition)a.getParent();
+				
+				if(r == w.getOwner() && a.getOwner() == w.getOwner())
+				{
+					ErrorManager.getInstance().printKey("errorRoleAlreadyLinkedWithParentWork");
+					return false;
+				}
+				else if(a.getOwner() != null && a.getOwner() != w.getOwner())
+				{
+					ErrorManager.getInstance().printKey("errorActivityAlreadyHaveARole");
+					return false;
+				}
+			}
+			
 			if (!r.containsFeature(a))
 			{
 				return true;
@@ -686,31 +657,6 @@ public class FlowDiagram extends SpemDiagram
 		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 		return false;
 	}
-	
-	
-	
-	/**
-	 * Test if a link between a process role and a work product can be created
-	 *
-	 * @param r the Process Role to be tested
-	 * @param a the Work Product to be tested
-	 * @return true if the link can be created, false otherwise
-	 */
-	/*public boolean areLinkableProcessRoleWorkProduct(ProcessRole r, WorkProduct w)
-	 {
-	 if (containsModelElement(r) && containsModelElement(w))
-	 {
-	 if (!r.containsResponsibility(w) && w.getResponsible()==null)
-	 {
-	 return true;
-	 }
-	 }
-	 
-	 ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
-	 return false;
-	 }*/
-	
-	
 	
 	/**
 	 * Test if a link with a work product in input of an activity can be created
@@ -750,7 +696,6 @@ public class FlowDiagram extends SpemDiagram
 		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 		return false;
 	}
-	
 	
 	/**
 	 * Test if a link with a work product in output of an activity can be created
@@ -798,10 +743,6 @@ public class FlowDiagram extends SpemDiagram
 			{
 				return existsLinkProcessRoleActivity((ProcessRole)source,(Activity)target);
 			}
-			/*else if(target instanceof WorkProduct)
-			 {
-			 return existsLinkProcessRoleWorkProduct((ProcessRole)source,(WorkProduct)target);
-			 }*/
 		}
 		else if(source instanceof WorkProduct)
 		{
@@ -831,8 +772,6 @@ public class FlowDiagram extends SpemDiagram
 		return false;
 	}
 	
-	
-	
 	/**
 	 * Test if a link between a process role and an activity exists
 	 *
@@ -851,29 +790,6 @@ public class FlowDiagram extends SpemDiagram
 		}
 		return false;
 	}
-	
-	
-	
-	/**
-	 * Test if a link between a process role and a work product exists
-	 *
-	 * @param r the Process Role to be tested
-	 * @param a the Work Product to be tested
-	 * @return true if the link exists, false otherwise
-	 */
-	/*public boolean existsLinkProcessRoleWorkProduct(ProcessRole r, WorkProduct w)
-	 {
-	 if (containsModelElement(r) && containsModelElement(w))
-	 {
-	 if (r.containsResponsibility(w) && w.getResponsible()==r)
-	 {
-	 return true;
-	 }
-	 }
-	 return false;
-	 }*/
-	
-	
 	
 	/**
 	 * Test if a link with a work product in input of an activity exists
@@ -909,7 +825,6 @@ public class FlowDiagram extends SpemDiagram
 		}
 		return false;
 	}
-	
 	
 	/**
 	 * Test if a link with a work product in output of an activity exists

@@ -23,10 +23,16 @@ package org.ipsquad.apes.ui.actions;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
+
+import org.ipsquad.apes.Context;
+import org.ipsquad.apes.ui.ApesFrame;
+import org.ipsquad.utils.ResourceManager;
+
 /**
  * Save the current project to a new file
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SaveAsAction extends ProjectManagementAction
 {
@@ -37,6 +43,26 @@ public class SaveAsAction extends ProjectManagementAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		saveProjectAs();
+		boolean save = true;
+		long time =  Context.getInstance().getProject().getProcess().getComponent().getValidate();
+		if( time == 0 || time < Context.getInstance().getUndoManager().getLastActionTime())
+		{
+			int choice=JOptionPane.showInternalConfirmDialog(
+
+			((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
+			ResourceManager.getInstance().getString("msgSaveWithoutValidateConfirm"),
+			ResourceManager.getInstance().getString("msgTitleSaveConfirm"),
+			JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+			if(choice!=JOptionPane.YES_OPTION)
+			{
+				save = false;
+			}
+		}
+		
+		if(save)
+		{
+			saveProjectAs();
+		}
 	}
 }

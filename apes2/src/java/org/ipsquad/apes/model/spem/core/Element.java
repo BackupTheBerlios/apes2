@@ -33,7 +33,7 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
  * Specify an abstract method to allow visitors
  * See the visitor design pattern for more informations
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class Element implements Serializable, Cloneable, Identity
 {
@@ -144,5 +144,14 @@ public abstract class Element implements Serializable, Cloneable, Identity
 		e.setName("noname"+msNoNameCounter++);
 		e.setID();
 		return e;
+	}
+	
+	/**
+	 * Warning : this method is only use by other software like iepp
+	 *
+	 */
+	public static void resetID()
+	{
+		mNoID = 0;
 	}
 };

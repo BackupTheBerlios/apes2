@@ -26,9 +26,9 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JTextField;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.text.JTextComponent;
 
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.ui.actions.ChangeBoldAction;
@@ -81,7 +81,7 @@ public class ApesGraphCellEditor extends DefaultGraphCellEditor
 		{
 			Component c = super.getGraphCellEditorComponent(graph, mCell, isSelected);
 			
-			if( editingComponent instanceof JTextField && value instanceof GraphCell )
+			if( editingComponent instanceof JTextComponent && value instanceof GraphCell )
 			{
 				Color fc =GraphConstants.getForeground(mCell.getAttributes());
 				Color bc =GraphConstants.getBackground(mCell.getAttributes());
@@ -90,11 +90,11 @@ public class ApesGraphCellEditor extends DefaultGraphCellEditor
 				mActionForeground.setColor(fc);
 				mActionBackground.setColor(bc);
 				
-				((JTextField)editingComponent).setForeground(fc);
-				((JTextField)editingComponent).setSelectedTextColor(fc);
-				((JTextField)editingComponent).setBackground(bc);
-				((JTextField)editingComponent).setFont( font );
-				((JTextField)editingComponent).selectAll();
+				((JTextComponent)editingComponent).setForeground(fc);
+				((JTextComponent)editingComponent).setSelectedTextColor(fc);
+				((JTextComponent)editingComponent).setBackground(bc);
+				((JTextComponent)editingComponent).setFont( font );
+				((JTextComponent)editingComponent).selectAll();
 			}
 			
 			return c;

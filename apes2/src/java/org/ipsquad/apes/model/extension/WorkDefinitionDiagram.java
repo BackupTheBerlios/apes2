@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
@@ -34,7 +35,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -51,48 +52,12 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		super(name);
 	}
 	
-	public static class Transition implements Serializable
-	{
-		private ModelElement mInput;
-		private ModelElement mOutput;
-		
-		public Transition()
-		{
-		}
-		
-		public Transition(ModelElement input, ModelElement output)
-		{
-			mInput=input;
-			mOutput=output;
-		}
-		
-		public void setInputModelElement(ModelElement me)
-		{
-			mInput=me;
-		}
-		
-		public ModelElement getInputModelElement()
-		{
-			return mInput;
-		}
-		
-		public void setOutputModelElement(ModelElement me)
-		{
-			mOutput=me;
-		}
-
-		public ModelElement getOutputModelElement()
-		{
-			return mOutput;
-		}
-		
-		public Object clone()
-		{
-			return new Transition( mInput, mOutput);
-		}
-	};
-	
-	
+	/**
+	 * Return the link between a WorkDefinition and a WorkProduct
+	 * @param source the WorkDefinition or the WorkProduct which start the link
+	 * @param target the  WorkDefinition or the WorkProduct which end the link
+	 * @return the transition between those elements, null if there is no link between those elements
+	 */
 	public Transition getTransition(ModelElement source, ModelElement target)
 	{
 		for(int i=0;i<mTransitions.size();i++)
@@ -107,6 +72,11 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	}
 	
 	
+	/**
+	 * Get a transition by giving its index
+	 * @param i the index of the presentation element to retrieve
+	 * @return the transition or null if the index is invalid
+	 */
 	public Transition getTransition(int i)
 	{
 		if(i<0 || i>=mTransitions.size())
@@ -118,12 +88,23 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	}
 
 
+	/**
+	 * Get the number of transitions in this diagram
+	 *
+	 * @return the number of transitions
+	 */
 	public int getTransitionCount()
 	{
 		return mTransitions.size();
 	}
 	
 
+	/**
+	 * Add a model element to the WorkDefinition diagram
+	 *
+	 * @param me the model element to associate
+	 * @return true if the model element can be added, false otherwise
+	 */
 	public boolean addModelElement(ModelElement me) 
 	{
 		if( me instanceof ProcessRole )
@@ -302,13 +283,22 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			{
 				r.addFeature(w);
 				w.setOwner(r);
+				
+				for(int i=0; i < w.subWorkCount(); i++)
+				{
+					Activity a = w.getSubWork(i); 
+					if( a.getOwner() == null && !r.containsFeature(a) )
+					{	
+						r.addFeature(a);
+						a.setOwner(r);
+					}
+				}
 				return true;
 			}
 		}
 		
 		return false;
 	}
-	
 	
 	/**
 	 * Create a link between a work product in input and a work definition
@@ -356,7 +346,6 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return false;
 	}
 	
-	
 	public boolean removeLinkModelElements( ModelElement source, ModelElement target) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
@@ -391,13 +380,20 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			if (r.removeFeature(w))
 			{
 				w.setOwner(null);
+				for(int i = 0; i < w.subWorkCount(); i++)
+				{
+					Activity a = w.getSubWork(i);
+					if(r.removeFeature(a))
+					{
+						a.setOwner(null);
+					}
+				}
 				return true;
 			}
 		}
 		
 		return false;
 	}
-	
 	
 	/**
 	 * Remove a link with a work product in input of a work definition
@@ -417,7 +413,6 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return false;	
 	}
 	
-	
 	/**
 	 * Remove a link with a work product in output of a work definition
 	 *
@@ -435,7 +430,6 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		
 		return false;	
 	}
-	
 
 	public boolean areLinkableModelElements( ModelElement source, ModelElement target) 
 	{	
@@ -470,14 +464,22 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			if (!r.containsFeature(w))
 			{
-				return true;
+				boolean canLink = true;
+				for(int i = 0; i < w.subWorkCount(); i++)
+				{
+					canLink = canLink && w.getSubWork(i).getOwner() != r;
+				}
+				if(!canLink)
+				{
+					ErrorManager.getInstance().printKey("errorRoleAlreadyLinkedWithSubWork");
+				}
+				return canLink;
 			}
 		}
 
 		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 		return false;
 	}
-	
 	
 	/**
 	 * Test if a link with a work product in input of a work definition can be created
@@ -497,7 +499,6 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return false;
 	}
 	
-	
 	/**
 	 * Test if a link with a work product in output of a work definition can be created
 	 *
@@ -515,8 +516,6 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 		return false;
 	}
-	
-	
 	
 	public boolean existsLinkModelElements( ModelElement source, ModelElement target) 
 	{
@@ -591,8 +590,6 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return false;
 	}
 	
-	
-	
 	public void visit(SpemVisitor visitor) 
 	{
 		visitor.visitWorkDefinitionDiagram( this );
@@ -606,5 +603,44 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return d;
 	}
 	
-	
+	public static class Transition implements Serializable
+	{
+		private ModelElement mInput;
+		private ModelElement mOutput;
+		
+		public Transition()
+		{
+		}
+		
+		public Transition(ModelElement input, ModelElement output)
+		{
+			mInput=input;
+			mOutput=output;
+		}
+		
+		public void setInputModelElement(ModelElement me)
+		{
+			mInput=me;
+		}
+		
+		public ModelElement getInputModelElement()
+		{
+			return mInput;
+		}
+		
+		public void setOutputModelElement(ModelElement me)
+		{
+			mOutput=me;
+		}
+
+		public ModelElement getOutputModelElement()
+		{
+			return mOutput;
+		}
+		
+		public Object clone()
+		{
+			return new Transition( mInput, mOutput);
+		}
+	};
 }

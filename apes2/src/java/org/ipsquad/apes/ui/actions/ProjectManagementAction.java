@@ -40,7 +40,7 @@ import org.ipsquad.utils.SmartChooser;
 /**
  * Base class for action that needs to manage the current project
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class ProjectManagementAction extends ApesAction
 {
@@ -95,7 +95,7 @@ public abstract class ProjectManagementAction extends ApesAction
 		{
 			return saveProject(context.getFilePath());
 		}
-	}
+	}	
 
 	/**
 	 * Save the current project in the specified file
