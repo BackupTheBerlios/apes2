@@ -36,7 +36,6 @@ import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTree;
 
 import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
@@ -46,7 +45,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class PreferencesDialog extends JDialog 
 {
@@ -164,26 +163,21 @@ public class PreferencesDialog extends JDialog
 	
 	private void changeLanguage()
 	{
-		
 		ApesFrame mainFrame = (ApesFrame)Context.getInstance().getTopLevelFrame(); 
 		JInternalFrame[] frames = mainFrame.getDesktop().getAllFrames();
 		JInternalFrame frameSelected = mainFrame.getDesktop().getSelectedFrame();
-		JTree tree = mainFrame.getTree();
 		Locale locale = new Locale(ConfigManager.getInstance().getProperty("Language"));
-		mainFrame.dispose();
 		ResourceManager.setResourceFile("resources/Apes", locale);
 		Locale.setDefault(locale);
 		Context context = Context.getInstance();
-
 		ApesMain.initActions(context);
-		ApesFrame f = new ApesFrame(tree);
+		ApesFrame f = new ApesFrame(mainFrame.getTree());
 		context.setTopLevelFrame(f);
 		ErrorManager.getInstance().setOwner(f.getContentPane());
 		f.setFilePath(context.getFilePath());
-		f.show();
 		for(int i = 0; i< frames.length;i++)
 		{		
-			if(!frames[i].equals(frameSelected))
+			if(!frames[i].equals(frameSelected) && frames[i].isVisible())
 			{
 				f.openDiagram(((GraphFrame)frames[i]).getGraphModel());
 				f.getDesktop().getAllFrames()[0].setBounds(frames[i].getBounds());
@@ -194,6 +188,10 @@ public class PreferencesDialog extends JDialog
 			f.openDiagram(((GraphFrame)frameSelected).getGraphModel());
 			f.getDesktop().getAllFrames()[0].setBounds(frameSelected.getBounds());
 		}
+		f.setBounds(mainFrame.getBounds());
+		f.getErrorPane().setDividerLocation(mainFrame.getErrorPane().getDividerLocation());
+		f.show();
+		mainFrame.dispose();
 	}   
 	
 	public void cancelSave()

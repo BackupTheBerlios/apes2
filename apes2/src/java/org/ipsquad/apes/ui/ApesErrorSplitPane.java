@@ -43,7 +43,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Split pane designed for error display
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ApesErrorSplitPane extends JSplitPane implements DocumentListener
 {
@@ -126,7 +126,7 @@ public class ApesErrorSplitPane extends JSplitPane implements DocumentListener
 	{
 		mArea.setText("");
 	}
-
+	
 	public void insertUpdate(DocumentEvent e)
 	{
 		if(mAutoShow.isSelected())

@@ -52,7 +52,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
@@ -113,6 +113,10 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 
 /// @name Accessors
 //@{
+	public ApesErrorSplitPane getErrorPane()
+	{
+		return mErrorPane;
+	}
 	public String getFilePath()
 	{
 		return mFilePath;
