@@ -29,7 +29,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ProcessPerformer extends ModelElement
 {
@@ -189,7 +189,9 @@ public class ProcessPerformer extends ModelElement
 		{	
 			ProcessPerformer p = (ProcessPerformer)o;
 			return mFeature.equals(p.mFeature)
-				&& getName().equals(p.getName());
+				&& getName().equals(p.getName())
+				&& ((getParent() == null && p.getParent() == null)
+					|| getParent().equals(p.getParent()));
 		}
 		return false;
 	}

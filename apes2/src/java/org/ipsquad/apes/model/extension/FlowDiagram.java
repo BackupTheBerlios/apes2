@@ -37,7 +37,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class FlowDiagram extends SpemDiagram
 {
@@ -90,9 +90,9 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean addProcessRole(ProcessRole r)
 	{
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::addProcessRole "+r);
 		if(!containsModelElement(r))
 		{
-			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::addProcessRole "+r);
 			mElements.add(r);
 			return true;
 		}

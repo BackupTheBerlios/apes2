@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -138,9 +138,9 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean addProcessRole(ProcessRole r)
 	{
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addProcessRole "+r);
 		if(!containsModelElement(r))
 		{
-			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::addProcessRole "+r);
 			mElements.add(r);
 			return true;
 		}
