@@ -42,7 +42,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class Context
 {
@@ -241,4 +241,17 @@ public class Context
 		return (Action)mActionMap.get(key);
 	}
 	
+	/**
+	 * Remove a previously registered action
+	 * @param key the identifier of the action to remove
+	 * @return the removed action or null
+	 */
+	public Action removeAction(String key)
+	{
+		if(mActionMap.containsKey(key))
+		{
+			return (Action)mActionMap.remove(key);
+		}
+		return null;
+	}
 }

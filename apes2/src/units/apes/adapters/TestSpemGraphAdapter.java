@@ -25,6 +25,7 @@ package apes.adapters;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -33,6 +34,7 @@ import javax.swing.JTree;
 
 import junit.framework.TestCase;
 
+import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.MainFrameInterface;
 import org.ipsquad.apes.Project;
@@ -52,6 +54,8 @@ import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.ui.GraphFrame;
 import org.ipsquad.apes.ui.ToolPalette;
+import org.ipsquad.utils.ConfigManager;
+import org.ipsquad.utils.ResourceManager;
 import org.jgraph.graph.ConnectionSet;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.Edge;
@@ -151,42 +155,6 @@ public class TestSpemGraphAdapter extends TestCase
 			}
 		};
 		
-		/*adapter.setBuilder( adapter.new Builder(){
-			public Object create( Object o )
-			{
-				if( o instanceof Element )
-				{
-					((Element)o).visit( this );
-					return mCreated;
-				}
-				return null;
-			}
-			
-			public void visitProduct(WorkProduct product) 
-			{
-				mCreated = new WorkProductCell( product );
-			}
-
-			public void visitRole(ProcessRole role) 
-			{
-				mCreated = new ProcessRoleCell( role );
-			}
-
-			public void visitActivity(Activity activity) 
-			{
-				mCreated = new ActivityCell( activity );
-			}
-
-			public boolean shouldGoInGraph(Object o)
-			{
-				if( o instanceof Activity || o instanceof WorkProduct || o instanceof ProcessRole)
-				{	
-					return true;
-				}
-				return false;
-			}
-		} );*/
-		
 		context.setTopLevelFrame(new MainFrameInterface()
 		{
 			private JTree tree = new JTree(model);
@@ -201,6 +169,9 @@ public class TestSpemGraphAdapter extends TestCase
 			public void setFilePath(String filePath) { }//fail(); }
 			public GraphFrame getGraphFrame(GraphModel model) { fail(); return null; }
 		});
+		
+		ConfigManager.init(ApesMain.createDefaultProperties());
+		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
 		
 		context.setProject(new Project());		
 		

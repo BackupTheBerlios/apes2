@@ -52,6 +52,7 @@ public class TestContext extends TestCase
 	public void testRegisterGetAction()
 	{
 		Context ctx = Context.getInstance();
+		
 		FakeAction a1 = new FakeAction();
 		FakeAction a2 = new FakeAction();
 		FakeAction a3 = new FakeAction();
@@ -76,6 +77,10 @@ public class TestContext extends TestCase
 		assertEquals(a1, ctx.getAction("A1"));
 		assertEquals(a2, ctx.getAction("A2"));
 		assertEquals(a1, ctx.getAction("A3"));
+		
+		ctx.removeAction("A1");
+		ctx.removeAction("A2");
+		ctx.removeAction("A3");
 	}
 
 	public void testGetSetTopLevelFrame()
