@@ -51,7 +51,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -123,7 +123,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		if( work.subWorkCount() == 0 )
 		{
 			ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateWorkDefinition")+" : "+work.getName());
+					ResourceManager.getInstance().getString("errorValidateWorkDefinition")+" : \""+work.getName()+"\"");
 			mHasErrors = true;
 		}
 	}
@@ -146,7 +146,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		if( mProductNames.contains(product.getName()) )
 		{
 			ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateWorkProductDuplicateName")+" : "+product.getName());
+					ResourceManager.getInstance().getString("errorValidateWorkProductDuplicateName")+" : \""+product.getName()+"\"");
 			mHasErrors = true;
 		}
 		else
@@ -159,7 +159,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			if( product.getResponsible() == null )
 			{
 				ErrorManager.getInstance().println(
-						ResourceManager.getInstance().getString("errorValidateWorkProductWithoutResponsible")+" : "+product.getName());
+						ResourceManager.getInstance().getString("errorValidateWorkProductWithoutResponsible")+" : \""+product.getName()+"\"");
 				mHasErrors = true;
 			}
 			if( product.getInputCount() == 0 && product.getOutputCount() == 0)
@@ -175,13 +175,13 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			if( product.getResponsible() == null )
 			{
 				ErrorManager.getInstance().println(
-						ResourceManager.getInstance().getString("errorValidateWorkProductWithoutResponsible")+" : "+product.getName());
+						ResourceManager.getInstance().getString("errorValidateWorkProductWithoutResponsible")+" : \""+product.getName()+"\"");
 				mHasErrors = true;
 			}
 			if( product.getInputCount() == 0 )
 			{
 				ErrorManager.getInstance().println(
-						ResourceManager.getInstance().getString("errorValidateProvidedWorkProductActivity")+" : "+product.getName());
+						ResourceManager.getInstance().getString("errorValidateProvidedWorkProductActivity")+" : \""+product.getName()+"\"");
 				mHasErrors = true;
 			}
 			checkProvidedProduct(product);
@@ -192,13 +192,13 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			if( product.getResponsible() != null )
 			{
 				ErrorManager.getInstance().println(
-						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductRole")+" : "+product.getName());
+						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductRole")+" : \""+product.getName()+"\"");
 				mHasErrors = true;
 			}
 			if( product.getInputCount() != 0 || product.getOutputCount() == 0 )
 			{
 				ErrorManager.getInstance().println(
-						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductActivity")+" : "+product.getName());
+						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductActivity")+" : \""+product.getName()+"\"");
 				mHasErrors = true;
 			}
 			checkRequiredProduct(product);
@@ -207,7 +207,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		if( product.getInputCount()==0 && product.getOutputCount()==0 && product.getResponsible()==null)
 		{
 			ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateWorkProductAlone")+" : "+product.getName());
+					ResourceManager.getInstance().getString("errorValidateWorkProductAlone")+" : \""+product.getName()+"\"");
 			mHasErrors = true;
 		}
 	}
@@ -234,14 +234,14 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			{
 				ErrorManager.getInstance().println(
 						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByWorkDefinition")
-							+" : "+w.getName());
+							+" : \""+w.getName()+"\"");
 				mHasErrors = true;
 			}
 			if( !isUsed )
 			{
 				ErrorManager.getInstance().println(
 						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductNotUsed")
-							+" : "+w.getName());
+							+" : \""+w.getName()+"\"");
 				mHasErrors = true;
 			}	
 		}
@@ -265,7 +265,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			{
 				ErrorManager.getInstance().println(
 					ResourceManager.getInstance().getString("errorValidateWorkProductNotProvidedByAnyWorkDefinition")
-						+" : "+w.getName());
+						+" : \""+w.getName()+"\"");
 				mHasErrors = true;
 			}
 		}
@@ -281,7 +281,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		if(role.getFeatureCount()==0 && role.getResponsibilityCount()==0)
 		{
 			ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateProcessRoleAlone")+" : "+role.getName());
+					ResourceManager.getInstance().getString("errorValidateProcessRoleAlone")+" : \""+role.getName()+"\"");
 			mHasErrors = true;
 		}		
 	}
@@ -297,14 +297,14 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		if (activity.getOwner()==null)
 		{
 			ErrorManager.getInstance().println(
-			ResourceManager.getInstance().getString("errorValidateActivityWithoutRole")+" : "+activity.getName());
+			ResourceManager.getInstance().getString("errorValidateActivityWithoutRole")+" : \""+activity.getName()+"\"");
 			mHasErrors = true;
 		}
 		
 		if(activity.getInputCount()==0 && activity.getOutputCount()==0 && activity.getOwner()==null)
 		{
 			ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : "+activity.getName());
+					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : \""+activity.getName()+"\"");
 			mHasErrors = true;
 		}
 	}
@@ -355,14 +355,16 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		
 		WorkProduct wp = null;
 		WorkDefinition wd = null;
-		boolean isUsed, isProvided;
+		boolean isUsed, isProvided, hasBeenTested;
 		
 		for( int i = 0; i < diagram.getTransitionCount(); i++ )
 		{
 			isUsed = false;
+			hasBeenTested = false;
 			
 			if( diagram.getTransition(i).getInputModelElement() instanceof WorkProduct )
 			{
+				hasBeenTested = true;
 				isProvided = false;
 				wp = (WorkProduct)diagram.getTransition(i).getInputModelElement();
 				wd = (WorkDefinition)diagram.getTransition(i).getOutputModelElement();
@@ -370,7 +372,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				for( int j = 0; j < wd.subWorkCount(); j++ )
 				{
 					if( wd.getSubWork(j).containsOutputWorkProduct(wp) )
-					{	
+					{
 						isProvided = true;
 					}
 					if( wd.getSubWork(j).containsInputWorkProduct(wp) )
@@ -382,12 +384,13 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				{
 					ErrorManager.getInstance().println(
 							ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByActivity")
-								+" : "+diagram.getName()+" "+wp.getName()+" "+wd.getName());
+								+" : \""+diagram.getName()+"\" \""+wp.getName()+"\" \""+wd.getName()+"\"");
 						mHasErrors = true;
 				}
 			}
 			else if( diagram.getTransition(i).getOutputModelElement() instanceof WorkProduct )
 			{
+				hasBeenTested = true;
 				wp = (WorkProduct)diagram.getTransition(i).getOutputModelElement();
 				wd = (WorkDefinition)diagram.getTransition(i).getInputModelElement();
 				
@@ -400,11 +403,11 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				}
 			}
 			
-			if( !isUsed )
+			if( hasBeenTested && !isUsed )
 			{
 				ErrorManager.getInstance().println(
 					ResourceManager.getInstance().getString("errorValidateWorkProductNotUsedInWorkDefinition")
-						+" : "+diagram.getName()+" "+wp.getName()+" "+wd.getName());
+						+" : \""+diagram.getName()+"\" \""+wp.getName()+"\" \""+wd.getName()+"\"");
 				mHasErrors = true;
 			}
 		}
@@ -417,12 +420,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 
 	public void visitContextDiagram(ContextDiagram diagram)
 	{ 
-		if( diagram.modelElementCount() == 1 )
-		{
-			ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateEmptyDiagram")+" : "+diagram.getName());
-			mHasErrors = true;
-		}
+		visitSpemDiagram(diagram);
 		
 		for( int i=0; i < diagram.modelElementCount(); i++ )
 		{
@@ -432,7 +430,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				if( wp.getReferences() == WorkProduct.NO_REFERENCES )
 				{
 					ErrorManager.getInstance().println(
-							ResourceManager.getInstance().getString("errorValidateWorkProductAlone")+" : "+wp.getName());
+							ResourceManager.getInstance().getString("errorValidateWorkProductAlone")+" : \""+wp.getName()+"\"");
 					mHasErrors = true;
 				}
 			}
@@ -444,7 +442,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		if( diagram.modelElementCount() == 0 )
 		{
 			ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateEmptyDiagram")+" : "+diagram.getName());
+					ResourceManager.getInstance().getString("errorValidateEmptyDiagram")+" : \""+diagram.getName()+"\"");
 			mHasErrors = true;
 		}
 	}
@@ -526,7 +524,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				if (me instanceof Activity)
 				{	
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : "+((Activity)me).getName());
+					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : \""+((Activity)me).getName()+"\"");
 					mHasErrors = true;
 				}
 				if (me instanceof ActivityDiagram.Decision)
