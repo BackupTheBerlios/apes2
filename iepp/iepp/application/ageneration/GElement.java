@@ -29,6 +29,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -251,6 +253,20 @@ public class GElement
 		return ( res );
 	}
 	
+	public String getLienImage()
+	{
+		String res = "./images" ;
+		ArbreGeneration aux = this.arbre;
+		// on remonte jusqu'à un composant ou un paquetage de présentation
+		while (!aux.isRacine() && (! (aux.getElement() instanceof GPaquetagePresentation)) 
+				&& (! (aux.getElement() instanceof GComposantPubliable)))
+		{
+			res = "../" + res;
+			aux = aux.getArbreParent();
+		}
+		return ( res );
+	}
+	
 	/**
 	 * Méthode permettant de remplir le fichier tree.js pour l'élément de présentation
 	 * qui est en train d'être traité. Il faut savoir si c'est une feuille de l'arbre ou
@@ -393,6 +409,11 @@ public class GElement
 	 */
 	protected void recopierContenu(String contenu, FileWriter fd) throws IOException
 	{
+		String regexp = "src=\"images";
+        Pattern modele = Pattern.compile(regexp);
+        Matcher correspondance;
+        
+
 		File f = new File(this.getCheminContenu() + File.separator + contenu);
 		if (f.exists())
 		{
@@ -403,6 +424,12 @@ public class GElement
 			char[] retourChariot = new char[]{Character.LINE_SEPARATOR};
 			while ((ligne = br.readLine()) != null)
 			{
+				// vérifie si l'on a un lien vers une image
+				correspondance = modele.matcher(ligne);
+				if (correspondance.find())
+				{
+					ligne = correspondance.replaceAll("src=\"" + this.getLienImage());
+				}
 				fd.write(ligne);
 				fd.write(retourChariot);
 			}
