@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
+import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
@@ -271,6 +272,9 @@ public class TestSpemVisitor extends TestCase
 		public void visitProduct(WorkProduct product) { fail(); }
 		public void visitRole(ProcessRole role) { fail(); }
 		public void visitActivity(Activity activity) { fail(); }
+		/**********DELPH**********/
+		public void visitWorkDefinition(ApesWorkDefinition WorkDefinition) { fail(); }
+		
 		public void visitExternalDescription(ExternalDescription description) { fail(); }
 		public void visitGuidance(Guidance guidance) { fail(); }
 		public void visitGuidanceKind(GuidanceKind kind) { fail(); }
@@ -352,6 +356,7 @@ public class TestSpemVisitor extends TestCase
 		public void visitWorkDefinition(WorkDefinition work)
 		{
 			result.add("WorkDefinition");
+			
 			super.visitWorkDefinition(work);
 		}
 		

@@ -54,7 +54,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -204,6 +204,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		update(createInsertCommand(me,ap,null));
 		
 		me = new ContextDiagram(mResource.getString("contextDiagram"));
+		update(createInsertCommand(me,ap.getComponent(),null));
+		
+		me = new WorkDefinitionDiagram(mResource.getString("workDefinitionDiagram"));
 		update(createInsertCommand(me,ap.getComponent(),null));
 		
 		me = new ApesProcess.ProvidedInterface(mResource.getString("provided"));
@@ -463,6 +466,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 	}
 	
+
 	/**
 	 * Insert an element in the model
 	 * @param parent the parent 
@@ -1055,7 +1059,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			else
 			{
 				if( element instanceof WorkProduct )
-				{		
+				{
 					if(((WorkProduct)element).getReferences() != WorkProduct.NO_REFERENCES )
 					{
 						changeWorkProductName((WorkProduct)element, newValue );
@@ -1063,7 +1067,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 					
 					changeWorkProductState((WorkProduct)element, events);
 				}
-
+				
 				String oldName = element.getName();
 				element.setName( newValue );
 				

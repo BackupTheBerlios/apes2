@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 /**
  * Base class for the elements of the model
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class ModelElement extends Element
 {
@@ -203,7 +203,15 @@ public abstract class ModelElement extends Element
 		return mPresentation.size();
 	}*/
 
-
+	/**
+	 * Set the name of the element
+	 *
+	 * @param name the element name
+	 */
+	public void setName(String name)
+	{
+		super.setName(name);
+	}
 
 	/**
 	 * Set the containing package of the model element

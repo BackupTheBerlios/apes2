@@ -101,7 +101,7 @@ public class ColorAssociater implements ModelVisitor
 	{	
 		
 	}
-
+	
 	public void visitProcessPerformer(ProcessPerformer performer)
 	{
 	}

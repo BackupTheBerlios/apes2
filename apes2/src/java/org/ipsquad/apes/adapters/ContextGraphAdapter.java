@@ -37,7 +37,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a context diagram in a JGraph
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -74,7 +74,7 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 
 			public void visitRole(ProcessRole role){ mCreated = null; }
 
-			public void visitActivity(Activity activity){ mCreated = null; } 
+			public void visitActivity(Activity activity){ mCreated = null; }
 		
 		};
 

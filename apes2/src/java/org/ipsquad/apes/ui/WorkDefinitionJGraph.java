@@ -40,7 +40,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a WorkDefinitionDiagram
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WorkDefinitionJGraph extends JGraph
 {
@@ -58,6 +58,7 @@ public class WorkDefinitionJGraph extends JGraph
 		{
 			return new WorkDefinitionView(v, this, cm);
 		}
+		
 		if(v instanceof ProcessRoleCell)
 		{
 			return new ProcessRoleView(v, this, cm);
@@ -75,7 +76,8 @@ public class WorkDefinitionJGraph extends JGraph
 		return super.createVertexView(v, cm);
 	}
 
-	protected EdgeView createEdgeView(Object e, CellMapper cm)
+	protected EdgeView 
+	createEdgeView(Object e, CellMapper cm)
 	{
 		ApesEdgeView ev = new ApesEdgeView(e, this, cm);
 		ev.update();

@@ -31,6 +31,7 @@ import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.DefaultModelVisitor;
 import org.ipsquad.apes.model.spem.core.Element;
@@ -44,7 +45,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This visitor associates an element with a popup menu.
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class PopupMenuAssociater extends DefaultModelVisitor
 {
@@ -78,7 +79,8 @@ public class PopupMenuAssociater extends DefaultModelVisitor
 				|| element instanceof ApesProcess.ProvidedInterface
 				|| element instanceof ApesProcess.RequiredInterface
 				|| element instanceof ActivityDiagram
-				|| element instanceof FlowDiagram))
+				|| element instanceof FlowDiagram
+				|| element instanceof WorkDefinitionDiagram))
 		{
 			mResult.addSeparator();
 			mResult.add(msContext.getAction("TreeRemove"));
@@ -107,7 +109,7 @@ public class PopupMenuAssociater extends DefaultModelVisitor
 			mResult.add(msContext.getAction("TreeAddWorkProduct"));
 			mResult.addSeparator();
 			mResult.add(msContext.getAction("TreeAddResponsabilityDiagram"));
-			mResult.add(msContext.getAction("TreeAddWorkDefinitionDiagram"));
+			//mResult.add(msContext.getAction("TreeAddWorkDefinitionDiagram"));
 			
 		}
 		

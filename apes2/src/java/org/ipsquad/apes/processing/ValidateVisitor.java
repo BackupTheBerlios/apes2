@@ -50,7 +50,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -126,7 +126,6 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			mHasErrors = true;
 		}
 	}
-
 
 	/**
 	 * Called when the visited element is a process performer

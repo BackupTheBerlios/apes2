@@ -28,7 +28,7 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkDefinition extends ModelElement
 {
@@ -50,7 +50,7 @@ public class WorkDefinition extends ModelElement
 	public void visit(SpemVisitor visitor)
 	{
 		visitor.visitWorkDefinition(this);
-	}
+	}	
 	
 	public ProcessPerformer getOwner()
 	{

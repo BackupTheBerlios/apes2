@@ -21,6 +21,7 @@
 
 package org.ipsquad.apes.model.extension;
 
+import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
@@ -29,7 +30,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 /**
  * WorkDefinition which contains an activity diagram and a flow diagram 
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ApesWorkDefinition extends WorkDefinition implements IPackage
 {
@@ -46,6 +47,13 @@ public class ApesWorkDefinition extends WorkDefinition implements IPackage
 		super( name );
 	}
 
+	
+	/***************DELPH*****************/
+	public void visit(SpemVisitor visitor)
+	{
+		visitor.visitWorkDefinition(this);
+	}
+	
 	public boolean addSubWork(Activity a)
 	{
 		if( super.addSubWork(a) )

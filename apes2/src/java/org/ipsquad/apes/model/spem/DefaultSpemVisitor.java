@@ -50,7 +50,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Default visitor implementation that does nothing.
  * Its only work is to follow the inheritance tree.
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class DefaultSpemVisitor implements SpemVisitor
 {
@@ -154,8 +154,8 @@ public class DefaultSpemVisitor implements SpemVisitor
 	{
 		visitModelElement(work);
 	}
-
-
+	
+	
 	/**
 	 * Simply treat the ProcessPerformer as a ModelElement
 	 *

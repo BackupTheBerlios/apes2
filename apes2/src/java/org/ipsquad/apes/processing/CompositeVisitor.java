@@ -48,7 +48,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Interface for visiting SPEM models
  * For more details see the visitor design pattern
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class CompositeVisitor implements RoutedSpemVisitor
 {
@@ -159,7 +159,6 @@ public class CompositeVisitor implements RoutedSpemVisitor
 		for (int i=0;i<mVisitors.size();i++)
 			((SpemVisitor)mVisitors.get(i)).visitWorkDefinition(work);
 	}
-	
 
 	/**
 	 * Called when the visited element is a process performer

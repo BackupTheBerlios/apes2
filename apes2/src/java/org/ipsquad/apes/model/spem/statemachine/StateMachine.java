@@ -26,7 +26,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 /**
  * An incomplete implementation of the StateMachine 
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class StateMachine extends ModelElement
 {
@@ -55,6 +55,7 @@ public class StateMachine extends ModelElement
 		return mContext;
 	}
 	
+
 	public void setName(String name)
 	{
 		if( name.length() > 2 && name.charAt(0) == '(' && name.charAt(name.length()-1)  == ')' )

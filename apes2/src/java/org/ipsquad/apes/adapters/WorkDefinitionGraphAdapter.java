@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 /**
  * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {
@@ -71,8 +71,8 @@ public class WorkDefinitionGraphAdapter extends SpemGraphAdapter
 			public void visitWorkDefinition(WorkDefinition workDefinition) 
 			{
 				mCreated = new WorkDefinitionCell( workDefinition );
-			}
-
+			}			
+			
 			public void visitActivity(Activity activity) { mCreated = null; }
 			
 		};
