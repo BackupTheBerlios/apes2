@@ -58,6 +58,7 @@ import org.ipsquad.apes.ui.actions.NewAction;
 import org.ipsquad.apes.ui.actions.OpenAction;
 import org.ipsquad.apes.ui.actions.PasteAction;
 import org.ipsquad.apes.ui.actions.PreferencesAction;
+import org.ipsquad.apes.ui.actions.PresentationAction;
 import org.ipsquad.apes.ui.actions.PrintDiagramAction;
 import org.ipsquad.apes.ui.actions.QuitAction;
 import org.ipsquad.apes.ui.actions.RedoAction;
@@ -80,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class ApesMain
 {
@@ -245,6 +246,7 @@ public class ApesMain
 		context.registerAction("Preferences",new PreferencesAction());
 		
 		context.registerAction("Validate", new ValidateAction());
+		context.registerAction("ToolPresentation", new PresentationAction());
 		//context.registerAction("Generate", new GenerateWebSiteAction());
 		
 		context.registerAction("ChangeForeground", new ChangeColorAction("changeForeground","ChangeForeground"));
