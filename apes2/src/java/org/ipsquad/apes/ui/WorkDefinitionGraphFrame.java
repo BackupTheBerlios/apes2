@@ -23,6 +23,8 @@ package org.ipsquad.apes.ui;
 
 import java.util.Map;
 
+import javax.swing.text.DefaultStyledDocument;
+
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -38,7 +40,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Work definition graph editing internal frame
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class WorkDefinitionGraphFrame extends GraphFrame {
 	
@@ -81,7 +83,7 @@ public class WorkDefinitionGraphFrame extends GraphFrame {
 		vertex = new ProcessRoleCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteRole.gif", "paletteRole");
 
-		vertex = new NoteCell();
+		vertex = new NoteCell(new DefaultStyledDocument());
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
 		
 		

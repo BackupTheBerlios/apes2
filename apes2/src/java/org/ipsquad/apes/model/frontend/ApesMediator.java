@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.text.Document;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
 
@@ -54,7 +55,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -593,6 +594,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			else if( element instanceof Element )
 			{
 				insertElementToModel( parent, (Element) element, attr, extraActions );				
+			}
+			else if( diagram != null && element instanceof Document )
+			{
+				if( diagram.addNote((Document)element))
+				{
+					extraActions.add(new InsertEvent(diagram, element, null, true, attr));
+				}
 			}
 		}
 		// add a transition beetween two elements in a diagram
@@ -1309,7 +1317,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		public String toString()
 		{
 			String result = "element "+mElement;
-			result += " parent "+ mParent;
+			result += " parent "+ mParent+" diagram "+mDiagram;
 			return result;
 		}
 	}

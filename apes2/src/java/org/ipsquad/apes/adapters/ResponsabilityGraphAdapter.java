@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This adapter allows to display a responsability diagram in a JGraph
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ResponsabilityGraphAdapter extends SpemGraphAdapter 
 {
@@ -46,16 +46,14 @@ public class ResponsabilityGraphAdapter extends SpemGraphAdapter
 					((Element)o).visit( this );
 					return mCreated;
 				}
-				return null;
+				return super.create(o);
 			}
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				if( o instanceof WorkProduct || o instanceof ProcessRole )
-				{
-					return true;
-				}
-				return false;
+				return( o instanceof WorkProduct 
+						|| o instanceof ProcessRole 
+						|| super.shouldGoInGraph(o));
 			}
 			
 			public void visitProduct(WorkProduct product) 

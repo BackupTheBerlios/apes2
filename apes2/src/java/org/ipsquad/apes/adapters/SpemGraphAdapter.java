@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.text.Document;
 import javax.swing.undo.UndoableEdit;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
@@ -74,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -433,14 +434,14 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	public void insertCell( DefaultGraphCell vertex, Map attr )
 	{
 		//System.out.println("Graph::tryInsertCell "+vertex.getUserObject());
-		if( vertex instanceof ApesGraphCell )
+		if( vertex instanceof ApesGraphCell || vertex instanceof NoteCell )
 		{	
 			ApesMediator.getInstance().update( 
 				ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, vertex.getUserObject(), attr ) );
 		}
-		else if( vertex instanceof NoteCell )
+		/*else if( vertex instanceof NoteCell )
 		{
-			NoteCell cell = new NoteCell("");
+			NoteCell cell = new NoteCell(new DefaultStyledDocument());
 			
 			// Construct a Map from cells to Maps (for insert)
 			Hashtable attributes = new Hashtable();
@@ -448,7 +449,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			attributes.put(cell, cell.getAttributes());
 			// Insert the Vertex and its Attributes
 			super.insert(new Object[]{cell}, attributes, null, null, null);
-		}
+		}*/
 	}
 	
 	/**
@@ -561,7 +562,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			
 			if( objectToAdd != null )
 			{
-				if( objectToAdd instanceof ApesGraphCell )
+				if( objectToAdd instanceof DefaultGraphCell )
 				{	
 					Map apply = null;
 					
@@ -799,9 +800,23 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		 * @param o an object of the model to encapsulate in a cell
 		 * @return the coresponding cell
 		 */
-		public abstract Object create( Object o );
+		public Object create( Object o )
+		{
+			if( o instanceof Document )
+			{
+				mCreated = new NoteCell((Document)o);
+			}
+			return mCreated;
+		}
 		
-		public abstract boolean shouldGoInGraph(Object o);
+		public boolean shouldGoInGraph(Object o)
+		{
+			if( o instanceof Document )
+			{
+				return true;
+			}
+			return false;
+		}
 		
 		public void visitApesProcess(ApesProcess p){ mCreated = null; }
 		public void visitWorkProductRef(WorkProductRef ref){ mCreated = null; }

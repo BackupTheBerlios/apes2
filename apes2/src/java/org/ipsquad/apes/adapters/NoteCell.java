@@ -27,7 +27,10 @@ import java.awt.Rectangle;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
 
+import org.ipsquad.apes.Context;
 import org.ipsquad.apes.ui.ColorFontPanel;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
@@ -35,17 +38,39 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class NoteCell extends DefaultGraphCell
 {
-	public NoteCell()
+	public Map changeAttributes(Map change)
 	{
-		super();
+		Document doc = (Document)userObject;
+		
+		Map undo = GraphConstants.applyMap(change,attributes);
+		
+		Object value = GraphConstants.getValue(change); 
+		
+		if( value != null && !value.toString().equals(doc.toString()) )
+		{
+			
+			System.out.println("cahngeText");
+			try{
+			doc.remove(0,doc.getLength());
+			doc.insertString(0,value.toString(),null);
+			userObject=doc;
+			}catch(Throwable t){t.printStackTrace();}
+		}
+		
+		return undo;
+	}
+
+	public NoteCell() 
+	{
+		super(new DefaultStyledDocument());
 		init();
 	}
 	
-	public NoteCell(Object userObject) 
+	public NoteCell(Document userObject)
 	{
 		super(userObject);
 		init();
@@ -54,6 +79,7 @@ public class NoteCell extends DefaultGraphCell
 	protected void init()
 	{
 		add(new DefaultPort());
+		((Document)userObject).addUndoableEditListener(Context.getInstance().getUndoManager());
 		// Create a Map that holds the attributes for the Vertex
 		Map map = GraphConstants.createMap();
 		// Add a Bounds Attribute to the Map
@@ -73,8 +99,24 @@ public class NoteCell extends DefaultGraphCell
 	public Object clone()
 	{
 		NoteCell c = (NoteCell) super.clone();
+		c.userObject = new DefaultStyledDocument();
 		init();
 		return c;
 	}
 	
+	public String toString()
+	{
+		if( userObject instanceof Document )
+		{
+			try
+			{
+				return ((Document)userObject).getText(0,((Document)userObject).getLength());
+			}
+			catch(Throwable t)
+			{
+				t.printStackTrace();
+			}
+		}
+		return "";
+	}
 }

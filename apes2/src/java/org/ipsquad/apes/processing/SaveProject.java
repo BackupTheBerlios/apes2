@@ -57,8 +57,8 @@ public class SaveProject
 				
 		saveComponent();
 		saveInterfaces();
-		createImagesDirectory();
-		saveImageAndMap();
+		//createImagesDirectory();
+		//saveImageAndMap();
 	}
 	
 	private static String normalizeName(String name)

@@ -41,7 +41,9 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.text.Document;
 
+import org.ipsquad.apes.adapters.NoteCell;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellView;
@@ -54,7 +56,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
  
 class NoteView extends VertexView 
@@ -103,8 +105,19 @@ class NoteView extends VertexView
 						Object value,
 						boolean isSelected) 
 				{
-					editorComponent.setText(value.toString());
-					editorComponent.selectAll();
+					if(value instanceof NoteCell && ((NoteCell)value).getUserObject() instanceof Document)
+					{	
+						try
+						{
+							Document doc = (Document)((NoteCell)value).getUserObject();
+							editorComponent.setText(doc.getText(0,doc.getLength()));
+							editorComponent.selectAll();
+						}
+						catch(Throwable t)
+						{
+							t.printStackTrace();
+						}
+					}
 					return editorComponent;
 				}
 
@@ -205,8 +218,24 @@ class NoteView extends VertexView
 					boolean focus,
 					boolean preview) 
 			{
-				setText(view.getCell().toString());
-
+				if( view.getCell() instanceof NoteCell )
+				{
+					NoteCell nc = (NoteCell)view.getCell();
+					System.out.println(nc.getUserObject().getClass());
+					if( nc.getUserObject() instanceof Document )
+					{	
+						Document doc = (Document)nc.getUserObject(); 
+						try
+						{
+							setText(doc.getText(0,doc.getLength()));
+						}
+						catch(Throwable t)
+						{
+							t.printStackTrace();
+						}
+					}
+				}
+				
 				Map attributes = view.getAllAttributes(); 
 				installAttributes(graph, attributes);
 				return this;

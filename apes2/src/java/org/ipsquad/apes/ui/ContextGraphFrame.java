@@ -23,6 +23,8 @@ package org.ipsquad.apes.ui;
 
 import java.util.Map;
 
+import javax.swing.text.DefaultStyledDocument;
+
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
@@ -36,7 +38,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Responsability graph editing internal frame
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ContextGraphFrame extends GraphFrame {
 	
@@ -69,7 +71,7 @@ public class ContextGraphFrame extends GraphFrame {
 		vertex = new WorkProductCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteWorkProduct.gif", "paletteWorkProduct");
 
-		vertex = new NoteCell();
+		vertex = new NoteCell(new DefaultStyledDocument());
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
 		
 		return palette;

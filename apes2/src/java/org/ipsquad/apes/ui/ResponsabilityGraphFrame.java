@@ -23,6 +23,8 @@ package org.ipsquad.apes.ui;
 
 import java.util.Map;
 
+import javax.swing.text.DefaultStyledDocument;
+
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -37,7 +39,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Responsability graph editing internal frame
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ResponsabilityGraphFrame extends GraphFrame {
 	
@@ -73,7 +75,7 @@ public class ResponsabilityGraphFrame extends GraphFrame {
 		vertex = new ProcessRoleCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteRole.gif", "paletteRole");
 
-		vertex = new NoteCell();
+		vertex = new NoteCell(new DefaultStyledDocument());
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
 		
 		
