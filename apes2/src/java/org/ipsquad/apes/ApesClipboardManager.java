@@ -42,7 +42,7 @@ import org.jgraph.graph.DefaultPort;
 
 /**
  *
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class ApesClipboardManager
 {
@@ -135,7 +135,6 @@ public class ApesClipboardManager
 			}
 						
 			adapter.insert(cells.toArray(), attributes, null, null, null);	
-			cb.setContents(new ApesTransferable(null, null), null) ;
 		} 
 		catch (NullPointerException e)
 		{
