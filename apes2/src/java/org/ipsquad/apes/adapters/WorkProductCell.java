@@ -27,7 +27,7 @@ package org.ipsquad.apes.adapters;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 /**
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkProductCell extends ApesGraphCell
 {
@@ -39,14 +39,6 @@ public class WorkProductCell extends ApesGraphCell
 	public WorkProductCell(WorkProduct wp)
 	{
 		super(wp);
-	}
-	
-	public Object clone()
-	{
-		WorkProductCell c = (WorkProductCell) super.clone();
-		c.init();
-		
-		return c;
 	}
 }
 

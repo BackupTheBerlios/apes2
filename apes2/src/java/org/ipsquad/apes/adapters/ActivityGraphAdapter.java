@@ -22,8 +22,6 @@
 
 package org.ipsquad.apes.adapters;
 
-import java.util.Map;
-
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.Link;
 import org.ipsquad.apes.model.extension.SpemDiagram;
@@ -33,17 +31,15 @@ import org.ipsquad.apes.model.extension.ActivityDiagram.InitialPoint;
 import org.ipsquad.apes.model.extension.ActivityDiagram.Synchro;
 import org.ipsquad.apes.model.extension.ActivityDiagram.Transition;
 import org.ipsquad.apes.model.spem.core.Element;
-import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
-import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 
 /**
  * This adapter allows to display an activity diagram in a JGraph
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ActivityGraphAdapter extends SpemGraphAdapter
 {
@@ -120,40 +116,40 @@ public class ActivityGraphAdapter extends SpemGraphAdapter
 		};
 	}
 	
-	public DefaultGraphCell getCellByUserObject(Object userObject, Map attr, boolean create)
-    {
-		DefaultGraphCell cell = super.getCellByUserObject(userObject, attr, create);
-		if(cell != null && cell instanceof DefaultEdge && userObject instanceof Link)
-		{
-			DefaultEdge edge = (DefaultEdge)cell;
-			Link link = (Link)userObject;
-			if(create)
-			{
-				if(link.getSource() instanceof ModelElement && link.getTarget() instanceof ModelElement)
-				{
-					cell = new TransitionEdge(new ActivityDiagram.Transition((ModelElement)link.getSource(),(ModelElement)link.getTarget(),""));
-					((TransitionEdge)cell).setSource(edge.getSource());
-					((TransitionEdge)cell).setTarget(edge.getTarget());
-				}
-			}
-			else
-			{
-				for(int i = 0; i < getRootCount(); i++)
-				{
-					if(getRootAt(i) instanceof TransitionEdge)
-					{
-						edge = (TransitionEdge) getRootAt(i);
-						ActivityDiagram.Transition transition = (ActivityDiagram.Transition)edge.getUserObject();
-						if(transition.getInputModelElement() == link.getSource() && transition.getOutputModelElement() == link.getTarget())
-						{
-							cell = edge;
-						}
-					}
-				}
-			}
-		}
-		return cell;
-    }
+//	public DefaultGraphCell getCellByUserObject(Object userObject, Map attr, boolean create)
+//    {
+//		DefaultGraphCell cell = super.getCellByUserObject(userObject, attr, create);
+//		if(cell != null && cell instanceof DefaultEdge && userObject instanceof Link)
+//		{
+//			DefaultEdge edge = (DefaultEdge)cell;
+//			Link link = (Link)userObject;
+//			if(create)
+//			{
+//				if(link.getSource() instanceof ModelElement && link.getTarget() instanceof ModelElement)
+//				{
+//					cell = new TransitionEdge(new ActivityDiagram.Transition((ModelElement)link.getSource(),(ModelElement)link.getTarget(),""));
+//					((TransitionEdge)cell).setSource(edge.getSource());
+//					((TransitionEdge)cell).setTarget(edge.getTarget());
+//				}
+//			}
+//			else
+//			{
+//				for(int i = 0; i < getRootCount(); i++)
+//				{
+//					if(getRootAt(i) instanceof TransitionEdge)
+//					{
+//						edge = (TransitionEdge) getRootAt(i);
+//						ActivityDiagram.Transition transition = (ActivityDiagram.Transition)edge.getUserObject();
+//						if(transition.getInputModelElement() == link.getSource() && transition.getOutputModelElement() == link.getTarget())
+//						{
+//							cell = edge;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return cell;
+//    }
 }
 
 

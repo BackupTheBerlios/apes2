@@ -42,7 +42,6 @@ import javax.swing.undo.UndoableEditSupport;
 import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Identity;
-import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
@@ -74,7 +73,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -145,17 +144,15 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			// if there is no component, create the interfaces then create a new component
 			if(ap.getComponent() == null)
 			{
-				ProcessComponent pc = new ProcessComponent(mConfig.getProperty("Component"));
-				ap.addModelElement(pc);
-				ContextDiagram cd = new ContextDiagram(mConfig.getProperty("ContextDiagram"));
-				Context.getInstance().getProject().getGraphModel(cd);				
-				pc.addModelElement(cd);
-				WorkDefinitionDiagram wd = new WorkDefinitionDiagram(mConfig.getProperty("WorkDefinitionDiagram"));
-				Context.getInstance().getProject().getGraphModel(wd);				
-				pc.addModelElement(wd);
+			    String name = mConfig.getProperty("Component");
+				ProcessComponent pc = new ProcessComponent(name!=null?name:"Component");
+				name = mConfig.getProperty("ContextDiagram");
+				ContextDiagram cd = new ContextDiagram(name!=null?name:"ContextDiagram");
+				name = mConfig.getProperty("WorkDefinitionDiagram");
+				WorkDefinitionDiagram wd = new WorkDefinitionDiagram(name!=null?name:"WorkDefinitionDiagram");
 				
-				insertInModel(new Object[]{pc,cd,wd}, new Object[]{ap,pc,pc}, null);
-				insertInModel(new Object[]{cd,wd}, new Object[]{pc,pc}, null);
+				insertInModel(new Object[]{pc}, new Object[]{ap}, null);
+				insertInModel(new Object[]{cd,wd}, new Object[]{pc,pc}, null);		
 				
 				loadProvidedInterface(ap);
 				loadRequiredInterface(ap);
@@ -275,15 +272,15 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	private void initNewProcess( ApesProcess ap )
 	{
 		String name = mConfig.getProperty("Component");
-		ProcessComponent pc = new ProcessComponent(name!=null?name:"");
+		ProcessComponent pc = new ProcessComponent(name!=null?name:"Component");
 		name = mConfig.getProperty("ContextDiagram");
-		ContextDiagram cd = new ContextDiagram(name!=null?name:"");
+		ContextDiagram cd = new ContextDiagram(name!=null?name:"ContextDiagram");
 		name = mConfig.getProperty("WorkDefinitionDiagram");
-		WorkDefinitionDiagram wd = new WorkDefinitionDiagram(name!=null?name:"");
+		WorkDefinitionDiagram wd = new WorkDefinitionDiagram(name!=null?name:"WorkDefinitionDiagram");
 		name = mConfig.getProperty("Provided");
-		ApesProcess.ProvidedInterface api = new ApesProcess.ProvidedInterface(name!=null?name:"");
+		ApesProcess.ProvidedInterface api = new ApesProcess.ProvidedInterface(name!=null?name:"Provided");
 		name = mConfig.getProperty("Required");
-		ApesProcess.RequiredInterface ari = new ApesProcess.RequiredInterface(name!=null?name:"");
+		ApesProcess.RequiredInterface ari = new ApesProcess.RequiredInterface(name!=null?name:"Required");
 		
 		insertInModel(new Object[]{pc}, new Object[]{ap}, null);
 		insertInModel(new Object[]{cd,wd}, new Object[]{pc,pc}, null);		
@@ -635,12 +632,15 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
      */
     public WorkProductRef getWorkProductRef(ApesProcess.Interface in, WorkProduct w)
     {
-        for (int i = 0; i < in.modelElementCount(); i++) 
+        if(in != null)
         {
-            WorkProductRef temp = (WorkProductRef)in.getModelElement(i);
-            if(temp.getReference() == w)
+            for (int i = 0; i < in.modelElementCount(); i++) 
             {
-                return temp;
+                WorkProductRef temp = (WorkProductRef)in.getModelElement(i);
+                if(temp.getReference() == w)
+                {
+                    return temp;
+                }
             }
         }
         return null;
@@ -961,6 +961,8 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		if(edit != null)
 		{
 			Context.getInstance().getUndoManager().save();				
+			Collection extraEdits = addExtraEdits(edit);
+			
 			for ( int i = 0; i < edits.size(); i++ )
 			{
 				ApesEdit tmpEdit = (ApesEdit)edits.get(i);
@@ -968,13 +970,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				{
 					fireModelChanged(tmpEdit.getSource(), tmpEdit);	            
 					edit.addEdit((UndoableEdit)edits.get(i));
+					extraEdits.addAll(addExtraEdits((ApesEdit)edits.get(i)));
 				}
 			}
 			if(edit.execute())
 			{
 				fireModelChanged(null, edit);	            
 				
-				Collection extraEdits = addExtraEdits(edit);
 				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
 				postEdit(edit, extraEdits);
 			}

@@ -168,9 +168,9 @@ public class TestSpemTreeAdapter extends TestCase
 		adapt.valueForPathChanged(new TreePath(new Object[]{node1, node12, node21}), "Node21");
 		assertTrue(node21.getName().equals("Node21"));
 
-		assertTrue(node22.getName().equals("node22"));
-		adapt.valueForPathChanged(new TreePath(new Object[]{node1, node12, node22}), "Node22");
-		assertTrue(node22.getName().equals("Node22"));
+	    assertTrue(node22.getName().equals("node22"));
+	    adapt.valueForPathChanged(new TreePath(new Object[]{node1, node12, node22}), "Node22");
+	    assertTrue(node22.getName().equals("Node22"));
 	}
 	
 	public void testGetIndexOfChild()
