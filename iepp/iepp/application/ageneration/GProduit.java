@@ -68,7 +68,7 @@ public class GProduit extends GElementModele
 		
 		// affiche les activités dont le produit est en entrée
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ENTREE_ACT") + " </div>\n");
-		Vector listeActivites = this.modele.getActiviteEntree();
+		Vector listeActivites = GenerationManager.getActivitesEntree(this.modele);
 		for (int i = 0; i < listeActivites.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);
@@ -76,7 +76,7 @@ public class GProduit extends GElementModele
 		}
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_SORTIE_ACT") + " </div>\n");
 		
-		listeActivites = this.modele.getActiviteSortie();
+		listeActivites = GenerationManager.getActivitesSortie(this.modele);
 		for (int i = 0; i < listeActivites.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeActivites.elementAt(i);

@@ -334,22 +334,23 @@ public class CExporterProcessus extends CommandeNonAnnulable
 
                         //activités dont le produit est en entrée
                         data.write("\t\t\t\t<listeProdEntree>\n");
-                        Vector listeId = io.getIDActiviteEntree();
+                        //Vector listeId = io.getIDActiviteEntree();
+                        Vector listeId = GenerationManager.getActivitesEntree(io);
                         for (int k = 0; k < listeId.size(); k++)
                         {
                             data.write("\t\t\t\t\t<prodEntree>");
-                            data.write(new Integer(((Integer) listeId.elementAt(k)).intValue() + (i * 10000)).toString());
+                            data.write(new Integer(((IdObjetModele) listeId.elementAt(k)).getID() + (listeComposant.indexOf( ((ComposantProcessus)((IdObjetModele)listeId.elementAt(k)).getRef()).getIdComposant()   ) * 10000)).toString());
                             data.write("</prodEntree>\n");
                         }
                         data.write("\t\t\t\t</listeProdEntree>\n");
 
                         //activités dont le produit est en sortie
                         data.write("\t\t\t\t<listeProdSortie>\n");
-                        listeId = io.getIDActiviteSortie();
+                        listeId = GenerationManager.getActivitesSortie(io);
                         for (int k = 0; k < listeId.size(); k++)
                         {
                             data.write("\t\t\t\t\t<prodSortie>");
-                            data.write(new Integer(((Integer) listeId.elementAt(k)).intValue() + (i * 10000)).toString());
+                            data.write(new Integer(((IdObjetModele) listeId.elementAt(k)).getID() + (listeComposant.indexOf( ((ComposantProcessus)((IdObjetModele)listeId.elementAt(k)).getRef()).getIdComposant()   ) * 10000)).toString());
                             data.write("</prodSortie>\n");
                         }
                         data.write("\t\t\t\t</listeProdSortie>\n");

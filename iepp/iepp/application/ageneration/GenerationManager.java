@@ -55,6 +55,7 @@ public class GenerationManager
 	private static Color couleur_surlign;
 	private static Vector listeProduitsExterieurs;
 	private static HashMap listeProduitsChanges;
+    private static HashMap listeProduitsRemplaces;
     private static Vector listeProduitsSortie;
 	private static String place_contenu;
 	private static String info_bulle;
@@ -78,6 +79,7 @@ public class GenerationManager
 	
 	public static final String PRESENT = "1";
 	public static final String NON_PRESENT = "0";
+
 	
 
 	/**
@@ -357,6 +359,23 @@ public class GenerationManager
     {
         return listeProduitsChanges;
     }
+    
+    /**
+     * Remplie la liste des produits qui sont remplaces par d'autres
+     * @param listeProduitsChanges
+     */
+    public static void setListeProduitsRemplaces(HashMap listeProduitsRemplaces)
+    {
+        GenerationManager.listeProduitsRemplaces = listeProduitsRemplaces;
+    }
+
+    /**
+     * Recupere la map des produits remplaces par un produit
+     */
+    public static HashMap getListeProduitsRemplaces()
+    {
+        return listeProduitsRemplaces;
+    }
 
     /**
      * Remplie la liste des produits en sortie
@@ -377,6 +396,30 @@ public class GenerationManager
     }
     
     /**
+	 * Rajouter a la map des produits exterieurs le couple passe en parametre
+	 * Si la cle existe deja, on ajoute la nouvelle valeur a un vecteur, on ne remplace pas
+	 * @param map La map sur laquelle il faut operer
+	 * @param key La cle
+	 * @param val La valeur
+	 */
+	public static void ajouterMapping(HashMap map, String key, IdObjetModele val)
+	{
+	    Vector v;
+	    if (!map.containsKey(key))
+	    {
+	        v = new Vector();
+	        map.put(key, v);
+	    }
+	    else
+	    {
+	        v = (Vector)map.get(key);
+	    }
+	    
+	    // V etant le vecteur resultat, on y ajoute la nouvelle valeur
+	    v.add(val);
+	}
+    
+    /**
 	 * récupérer la liste des produits en entrée et vérifier s'ils sont extérieurs au processus
 	 * @param idComposant
 	 */
@@ -391,6 +434,7 @@ public class GenerationManager
 		
 		// Liste des produits en entree lies avec d'autres
 		HashMap listeProduitsChanges = new HashMap();
+		HashMap listeProduitsRemplaces = new HashMap();
 		
 		// Liste des produits en sortie de composants
 		Vector listeProduitsSortie = new Vector();
@@ -449,6 +493,7 @@ public class GenerationManager
 					 		        produitCible = lien.getProduitEntree();
 					 		    }
 					 		    listeProduitsChanges.put(idProduit.getRef().toString() +"::"+ idProduit.toString(),produitCible);
+					 		    ajouterMapping(listeProduitsRemplaces, produitCible.getRef().toString() +"::"+ produitCible.toString(), idProduit);
 					 		} 
 					 	}
 					 	if (!lie)
@@ -463,6 +508,7 @@ public class GenerationManager
 			}
 		}
 		GenerationManager.setListeProduitsChanges(listeProduitsChanges);
+		GenerationManager.setListeProduitsRemplaces(listeProduitsRemplaces);
 		GenerationManager.setListeProduitsExterieurs(listeProduitsExterieurs);
 		GenerationManager.setListeProduitsSortie(listeProduitsSortie);
 		System.out.println("Produits exterieurs " + listeProduitsExterieurs);
@@ -710,5 +756,53 @@ public class GenerationManager
 	        return (IdObjetModele)listeProduitsChanges.get(id);
 	    }
 	    return null;
+	}
+	
+	/**
+	 * Retourne un vecteur contenant la liste des produits que le produit passe en parametre a remplace
+	 * ou null s'il n'y en a pas
+	 * @param id IdObjectModele du produit qui remplace
+	 * @return vecteur contenant les IdObjetModele des produits qui ont ete remplace
+	 */
+	public static Vector getProduitsRemplaces (IdObjetModele id)
+	{
+	    return (Vector)(listeProduitsRemplaces.get(id.getRef().toString() +"::"+ id.toString()));
+	}
+	
+	/**
+	 * Retourne le vecteur des activites qui ont le produit passe en parametre en entree(ses activites propres et les activites des produits qu'il remplace)
+	 * @param id IdObjectModele du produit
+	 * @return vecteur contenant les IdObjetModele des activites ayant le produit en entree
+	 */
+	public static Vector getActivitesEntree (IdObjetModele id)
+	{
+	    Vector activIn = (Vector) id.getActiviteEntree().clone();
+	    Vector prodRemplaces = getProduitsRemplaces(id);
+	    if (prodRemplaces != null)
+        {
+            for (int i = 0; i < prodRemplaces.size(); i++)
+            {
+                activIn.addAll(((IdObjetModele) prodRemplaces.elementAt(i)).getActiviteEntree());
+            }
+        }
+	    return activIn; 
+	}
+	/**
+	 * Retourne le vecteur des activites qui ont le produit passe en parametre en sortie (ses activites propres et les activites des produits qu'il remplace)
+	 * @param id IdObjectModele du produit
+	 * @return vecteur contenant les IdObjetModele des activites ayant le produit en sortie
+	 */
+	public static Vector getActivitesSortie (IdObjetModele id)
+	{
+	    Vector activOut = (Vector) id.getActiviteSortie().clone();
+	    Vector prodRemplaces = getProduitsRemplaces(id);
+	    if (prodRemplaces != null)
+        {
+            for (int i = 0; i < prodRemplaces.size(); i++)
+            {
+                activOut.addAll(((IdObjetModele) prodRemplaces.elementAt(i)).getActiviteSortie());
+            }
+        }
+	    return activOut;
 	}
 }
