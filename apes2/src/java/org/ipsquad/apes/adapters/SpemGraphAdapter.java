@@ -75,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesModelListener
 {
@@ -396,7 +396,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
     		ParentMap pm,
     		UndoableEdit[] edits) 
     {
-    	if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemGraphAdater/"+getName()+" -> edit( attr "+attributes+" cs "+cs+" pm "+pm+" "+edits+")");
+    	if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemGraphAdater/"+getName()+" -> edit( attr "+attributes.hashCode()+" cs "+cs+" pm "+pm+" "+edits+")");
     	if(attributes != null)
     	{
     		Map changes = new HashMap();
@@ -407,7 +407,6 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
     		{
     			Map.Entry entry = (Map.Entry) it.next();
     			DefaultGraphCell cell = (DefaultGraphCell) entry.getKey();
-    			
     			if(cell instanceof ApesGraphCell)
     			{	
     				Map map = (Map) entry.getValue();
@@ -419,8 +418,9 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
     						attr.put(cell.getUserObject(), cell);
     						changes.put(cell.getUserObject(), ApesGraphConstants.getValue(map));
     					}
+						it.remove();
     				}
-    			}
+    			}    			
     		}
     		
     		if(!changes.isEmpty())
@@ -429,9 +429,69 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
     			return;
     		}
     	}
-    	super.edit(attributes, cs, pm, edits);
+    	
+    	if(!attributes.isEmpty())
+    	{
+    		super.edit(attributes, cs, pm, edits);
+    	}
     }
     
+	/**
+	 * Move the begin or end extremity, indicating by isSource, of an edge to the new cell 
+	 * 
+	 * @param edge the edge to move
+	 * @param newCell the new cell to connecting
+	 * @param isSource true if the concerned end is the source of the edge, false otherwise 
+	 */
+	public void moveEdge( DefaultEdge edge, ApesGraphCell newCell, boolean isSource )
+	{
+	    if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemGraphAdater/"+getName()+" -> moveEdge( edge "+edge+" cell "+newCell+" isSource "+isSource+")");
+	    
+	    if(edge != null && contains(edge))
+	    {
+	        ApesGraphCell source = isSource? newCell : (ApesGraphCell)getParent(edge.getSource());
+            ApesGraphCell target = isSource?(ApesGraphCell)getParent(edge.getTarget()) : newCell;
+            ApesGraphCell oldSource = (ApesGraphCell)getParent(edge.getSource());
+    		ApesGraphCell oldTarget = (ApesGraphCell)getParent(edge.getTarget());
+    		
+    		boolean oldEdgeHaveNoteCell = oldSource instanceof NoteCell || oldTarget instanceof NoteCell;     
+   	        boolean newEdgeHaveNoteCell = source instanceof NoteCell || target instanceof NoteCell;
+
+   	        //Moves a link from two elements to two elements
+   	        if( !oldEdgeHaveNoteCell && !newEdgeHaveNoteCell)
+			{
+   	            Map move = ApesGraphConstants.createMap();
+   	            Link oldLink = new Link(oldSource.getUserObject(), oldTarget.getUserObject());
+   	            Link newLink = new Link(source.getUserObject(), target.getUserObject());
+   	            
+   	            move.put(oldLink, newLink);
+ 
+   	            ApesMediator.getInstance().move(mDiagram, move, null);
+			}   		
+   	        
+   	        //Moves a link from a note cell and an element to another note cell and an element
+			if(oldEdgeHaveNoteCell && newEdgeHaveNoteCell)
+			{
+			    Context.getInstance().getUndoManager().save();
+	   			
+			    super.remove(new Object[]{edge});
+	   			
+			    DefaultEdge newEdge = new NoteEdge();
+       		    newEdge.setSource(source.getChildAt(0));
+       		    newEdge.setTarget(target.getChildAt(0));
+       		    
+       		    ConnectionSet cs = new ConnectionSet();
+       		    cs.connect(edge, source.getChildAt(0), target.getChildAt(0));
+        		Map attr = ApesGraphConstants.createMap();
+        		attr.put(newEdge, newEdge.getAttributes());
+            			     		
+        		super.insert(new Object[]{newEdge}, attr, cs, null, null);
+			}
+			
+						
+	    }
+	}
+	
 	public void modelChanged(ApesModelEvent e)
 	{
 	    if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemGraphAdapter/"+getName()+") -> modelChanged");
@@ -524,7 +584,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			return null;
 		
 		if(Debug.enabled) Debug.print(Debug.ADAPTER, "\t(SpemGraphAdapter/"+getName()+") -> handleChange "+changed);
-
+		
 		Map change = new HashMap();
 		Object[] cells = getCellsByUserObject(changed.keySet().toArray(), extras, false);
 		for ( int i = 0; i < cells.length; i++ )
@@ -713,6 +773,17 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		public void visitSynchro(Synchro synchro) { mCreated = null; }
 		
 		public void visitTransition(ActivityDiagram.Transition transition) { mCreated = null; }
+		
+		protected Map getDefaultEdgeAttributes()
+		{
+		    Map map = ApesGraphConstants.createMap();
+		    int arrow = ApesGraphConstants.ARROW_CLASSIC;
+		    ApesGraphConstants.setLineEnd(map , arrow);
+		    ApesGraphConstants.setDashPattern(map, new float[] { 3, 3 });
+		    ApesGraphConstants.setEndFill(map, true);
+		    ApesGraphConstants.setEditable(map, false);
+		    return map;
+		}
 	}
 
 }

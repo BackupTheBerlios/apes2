@@ -26,6 +26,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
+import org.ipsquad.apes.Context;
+import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellHandle;
 import org.jgraph.graph.CellMapper;
@@ -37,7 +40,7 @@ import org.jgraph.graph.PortView;
 
 /**
  * 
- * @version $revision$
+ * @version $Revision: 1.13 $
  */
 public class ApesEdgeView extends EdgeView
 {
@@ -91,7 +94,7 @@ public class ApesEdgeView extends EdgeView
 				
 				if( mFirstPort != null && mPort != null )
 				{
-					//((SpemGraphAdapter)graph.getModel()).moveEdge( (DefaultEdge)getCell(),(ApesGraphCell)mPort.getParentView().getCell(), mFirstPort == getTarget() );
+					((SpemGraphAdapter)graph.getModel()).moveEdge( (DefaultEdge)getCell(),(ApesGraphCell)mPort.getParentView().getCell(), mFirstPort == getTarget() );
 				}
 				
 				graph.repaint();
@@ -99,12 +102,16 @@ public class ApesEdgeView extends EdgeView
 			else
 			{
 				graph.repaint();
+
 			}
 			
 			mFirstPort = mPort = null;
 			mStart = mCurrent = null;
 
+			//don't add an undoable change for the mouse release in a diagram
+			Context.getInstance().getUndoManager().save();
 			super.mouseReleased(e);
+			Context.getInstance().getUndoManager().restore();
 		}
 		
 		public void mouseDragged(MouseEvent e)

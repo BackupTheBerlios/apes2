@@ -35,7 +35,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * This adapter allows to display a flow diagram in a JGraph
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class FlowGraphAdapter extends SpemGraphAdapter
 {
@@ -55,6 +55,7 @@ public class FlowGraphAdapter extends SpemGraphAdapter
 				{
 					Link link = (Link)o;
 					DefaultEdge edge = new DefaultEdge();
+					edge.changeAttributes(getDefaultEdgeAttributes());
 					edge.setSource(getCellByUserObject(link.getSource(), null, false).getChildAt(0));
 					edge.setTarget(getCellByUserObject(link.getTarget(), null, false).getChildAt(0));
 					return edge;

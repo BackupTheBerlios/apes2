@@ -35,7 +35,10 @@ import javax.swing.tree.TreePath;
 import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.frontend.ApesMediator;
+import org.ipsquad.apes.ui.GraphFrame;
 import org.ipsquad.utils.ConfigManager;
+import org.jgraph.JGraph;
+import org.jgraph.graph.GraphModel;
 
 
 
@@ -45,7 +48,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class Context
 {
@@ -266,5 +269,21 @@ public class Context
 			return (Action)mActionMap.remove(key);
 		}
 		return null;
+	}
+	
+	public void graphNameChanged(GraphModel model, String newName)
+	{
+		JInternalFrame[] frames = Context.getInstance().getTopLevelFrame().getDesktop().getAllFrames();
+		for(int i=0; i<frames.length; i++)
+		{
+			if(frames[i] instanceof GraphFrame )
+			{
+				JGraph graph = ((GraphFrame)frames[i]).getGraph();
+				if(graph.getModel() == model)
+				{
+					frames[i].setTitle(newName);
+				}
+			}
+		}
 	}
 }

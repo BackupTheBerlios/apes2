@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -656,6 +656,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 			return areLinkableWorkDefinitionWorkProductState((WorkDefinition) source, (StateMachine) target);
 		}
 		
+		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
 

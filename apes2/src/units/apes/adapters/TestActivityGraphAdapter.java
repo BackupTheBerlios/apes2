@@ -477,7 +477,7 @@ public class TestActivityGraphAdapter extends TestCase
 		adapter1.remove(new Object[]{initialPointCell, firstSynchroCell, activityCell2, decisionCell, activityCell3, activityCell4, t1, t3, t7, t8});
 		
 		
-		//problem with an undoableEdit of DefaultGraphModel...
+		//FIXME : problem with an undoableEdit of DefaultGraphModel...
 		try
 		{
 			undoManager.undo(null);
