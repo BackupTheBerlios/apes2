@@ -21,10 +21,7 @@
 
 package org.ipsquad.apes.ui;
 
-import java.util.Map;
-
-import javax.swing.text.DefaultStyledDocument;
-
+import org.ipsquad.apes.adapters.ContextEdge;
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -35,12 +32,11 @@ import org.ipsquad.apes.ui.tools.EdgeTool;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
-import org.jgraph.graph.GraphConstants;
 
 /**
  * Work definition graph editing internal frame
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class WorkDefinitionGraphFrame extends GraphFrame {
 	
@@ -53,15 +49,7 @@ public class WorkDefinitionGraphFrame extends GraphFrame {
 	{
 		ToolPalette palette = super.createToolPalette();
 
-		DefaultEdge edge = new DefaultEdge();
-		Map map = GraphConstants.createMap();
-		int arrow = GraphConstants.ARROW_CLASSIC;
-		GraphConstants.setLineEnd(map , arrow);
-		GraphConstants.setDashPattern(map, new float[] { 3, 3 });
-		GraphConstants.setEndFill(map, true);
-		GraphConstants.setEditable(map, false);
-		//edge.setAttributes(map);
-		edge.changeAttributes(map);
+		DefaultEdge edge = new ContextEdge();
 		
 		palette.addToolButton(new EdgeTool(edge), "icons/PaletteLink.gif", "paletteLink");
 		//palette.addToolButton(new EdgeTool(edge), "icons/PaletteLink.gif", "paletteLink");
@@ -83,9 +71,8 @@ public class WorkDefinitionGraphFrame extends GraphFrame {
 		vertex = new ProcessRoleCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteRole.gif", "paletteRole");
 
-		vertex = new NoteCell(new DefaultStyledDocument());
+		vertex = new NoteCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
-		
 		
 		return palette;
 	}

@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.text.Document;
 import javax.swing.undo.UndoableEdit;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
@@ -75,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -293,7 +292,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				{	
 					Map map = (Map) entry.getValue();
 				
-					if( map.size() == 1 && GraphConstants.getValue(map) instanceof String 
+					if( GraphConstants.getValue(cell.getAttributes()) != null && map.size() == 1 && GraphConstants.getValue(map) instanceof String 
 							&& ! GraphConstants.getValue(map).equals(GraphConstants.getValue(cell.getAttributes()).toString()))
 					{
 						Map attr = new HashMap();
@@ -323,16 +322,16 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 
 			if(cells[i] instanceof ApesGraphCell)
 			{
-				ApesGraphCell vertex = (ApesGraphCell)cells[i];
+				ApesGraphCell vertex = (ApesGraphCell)cells[i];    
 				List children = vertex.getChildren();
 				addRelated(children.toArray(), related);
 			}
 			else if(cells[i] instanceof Port)
 			{
-				Iterator it = ((Port)cells[i]).edges();
+				Iterator it = ((Port)cells[i]).edges();     
 				while(it.hasNext())
 				{
-					Object o = it.next();
+					Object o = it.next();                    
 					
 					if(!related.contains(o) && o!=null)
 					{
@@ -340,7 +339,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 					}
 				}
 			}
-		}
+		}												
 	}
 
 	/**
@@ -434,22 +433,23 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	public void insertCell( DefaultGraphCell vertex, Map attr )
 	{
 		//System.out.println("Graph::tryInsertCell "+vertex.getUserObject());
-		if( vertex instanceof ApesGraphCell || vertex instanceof NoteCell )
+		if( vertex instanceof ApesGraphCell )
 		{	
 			ApesMediator.getInstance().update( 
 				ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, vertex.getUserObject(), attr ) );
 		}
-		/*else if( vertex instanceof NoteCell )
+		else if( vertex instanceof NoteCell )
 		{
-			NoteCell cell = new NoteCell(new DefaultStyledDocument());
-			
+			NoteCell cell = new NoteCell();
 			// Construct a Map from cells to Maps (for insert)
 			Hashtable attributes = new Hashtable();
 			// Associate the Vertex with its Attributes
-			attributes.put(cell, cell.getAttributes());
+			attributes.put(cell, vertex.getAttributes());
 			// Insert the Vertex and its Attributes
 			super.insert(new Object[]{cell}, attributes, null, null, null);
-		}*/
+			
+			
+		}
 	}
 	
 	/**
@@ -562,7 +562,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			
 			if( objectToAdd != null )
 			{
-				if( objectToAdd instanceof DefaultGraphCell )
+				if( objectToAdd instanceof ApesGraphCell )
 				{	
 					Map apply = null;
 					
@@ -759,28 +759,32 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			while (it.hasNext())
 			{
 				Map.Entry entry = (Map.Entry) it.next();
-				DefaultGraphCell cell = (DefaultGraphCell) entry.getKey();
-
-				Map clonedMap = GraphConstants.cloneMap(getAttributes(cell));
-				if(GraphConstants.getValue(clonedMap)==null)
+				
+				if(entry.getKey() instanceof DefaultGraphCell)
 				{
-					GraphConstants.setValue(clonedMap, "");
-				}
-				else
-				{
-					if( cell instanceof ApesGraphCell )
+					DefaultGraphCell cell = (DefaultGraphCell) entry.getKey();
+					Map clonedMap = GraphConstants.cloneMap(getAttributes(cell));
+					if(GraphConstants.getValue(clonedMap)==null)
 					{
-						GraphConstants.setValue(clonedMap, cell.getUserObject());
+						GraphConstants.setValue(clonedMap, "");
 					}
 					else
 					{
-						GraphConstants.setValue(clonedMap, GraphConstants.getValue(clonedMap).toString());
+						if( cell instanceof ApesGraphCell )
+						{
+							GraphConstants.setValue(clonedMap, cell.getUserObject());
+						}
+						else
+						{
+							GraphConstants.setValue(clonedMap, GraphConstants.getValue(clonedMap).toString());
+						}
 					}
+					undo.put(cell, clonedMap);
+	
+					Map map = (Map) entry.getValue();
+					cell.changeAttributes(map);
 				}
-				undo.put(cell, clonedMap);
-
-				Map map = (Map) entry.getValue();
-				cell.changeAttributes(map);
+			
 			}
 			return undo;
 		}
@@ -800,23 +804,9 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		 * @param o an object of the model to encapsulate in a cell
 		 * @return the coresponding cell
 		 */
-		public Object create( Object o )
-		{
-			if( o instanceof Document )
-			{
-				mCreated = new NoteCell((Document)o);
-			}
-			return mCreated;
-		}
+		public abstract Object create( Object o );
 		
-		public boolean shouldGoInGraph(Object o)
-		{
-			if( o instanceof Document )
-			{
-				return true;
-			}
-			return false;
-		}
+		public abstract boolean shouldGoInGraph(Object o);
 		
 		public void visitApesProcess(ApesProcess p){ mCreated = null; }
 		public void visitWorkProductRef(WorkProductRef ref){ mCreated = null; }

@@ -32,7 +32,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 /**
  * This adapter allows to display a flow diagram in a JGraph
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class FlowGraphAdapter extends SpemGraphAdapter
 {
@@ -48,7 +48,7 @@ public class FlowGraphAdapter extends SpemGraphAdapter
 					((Element)o).visit( this );
 					return mCreated;
 				}
-				return super.create(o);
+				return null;
 			}
 			
 			public boolean shouldGoInGraph(Object o)
@@ -56,8 +56,7 @@ public class FlowGraphAdapter extends SpemGraphAdapter
 				if( o instanceof Activity 
 						|| o instanceof ProcessRole
 						|| o instanceof WorkProduct
-						|| o instanceof StateMachine
-						|| super.shouldGoInGraph(o))
+						|| o instanceof StateMachine )
 				{
 					return true;
 				}

@@ -21,21 +21,16 @@
 
 package org.ipsquad.apes.model.extension;
 
-import java.util.Vector;
-
-import javax.swing.text.Document;
-
 import org.ipsquad.apes.model.spem.core.ModelElement;
 
 /**
  * Base class for diagrams
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class SpemDiagram extends ModelElement
 {
-	private Vector mNotes = new Vector();
-	
+
 	public SpemDiagram()
 	{
 
@@ -66,34 +61,5 @@ public abstract class SpemDiagram extends ModelElement
 
 	public abstract boolean existsLinkModelElements(ModelElement source, ModelElement target);
 
-	public boolean addNote( Document note )
-	{
-		if(!mNotes.contains(note))
-		{	
-			mNotes.add(note);
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean removeNote( Document note )
-	{
-		return mNotes.remove(note);
-	}
-	
-	public boolean canAddNote( Document note )
-	{
-		return mNotes.contains(note);
-	}
-	
-	public int notesCount()
-	{
-		return mNotes.size();
-	}
-	
-	public Document getNote(int i)
-	{
-		return (Document)mNotes.get(i);
-	}
-	
+
 }

@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.jgraph.JGraph;
 import org.jgraph.graph.BasicMarqueeHandler;
@@ -39,7 +40,7 @@ import org.jgraph.graph.GraphConstants;
  * This tool allows to create cells in the graph
  * It use the prototype design pattern to clone cells
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class CellTool extends Tool
 {
@@ -87,7 +88,7 @@ public class CellTool extends Tool
 
 		public void mousePressed(MouseEvent e)
 		{
-			fireToolStarted();
+			fireToolStarted(); 
 			
 			mGraph.clearSelection();
 			Point pt = mGraph.fromScreen(e.getPoint());
@@ -97,10 +98,9 @@ public class CellTool extends Tool
 			Map view = new HashMap(), 
 				attr = vertex.getAttributes();
 			
-			if( vertex instanceof ApesGraphCell)
+			if( vertex instanceof ApesGraphCell || vertex instanceof NoteCell)
 			{	
 				GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
-
 				view.put("Attributes", attr);
 			}
 			

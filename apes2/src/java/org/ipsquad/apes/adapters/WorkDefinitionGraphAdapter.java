@@ -30,7 +30,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {
@@ -46,15 +46,16 @@ public class WorkDefinitionGraphAdapter extends SpemGraphAdapter
 					((Element)o).visit( this );
 					return mCreated;
 				}
-				return super.create(o);
+				return null;
 			}
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				return ( o instanceof WorkProduct 
-						|| o instanceof ProcessRole 
-						|| o instanceof WorkDefinition
-						|| super.shouldGoInGraph(o));
+				if( o instanceof WorkProduct || o instanceof ProcessRole || o instanceof WorkDefinition)
+				{
+					return true;
+				}
+				return false;
 			}
 			
 			public void visitProduct(WorkProduct product) 

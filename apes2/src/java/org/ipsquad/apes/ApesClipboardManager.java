@@ -36,7 +36,7 @@ import org.jgraph.JGraph;
 
 /**
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesClipboardManager
 {
@@ -48,7 +48,7 @@ public class ApesClipboardManager
 	{
 		Project p = Context.getInstance().getProject();
 		JGraph graph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
-		Object [] listCells = graph.getSelectionCells() ; 
+		Object [] listCells = graph.getSelectionCells() ;
 		ApesTransferable transfer = new ApesTransferable(p, listCells) ;
 		
 		cb.setContents(transfer, null) ;

@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.text.Document;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
 
@@ -55,7 +54,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -595,13 +594,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			{
 				insertElementToModel( parent, (Element) element, attr, extraActions );				
 			}
-			else if( diagram != null && element instanceof Document )
-			{
-				if( diagram.addNote((Document)element))
-				{
-					extraActions.add(new InsertEvent(diagram, element, null, true, attr));
-				}
-			}
 		}
 		// add a transition beetween two elements in a diagram
 		if( source != null && target != null 
@@ -821,9 +813,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		{
 			for( int i = 0; i < sources.length; i++ )
 			{
-				if( removeLinksFromDiagram( diagram, (ModelElement) sources[i], (ModelElement) targets[i], events ) )
+				if( sources[i] instanceof ModelElement && targets[i] instanceof ModelElement &&
+					removeLinksFromDiagram( diagram, (ModelElement) sources[i], (ModelElement) targets[i], events ) )
 				{
-					removedSources.add(sources[i]);
+					removedSources.add(sources[i]); 
 					removedTargets.add(targets[i]);
 				}
 			}
@@ -1317,7 +1310,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		public String toString()
 		{
 			String result = "element "+mElement;
-			result += " parent "+ mParent+" diagram "+mDiagram;
+			result += " parent "+ mParent;
 			return result;
 		}
 	}

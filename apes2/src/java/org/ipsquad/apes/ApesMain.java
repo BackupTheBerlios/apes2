@@ -80,7 +80,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class ApesMain
 {
@@ -88,6 +88,14 @@ public class ApesMain
 	{
 		ResourceManager resManager = ResourceManager.getInstance();
 		Properties properties = new Properties();
+		properties.setProperty("DiagramsTitleforegroundred","0");
+		properties.setProperty("DiagramsTitleforegroundgreen","0");
+		properties.setProperty("DiagramsTitleforegroundblue","0");
+		properties.setProperty("DiagramsTitlebackgroundred","255");
+		properties.setProperty("DiagramsTitlebackgroundgreen","255");
+		properties.setProperty("DiagramsTitlebackgroundblue","255");
+		properties.setProperty("DiagramsTitlebold","false");
+		properties.setProperty("DiagramsTitleitalic","false");
 		properties.setProperty("ActivityTitleforegroundred","0");
 		properties.setProperty("ActivityTitleforegroundgreen","0");
 		properties.setProperty("ActivityTitleforegroundblue","0");

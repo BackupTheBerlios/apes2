@@ -37,7 +37,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This adapter allows to display an activity diagram in a JGraph
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ActivityGraphAdapter extends SpemGraphAdapter
 {
@@ -57,7 +57,7 @@ public class ActivityGraphAdapter extends SpemGraphAdapter
 					((ActivityDiagram.Transition)o).visit( this );
 					return mCreated;
 				}
-				return super.create(o);
+				return null;
 			}
 
 			public boolean shouldGoInGraph(Object o)
@@ -67,8 +67,7 @@ public class ActivityGraphAdapter extends SpemGraphAdapter
 					|| o instanceof ActivityDiagram.FinalPoint
 					|| o instanceof ActivityDiagram.InitialPoint
 					|| o instanceof ActivityDiagram.Synchro
-					|| o instanceof ActivityDiagram.Transition
-					|| super.shouldGoInGraph(o));
+					|| o instanceof ActivityDiagram.Transition);
 			}
 
 			public void visitProduct(WorkProduct product) { mCreated = null; }

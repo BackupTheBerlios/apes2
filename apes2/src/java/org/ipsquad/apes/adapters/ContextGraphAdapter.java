@@ -37,7 +37,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a context diagram in a JGraph
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -54,14 +54,12 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 					((Element)o).visit( this );
 					return mCreated;
 				}
-				return super.create(o);
+				return null;
 			}
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				return ( o instanceof WorkProduct 
-						|| o instanceof ProcessComponent 
-						|| super.shouldGoInGraph(o));
+				return ( o instanceof WorkProduct || o instanceof ProcessComponent );
 			}	
 
 			public void visitProcessComponent(ProcessComponent component) 

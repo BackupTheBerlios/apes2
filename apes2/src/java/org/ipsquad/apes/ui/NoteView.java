@@ -41,9 +41,7 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.text.Document;
 
-import org.ipsquad.apes.adapters.NoteCell;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellView;
@@ -56,7 +54,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
  
 class NoteView extends VertexView 
@@ -81,8 +79,10 @@ class NoteView extends VertexView
 
 		class NoteEditor extends ApesGraphCellEditor 
 		{
-			class RealCellEditor extends AbstractCellEditor implements GraphCellEditor 
+			
+			class RealCellEditor extends AbstractCellEditor implements GraphCellEditor
 			{
+				
 				JTextArea editorComponent = new JTextArea();
 				public RealCellEditor() 
 				{
@@ -105,19 +105,8 @@ class NoteView extends VertexView
 						Object value,
 						boolean isSelected) 
 				{
-					if(value instanceof NoteCell && ((NoteCell)value).getUserObject() instanceof Document)
-					{	
-						try
-						{
-							Document doc = (Document)((NoteCell)value).getUserObject();
-							editorComponent.setText(doc.getText(0,doc.getLength()));
-							editorComponent.selectAll();
-						}
-						catch(Throwable t)
-						{
-							t.printStackTrace();
-						}
-					}
+					editorComponent.setText(value.toString());
+					editorComponent.selectAll();
 					return editorComponent;
 				}
 
@@ -142,12 +131,15 @@ class NoteView extends VertexView
 					editorComponent.requestFocus();
 					return super.shouldSelectCell(event);
 				}
+				
 			}
+
 
 			public NoteEditor() 
 			{
 				super((GraphCell)cell);
 			}
+			
 			/**
 			 * Overriding this in order to set the size of an editor to that of an edited view.
 			 */
@@ -158,7 +150,7 @@ class NoteView extends VertexView
 			{
 
 				Component component = super.getGraphCellEditorComponent(graph, cell, isSelected);
-
+				
 				//set the size of an editor to that of a view
 				CellView view = graph.getGraphLayoutCache().getMapping(cell, false);
 				editingComponent.setBounds(view.getBounds());
@@ -218,24 +210,7 @@ class NoteView extends VertexView
 					boolean focus,
 					boolean preview) 
 			{
-				if( view.getCell() instanceof NoteCell )
-				{
-					NoteCell nc = (NoteCell)view.getCell();
-					System.out.println(nc.getUserObject().getClass());
-					if( nc.getUserObject() instanceof Document )
-					{	
-						Document doc = (Document)nc.getUserObject(); 
-						try
-						{
-							setText(doc.getText(0,doc.getLength()));
-						}
-						catch(Throwable t)
-						{
-							t.printStackTrace();
-						}
-					}
-				}
-				
+				setText(view.getCell().toString());
 				Map attributes = view.getAllAttributes(); 
 				installAttributes(graph, attributes);
 				return this;

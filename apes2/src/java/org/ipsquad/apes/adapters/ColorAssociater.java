@@ -141,22 +141,37 @@ public class ColorAssociater implements ModelVisitor
 
 	public void visitFlowDiagram(FlowDiagram diagram)
 	{
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.DIAGRAMS_KEY);
 	}
 
 	public void visitResponsabilityDiagram(ResponsabilityDiagram diagram)
 	{
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.DIAGRAMS_KEY);
 	}
 
 	public void visitContextDiagram(ContextDiagram diagram)
 	{
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.DIAGRAMS_KEY);
 	}
 
 	public void visitActivityDiagram(ActivityDiagram diagram)
 	{
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.DIAGRAMS_KEY);
 	}
 	
 	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
 	{
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.DIAGRAMS_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.DIAGRAMS_KEY);
 	}
 
 	public void visitStateMachine(StateMachine sm)

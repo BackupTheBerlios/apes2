@@ -22,9 +22,6 @@
 
 package org.ipsquad.apes.ui;
 
-import java.util.Map;
-
-import javax.swing.text.DefaultStyledDocument;
 
 import org.ipsquad.apes.adapters.ActivityCell;
 import org.ipsquad.apes.adapters.DecisionCell;
@@ -39,12 +36,11 @@ import org.ipsquad.apes.ui.tools.EdgeTool;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
-import org.jgraph.graph.GraphConstants;
 
 /**
  * Activity graph editing internal frame
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ActivityGraphFrame extends GraphFrame
 {
@@ -58,12 +54,6 @@ public class ActivityGraphFrame extends GraphFrame
 		ToolPalette palette = super.createToolPalette();
 
 		DefaultEdge edge = new TransitionEdge();
-		Map map = GraphConstants.createMap();
-		int arrow = GraphConstants.ARROW_CLASSIC;
-		GraphConstants.setLineEnd(map , arrow);
-		GraphConstants.setEndFill(map, true);
-		//edge.setAttributes(map);
-		edge.changeAttributes(map);
 		
 		palette.addToolButton(new EdgeTool(edge), "icons/PaletteTransition.gif", "paletteTransition");
 		//palette.addToolButton(new EdgeTool(getDefaultEdge()), "icons/PaletteTransition.gif", "paletteTransition");
@@ -86,7 +76,7 @@ public class ActivityGraphFrame extends GraphFrame
 		vertex = new SynchroCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteSynchro.gif","paletteSynchro");
 		
-		vertex = new NoteCell(new DefaultStyledDocument());
+		vertex = new NoteCell();
 		palette.addToolButton(new CellTool(vertex), "icons/PaletteNotes.gif","paletteNote");
 		
 		return palette;

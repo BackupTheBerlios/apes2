@@ -22,15 +22,12 @@
 package org.ipsquad.apes.adapters;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Rectangle;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Document;
 
-import org.ipsquad.apes.Context;
 import org.ipsquad.apes.ui.ColorFontPanel;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultPort;
@@ -38,39 +35,17 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class NoteCell extends DefaultGraphCell
 {
-	public Map changeAttributes(Map change)
+	public NoteCell()
 	{
-		Document doc = (Document)userObject;
-		
-		Map undo = GraphConstants.applyMap(change,attributes);
-		
-		Object value = GraphConstants.getValue(change); 
-		
-		if( value != null && !value.toString().equals(doc.toString()) )
-		{
-			
-			System.out.println("cahngeText");
-			try{
-			doc.remove(0,doc.getLength());
-			doc.insertString(0,value.toString(),null);
-			userObject=doc;
-			}catch(Throwable t){t.printStackTrace();}
-		}
-		
-		return undo;
-	}
-
-	public NoteCell() 
-	{
-		super(new DefaultStyledDocument());
+		super();
 		init();
 	}
 	
-	public NoteCell(Document userObject)
+	public NoteCell(Object userObject) 
 	{
 		super(userObject);
 		init();
@@ -79,14 +54,12 @@ public class NoteCell extends DefaultGraphCell
 	protected void init()
 	{
 		add(new DefaultPort());
-		((Document)userObject).addUndoableEditListener(Context.getInstance().getUndoManager());
 		// Create a Map that holds the attributes for the Vertex
 		Map map = GraphConstants.createMap();
-		// Add a Bounds Attribute to the Map
-		GraphConstants.setBounds(map, new Rectangle(50, 50, 130, 32));
 		// Even though it is opaque, set it to transparent so that renderer's super.paint() won't paint background.
 		GraphConstants.setOpaque(map, false);
 		//resizable cells.
+		GraphConstants.setSize(map, new Dimension(130,50));
 		GraphConstants.setSizeable(map, true);
 		//outline it with a border.
 		GraphConstants.setBorder(map, BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -99,24 +72,7 @@ public class NoteCell extends DefaultGraphCell
 	public Object clone()
 	{
 		NoteCell c = (NoteCell) super.clone();
-		c.userObject = new DefaultStyledDocument();
 		init();
 		return c;
-	}
-	
-	public String toString()
-	{
-		if( userObject instanceof Document )
-		{
-			try
-			{
-				return ((Document)userObject).getText(0,((Document)userObject).getLength());
-			}
-			catch(Throwable t)
-			{
-				t.printStackTrace();
-			}
-		}
-		return "";
 	}
 }

@@ -30,11 +30,13 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.jgraph.JGraph;
 import org.jgraph.graph.BasicMarqueeHandler;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
+import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.PortView;
 
@@ -42,7 +44,7 @@ import org.jgraph.graph.PortView;
  * This tool allows to create edges in the graph
  * It use the prototype design pattern to clone edges
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class EdgeTool extends Tool
 {
@@ -123,7 +125,6 @@ public class EdgeTool extends Tool
 				if( mFirstPort.getParentView() != null && mPort.getParentView() != null )
 				{
 					DefaultEdge edge = (DefaultEdge) mPrototype.clone();
-					
 					Map view = new HashMap();
 					view.put( "firstPort",mFirstPort.getCell());
 					view.put( "endPort",mPort.getCell());
@@ -132,7 +133,21 @@ public class EdgeTool extends Tool
 
 					view.put("Attributes", attr);
 					
-					((SpemGraphAdapter)mGraph.getModel()).insertEdge( (DefaultGraphCell)mFirstPort.getParentView().getCell(), (DefaultGraphCell)mPort.getParentView().getCell(), view);
+					if (mPort.getParentView().getCell() instanceof NoteCell || mFirstPort.getParentView().getCell() instanceof NoteCell)
+					{	
+						Map map = GraphConstants.createMap();
+						GraphConstants.setDashPattern(map, new float[] { 3, 3 });
+						GraphConstants.setEditable(map, false);
+						GraphConstants.setLineEnd(map,GraphConstants.ARROW_NONE);
+						edge.changeAttributes(map);
+						edge.setSource(mFirstPort.getCell());
+						edge.setTarget(mPort.getCell());
+						((DefaultGraphModel)mGraph.getModel()).insert(new Object[]{edge},attr,null,null,null);
+					}
+					else
+					{
+						((SpemGraphAdapter)mGraph.getModel()).insertEdge( (DefaultGraphCell)mFirstPort.getParentView().getCell(), (DefaultGraphCell)mPort.getParentView().getCell(), view);
+					}
 				}
 				
 				e.consume();

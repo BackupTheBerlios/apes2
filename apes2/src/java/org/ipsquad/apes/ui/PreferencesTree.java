@@ -38,6 +38,8 @@ public class PreferencesTree extends JTree
 		DefaultMutableTreeNode appearanceTree = new DefaultMutableTreeNode(new PreferencesTreeItem
 				(DescriptionPanel.APPEARANCE_KEY,resMan.getString(DescriptionPanel.APPEARANCE_KEY),PreferencesTreeItem.DESC_PANEL));
 			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
+				(ColorFontPanel.DIAGRAMS_KEY,resMan.getString(ColorFontPanel.DIAGRAMS_KEY),PreferencesTreeItem.COLOR_PANEL)));
+			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 				(ColorFontPanel.ACTIVITY_KEY,resMan.getString(ColorFontPanel.ACTIVITY_KEY),PreferencesTreeItem.COLOR_PANEL)));
 			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 				(ColorFontPanel.ROLE_KEY,resMan.getString(ColorFontPanel.ROLE_KEY),PreferencesTreeItem.COLOR_PANEL)));
