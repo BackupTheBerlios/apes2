@@ -124,7 +124,7 @@ public class ArbreGeneration
 		mapCompteur.put("nbProduits", new Integer(0));
 		mapCompteur.put("nbActivites", new Integer(0));
 		mapCompteur.put("nbDefinitionsTravail", new Integer(0));
-		mapCompteur.put("nbDiagrammes", new Integer(1));
+		mapCompteur.put("nbDiagrammes", new Integer(0));
 		mapCompteur.put("nbGuides", new Integer(0));
 		mapCompteur.put("nbPaquetagesPresentation", new Integer(0));
 		mapCompteur.put("nbPaquetages", new Integer(0));
@@ -134,6 +134,9 @@ public class ArbreGeneration
 		mapRecap.put("roles", new Vector());
 		mapRecap.put("produits", new Vector());
 		mapRecap.put("activites", new Vector());
+		
+		// initialiser les ID
+		IDGenere = 1;
 	}
 
 	/**

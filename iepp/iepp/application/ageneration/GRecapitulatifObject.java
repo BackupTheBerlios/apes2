@@ -107,7 +107,7 @@ public class GRecapitulatifObject extends GElement
 			IdObjetModele id = elem.getElementPresentation().getElementModele();
 			if (id != null && id.getChemin() != null)
 			{
-				fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+				fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + elem.getNomRacine() + " :: " + id.toString() + "</a></div>\n");
 			}
 		}
 		

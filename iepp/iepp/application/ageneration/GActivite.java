@@ -46,6 +46,24 @@ public class GActivite extends GElementModele
 		super(elem,writer);
 	}
 
+	/**
+	 * Renvoie le nom de la définition de travail dans lequel on a l'activité courante
+	 */
+	public String getNomRacine()
+	{
+		ArbreGeneration aux = this.arbre;
+		// on remonte jusqu'à un composant ou un paquetage de présentation
+		while (!aux.isRacine() && (! (aux.getElement() instanceof GDefinitionTravail)))
+		{
+			aux = aux.getArbreParent();
+		}
+		if (aux.isRacine())
+		{
+			return "";
+		}
+		return ( aux.getElement().getElementPresentation().getNomPresentation());
+	}
+	
 
 	/**
 	 * Méthode permettant de créer le contenu de la page associée à l'activité courante
