@@ -392,16 +392,6 @@ public class IdObjetModele implements Serializable, Cloneable
 		return null;
 	}
 	
-	public IdObjetModele getDiagrammeActivite()
-	{
-		if (this.estDefinitionTravail())
-		{
-			return (((ComposantProcessus)this.getRef()).getDiagrammeActivite(this.numRang, this.numType));
-		}
-		return null;
-	}
-
-	
 	public Vector getListeDiagrammeResponsabilite()
 	{
 		if (this.estComposant())

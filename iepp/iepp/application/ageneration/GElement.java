@@ -542,7 +542,7 @@ public class GElement
 		}
 		else
 		{
-			System.out.println("BOUHOU LE CHEMIN : " + id);
+			//System.out.println("BOUHOU LE CHEMIN : " + id);
 		}
 		//System.out.println("RES " + id.getChemin() + " : " + id);
 		ArbreGeneration aux = this.arbre;

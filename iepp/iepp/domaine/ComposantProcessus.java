@@ -1400,12 +1400,19 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 	/**
 	 * @return
 	 */
-	public IdObjetModele getDiagrammeActivite(int numrang, int numtype)
+	public IdObjetModele getDiagrammeActivite(int ID_Apes)
 	{
-		ApesWorkDefinition apw = (ApesWorkDefinition)this.listeDefinition.elementAt(numrang);
-		// récupérer le diagramme
-		Object o = apw.getActivityDiagram();
-		return this.rechercherDiagramme(o);
+		for (int i = 0; i < this.listeDefinition.size(); i++)
+		{
+			ApesWorkDefinition apw = (ApesWorkDefinition)this.listeDefinition.elementAt(i);
+			if (apw.getID() == ID_Apes)
+			{
+				//récupérer le diagramme
+				Object o = apw.getActivityDiagram();
+				return this.rechercherDiagramme(o);
+			}
+		}
+		return null;
 	}
 	
 	public IdObjetModele getDiagrammeFlotProduit(int ID_Apes)

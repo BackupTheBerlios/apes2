@@ -319,7 +319,8 @@ public class OSelection extends Outil
       	if (this.handleClique != null)
       	{
       		this.state = IDLE_STATE;
-          	if (this.handleClique instanceof HandleElement)
+          	
+      		if (this.handleClique instanceof HandleElement)
           	{
             	HandleElement h = (HandleElement) this.handleClique;
            		CRedimensionnerElement c = new CRedimensionnerElement((FElement) h.getFigure(), h.newFigureX,  h.newFigureY,  h.newFigureLargeur,  h.newFigureHauteur);

@@ -20,6 +20,7 @@
 package iepp.application.ageneration;
 
 import iepp.Application;
+import iepp.domaine.ComposantProcessus;
 import iepp.domaine.ElementPresentation;
 import iepp.domaine.IdObjetModele;
 
@@ -72,6 +73,9 @@ public class GDefinitionTravail extends GElementModele
 			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 		
+		fd.write("<br>" + getLienVersDiagActivite() + "<br>");
+		fd.write( getLienVersDiagFlot() + "<br>");
+		
 		this.ajouterDescription(fd);
 		this.ajouterContenu(fd);
 		this.ajouterMail(fd);
@@ -80,7 +84,43 @@ public class GDefinitionTravail extends GElementModele
 		fd.close();
 	}
 	
-
+	public String getLienVersDiagActivite()
+	{
+		ElementPresentation elem = null;
+		
+		// récupérer l'id Apes qui va nous permettre de récupérer le diagramme
+		int ID_Apes = this.modele.getID();
+		ComposantProcessus cp = (ComposantProcessus)this.modele.getRef();
+		IdObjetModele id = cp.getDiagrammeActivite(ID_Apes);
+		if (id != null)
+		{
+			 ID_Apes = id.getID();
+			 elem = cp.getElementPresentation(ID_Apes);
+			 return "<a href=\""+ this.getLienChemin(id)+ "\" target=\"_new\" > " +
+			  	Application.getApplication().getTraduction("WEB_LINK_DIAG_ACTIVITE") + " </a>\n";
+		}
+		return "";
+	}
+	
+	public String getLienVersDiagFlot()
+	{
+		ElementPresentation elem = null;
+		
+		// récupérer l'id Apes qui va nous permettre de récupérer le diagramme
+		int ID_Apes = this.modele.getID();
+		ComposantProcessus cp = (ComposantProcessus)this.modele.getRef();
+		IdObjetModele id = cp.getDiagrammeFlotProduit(ID_Apes);
+		if (id != null)
+		{
+			 ID_Apes = id.getID();
+			 elem = cp.getElementPresentation(ID_Apes);
+			 return "<a href=\""+ this.getLienChemin(id)+ "\" target=\"_new\" > " +
+			  	Application.getApplication().getTraduction("WEB_LINK_DIAG_FLOT_PROD") + " </a>\n";
+		}
+		return "";
+	}
+	
+	
 	/**
 	 * 
 	 */

@@ -316,6 +316,9 @@ WEB_RECAP=Récapitulatif
 WEB_ROLES_RECAP=Rôles
 WEB_PRODUITS_RECAP=Produits
 WEB_ACTIVITES_RECAP=Activités
+WEB_LINK_DIAG_ACTIVITE=Voir le diagramme d'activité
+WEB_LINK_DIAG_FLOT_PROD=Voir le diagramme de flot
+
 
 #Boite de propriétés
 couleur_fond_diagramme=Couleur de fond du diagramme

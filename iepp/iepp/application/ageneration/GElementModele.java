@@ -46,32 +46,6 @@ public class GElementModele extends GElement
 		super(elem, pwFicTree);
 		this.modele = this.element.getElementModele();
 	}
-
-	/**
-	 * Retourne le lien vers un id donné
-	 */
-	public String getLienChemin(IdObjetModele id)
-	{
-		String res = id.getChemin();
-		if (res != null && res.length()> 2)
-		{
-			res = res.substring(2);
-		}
-		else
-		{
-			System.out.println("BOUHOU LE CHEMIN : " + id);
-		}
-		//System.out.println("RES " + id.getChemin() + " : " + id);
-		ArbreGeneration aux = this.arbre;
-		// on remonte jusqu'à la racine
-		while (!aux.isRacine())
-		{
-			res = "../" + res;
-			aux = aux.getArbreParent();
-		}
-		//System.out.println("REtour : " + res);
-		return res;
-	}
 	
 	/**
 	 * Méthode permettant de traiter les éléments de présentation liés à un élément de modèle

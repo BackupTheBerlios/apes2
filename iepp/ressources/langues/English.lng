@@ -313,6 +313,8 @@ WEB_RECAP=Summary
 WEB_ROLES_RECAP=Roles
 WEB_PRODUITS_RECAP=Products
 WEB_ACTIVITES_RECAP=Activities
+WEB_LINK_DIAG_ACTIVITE=Display the activity diagram
+WEB_LINK_DIAG_FLOT_PROD=Display the flow diagram
 
 #Boite de propriétés
 couleur_fond_diagramme=Diagram's background color
