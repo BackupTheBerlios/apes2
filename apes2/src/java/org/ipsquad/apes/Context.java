@@ -48,7 +48,7 @@ import org.jgraph.graph.GraphModel;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class Context
 {
@@ -69,6 +69,7 @@ public class Context
 	};
 	
 	private Context() {};
+
 	/**
 	 * Allows to retrieve the Context instance
 	 * @return the unique instance of Context
