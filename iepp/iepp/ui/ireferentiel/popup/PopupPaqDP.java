@@ -58,11 +58,14 @@ public class PopupPaqDP extends JPopupMenu implements ActionListener
 		// d'enregistrement dans le référentiel
 		if ((new CNouveauProjet()).executer())
 	    {
-	        new CFermerProjet().executer() ;
 	        Application.getApplication().getFenetrePrincipale().setTitle(
 					Application.getApplication().getConfigPropriete("titre")
 					+ " " + Application.getApplication().getReferentiel().getNomReferentiel());
 	    }
+		else
+		{
+		    new CFermerProjet().executer() ;
+		}
 	}
 
 }
