@@ -537,7 +537,10 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 			 {
 					// création d'un nouveau projet
 					 CNouveauProjet c = new CNouveauProjet() ;
-					 c.executer() ;
+					 if (c.executer()== false)
+				     {
+				     	new CFermerProjet().executer();
+				     }
 					 this.majEtat();
 			 }
 			 else if ((source == this.ouvrir_proc )||(source == this.bouvrir_proc))

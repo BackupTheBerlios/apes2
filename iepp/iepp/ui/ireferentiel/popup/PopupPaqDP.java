@@ -19,6 +19,7 @@
 package iepp.ui.ireferentiel.popup;
 
 import iepp.Application;
+import iepp.application.CFermerProjet;
 import iepp.application.CNouveauProjet;
 
 import javax.swing.* ;
@@ -55,7 +56,10 @@ public class PopupPaqDP extends JPopupMenu implements ActionListener
 	{
 		// Si on clique sur l'élément "ajouter un composant", lancer la commande
 		// d'enregistrement dans le référentiel
-		(new CNouveauProjet()).executer() ;
+		if ((new CNouveauProjet()).executer())
+	    {
+	        new CFermerProjet().executer() ;
+	    }
 	}
 
 }

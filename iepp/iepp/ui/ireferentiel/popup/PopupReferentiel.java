@@ -19,6 +19,7 @@
 package iepp.ui.ireferentiel.popup;
 
 import iepp.Application;
+import iepp.application.CFermerProjet;
 import iepp.application.CNouveauProjet;
 import iepp.application.areferentiel.CAjouterComposantRef;
 import iepp.application.areferentiel.CAjouterPaqPresRef;
@@ -67,7 +68,12 @@ public class PopupReferentiel extends JPopupMenu implements ActionListener
 			(new CAjouterComposantRef()).executer() ;
 		// Créer une nouvelle DP
 		else if (source == this.creerDP)
-			(new CNouveauProjet()).executer() ;
+		{
+		    if(! new CNouveauProjet().executer())
+		    {
+		        new CFermerProjet().executer() ;
+		    }
+		}  
 		else if (source == this.ajouterPresentationRef)
 			(new CAjouterPaqPresRef()).executer() ;
 	}

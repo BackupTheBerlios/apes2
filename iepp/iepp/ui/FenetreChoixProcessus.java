@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import iepp.*;
+import iepp.application.CFermerProjet;
 import iepp.application.CNouveauProjet;
 import iepp.application.COuvrirDP;
 
@@ -183,6 +184,10 @@ public class FenetreChoixProcessus extends JDialog
 				if (c.executer())
 				{
 					this.dispose();
+				}
+				else
+				{
+				     new CFermerProjet().executer();
 				}
 				Application.getApplication().getFenetrePrincipale().majEtat();
 			}

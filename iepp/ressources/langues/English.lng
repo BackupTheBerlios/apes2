@@ -99,6 +99,7 @@ ERR_AucuneDP=No process has been recorded in this repository.
 ERR_DpInexistante=The specified process does not exist !
 ERR_Composant_Deja=This component is already in the repository
 ERR_Presentation_Deja=This package is already in the repository
+ERR_Processus_Deja=This process is already in the repository
 
 # Verification titles
 TITREVERIF_NOM_LIBRE=Component name unused

@@ -101,6 +101,7 @@ ERR_DpInexistante=Il n'existe aucune définition de processus de ce nom !
 ERR_Fic_Ref_Corromp=Ce fichier référentiel est corrompu.
 ERR_Composant_Deja=Ce composant est deja dans le referentiel.
 ERR_Presentation_Deja=Cette presentation est deja dans le referentiel.
+ERR_Processus_Deja=Ce processus est deja dans le referentiel.
 
 # Titres vérification
 TITREVERIF_NOM_LIBRE=Nom de composant inutilisé

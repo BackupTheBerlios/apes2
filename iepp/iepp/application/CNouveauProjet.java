@@ -85,6 +85,13 @@ public class CNouveauProjet extends CommandeNonAnnulable
 			DefinitionProcessus dp = Application.getApplication().getProjet().getDefProc() ;
 			String nomDP = dp.getNomDefProc() ;
 			long idDP = Application.getApplication().getReferentiel().ajouterElement (nomDP, ElementReferentiel.DP) ;
+			if (idDP == -3)
+			{
+				JOptionPane.showMessageDialog ( Application.getApplication().getFenetrePrincipale(),
+					Application.getApplication().getTraduction("ERR_Processus_Deja"),
+					Application.getApplication().getTraduction("ERR"),
+					JOptionPane.ERROR_MESSAGE );
+			}
 			if (idDP < 0)
 				return false ;
 			// Ajouter la référence de la DP au référentiel (association avec l'id)
