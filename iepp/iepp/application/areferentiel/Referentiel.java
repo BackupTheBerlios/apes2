@@ -126,15 +126,17 @@ public class Referentiel extends Observable implements TreeModel
 	/**
 	 * Crée le référentiel, à partir du fichier référentiel
 	 * @param nom : nom du référentiel
+	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException
 	 */
-	public Referentiel (String nom) throws NumberFormatException
+	public Referentiel (String nom) throws Exception
 	{
 		File fic = new File(Application.getApplication().getConfigPropriete("chemin_referentiel") + File.separator + nom);
 		
 		this.cheminRepository = ToolKit.getAbsoluteDirectory(Application.getApplication().getConfigPropriete("chemin_referentiel"));
 		
 		if (fic.exists())
-		{ this.chargerReferentiel(nom);}
+		{}
 		else
 		{ this.creerReferentiel(nom); }
 	} // Fin constructeur Referentiel (String chemin)
@@ -143,12 +145,13 @@ public class Referentiel extends Observable implements TreeModel
 
 	/**
 	 * @param cheminRef
+	 * @throws FileNotFoundException
 	 */
-	public Referentiel(File cheminRef) 
+	public Referentiel(File cheminRef) throws Exception 
 	{
 		this.cheminRepository = cheminRef.getParentFile().getParentFile().toString();
 		this.cheminRepository = ToolKit.getAbsoluteDirectory(this.cheminRepository);
-		this.chargerReferentiel(cheminRef.getName().substring(0, cheminRef.getName().lastIndexOf(".ref")));
+		this.chargerReferentiel(cheminRef.getName().substring(0, cheminRef.getName().lastIndexOf(".ref")), cheminRef.getParentFile().getName());
 	}
 
 
@@ -156,8 +159,9 @@ public class Referentiel extends Observable implements TreeModel
 	/**
 	 * Initialise le référentiel et crée un nouveau répertoire contenant le référentiel cité  
 	 * @param nom : nom du référentiel à créer
+	 * @throws FileNotFoundException
 	 */
-	public void creerReferentiel(String nom) 
+	public void creerReferentiel(String nom) throws Exception 
 	{
 		// Affectation du nom à l'objet
 		nomReferentiel = nom;
@@ -201,7 +205,8 @@ public class Referentiel extends Observable implements TreeModel
 		}
 		
 		// Après avoir créé le référentiel, on le charge
-		this.chargerReferentiel(nom);
+		this.chargerReferentiel(nom, nom);
+	
 		
 	} // Fin méthode creerReferentiel
 
@@ -209,8 +214,9 @@ public class Referentiel extends Observable implements TreeModel
 	/**
 	 * Charge le référentiel à partir du fichier référentiel
 	 * @param nom : nom du référentiel
+	 * @throws Exception
 	 */
-	public void chargerReferentiel (String nom) throws NumberFormatException
+	public void chargerReferentiel (String nom, String nomInter) throws Exception
 	{
 		RandomAccessFile raf;
 		String ligne = null;
@@ -221,7 +227,7 @@ public class Referentiel extends Observable implements TreeModel
 		nomReferentiel = nom;
 
 		// Initialisation du chemin du référentiel
-		cheminReferentiel = this.cheminRepository + File.separator + nom;
+		cheminReferentiel = this.cheminRepository + File.separator + nomInter;
 		
 		// Création de la racine de l'arbre (racine) et des 2 noeuds principaux (composants et dp)
 		racine = new ElementReferentiel(nomReferentiel, 0, cheminReferentiel, ElementReferentiel.REFERENTIEL);
@@ -238,93 +244,67 @@ public class Referentiel extends Observable implements TreeModel
 		racine.add(present);
 		
 		// Lecture du fichier référentiel	
-		try
-		{
-			raf = new RandomAccessFile(cheminReferentiel + File.separator + nomReferentiel + ".ref", "rw");
-			
-			try
-			{
-				ligne = raf.readLine();
-				
-				// Récupération du dernier ID attribué
-				lastId = Long.parseLong(ligne.substring(ligne.lastIndexOf(">") + 2).trim());
+		raf = new RandomAccessFile(cheminReferentiel + File.separator + nomReferentiel + ".ref", "rw");
 		
-				ligne = raf.readLine();
+		ligne = raf.readLine();
 				
-				while (ligne != null)
-				{
-					if (!ligne.startsWith("DP:")) // Si ce n'est pas un DP, c'est soit un composant soit une presentation
-					{ 
-						if (!ligne.startsWith("PP")) // Si ce n'est pas une presentation c'est forcément un composant
-						{ 
-							try
-							{
-								// dans le fichier ce sont des liens relatifs au référentiel pour pouvoir le déplacer
-								ligne = ToolKit.getConcatePath(this.cheminReferentiel, ligne.substring(3)) ;
-								
-								// Création du chargeur permettant de récupérer le nom de l'élément
-								chargeur = new ChargeurComposant(ligne);
+		// Récupération du dernier ID attribué
+		lastId = Long.parseLong(ligne.substring(ligne.lastIndexOf(">") + 2).trim());
+	
+		ligne = raf.readLine();
 			
-								//System.out.println("LIGNE : " + ligne);
-								// Chargement du nom de l'élément à partir du fichier .pre pour les composants non vides
-								nomElt = chargeur.chercherNomComposant(ligne);
-								
-								// si c'est un composant vide
-								if ( nomElt == null )
-								{
-									// Le nom du fichier du composant vide est celui du composant
-									nomElt = this.extraireNomFichier(ligne);
-								}
-								
-								this.getNoeudComposants().add(new ElementReferentiel(nomElt, this.extraireIdChemin(ligne), ligne, ElementReferentiel.COMPOSANT));
-							
-							}
-							catch(ParserConfigurationException e)
-							{
-								e.printStackTrace();
-								ErrorManager.getInstance().displayError(e.getMessage()); 
-							}
-							catch(SAXException e)
-							{
-								e.printStackTrace();
-								ErrorManager.getInstance().displayError(e.getMessage()); 
-							}
-							catch(IOException e)
-							{
-								e.printStackTrace();
-								ErrorManager.getInstance().displayError(e.getMessage()); 
-							}
-						}
-						else // Cas de la présentation
-						{ 
-							ligne = ToolKit.getConcatePath(this.cheminReferentiel, ligne.substring(3)) ;
-							this.getNoeudPresentation().add(new ElementReferentiel(this.extraireNomFichier(ligne), this.extraireIdChemin(ligne), ligne, ElementReferentiel.PRESENTATION)); 
-						}
-					} 						
-					else
-					{ 
-						ligne = ToolKit.getConcatePath(this.cheminReferentiel, ligne.substring(3)) ;
-						this.getNoeudDp().add(new ElementReferentiel(this.extraireNomFichier(ligne), this.extraireIdChemin(ligne), ligne, ElementReferentiel.DP)); 
+		while (ligne != null)
+		{
+			if (!ligne.startsWith("DP:")) // Si ce n'est pas un DP, c'est soit un composant soit une presentation
+			{ 
+				if (!ligne.startsWith("PP:")) // Si ce n'est pas une presentation c'est forcément un composant
+				{ 
+					
+					// dans le fichier ce sont des liens relatifs au référentiel pour pouvoir le déplacer
+					ligne = ToolKit.getConcatePath(this.cheminReferentiel, ligne.substring(3)) ;
+					
+					// Création du chargeur permettant de récupérer le nom de l'élément
+					chargeur = new ChargeurComposant(ligne);
+
+					//System.out.println("LIGNE : " + ligne);
+					// Chargement du nom de l'élément à partir du fichier .pre pour les composants non vides
+					nomElt = chargeur.chercherNomComposant(ligne);
+					
+					// si c'est un composant vide
+					if ( nomElt == null )
+					{
+						// Le nom du fichier du composant vide est celui du composant
+						nomElt = this.extraireNomFichier(ligne);
 					}
 					
-						
-					ligne = raf.readLine();
+					this.getNoeudComposants().add(new ElementReferentiel(nomElt, this.extraireIdChemin(ligne), ligne, ElementReferentiel.COMPOSANT));
+
 				}
-				
-				// Fermeture du flux		
-				raf.close();	
-			}
-			catch (IOException e)
+				else // Cas de la présentation
+				{ 
+					ligne = ToolKit.getConcatePath(this.cheminReferentiel, ligne.substring(3)) ;
+					if ((this.extraireNomFichier(ligne)).equals(""))
+					{
+						throw new Exception();
+					}
+					this.getNoeudPresentation().add(new ElementReferentiel(this.extraireNomFichier(ligne), this.extraireIdChemin(ligne), ligne, ElementReferentiel.PRESENTATION)); 
+				}
+			} 						
+			else
 			{ 
-				e.printStackTrace();
-				ErrorManager.getInstance().displayError(e.getMessage()); 
-			}						
+				ligne = ToolKit.getConcatePath(this.cheminReferentiel, ligne.substring(3)) ;
+				if ((this.extraireNomFichier(ligne)).equals(""))
+				{
+					throw new Exception();
+				}
+				this.getNoeudDp().add(new ElementReferentiel(this.extraireNomFichier(ligne), this.extraireIdChemin(ligne), ligne, ElementReferentiel.DP)); 
+			}
+
+			ligne = raf.readLine();
 		}
-		catch (FileNotFoundException e) 
-		{ 
-			e.printStackTrace();
-			ErrorManager.getInstance().displayError(e.getMessage()); 
-		}			
+		
+		// Fermeture du flux		
+		raf.close();	
 	}
 
 
@@ -1259,6 +1239,7 @@ public class Referentiel extends Observable implements TreeModel
 	 * Extrait uniquement le nom du fichier (sans l'extension) du chemin d'accès à celui-ci
 	 * @param cheminFichier : le chemin d'accès au fichier
 	 * @return Le nom du fichier (sans l'extension) 
+	 * @throws Exception
 	 */
 	public String extraireNomFichier(String cheminFichier)
 	{ 
@@ -1267,13 +1248,13 @@ public class Referentiel extends Observable implements TreeModel
 		{
 			return (f.getName()).substring(0,(f.getName()).indexOf("."));
 		}
-		return ("NONAME");
+		return "";
 	}
 		
 
 
 	/**
-	 * Extrait l'ID de la DP à partir du du chemin d'accès à son fichier
+	 * Extrait l'ID de la DP à partir du chemin d'accès à son fichier
 	 * @param cheminFichier : le chemin d'accès au fichier
 	 * @return L'ID de la DP 
 	 */	

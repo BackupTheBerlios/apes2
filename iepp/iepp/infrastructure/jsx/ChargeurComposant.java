@@ -329,7 +329,7 @@ public class ChargeurComposant extends MonitoredTaskBase
 	 * @throws IOException
 	 * @throws FichierException
 	 */
-	public String chercherNomComposant(String projectZip) throws ParserConfigurationException, SAXException, IOException
+	public String chercherNomComposant(String projectZip) throws Exception
 	{
 		
 		this.componentTrouve = false;
@@ -357,31 +357,11 @@ public class ChargeurComposant extends MonitoredTaskBase
 			}
 			zipFile.close();
 		}
-		catch (FileNotFoundException e)
+		catch (Exception e)
 		{
-			// ne devrait pas arriver
 			this.componentTrouve = false;
 			this.traiterErreur();
-			ErrorManager.getInstance().display("ERR","ERR_Fichier_Non_Trouve");
-			
-		}
-		catch (ParserConfigurationException e)
-		{
-			this.componentTrouve = false;
-			e.printStackTrace();
-			ErrorManager.getInstance().displayError(e.getMessage());
-		} 
-		catch (SAXException e) 
-		{
-			this.componentTrouve = false;
-			e.printStackTrace();
-			ErrorManager.getInstance().displayError(e.getMessage());
-		}
-		catch (IOException e) 
-		{
-			this.componentTrouve = false;
-			e.printStackTrace();
-			ErrorManager.getInstance().displayError(e.getMessage());
+			throw new Exception();
 		}
 		
 		this.componentTrouve = ChargeurComposant.findData("Component.xml",projectZip);

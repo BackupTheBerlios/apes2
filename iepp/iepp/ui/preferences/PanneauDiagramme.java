@@ -1,3 +1,21 @@
+/*
+ * IEPP: Isi Engineering Process Publisher
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
 package iepp.ui.preferences;
 
 import iepp.Application;
@@ -96,7 +114,7 @@ public class PanneauDiagramme extends PanneauOption
 			// selon cet objet, réagir en conséquence
 			if (source == PanneauDiagramme.this.mBackgroundColorButton)
 			{
-				Color couleur_choisie = JColorChooser.showDialog(PanneauDiagramme.this,Application.getApplication().getConfigPropriete("couleur_fond_diagrmme"), new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_fond_diagrmme"))));
+				Color couleur_choisie = JColorChooser.showDialog(PanneauDiagramme.this,Application.getApplication().getTraduction("choix_couleur"), new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_fond_diagrmme"))));
 				// si l'utilisateur choisit annuler, la bd renvoie null, donc on vérifie le retour
 				if (couleur_choisie != null)
 				{

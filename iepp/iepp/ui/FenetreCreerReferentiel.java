@@ -24,6 +24,7 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import iepp.Application;
 import iepp.application.CFermerProjet;
@@ -35,6 +36,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import util.ErrorManager;
 
 /**
  * 
@@ -157,11 +160,21 @@ public class FenetreCreerReferentiel extends JDialog
 			File fic = new File(Application.getApplication().getConfigPropriete("chemin_referentiel")+ this.nomRef.getText());
 			if(!fic.exists())
 			{
-				this.dispose();
-				// création du référentiel
-				Application.getApplication().setReferentiel(new Referentiel(this.nomRef.getText()));
-				this.estCree = true ;
-				new FenetreChoixProcessus(this.fparent);
+				
+				try 
+				{
+					// création du référentiel
+					Application.getApplication().setReferentiel(new Referentiel(this.nomRef.getText()));
+					this.dispose();
+					this.estCree = true ;
+					new FenetreChoixProcessus(this.fparent);
+				} 
+				catch (Exception e1) 
+				{
+					e1.printStackTrace();
+					ErrorManager.getInstance().display("ERR","ERR_Fic_Ref_Corromp"); 
+					this.estCree = false ;
+				}
 			}
 			else
 				JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_ref_existe"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE);

@@ -88,7 +88,6 @@ public class FenetrePropos extends JDialog {
 		STC_Titre.setText("IEPP : Isi Engineering Process Publisher");
 		//Création de la version
 		STC_Version.setFont(new java.awt.Font("MS_SansSerif", 0, 12));
-		//TODO Changer le numéro de version
 		STC_Version.setText("Version " + Application.NUMVERSION);
 		//Ajout aux panels
 		SC_Titre.add(SIC_Icone, null);

@@ -98,18 +98,9 @@ public class COuvrirReferentiel extends CommandeNonAnnulable
 		CFermerProjet c = new CFermerProjet();
 		c.executer();
 		
-		try
+		CChargerReferentielDemarrage c2 = new CChargerReferentielDemarrage(chooser.getSelectedFile());
+		if (!c2.executer())
 		{
-			CChargerReferentielDemarrage c2 = new CChargerReferentielDemarrage(chooser.getSelectedFile());
-			if (!c2.executer())
-			{
-				return false;
-			}
-		}
-		catch(NumberFormatException e)
-		{
-			e.printStackTrace();
-			ErrorManager.getInstance().display("ERR","ERR_Fic_Ref_Corromp"); 
 			return false;
 		}
 		return true;
