@@ -30,7 +30,6 @@ import org.ipsquad.apes.adapters.FinalPointCell;
 import org.ipsquad.apes.adapters.InitialPointCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SynchroCell;
-import org.ipsquad.apes.adapters.TransitionEdge;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.EdgeView;
@@ -39,7 +38,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for an ActivityDiagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ActivityJGraph extends JGraph
 {
@@ -77,12 +76,7 @@ public class ActivityJGraph extends JGraph
 
 	protected EdgeView createEdgeView(Object e, CellMapper cm) 
 	{
-		if( e instanceof TransitionEdge )
-		{
-			return new TransitionEdgeView(e, this, cm);
-		}
-		
-		return super.createEdgeView(e, cm);
+		return new TransitionEdgeView(e, this, cm);
 	}
 
 	public Dimension getPreferredSize()

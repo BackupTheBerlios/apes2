@@ -42,7 +42,7 @@ import org.jgraph.graph.PortView;
  * This tool allows to create edges in the graph
  * It use the prototype design pattern to clone edges
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class EdgeTool extends Tool
 {
@@ -127,7 +127,6 @@ public class EdgeTool extends Tool
 					Map view = new HashMap();
 					view.put( "firstPort",mFirstPort.getCell());
 					view.put( "endPort",mPort.getCell());
-
 					Map attr = mPrototype.getAttributes();
 					//attr.put(edge, attr);
 
@@ -142,7 +141,7 @@ public class EdgeTool extends Tool
 			}
 			else
 			{
-				mGraph.repaint();
+				//mGraph.repaint();
 				mStable = false;
 			}
 			

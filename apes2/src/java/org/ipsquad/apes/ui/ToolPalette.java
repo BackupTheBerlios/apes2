@@ -39,13 +39,13 @@ import org.jgraph.JGraph;
 /**
  * Base class for the graph editing toolpalettes
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ToolPalette extends JToolBar implements ToolListener
 {
 	private JGraph mGraph;
 	private ButtonGroup mButtonGroup = new ButtonGroup();
-	private ToolButton mDefaultButton;
+	private ToolButton mDefaultButton, mPortButton;
 	private Tool mCurrentTool = null;
 
 
@@ -59,10 +59,6 @@ public class ToolPalette extends JToolBar implements ToolListener
 		mDefaultButton = createToolButton(new DefaultTool(), "icons/PaletteArrow.gif", "paletteArrow");
 		add(mDefaultButton);
 		addSeparator();
-		
-		/*mDefaultButton = createToolButton(new DefaultTool(), "icons/PaletteArrow.gif", "paletteArrow");
-		add(mDefaultButton);
-		addSeparator();*/
 	}
 	
 

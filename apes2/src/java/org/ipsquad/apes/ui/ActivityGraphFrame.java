@@ -34,6 +34,7 @@ import org.ipsquad.apes.adapters.SynchroCell;
 import org.ipsquad.apes.adapters.TransitionEdge;
 import org.ipsquad.apes.ui.tools.CellTool;
 import org.ipsquad.apes.ui.tools.EdgeTool;
+import org.ipsquad.apes.ui.tools.PortTool;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.GraphConstants;
@@ -41,7 +42,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Activity graph editing internal frame
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ActivityGraphFrame extends GraphFrame
 {
@@ -54,6 +55,10 @@ public class ActivityGraphFrame extends GraphFrame
 	{
 		ToolPalette palette = super.createToolPalette();
 
+		palette.addSeparator();
+		palette.addToolButton( new PortTool(), "icons/PaletteArrow.gif", "paletteArrow");
+		palette.addSeparator();
+		
 		DefaultEdge edge = new TransitionEdge();
 		Map map = GraphConstants.createMap();
 		int arrow = GraphConstants.ARROW_CLASSIC;

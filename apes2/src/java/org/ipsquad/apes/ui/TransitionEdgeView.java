@@ -21,15 +21,17 @@
 
 package org.ipsquad.apes.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellViewRenderer;
 import org.jgraph.graph.EdgeRenderer;
-import org.jgraph.graph.EdgeView;
 import org.jgraph.graph.GraphCell;
 import org.jgraph.graph.GraphCellEditor;
 import org.jgraph.graph.GraphConstants;
@@ -39,13 +41,8 @@ import org.jgraph.graph.GraphConstants;
  * 
  * @version $revision$
  */
-public class TransitionEdgeView extends EdgeView
+public class TransitionEdgeView extends ApesEdgeView
 {
-	public EdgeRenderer getEdgeRenderer()
-	{
-		return renderer;
-	}
-
 	public TransitionEdgeView(Object cell, JGraph graph, CellMapper mapper) 
 	{	
 		super(cell, graph, mapper);
@@ -57,6 +54,11 @@ public class TransitionEdgeView extends EdgeView
 		return renderer;
 	}
 
+	public EdgeRenderer getEdgeRenderer()
+	{
+		return renderer;
+	}
+
 	public GraphCellEditor getEditor()
 	{
 		return new ApesGraphCellEditor((GraphCell)getCell());
@@ -64,6 +66,53 @@ public class TransitionEdgeView extends EdgeView
 
 	static class ApesEdgeRenderer extends EdgeRenderer	
 	{
+		public void paint(Graphics g) {
+			Shape edgeShape = view.getShape();
+			// Sideeffect: beginShape, lineShape, endShape
+			if (edgeShape != null) {
+				Graphics2D g2 = (Graphics2D) g;
+				int c = BasicStroke.CAP_BUTT;
+				int j = BasicStroke.JOIN_MITER;
+				g2.setStroke(new BasicStroke(lineWidth, c, j));
+				translateGraphics(g);
+				g.setColor(getForeground());
+				if (view.beginShape != null) {
+					if (beginFill)
+						g2.fill(view.beginShape);
+					g2.draw(view.beginShape);
+				}
+				if (view.endShape != null) {
+					if (endFill)
+						g2.fill(view.endShape);
+					g2.draw(view.endShape);
+				}
+				if (lineDash != null) // Dash For Line Only
+					g2.setStroke(
+							new BasicStroke(lineWidth, c, j, 10.0f, lineDash, 0.0f));
+				if (view.lineShape != null)
+					g2.draw(view.lineShape);
+				
+				if (selected) { // Paint Selected
+					g2.setStroke(GraphConstants.SELECTION_STROKE);
+					g2.setColor(graph.getHighlightColor());
+					if (view.beginShape != null)
+						g2.draw(view.beginShape);
+					if (view.lineShape != null)
+						g2.draw(view.lineShape);
+					if (view.endShape != null)
+						g2.draw(view.endShape);
+				}
+				if (graph.getEditingCell() != view.getCell()) {
+					Object label = graph.convertValueToString(view);
+					if (label != null) {
+						g2.setStroke(new BasicStroke(1));
+						g.setFont(getFont());
+						paintLabel(g, label.toString());
+					}
+				}
+			}
+		}
+			
 		protected void paintLabel(Graphics g, String label)
 		{
 			Point p = getLabelPosition(view);

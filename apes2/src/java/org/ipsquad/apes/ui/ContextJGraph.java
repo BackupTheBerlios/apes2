@@ -37,7 +37,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a ResponsabilityDiagram
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ContextJGraph extends JGraph
 {
@@ -63,7 +63,7 @@ public class ContextJGraph extends JGraph
 
 	protected EdgeView createEdgeView(Object e, CellMapper cm)
 	{
-		EdgeView ev = super.createEdgeView((Object)e, cm);
+		ApesEdgeView ev = new ApesEdgeView(e, this, cm);
 		ev.update();
 		
 		if(e instanceof Edge && GraphConstants.getPoints(((Edge)e).getAttributes())==null)

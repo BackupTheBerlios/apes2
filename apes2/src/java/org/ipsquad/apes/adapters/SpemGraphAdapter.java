@@ -75,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -365,6 +365,32 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 				ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, source.getUserObject(), target.getUserObject(), attr ) );		
 	}
 	
+	public void moveEdge( DefaultEdge edge, ApesGraphCell newCell, boolean isSource )
+	{
+		//System.out.println("Graph::moveEdge "+edge+" "+newCell+" "+isSource);
+		Vector commands = new Vector();
+		Map attr = new HashMap();
+		Object source = ((ApesGraphCell)((DefaultPort)edge.getSource()).getParent()).getUserObject();
+		Object target = ((ApesGraphCell)((DefaultPort)edge.getTarget()).getParent()).getUserObject();
+		
+		attr.put("Links", new Object[]{edge} );
+		commands.add( ApesMediator.getInstance().createRemoveCommand( mDiagram, null, new Object[]{ source }, new Object[]{ target }, attr ) );
+		
+		if( isSource )
+		{
+			source = newCell.getUserObject();
+		}
+		else
+		{
+			target = newCell.getUserObject();
+		}
+		attr = new HashMap();
+		attr.put("Attributes",edge.getAttributes());
+		commands.add( ApesMediator.getInstance().createInsertCommandToSpemDiagram( mDiagram, source, target, attr));
+		
+		ApesMediator.getInstance().execute(commands);
+	}
+	
 	public void remove( Object[] cells, Object[] sources, Object[] targets, Map attr )
 	{
 		//System.out.println("Graph::tryRemove");
@@ -479,7 +505,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	
 	protected void removed( RemoveEvent e )
 	{
-		//System.out.println("Graph::remove "+e);
+		//System.out.println("Graph::remove "+mDiagram+" "+e);
 		
 		if( e.getDiagram() == mDiagram || e.getDiagram() == null )
 		{
