@@ -33,6 +33,8 @@ import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.processing.SaveJPEG;
 import org.ipsquad.apes.ui.ApesFrame;
+import org.ipsquad.apes.ui.DefaultPathPanel;
+import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 import org.ipsquad.utils.SimpleFileFilter;
@@ -41,7 +43,7 @@ import org.ipsquad.utils.SmartChooser;
 /**
  * Save the selected diagram in a jpeg file
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SaveAsJpegAction extends AbstractAction
 {
@@ -57,6 +59,7 @@ public class SaveAsJpegAction extends AbstractAction
 		SmartChooser chooser = SmartChooser.getChooser();
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileFilter(filter);
+		chooser.setDirectory(ConfigManager.getInstance().getProperty(DefaultPathPanel.PICTURES_KEY+"defaultPath"));
 		
 		if (chooser.showSaveDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane())
 		==SmartChooser.APPROVE_OPTION)
