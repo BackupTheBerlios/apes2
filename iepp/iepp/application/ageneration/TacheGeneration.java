@@ -186,6 +186,11 @@ public class TacheGeneration extends MonitoredTaskBase {
 					idComposant = (IdObjetModele)liste.elementAt(i);
 					Vector listeProduits = idComposant.getProduitEntree();
 					Vector listeLiens = ((ComposantProcessus)idComposant.getRef()).getLien();
+					// Verifier s'il s'agit d'un composant vide, auquel cas il faut verifier les produits en sortie
+					if (idComposant.estComposantVide())
+					{
+					    listeProduits.addAll(idComposant.getProduitSortie());
+					}
 					for(int j = 0; j < listeProduits.size(); j++)
 					{
 					 	IdObjetModele idProduit = (IdObjetModele)listeProduits.elementAt(j);
@@ -207,7 +212,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 					}
 				}
 			}
-			//GenerationManager.getInstance().setListeProduitsExterieurs(listeProduitsExterieurs);
+			GenerationManager.getInstance().setListeProduitsExterieurs(listeProduitsExterieurs);
 			System.out.println(listeProduitsExterieurs);
 		}
 		

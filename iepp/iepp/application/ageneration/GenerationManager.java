@@ -47,6 +47,7 @@ public class GenerationManager
 	private static boolean brancheObjet ;
 	private static Vector listeAGenerer;
 	private static Color couleur_surlign;
+	private static Vector listeProduitsExterieurs;
 	
 	// mettre tous les autres attributs en private static
 
@@ -62,6 +63,7 @@ public class GenerationManager
 	public static final int TYPE_DEFP_TABLEAU = 3 ;
 	public static final int TYPE_DEFP_ACT = 4 ;
 	public static final int TYPE_DEFP_FLOT = 5 ;
+    
 
 	
 
@@ -224,5 +226,24 @@ public class GenerationManager
 	{
 		return dateGeneration;
 	}
+
+
+
+    /**
+     * Remplie la liste des produits exterieurs (n'ayant pas de presentation)
+     * @param listeProduitsExterieurs Liste des produits exterieurs
+     */
+    public static void setListeProduitsExterieurs(Vector listeProduitsExterieurs)
+    {
+        GenerationManager.listeProduitsExterieurs=listeProduitsExterieurs;
+    }
+    
+    /**
+     * Recupere la liste des produits exterieurs (n'ayant pas de presentation)
+     */
+    public static Vector getListeProduitsExterieurs()
+    {
+        return (GenerationManager.listeProduitsExterieurs);
+    }
 
 }

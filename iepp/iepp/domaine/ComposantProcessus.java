@@ -1337,6 +1337,11 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 					else
 					{
 						System.err.println("BouhOU : " + ID_Apes);
+						// S'il s'agit d'un produit exterieur (sans element de presentation)
+						if (o[i] instanceof WorkProductCell)
+						{
+							// S'occuper du paquetage special
+						}
 					}
 				}
 			}

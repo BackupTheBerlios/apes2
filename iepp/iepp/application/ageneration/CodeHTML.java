@@ -120,7 +120,13 @@ public class CodeHTML
 				h = y + comp.getHauteur();
 				
 				io = comp.getId();
-				result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\">\n";
+				
+				
+				// Verifier s'il ne s'agit pas d'un composant vide, auquel cas il ne faut pas creer de zone
+				if (!io.estComposantVide())
+				{
+					result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\">\n";
+				}
 			}
 			else if ( aux instanceof MDProduit )
 			{
@@ -133,7 +139,12 @@ public class CodeHTML
 				h = y + prod.getHauteur();
 	
 				io = prod.getId();
-				result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\">\n";
+				
+				// Verifier qu'il ne s'agit ni d'un produit exterieur, ni d'un produit fusion de deux elements exterieurs (auquel cas le chemin est vide)
+				if (!GenerationManager.getListeProduitsExterieurs().contains(io) && ! io.getChemin().equals(""))
+				{
+					result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + io.getChemin() + "\">\n";
+				}
 			}
 		}
 		return  result + "</map>\n";
