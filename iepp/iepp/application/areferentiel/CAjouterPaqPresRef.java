@@ -43,7 +43,7 @@ public class CAjouterPaqPresRef extends CommandeNonAnnulable
 		String cheminComp ;	// Chemin du paquetage à charger
 
 		// Demander à l'utilisateur de choisir un paquetage
-		JFileChooser chooser = SmartChooser.getChooser();
+		JFileChooser chooser = new JFileChooser(Application.getApplication().getConfigPropriete("rep_paquetage"));
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileFilter(new SimpleFileFilter
 			(new String[]{"pre"}, Application.getApplication().getTraduction("Presentations"))) ;

@@ -307,4 +307,5 @@ RepositoryTitle=Référentiel
 LanguageTitle=Language
 CheminReferentiel=Default path :
 ReferentielDefaut=Loaded repository on startup :
-RepComposantDefaut=Default Path of incoming component :
+RepComposantDefaut=Default path of incoming component :
+RepPaquetageDefaut=Default path of incoming presentation package :

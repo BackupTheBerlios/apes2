@@ -29,6 +29,8 @@ public class PanneauReferentiel extends PanneauOption
 	private JButton browseButton2;
 	private JTextField mDefaultComp;
 	private JButton browseButton3;
+	private JTextField mDefaultPaq;
+	private JButton browseButton4;
 	
 	public static final String REPOSITORY_PANEL_KEY = "RepositoryTitle";
 	
@@ -137,6 +139,32 @@ public class PanneauReferentiel extends PanneauOption
 		gridbag.setConstraints(browseButton3, c);
 		mPanel.add(browseButton3);		
 		
+		//linefeed
+		c.weighty = 0;      		
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		
+		//	rep des paquetage de présentation à importer
+		c.weighty = 0;
+		c.weightx = 0 ;
+		c.fill = GridBagConstraints.BOTH;
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		JLabel label4 = new JLabel(Application.getApplication().getTraduction("RepPaquetageDefaut"));
+		gridbag.setConstraints(label4, c);
+		mPanel.add(label4);
+		c.weightx = 3 ;
+		c.gridwidth = GridBagConstraints.RELATIVE;
+		mDefaultPaq = new JTextField(25);
+		mDefaultPaq.setText(Application.getApplication().getConfigPropriete("rep_paquetage"));
+		mPanel.add(mDefaultPaq);
+		gridbag.setConstraints(mDefaultPaq, c);
+		c.weightx = 0 ;
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		this.browseButton4 = new JButton(Application.getApplication().getTraduction("Parcourir"));
+		browseButton4.addActionListener(man);
+		gridbag.setConstraints(browseButton4, c);
+		mPanel.add(browseButton4);		
+		
 		c.fill = GridBagConstraints.VERTICAL;
 		c.weighty = 2.0; 
 		// linefeed     		
@@ -160,6 +188,7 @@ public class PanneauReferentiel extends PanneauOption
 		Application.getApplication().setConfigPropriete("chemin_referentiel", mDefaultPath.getText());
 		Application.getApplication().setConfigPropriete("referentiel_demarrage", mDefaultRef.getText());
 		Application.getApplication().setConfigPropriete("rep_composant", mDefaultComp.getText());
+		Application.getApplication().setConfigPropriete("rep_paquetage", mDefaultPaq.getText());
 	}
 	
 	private class ManagerButton implements ActionListener
@@ -202,6 +231,15 @@ public class PanneauReferentiel extends PanneauOption
 				int res = fileChooser.showDialog(PanneauReferentiel.this, Application.getApplication().getTraduction("OK"));
 				if(res == JFileChooser.APPROVE_OPTION)
 					PanneauReferentiel.this.mDefaultComp.setText(fileChooser.getSelectedFile().getAbsolutePath());
+			}
+			else if (source == PanneauReferentiel.this.browseButton4)
+			{
+				JFileChooser fileChooser = new JFileChooser(PanneauReferentiel.this.mDefaultComp.getText());
+				fileChooser.setDialogTitle(Application.getApplication().getTraduction("titre_choix_rep"));
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int res = fileChooser.showDialog(PanneauReferentiel.this, Application.getApplication().getTraduction("OK"));
+				if(res == JFileChooser.APPROVE_OPTION)
+					PanneauReferentiel.this.mDefaultPaq.setText(fileChooser.getSelectedFile().getAbsolutePath());
 			}
 		}
 	}

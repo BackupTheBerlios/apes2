@@ -307,3 +307,4 @@ LanguageTitle=Langue
 CheminReferentiel=Répertoire par défaut :
 ReferentielDefaut=Référentiel à charger au démarrage :
 RepComposantDefaut=Repertoire par défaut des composants à importer :
+RepPaquetageDefaut=Repertoire par défaut des paquetages de présentation à importer :
