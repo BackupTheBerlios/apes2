@@ -62,7 +62,7 @@ import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 public class PogToolkit
 {
   /** Nom de l'application */
-  public static final String _APP_NAME = "POG (v1.0)";
+  public static final String _APP_NAME = "POG v";
 
   /**Chemin de l'application*/
   public static String _PATH_APPLI;
@@ -145,9 +145,13 @@ public class PogToolkit
   }
 
   static public File chooseFileToSave(Component fenetre, MyMultiFileFilter filters, String nomFile) {
-    _FILE_CHOOSER = new JFileChooser(new File(System.getProperty("user.dir")));
+  	File dfic = new File(nomFile);
+	if (!dfic.getParentFile().exists())
+		dfic = new File(System.getProperty("user.dir") + File.separator + dfic.getName());
+    _FILE_CHOOSER = new JFileChooser(dfic.getParentFile());
     _FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
     _FILE_CHOOSER.addChoosableFileFilter( (FileFilter) filters);
+	_FILE_CHOOSER.setSelectedFile(dfic);
     if (_FILE_CHOOSER.showSaveDialog(fenetre) == JFileChooser.APPROVE_OPTION) {
       return (_FILE_CHOOSER.getSelectedFile());
     }
@@ -155,8 +159,11 @@ public class PogToolkit
     return null;
 }
 
-  static public File chooseDirectory(Component fenetre) {
-    _FILE_CHOOSER = new JFileChooser(new File(System.getProperty("user.dir")));
+  static public File chooseDirectory(Component fenetre, String prevDir) {
+  	File dopen = new File(prevDir);
+  	if (!dopen.exists())
+  		dopen = new File(System.getProperty("user.dir"));
+    _FILE_CHOOSER = new JFileChooser(dopen);
     _FILE_CHOOSER.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     if (_FILE_CHOOSER.showOpenDialog(fenetre)== JFileChooser.APPROVE_OPTION) {
       return (_FILE_CHOOSER.getSelectedFile());

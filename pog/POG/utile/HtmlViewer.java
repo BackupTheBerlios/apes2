@@ -81,7 +81,7 @@ public class HtmlViewer extends JScrollPane {
                         }
         });
 
-        setWebPage("file:///" + _fichierAide);
+        setWebPage("file://" + _fichierAide);
     }
 
     /**

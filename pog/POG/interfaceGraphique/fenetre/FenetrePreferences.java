@@ -288,7 +288,7 @@ public class FenetrePreferences
         {
           public void actionPerformed(ActionEvent e)
           {
-            File fichier = PogToolkit.chooseDirectory(_this);
+            File fichier = PogToolkit.chooseDirectory(_this, champPresChemIcones.getText());
             if (fichier != null && fichier.exists())
             {
               champPresChemIcones.setText(fichier.getAbsolutePath());
@@ -305,7 +305,7 @@ public class FenetrePreferences
         {
           public void actionPerformed(ActionEvent e)
           {
-            File fichier = PogToolkit.chooseDirectory(_this);
+            File fichier = PogToolkit.chooseDirectory(_this, champPresChemBiblio.getText());
             if (fichier != null && fichier.exists())
             {
               champPresChemBiblio.setText(fichier.getAbsolutePath());

@@ -126,4 +126,11 @@ public class FenetreEnregistrerSous extends FenetrePOG   {
   public void actionAnnuler() {
     this.setVisible(false);
   }
+  
+	public void setVisible(boolean arg0) {
+		String nomficpog = lnkFenetrePrincipale.get_pathSave();
+		jTextField1.setText(nomficpog);
+		super.setVisible(arg0);
+	}
+
 }

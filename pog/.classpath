@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/apes2"/>
-	<classpathentry kind="lib" path="/apes2/src/lib/JSX.jar"/>
-	<classpathentry sourcepath="/home/ptiyo/logiciels/jgraph3/src" kind="lib" path="/apes2/src/lib/jgraph.jar"/>
+	<classpathentry kind="lib" path="E:/Programme/eclipse/workspace/apes2/src/lib/jgraph.jar"/>
+	<classpathentry kind="lib" path="E:/Programme/eclipse/workspace/apes2/src/lib/JSX.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

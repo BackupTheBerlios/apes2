@@ -57,8 +57,8 @@ public class Apes {
     	FileInputStream fis = new FileInputStream(mFile);
       ZipInputStream zipFile = new ZipInputStream(fis);
       loadComponent(zipFile, ap);
-//	  zipFile.close();
-//	  fis.close();
+	  zipFile.close();
+	  fis.close();
     }
     catch (Throwable t) {
       t.printStackTrace();
@@ -139,10 +139,10 @@ public class Apes {
         mFile.getAbsolutePath())));
 
     ZipEntry zipEntry = zipFile.getNextEntry();
-
+	BufferedInputStream tmpbuf = null;
     while (zipEntry != null) {
-      DataInputStream data = new DataInputStream(new BufferedInputStream(
-          zipFile));
+		tmpbuf = new BufferedInputStream(zipFile);
+      DataInputStream data = new DataInputStream(tmpbuf);
 
       if (zipEntry.getName().equals(fileName)) {
         return data;
@@ -151,6 +151,8 @@ public class Apes {
         zipEntry = zipFile.getNextEntry();
       }
     }
+    if (tmpbuf != null)
+    	tmpbuf.close();
     zipFile.close();
     return null;
   }

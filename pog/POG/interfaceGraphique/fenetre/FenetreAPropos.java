@@ -59,7 +59,11 @@ public class FenetreAPropos extends JDialog implements ActionListener
 
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JPanel centerPanel = new JPanel(new GridLayout(10, 1));
-    JLabel lbl0 = new JLabel(PogToolkit._APP_NAME, SwingConstants.CENTER);
+	String ver = lnkFenetrePrincipale.getLnkLangues().valeurDe("version");
+	String version = "";
+	for (int i = 0; i < ver.length(); i++)
+		version = version + ver.charAt(i) + ".";
+    JLabel lbl0 = new JLabel(PogToolkit._APP_NAME + version, SwingConstants.CENTER);
     JLabel lbl1 = new JLabel(lnkFenetrePrincipale.getLnkLangues().valeurDe("ligne1APropos"), SwingConstants.CENTER);
     JLabel lbl2 = new JLabel(lnkFenetrePrincipale.getLnkLangues().valeurDe("ligne2APropos"), SwingConstants.CENTER);
 

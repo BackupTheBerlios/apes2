@@ -513,7 +513,7 @@ public class Presentation
       		toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
 		if (!toto.exists())
 			if (PogToolkit.askYesNoQuestion(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("deplbiblio"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
-				File nbib = PogToolkit.chooseDirectory(FenetrePrincipale.INSTANCE);
+				File nbib = PogToolkit.chooseDirectory(FenetrePrincipale.INSTANCE, lnkBibliotheque.getAbsolutePath());
 				FenetrePrincipale.INSTANCE.getLnkSysteme().changerBibliotheque(nbib);
 				toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
 			}

@@ -57,7 +57,9 @@ public class Langues {
   public Langues(String langue) {
     try {
 		Locale locale = new Locale(langue);
-      _langue = new PropertyResourceBundle(new FileInputStream(Preferences.REPPREF + NOMBASE + '_' + langue + ".properties"));
+		FileInputStream fis = new FileInputStream(Preferences.REPPREF + NOMBASE + '_' + langue + ".properties");
+      _langue = new PropertyResourceBundle(fis);
+      fis.close();
       Locale.setDefault(locale);
 
     } catch (Exception e) {
@@ -82,8 +84,9 @@ public class Langues {
     Locale locale = new Locale(langue);
     try
     {
-      //_langue = ResourceBundle.getBundle(Preferences.REPPREF + NOMBASE, locale);
-      _langue = new PropertyResourceBundle(new FileInputStream(Preferences.REPPREF + NOMBASE + '_' + langue + ".properties"));
+      FileInputStream fis = new FileInputStream(Preferences.REPPREF + NOMBASE + '_' + langue + ".properties");
+      _langue = new PropertyResourceBundle(fis);
+      fis.close();
       Locale.setDefault(locale);
       return true;
     }
@@ -111,7 +114,9 @@ public class Langues {
         int fin = nom.indexOf('.');
         try {
           Locale l = new Locale(nom.substring(debut + 1, fin));
-          new PropertyResourceBundle(new FileInputStream(fichiers [i]));
+		  FileInputStream fis = new FileInputStream(fichiers [i]);
+          new PropertyResourceBundle(fis);
+          fis.close();
           al.add(l);
         }
         catch (Exception e) {}

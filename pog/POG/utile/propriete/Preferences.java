@@ -238,8 +238,8 @@ public class Preferences {
   }
 
 	public String get_editeur(String ext) {
-		if (ext.endsWith("html") || ext.endsWith("htm"))
-			return _editeurPerso;
+/*		if (ext.endsWith("html") || ext.endsWith("htm"))
+			return _editeurPerso;*/
 		return( (String)_associationDocExe.get(ext));
   }
 

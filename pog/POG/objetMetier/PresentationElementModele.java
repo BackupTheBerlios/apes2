@@ -31,7 +31,9 @@ import javax.swing.ImageIcon;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 
+import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.utile.trace.Debug;
+import POG.utile.PogToolkit;
 
 
 public class PresentationElementModele extends ElementPresentation {
@@ -62,7 +64,14 @@ public class PresentationElementModele extends ElementPresentation {
 
   public void setModelElement(ModelElement el)
   {
-    this.lnkModelElement = el;
+  	if (!lnkModelElement.getName().equals(el.getName())) {
+    	String quest = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("questouinonchangernommodele");
+    	quest = quest.replaceFirst("ARG0", _nomPresentation);
+    	int rep = PogToolkit.askYesNoQuestion(quest, false, FenetrePrincipale.INSTANCE);
+    	if (rep == PogToolkit._NO)
+    		_nomPresentation = el.getName();
+    }
+	this.lnkModelElement = el;
   }
 
   public ModelElement getLnkModelElement() {

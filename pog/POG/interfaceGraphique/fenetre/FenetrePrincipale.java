@@ -259,6 +259,7 @@ public class FenetrePrincipale
 
   public static void main(String[] args) {
     try {
+    	
       // Ne pas enlever les println d'ici...
       DateFormat dt = DateFormat.getTimeInstance();
       System.out.println("Start POG at " + dt.format(new Date()));
@@ -360,7 +361,7 @@ public class FenetrePrincipale
 		public void actionPerformed(ActionEvent arg0) {
 			if (lnkSysteme.getlnkControleurPresentation().getlnkPresentation() == null)
 				return;
-			File newBib = PogToolkit.chooseDirectory(fpp);
+			File newBib = PogToolkit.chooseDirectory(fpp, lnkSysteme.getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
 			lnkSysteme.changerBibliotheque(newBib);
 		} 
   	});
@@ -466,11 +467,13 @@ public class FenetrePrincipale
     this.setJMenuBar(_menu);
     this.getContentPane().add(jSplitPane1, BorderLayout.CENTER);
     this.addWindowListener(new WindowAdapter() {
-		public void windowClosed(WindowEvent arg0) {
+
+		public void windowClosing(WindowEvent arg0) {
 			lnkSysteme.quitter();
 		}
+    	
     });
-    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.getContentPane().add(lnkMainToolBar, BorderLayout.NORTH);
 
     setIconImage(lnkPreferences.getIconeDefaut("logo-NB").getImage());

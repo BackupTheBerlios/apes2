@@ -111,7 +111,7 @@ public class FenetreNouvellePresentationAvecModele extends FenetrePOG {
     jButtonP.addActionListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent evt) {
-        File dir = PogToolkit.chooseDirectory(lnkFenetrePrincipale);
+        File dir = PogToolkit.chooseDirectory(lnkFenetrePrincipale, jTextFieldBiblio.getText());
         if (dir != null) {
           jTextFieldBiblio.setText(dir.getAbsolutePath());
         }

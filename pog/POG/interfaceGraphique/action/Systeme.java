@@ -168,7 +168,10 @@ public class Systeme {
 
 	private void _verifcohe() {
 		if (!_coherent) {
-			_coherent = (_modele == lnkControleurPresentation.get_pathModele().lastModified());
+			if (lnkControleurPresentation.get_pathModele() == null)
+				_coherent = true;
+			else
+				_coherent = (_modele == lnkControleurPresentation.get_pathModele().lastModified());
 			if (!_coherent) {
 				lnkFenetrePrincipale.getLnkDebug().verificationMessage("messverifsync");
 				return;
@@ -296,7 +299,6 @@ public class Systeme {
     g.set_nomPresentation(nomDefaut);
     this.lnkControleurPresentation.getlnkPresentation().
         ajouterElementPresentation(g);
-    g.set_description(typeGuide);
     refreshAll(g);
     lnkFenetrePrincipale.getLnkControleurPanneaux().loadCentre("DGuide", g);
   }
@@ -658,7 +660,15 @@ public class Systeme {
   }
 
 	public void quitter() {
-		_verifierSauve(true);
+		if (PogToolkit.askYesNoQuestion(lnkFenetrePrincipale.getLnkLangues().valeurDe("questionquitter"), false, lnkFenetrePrincipale) == PogToolkit._NO)
+			return;
+		if (lnkFenetrePrincipale.get_pathSave().equals("")) {
+			if (PogToolkit.askYesNoQuestion(lnkFenetrePrincipale.getLnkLangues().valeurDe("errquitterenregistrer"), false, lnkFenetrePrincipale) == PogToolkit._NO)
+				return;
+		}
+		else
+			_verifierSauve(true);
+		lnkFenetrePrincipale.dispose();
 		System.exit(0);
 	}
 

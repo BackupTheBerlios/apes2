@@ -121,4 +121,11 @@ public class FenetreExport extends FenetrePOG  {
     this.setVisible(false);
   }
 
+	public void setVisible(boolean arg0) {
+		String nomficpog = lnkFenetrePrincipale.get_pathSave();
+		nomficpog = nomficpog.substring(0, nomficpog.lastIndexOf('.')) + ".pre";
+		jTextField1.setText(nomficpog);
+		super.setVisible(arg0);
+	}
+
 }
