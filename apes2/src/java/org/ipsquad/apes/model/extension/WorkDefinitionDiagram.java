@@ -29,11 +29,12 @@ import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.utils.ErrorManager;
+import java.io.Serializable;
 
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -50,7 +51,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		super(name);
 	}
 	
-	public static class Transition 
+	public static class Transition implements Serializable
 	{
 		private ModelElement mInput;
 		private ModelElement mOutput;
