@@ -158,7 +158,8 @@ public class CodeHTML
 				if (!io.estComposantVide())
 				{
 					ComposantProcessus cp = (ComposantProcessus)io.getRef();
-					ElementPresentation elem = null;
+					ElementPresentation elem, elem2 = null;
+					elem2 = cp.getElementPresentation(io.getID());
 					// un click sur un composant de processus amène vers le diagramme de
 					// flot de définition de travail (workflow diagram)
 					IdObjetModele id = cp.getDiagrammeFlot();
@@ -171,14 +172,14 @@ public class CodeHTML
 						elem = null;
 					}
 					
-					if (elem != null)
+					if (elem != null && elem2 != null)
 					{
 						String description = "ALT=\"\"";
 						if (GenerationManager.getInstance().estInfoBulle())
 						{
-							if (elem.getDescription() != null)
+							if (elem2.getDescription() != null)
 							{
-								description = "ALT=\"" + elem.getDescription() + "\"";
+								description = "ALT=\"" + elem2.getDescription() + "\"";
 							}
 						}
 						result += "<area shape=\"rect\" coords =\"" + x + "," + y + "," + l + "," + h + "\" href=\"" + id.getChemin() + "\"" + description +  ">\n";

@@ -173,16 +173,22 @@ public class GDiagramme extends GElementModele
 				
 				// récupérer l'ID de l'élément courant
 				int ID_Apes;
-				ElementPresentation elem;
+				// elem = l'élément de présentation vers lequel on va pointé
+				// elem2 = l'élément de présentation sur lequel on veut avoir la description
+				ElementPresentation elem, elem2;
 				
 				IdObjetModele nouvelId = GenerationManager.getProduitChange( this.cp.toString()+ "::" + o[i].toString());
 			    if (nouvelId != null)
 			    {
 			        ID_Apes = nouvelId.getID();
 			        elem = ((ComposantProcessus)nouvelId.getRef()).getElementPresentation(ID_Apes);
+			        elem2 = elem;
 			    }
 				else
 				{
+					ID_Apes = ((ApesGraphCell)o[i]).getID();
+				    elem2 = this.cp.getElementPresentation(ID_Apes);
+				    
 					if (o[i] instanceof ProcessComponentCell)
 					{
 						// un click sur un composant de processus amène vers le diagramme de
@@ -216,23 +222,22 @@ public class GDiagramme extends GElementModele
 					}
 					else
 					{
-					    ID_Apes = ((ApesGraphCell)o[i]).getID();
 					    elem = this.cp.getElementPresentation(ID_Apes);
 					}
 				}
 			    
-				if ( elem != null )
+				if ( elem != null && elem2 != null)
 				{
 					IdObjetModele id = elem.getElementModele();
 					if (id != null)
 					{
-						// rajouté: info-bulle contenant la description de l'élément
+						// info-bulle contenant la description de l'élément
 						String description = "ALT=\"\"";
 						if (GenerationManager.getInstance().estInfoBulle())
 						{
-							if (elem.getDescription() != null)
+							if (elem2.getDescription() != null)
 							{
-								description = "ALT=\"" + elem.getDescription() + "\"";
+								description = "ALT=\"" + elem2.getDescription() + "\"";
 							}
 						}
 						mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ this.getLienChemin(id)+ "\" " + description + ">\n");
