@@ -23,8 +23,24 @@
 package org.ipsquad.apes.ui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.EventObject;
+import java.util.Map;
+
+import javax.swing.AbstractAction;
+import javax.swing.AbstractCellEditor;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
@@ -35,38 +51,39 @@ import org.jgraph.graph.GraphCellEditor;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.VertexView;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-
 /**
- * Display a WorkProductState cell
+ * Display a note cell
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
  
-class NoteView extends VertexView {
+class NoteView extends VertexView 
+{
 		static final NoteRenderer renderer = new NoteRenderer();
 		static final NoteEditor editor = new NoteEditor();
 
-		public NoteView(Object cell, JGraph graph, CellMapper cm) {
+		public NoteView(Object cell, JGraph graph, CellMapper cm) 
+		{
 			super(cell, graph, cm);
 		}
 
-		public CellViewRenderer getRenderer() {
+		public CellViewRenderer getRenderer() 
+		{
 			return renderer;
 		}
 
-		public GraphCellEditor getEditor() {
+		public GraphCellEditor getEditor() 
+		{
 			return editor;
 		}
 
-		static class NoteEditor extends DefaultGraphCellEditor {
-			class RealCellEditor extends AbstractCellEditor implements GraphCellEditor {
+		static class NoteEditor extends DefaultGraphCellEditor 
+		{
+			class RealCellEditor extends AbstractCellEditor implements GraphCellEditor 
+			{
 				JTextArea editorComponent = new JTextArea();
-				public RealCellEditor() {
+				public RealCellEditor() 
+				{
 					editorComponent.setBorder(UIManager.getBorder("Tree.editorBorder"));
 					editorComponent.setLineWrap(true);
 					editorComponent.setWrapStyleWord(true);
@@ -74,7 +91,8 @@ class NoteView extends VertexView {
 					//substitute a JTextArea's VK_ENTER action with our own that will stop an edit.
 					editorComponent.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter");
 					editorComponent.getActionMap().put("enter", new AbstractAction(){
-						public void actionPerformed(ActionEvent e) {
+						public void actionPerformed(ActionEvent e) 
+						{
 							stopCellEditing();
 						}
 					});
@@ -83,17 +101,20 @@ class NoteView extends VertexView {
 				public Component getGraphCellEditorComponent(
 						JGraph graph,
 						Object value,
-						boolean isSelected) {
+						boolean isSelected) 
+				{
 					editorComponent.setText(value.toString());
 					editorComponent.selectAll();
 					return editorComponent;
 				}
 
-				public Object getCellEditorValue() {
+				public Object getCellEditorValue() 
+				{
 					return editorComponent.getText();
 				}
 
-				public boolean stopCellEditing() {
+				public boolean stopCellEditing() 
+				{
 					//set the size of a vertex to that of an editor.
 					CellView view = graph.getGraphLayoutCache().getMapping(graph.getEditingCell(), false);
 					Map map = view.getAllAttributes();
@@ -104,13 +125,15 @@ class NoteView extends VertexView {
 					return super.stopCellEditing();
 				}
 
-				public boolean shouldSelectCell(EventObject event) {
+				public boolean shouldSelectCell(EventObject event) 
+				{
 					editorComponent.requestFocus();
 					return super.shouldSelectCell(event);
 				}
 			}
 
-			public NoteEditor() {
+			public NoteEditor() 
+			{
 				super();
 			}
 			/**
@@ -119,7 +142,8 @@ class NoteView extends VertexView {
 			public Component getGraphCellEditorComponent(
 					JGraph graph,
 					Object cell,
-					boolean isSelected) {
+					boolean isSelected) 
+			{
 
 				Component component = super.getGraphCellEditorComponent(graph, cell, isSelected);
 
@@ -135,7 +159,8 @@ class NoteView extends VertexView {
 				return component;
 			}
 
-			protected GraphCellEditor createGraphCellEditor() {
+			protected GraphCellEditor createGraphCellEditor() 
+			{
 				return new NoteEditor.RealCellEditor();
 			}
 
@@ -143,12 +168,15 @@ class NoteView extends VertexView {
 			 * Overriting this so that I could modify an eiditor container.
 			 * see <http://sourceforge.net/forum/forum.php?thread_id=781479>&forum_id=140880
 			 */
-			protected Container createContainer() {
+			protected Container createContainer() 
+			{
 				return new NoteEditor.ModifiedEditorContainer();
 			}
 
-			class ModifiedEditorContainer extends EditorContainer {
-				public void doLayout() {
+			class ModifiedEditorContainer extends EditorContainer 
+			{
+				public void doLayout() 
+				{
 					super.doLayout();
 					//substract 2 pixels that were added to the preferred size of the container for the border.
 					Dimension cSize = getSize();
@@ -161,7 +189,8 @@ class NoteView extends VertexView {
 			}
 		}
 
-		static class NoteRenderer extends JTextArea implements CellViewRenderer {
+		static class NoteRenderer extends JTextArea implements CellViewRenderer 
+		{
 			{
 				setLineWrap(true);
 				setWrapStyleWord(true);
@@ -172,7 +201,8 @@ class NoteView extends VertexView {
 					CellView view,
 					boolean sel,
 					boolean focus,
-					boolean preview) {
+					boolean preview) 
+			{
 				setText(view.getCell().toString());
 
 				Map attributes = view.getAllAttributes();
@@ -180,7 +210,8 @@ class NoteView extends VertexView {
 				return this;
 			}
 
-			protected void installAttributes(JGraph graph, Map attributes) {
+			protected void installAttributes(JGraph graph, Map attributes) 
+			{
 				setOpaque(GraphConstants.isOpaque(attributes));
 				Color foreground = GraphConstants.getForeground(attributes);
 				setForeground((foreground != null) ? foreground : graph.getForeground());
@@ -192,7 +223,8 @@ class NoteView extends VertexView {
 				Color bordercolor = GraphConstants.getBorderColor(attributes);
 				if(border != null)
 					setBorder(border);
-				else if (bordercolor != null) {
+				else if (bordercolor != null) 
+				{
 					int borderWidth = Math.max(1, Math.round(GraphConstants.getLineWidth(attributes)));
 					setBorder(BorderFactory.createLineBorder(bordercolor, borderWidth));
 				}

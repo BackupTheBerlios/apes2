@@ -25,7 +25,6 @@ package org.ipsquad.apes.ui;
 import java.util.Map;
 
 import org.ipsquad.apes.adapters.ActivityCell;
-import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -40,7 +39,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Flow graph editing internal frame
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class FlowGraphFrame extends GraphFrame
 {

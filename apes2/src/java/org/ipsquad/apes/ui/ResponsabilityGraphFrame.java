@@ -23,7 +23,6 @@ package org.ipsquad.apes.ui;
 
 import java.util.Map;
 
-import org.ipsquad.apes.adapters.ApesGraphCell;
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -38,7 +37,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Responsability graph editing internal frame
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ResponsabilityGraphFrame extends GraphFrame {
 	

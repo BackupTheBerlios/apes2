@@ -22,25 +22,28 @@
 package org.ipsquad.apes.adapters;
 
 import org.jgraph.graph.DefaultGraphCell;
+import org.jgraph.graph.DefaultPort;
 
 /**
- * @author joffre
  *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * @version $Revision: 1.2 $
  */
 public class NoteCell extends DefaultGraphCell{
 
-	public NoteCell(){;}
+	public NoteCell()
+	{
+		add(new DefaultPort());
+	}
 	
-	public NoteCell(Object userObject) {
+	public NoteCell(Object userObject) 
+	{
 		super(userObject);
 	}
 	
 	public Object clone()
 	{
 		NoteCell c = (NoteCell) super.clone();
-		
+		c.add(new DefaultPort());
 		return c;
 	}
 	
