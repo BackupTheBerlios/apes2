@@ -42,9 +42,9 @@ import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 /**
- * This visitor associates an element with a poup menu.
+ * This visitor associates an element with a popup menu.
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class PopupMenuAssociater extends DefaultModelVisitor
 {
@@ -107,6 +107,8 @@ public class PopupMenuAssociater extends DefaultModelVisitor
 			mResult.add(msContext.getAction("TreeAddWorkProduct"));
 			mResult.addSeparator();
 			mResult.add(msContext.getAction("TreeAddResponsabilityDiagram"));
+			mResult.add(msContext.getAction("TreeAddWorkDefinitionDiagram"));
+			
 		}
 		
 		super.visitPackage(pack);

@@ -35,9 +35,9 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.jgraph.graph.ConnectionSet;
 import org.jgraph.graph.Port;
 /**
- * This adapter allows to display a flow diagram in a JGraph
+ * This adapter allows to display a context diagram in a JGraph
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -75,6 +75,7 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 			public void visitRole(ProcessRole role){ mCreated = null; }
 
 			public void visitActivity(Activity activity){ mCreated = null; } 
+		
 		};
 
 		ApesGraphCell cell = (ApesGraphCell)mBuilder.create(Context.getInstance().getProject().getProcess().getComponent());

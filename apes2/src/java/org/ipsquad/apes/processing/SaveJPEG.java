@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import javax.swing.JFrame;
 
 import org.ipsquad.apes.adapters.ActivityGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.adapters.ContextGraphAdapter;
 import org.ipsquad.apes.adapters.FlowGraphAdapter;
 import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
@@ -40,6 +41,7 @@ import org.ipsquad.apes.ui.ActivityJGraph;
 import org.ipsquad.apes.ui.ContextJGraph;
 import org.ipsquad.apes.ui.FlowJGraph;
 import org.ipsquad.apes.ui.ResponsabilityJGraph;
+import org.ipsquad.apes.ui.WorkDefinitionJGraph;
 import org.jgraph.JGraph;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -49,7 +51,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 /**
  * Save a graph in a jpeg file
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SaveJPEG
 {
@@ -159,6 +161,10 @@ public class SaveJPEG
 		else if(mAdapter instanceof ContextGraphAdapter)
 		{
 			mGraph=new ContextJGraph(mAdapter);
+		}
+		else if(mAdapter instanceof WorkDefinitionGraphAdapter)
+		{
+			mGraph=new WorkDefinitionJGraph(mAdapter);
 		}
 		
 		JFrame frame = new JFrame();

@@ -33,6 +33,7 @@ import java.util.Vector;
 import javax.swing.undo.UndoableEdit;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
@@ -73,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -813,6 +814,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		public void visitResponsabilityDiagram(ResponsabilityDiagram diagram) { mCreated = null; }
 		public void visitContextDiagram(ContextDiagram diagram) { mCreated = null; }
 		public void visitActivityDiagram(ActivityDiagram diagram) { mCreated = null; }	
+		public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram) { mCreated = null; }
 		public void visitStateMachine(StateMachine sm) { mCreated = null; }
 		
 		public void visitDecision( Decision decision ) { mCreated = null; }

@@ -32,9 +32,11 @@ import org.ipsquad.apes.adapters.ContextGraphAdapter;
 import org.ipsquad.apes.adapters.FlowGraphAdapter;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
 import org.ipsquad.apes.adapters.WorkProductStateCell;
+import org.ipsquad.apes.ui.WorkDefinitionJGraph;
 import org.ipsquad.apes.ui.ActivityJGraph;
 import org.ipsquad.apes.ui.ContextJGraph;
 import org.ipsquad.apes.ui.FlowJGraph;
@@ -45,7 +47,7 @@ import org.jgraph.JGraph;
 /**
  * Save a graph in a jpeg file and create a html map
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SaveJpegWithMap
 {
@@ -108,6 +110,10 @@ public class SaveJpegWithMap
 		else if(mAdapter instanceof FlowGraphAdapter)
 		{
 			mGraph=new FlowJGraph(mAdapter);
+		}
+		else if(mAdapter instanceof WorkDefinitionGraphAdapter)
+		{
+			mGraph=new WorkDefinitionJGraph(mAdapter);
 		}
 
 		JFrame frame = new JFrame();

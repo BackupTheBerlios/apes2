@@ -28,13 +28,14 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 
 /**
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class WorkDefinition extends ModelElement
 {
 	private Vector mSubWork = new Vector();
 	private Vector mParentWork = new Vector();
 	private ProcessPerformer mOwner;
+	
 	
 	public WorkDefinition()
 	{

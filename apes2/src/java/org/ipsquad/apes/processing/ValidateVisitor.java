@@ -28,6 +28,7 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
@@ -49,7 +50,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -274,11 +275,21 @@ public class ValidateVisitor implements RoutedSpemVisitor
 
 	
 	/**
-	 * Called when the visited element is a class diagram
+	 * Called when the visited element is a flow diagram
 	 *
-	 * @param diagram the visited class diagram
+	 * @param diagram the visited flow diagram
 	 */
 	public void visitFlowDiagram(FlowDiagram diagram)
+	{
+		visitSpemDiagram(diagram);
+	}
+	
+	/**
+	 * Called when the visited element is a work definition diagram
+	 *
+	 * @param diagram the visited work definition diagram
+	 */
+	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
 	{
 		visitSpemDiagram(diagram);
 	}

@@ -27,6 +27,7 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.extension.ActivityDiagram.Decision;
 import org.ipsquad.apes.model.extension.ActivityDiagram.FinalPoint;
@@ -151,6 +152,10 @@ public class ColorAssociater implements ModelVisitor
 	}
 
 	public void visitActivityDiagram(ActivityDiagram diagram)
+	{
+	}
+	
+	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
 	{
 	}
 

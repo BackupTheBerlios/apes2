@@ -27,6 +27,7 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
 import org.ipsquad.apes.model.spem.basic.GuidanceKind;
@@ -45,7 +46,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Interface for visiting SPEM models
  * For more details see the visitor design pattern
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface SpemVisitor
 {
@@ -146,9 +147,9 @@ public interface SpemVisitor
 	
 	
 	/**
-	 * Called when the visited element is a class diagram
+	 * Called when the visited element is a flow diagram
 	 *
-	 * @param diagram the visited class diagram
+	 * @param diagram the visited flow diagram
 	 */
 	public void visitFlowDiagram(FlowDiagram diagram);
 	
@@ -162,7 +163,7 @@ public interface SpemVisitor
 	/**
 	 * Called when the visited element is a context diagram
 	 *
-	 * @param diagram the visited responsability diagram
+	 * @param diagram the visited context diagram
 	 */
 	public void visitContextDiagram(ContextDiagram diagram);
 
@@ -172,6 +173,13 @@ public interface SpemVisitor
 	 * @param diagram the visited activity diagram
 	 */
 	public void visitActivityDiagram(ActivityDiagram diagram);
+	
+	/**
+	 * Called when the visited element is a work definition diagram
+	 *
+	 * @param diagram the visited work definition diagram
+	 */
+	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram);
 	
 	/**
 	 * Called when the visited element is a state machine

@@ -30,6 +30,7 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.spem.DefaultSpemVisitor;
 import org.ipsquad.apes.model.spem.SpemVisitor;
@@ -274,6 +275,7 @@ public class TestSpemVisitor extends TestCase
 		public void visitGuidance(Guidance guidance) { fail(); }
 		public void visitGuidanceKind(GuidanceKind kind) { fail(); }
 		public void visitFlowDiagram(FlowDiagram diagram) { fail(); }
+		public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram) { fail(); }
 		public void visitResponsabilityDiagram(ResponsabilityDiagram diagram) { fail(); }
 		public void visitContextDiagram(ContextDiagram diagram) { fail(); }
 		public void visitActivityDiagram(ActivityDiagram diagram) { fail(); }
@@ -405,6 +407,12 @@ public class TestSpemVisitor extends TestCase
 		{
 			result.add("ResponsabilityDiagram");
 			super.visitResponsabilityDiagram(diagram);
+		}
+		
+		public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
+		{
+			result.add("WorkDefinitionDiagram");
+			super.visitWorkDefinitionDiagram(diagram);
 		}
 		
 		public void visitContextDiagram(ContextDiagram diagram)

@@ -32,6 +32,7 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
@@ -79,7 +80,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ApesMain
 {
@@ -245,6 +246,7 @@ public class ApesMain
 		context.registerAction("TreeAddFlowDiagram", new AddToModelAction("treeAddFlowDiagram",  new ApesTreeNode(new FlowDiagram(""), true)));
 		context.registerAction("TreeAddResponsabilityDiagram", new AddToModelAction("treeAddResponsabilityDiagram",  new ApesTreeNode(new ResponsabilityDiagram(""), true)));
 		context.registerAction("TreeAddContextDiagram", new AddToModelAction("treeAddContextDiagram",  new ApesTreeNode(new ContextDiagram(""), true)));
+		context.registerAction("TreeAddWorkDefinitionDiagram", new AddToModelAction("treeAddWorkDefinitionDiagram",  new ApesTreeNode(new WorkDefinitionDiagram(""), true)));
 		context.registerAction("TreeOpenDiagram", new InteractWithModelAction("treeOpenDiagram"));
 		context.registerAction("TreeAddRole", new AddToModelAction("treeAddRole",  new ApesTreeNode(new ProcessRole(""), true)));		
 		context.registerAction("TreeAddActivity", new AddToModelAction("treeAddActivity",  new ApesTreeNode(new Activity(""), true)));

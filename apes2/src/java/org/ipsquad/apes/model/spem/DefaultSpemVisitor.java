@@ -27,6 +27,7 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
@@ -49,7 +50,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Default visitor implementation that does nothing.
  * Its only work is to follow the inheritance tree.
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class DefaultSpemVisitor implements SpemVisitor
 {
@@ -279,6 +280,16 @@ public class DefaultSpemVisitor implements SpemVisitor
 	 * @param diagram the visited activity diagram
 	 */
 	public void visitActivityDiagram(ActivityDiagram diagram)
+	{
+		visitSpemDiagram(diagram);
+	}
+	
+	/**
+	 * Simply treat the WorkDefinitionDiagram as a SpemDiagram
+	 *
+	 * @param diagram the visited work definition diagram
+	 */
+	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
 	{
 		visitSpemDiagram(diagram);
 	}

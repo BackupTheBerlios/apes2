@@ -28,6 +28,7 @@ import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
@@ -47,7 +48,7 @@ import org.ipsquad.apes.model.spem.statemachine.StateMachine;
  * Interface for visiting SPEM models
  * For more details see the visitor design pattern
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class CompositeVisitor implements RoutedSpemVisitor
 {
@@ -284,6 +285,18 @@ public class CompositeVisitor implements RoutedSpemVisitor
 		for (int i=0;i<mVisitors.size();i++)
 			((SpemVisitor)mVisitors.get(i)).visitActivityDiagram(diagram);
 	}		
+	
+	
+	/**
+	 * Called when the visited element is a work definition diagram
+	 *
+	 * @param diagram the visited responsability diagram
+	 */
+	public void visitWorkDefinitionDiagram(WorkDefinitionDiagram diagram)
+	{
+		for (int i=0;i<mVisitors.size();i++)
+			((SpemVisitor)mVisitors.get(i)).visitWorkDefinitionDiagram(diagram);
+	}	
 
 	public void visitStateMachine(StateMachine sm)
 	{

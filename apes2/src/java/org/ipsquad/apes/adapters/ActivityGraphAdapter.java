@@ -37,7 +37,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 /**
  * This adapter allows to display an activity diagram in a JGraph
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ActivityGraphAdapter extends SpemGraphAdapter
 {
@@ -73,7 +73,7 @@ public class ActivityGraphAdapter extends SpemGraphAdapter
 			public void visitProduct(WorkProduct product) { mCreated = null; }
 
 			public void visitRole(ProcessRole role){ mCreated = null; }
-
+			
 			public void visitActivity(Activity activity) 
 			{
 				mCreated = new ActivityCell( activity );

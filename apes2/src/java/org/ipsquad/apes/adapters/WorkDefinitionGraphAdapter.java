@@ -26,15 +26,15 @@ import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
-
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 /**
- * This adapter allows to display a responsability diagram in a JGraph
+ * This adapter allows to display a work definition diagram in a JGraph
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.1 $
  */
-public class ResponsabilityGraphAdapter extends SpemGraphAdapter 
+public class WorkDefinitionGraphAdapter extends SpemGraphAdapter 
 {
-	public ResponsabilityGraphAdapter( SpemDiagram diagram )
+	public WorkDefinitionGraphAdapter( SpemDiagram diagram )
 	{
 		super( diagram );
 		
@@ -51,7 +51,7 @@ public class ResponsabilityGraphAdapter extends SpemGraphAdapter
 
 			public boolean shouldGoInGraph(Object o)
 			{
-				if( o instanceof WorkProduct || o instanceof ProcessRole )
+				if( o instanceof WorkProduct || o instanceof ProcessRole || o instanceof WorkDefinition)
 				{
 					return true;
 				}
@@ -66,6 +66,11 @@ public class ResponsabilityGraphAdapter extends SpemGraphAdapter
 			public void visitRole(ProcessRole role) 
 			{
 				mCreated = new ProcessRoleCell( role );
+			}
+			
+			public void visitWorkDefinition(WorkDefinition workDefinition) 
+			{
+				mCreated = new WorkDefinitionCell( workDefinition );
 			}
 
 			public void visitActivity(Activity activity) { mCreated = null; }

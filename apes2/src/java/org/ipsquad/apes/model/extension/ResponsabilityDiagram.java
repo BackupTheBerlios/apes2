@@ -17,7 +17,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the responsability diagram
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ResponsabilityDiagram extends SpemDiagram {
 
@@ -60,7 +60,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 			mElements.add(r);
 			return true;
 		}
-
+		ErrorManager.getInstance().printKey("errorElementAlreadyPresent");
 		return false;
 	}
 
@@ -77,7 +77,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 			mElements.add(p);
 			return true;
 		}
-
+		ErrorManager.getInstance().printKey("errorElementAlreadyPresent");
 		return false;
 	}
 

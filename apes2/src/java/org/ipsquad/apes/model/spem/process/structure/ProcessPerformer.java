@@ -28,7 +28,7 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 
 /**
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ProcessPerformer extends ModelElement
 {
@@ -58,7 +58,17 @@ public class ProcessPerformer extends ModelElement
 	 * @param f the feature to associate
 	 * @return true if the feature can be added, false otherwise
 	 */
-	public boolean addFeature(Activity f)
+	/*public boolean addFeature(Activity f)
+	{
+		if(!containsFeature(f))
+		{
+			mFeature.add(f);
+			return true;
+		}
+		return false;
+	}*/
+	
+	public boolean addFeature(WorkDefinition f)
 	{
 		if(!containsFeature(f))
 		{
@@ -69,14 +79,24 @@ public class ProcessPerformer extends ModelElement
 	}
 	
 	
-	
 	/**
 	 * Remove a feature to this ProcessPerformer
 	 *
 	 * @param f the feature to remove
 	 * @return true if the feature can be removed, false otherwise
 	 */
-	public boolean removeFeature(Activity f)
+	/*public boolean removeFeature(Activity f)
+	{
+		if(containsFeature(f))
+		{
+			mFeature.remove(f);
+			return true;
+		}
+
+		return false;
+	}*/
+	
+	public boolean removeFeature(WorkDefinition f)
 	{
 		if(containsFeature(f))
 		{
@@ -87,19 +107,20 @@ public class ProcessPerformer extends ModelElement
 		return false;
 	}
 	
-	
-	
 	/**
 	 * Check if an activity is a feature of this ProcessPerformer
 	 *
 	 * @param f the Activity to test
 	 * @return true if the Activity is a feature of this ProcessPerformer, false otherwise
 	 */
-	public boolean containsFeature(Activity f)
+	/*public boolean containsFeature(Activity f)
+	{
+		return mFeature.contains(f);
+	}*/
+	public boolean containsFeature(WorkDefinition f)
 	{
 		return mFeature.contains(f);
 	}
-	
 	
 	
 	/**
@@ -171,9 +192,15 @@ public class ProcessPerformer extends ModelElement
 		return mResponsibilities.size();
 	}
 	
+	/*
 	public Activity getFeature(int i)
 	{
 		return (Activity)mFeature.get(i);
+	}
+	*/
+	public WorkDefinition getFeature(int i)
+	{
+		return (WorkDefinition)mFeature.get(i);
 	}
 	
 	public WorkProduct getResponsibility(int i)

@@ -42,6 +42,7 @@ import org.ipsquad.apes.adapters.ActivityGraphAdapter;
 import org.ipsquad.apes.adapters.ContextGraphAdapter;
 import org.ipsquad.apes.adapters.FlowGraphAdapter;
 import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.Debug;
 import org.ipsquad.utils.ResourceManager;
@@ -51,7 +52,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
@@ -227,6 +228,11 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 		{
 			ContextGraphAdapter adapter = (ContextGraphAdapter) model;
 			w = new ContextGraphFrame(adapter);
+		}
+		else if(model instanceof WorkDefinitionGraphAdapter)
+		{
+			WorkDefinitionGraphAdapter adapter = (WorkDefinitionGraphAdapter) model;
+			w = new WorkDefinitionGraphFrame(adapter);
 		}
 		else
 		{

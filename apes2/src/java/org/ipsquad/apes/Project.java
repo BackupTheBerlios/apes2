@@ -30,6 +30,7 @@ import org.ipsquad.apes.adapters.ActivityGraphAdapter;
 import org.ipsquad.apes.adapters.ContextGraphAdapter;
 import org.ipsquad.apes.adapters.FlowGraphAdapter;
 import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
+import org.ipsquad.apes.adapters.WorkDefinitionGraphAdapter;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
@@ -37,6 +38,7 @@ import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkDefinitionDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.utils.ResourceManager;
@@ -46,7 +48,7 @@ import org.ipsquad.utils.ResourceManager;
  *
  * This class represent a project in the application
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Project implements Serializable
 {
@@ -119,6 +121,15 @@ public class Project implements Serializable
 			else if(diagram instanceof ActivityDiagram)
 			{
 				ActivityGraphAdapter adapt = new ActivityGraphAdapter((ActivityDiagram)diagram);
+				adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
+				mDiagramMap.put(diagram, adapt);
+				ApesMediator.getInstance().registerDiagram(diagram);
+				ApesMediator.getInstance().addApesMediatorListener( adapt );
+				//Context.getInstance().getTopLevelFrame().getTree().getModel().addTreeModelListener(adapt);
+			}
+			else if(diagram instanceof WorkDefinitionDiagram)
+			{
+				WorkDefinitionGraphAdapter adapt = new WorkDefinitionGraphAdapter((WorkDefinitionDiagram)diagram);
 				adapt.addUndoableEditListener(Context.getInstance().getUndoManager());
 				mDiagramMap.put(diagram, adapt);
 				ApesMediator.getInstance().registerDiagram(diagram);
