@@ -22,14 +22,20 @@ package org.ipsquad.apes.ui.actions;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
 
+
+import org.ipsquad.apes.Context;
+import org.ipsquad.apes.processing.SaveProject;
+import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.DefaultPathPanel;
 import org.ipsquad.utils.ConfigManager;
+import org.ipsquad.utils.ResourceManager;
 
 
 /**
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class PresentationAction extends ApesAction
 {
@@ -50,16 +56,30 @@ public class PresentationAction extends ApesAction
 	{
 			try 
 			{
-				String path = ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath");
-				String s = System.getProperty("os.name") ; 
-                if (s.charAt(0) == 'w' || s.charAt(0) == 'W') 
-                { 
-                    Runtime.getRuntime().exec("java -jar "+ " \""+ path +"\" " ); 
-                } 
-                else 
-                { 
-                    Runtime.getRuntime().exec("java -jar "+ path ); 
-                } 
+				int choice=JOptionPane.showConfirmDialog(
+				((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
+				ResourceManager.getInstance().getString("msgPresentationSave"),
+				ResourceManager.getInstance().getString("toolsPresentation"),
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
+				if(choice==JOptionPane.YES_OPTION)
+				{
+					
+						String path = ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath");
+						String s = System.getProperty("os.name") ; 
+						if (s.charAt(0) == 'w' || s.charAt(0) == 'W') 
+						{ 
+							Runtime.getRuntime().exec("java -jar "+ " \""+ path +"\" " + context.getFilePath() ); 
+							
+						} 
+						else 
+						{ 
+							Runtime.getRuntime().exec("java -jar "+ path + context.getFilePath()); 
+						}
+					}
+				
+				
+				
 				
             } 
 			catch (Throwable t) 
