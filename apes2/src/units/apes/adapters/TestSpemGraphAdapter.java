@@ -608,4 +608,33 @@ public class TestSpemGraphAdapter extends TestCase
 		adapter.edit(attr, null, null, null);
 		assertEquals("A short test...", ApesGraphConstants.getValue(cell.getAttributes()));
 	}
+	
+	public void testDuplicateNames()
+	{
+		assertEquals(0, adapter.getRootCount());
+		
+		/*
+		 * insert two activity cells
+		 */
+		vertex1 = adapter.associateGraphCell(new Activity("a1"));
+		vertex2 = adapter.associateGraphCell(new Activity("a2"));
+		Map attr = ApesGraphConstants.createMap();
+		attr.put(vertex1, vertex1.getAttributes());	
+		attr.put(vertex2, vertex2.getAttributes());	
+		
+		adapter.insert( new Object[]{vertex1, vertex2}, attr, null, null, null );
+		assertEquals(2, SpemGraphAdapter.getRoots(adapter).length);
+		assertTrue(adapter.contains(vertex1));
+		assertTrue(adapter.contains(vertex2));
+		
+		/*
+		 * Try to change the name of a2 to a1
+		 */
+		Map name = ApesGraphConstants.createMap();
+		ApesGraphConstants.setValue(name, "a1");
+		attr.clear();
+		attr.put(vertex2, name);
+		assertEquals("a2", vertex2.toString());
+		
+	}
 }

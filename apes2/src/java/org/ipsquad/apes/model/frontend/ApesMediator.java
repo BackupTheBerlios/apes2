@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1615,7 +1615,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	        }    
 		}
 	    
-		return !removed.isEmpty() ? removed : null;
+		return removed.isEmpty() ? null : removed;
 	}
 
 	/**
@@ -1661,7 +1661,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	    		}
 	    	}		
 		}
-	    return inserted.size()>0 ? inserted.toArray() : null;
+	    return inserted.isEmpty() ? null : inserted.toArray();
 	}
 
 	/**
@@ -1708,7 +1708,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		        }
 		    }
 		}
-		return removed.size()>0 ? removed.toArray() : null;
+		return removed.isEmpty()? null : removed.toArray();
 	}
 
 	/**
@@ -1734,15 +1734,33 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			if(entry.getKey() instanceof ModelElement && entry.getValue() instanceof String)
 			{
 				ModelElement me = (ModelElement)entry.getKey();
+				IPackage parent = me.getParent();
+				
+				//remove the element before rename it
+				if(parent != null)
+				{
+					parent.removeModelElement(me);
+				}
+				
+				//rename the element and add the undo to the map
 				undo.put(me, me.getName());
 				me.setName((String)entry.getValue());
+
+				//if it's not possible to readd the element (due to duplicated names) rollback to previous state 
+				if(parent != null && !parent.addModelElement(me))
+				{
+					me.setName((String)undo.remove(me));
+					parent.addModelElement(me);					
+					ErrorManager.getInstance().printKey("errorDuplicatedName");
+				}
+				
 				if(me instanceof SpemDiagram)
 				{
 					Context.getInstance().graphNameChanged(Context.getInstance().getProject().getGraphModel((SpemDiagram)me),me.getName());
 				}
 			}
 		}
-		return undo;	    
+		return undo.isEmpty()? null : undo;	    
 	}
 	
 	/**
@@ -1786,7 +1804,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				}
 			}
 		}
-		return undo;
+		return undo.isEmpty()? null : undo;
 	}
 	
 	/**

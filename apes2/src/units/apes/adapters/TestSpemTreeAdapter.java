@@ -61,8 +61,9 @@ public class TestSpemTreeAdapter extends TestCase
 	public void setUp()
 	{
 		ApesMediator.getInstance().clearListeners();
-		
 		adapt = new SpemTreeAdapter();
+		ApesMediator.getInstance().addApesModelListener(adapt);
+
 		adapt.setRoot(new ApesProcess("node1"));
 		node1 = (ApesTreeNode)adapt.getRoot();
 		
@@ -75,34 +76,45 @@ public class TestSpemTreeAdapter extends TestCase
 		//adapt.setRoot(createProcess());
 	}
 	
-	private ApesProcess createProcess()
+	public void testInsert()
 	{
 		proc = new ApesProcess("proc");
+		adapt.setRoot(proc);
+		
 		component = new ProcessComponent("component");
-		proc.addModelElement(component);
-		context = new ContextDiagram("context");
-		component.addModelElement(context);
+		ApesTreeNode node = new ApesTreeNode(component, false);
 		
-		//component = new ProcessComponent("component");
+		adapt.insert(new Object[]{node}, new Object[]{adapt.getRoot()});
+		assertEquals(((ApesTreeNode)adapt.getRoot()).getChildAt(0), node);
+		
+		component = new ProcessComponent("component");
+		node = new ApesTreeNode(component, false);
+		adapt.insert(new Object[]{node}, new Object[]{adapt.getRoot()});
+		assertEquals(adapt.getRoot(), node.getParent());
+		
 		p1 = new SPackage("p1");
+		ApesTreeNode nodeP1 = new ApesTreeNode(p1, false);
 		p2 = new SPackage("p2");
+		ApesTreeNode nodeP2 = new ApesTreeNode(p2, false);
 		p3 = new SPackage("p3");
+		ApesTreeNode nodeP3 = new ApesTreeNode(p3, false);
+		
+		adapt.insert(new Object[]{nodeP1, nodeP2, nodeP3}, new Object[]{node, node, node});
+		assertEquals(node, nodeP1.getParent());
+		assertEquals(node, nodeP2.getParent());
+		assertEquals(node, nodeP3.getParent());
+
 		w1 = new ApesWorkDefinition("w1");
-		act = new Activity("act");
+		ApesTreeNode nodeW1 = new ApesTreeNode(w1, false);
 		role = new ProcessRole("role");
+		ApesTreeNode nodeRole = new ApesTreeNode(role, false);
 		prod = new WorkProduct("prod");
+		ApesTreeNode nodeProd = new ApesTreeNode(prod, false);
 		
-		//proc.addModelElement(component);
-		component.addModelElement(p1);
-		component.addModelElement(p2);
-		component.addModelElement(p3);
-		
-		w1.addModelElement(act);
-		p1.addModelElement(w1);
-		p2.addModelElement(role);
-		p3.addModelElement(prod);
-		
-		return proc;
+		adapt.insert(new Object[]{nodeW1, nodeRole, nodeProd}, new Object[]{nodeP1, nodeP2, nodeP3});
+		assertEquals(nodeP1, nodeW1.getParent());
+		assertEquals(nodeP2, nodeRole.getParent());
+		assertEquals(nodeP3, nodeProd.getParent());		
 	}
 	
 	
@@ -218,6 +230,51 @@ public class TestSpemTreeAdapter extends TestCase
 		
 		ApesTreeNode test = new ApesTreeNode(null, false);
 		assertTrue(arraysEquals(adapt.getPathToRoot(test), new ApesTreeNode[]{test}));
+	}
+	
+	public void testDuplicateName()
+	{
+		proc = new ApesProcess("proc");
+		adapt.setRoot(proc);
+		
+		component = new ProcessComponent("component");
+		ApesTreeNode node = new ApesTreeNode(component, false);
+		adapt.insert(new Object[]{node}, new Object[]{adapt.getRoot()});
+		assertEquals(((ApesTreeNode)adapt.getRoot()).getChildAt(0), node);
+		
+		component = new ProcessComponent("component");
+		node = new ApesTreeNode(component, false);
+		adapt.insert(new Object[]{node}, new Object[]{adapt.getRoot()});
+		assertEquals(adapt.getRoot(), node.getParent());
+		
+		p1 = new SPackage("p1");
+		ApesTreeNode nodeP1 = new ApesTreeNode(p1, false);
+		p2 = new SPackage("p2");
+		ApesTreeNode nodeP2 = new ApesTreeNode(p2, false);
+		p3 = new SPackage("p3");
+		ApesTreeNode nodeP3 = new ApesTreeNode(p3, false);
+		
+		adapt.insert(new Object[]{nodeP1, nodeP2}, new Object[]{node, node});
+		assertEquals(node, nodeP1.getParent());
+		assertEquals(node, nodeP2.getParent());
+
+		adapt.insert(new Object[]{nodeP3}, new Object[]{nodeP2});
+		assertEquals(nodeP2, nodeP3.getParent());
+
+		/*
+		 * Try to change the name of node21 to node22
+		 */
+		adapt.valueForPathChanged(new TreePath(nodeP2.getPath()), "p1");
+		assertEquals("p2", nodeP2.toString());
+		
+		/*
+		 * rename p3 to p1 and try to move it in the same level of p1
+		 */
+		adapt.valueForPathChanged(new TreePath(nodeP3.getPath()), "p1");
+		assertEquals("p1", nodeP3.toString());
+		
+		adapt.move(new Object[]{nodeP3}, new Object[]{node});
+		assertEquals(nodeP2, nodeP3.getParent());
 	}
 	
 	private boolean arraysEquals(Object[] array1, Object[] array2)
