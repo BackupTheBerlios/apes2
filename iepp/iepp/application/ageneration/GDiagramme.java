@@ -172,37 +172,30 @@ public class GDiagramme extends GElementModele
 				x2=x1+(int)mGraph.getCellBounds(o[i]).getWidth();
 				y1=(int)mGraph.getCellBounds(o[i]).getY();
 				y2=y1+(int)mGraph.getCellBounds(o[i]).getHeight();
-				// si c'est un composant
-				if (o[i] instanceof ProcessComponentCell)
+				
+				// récupérer l'ID de l'élément courant
+				int ID_Apes = ((ApesGraphCell)o[i]).getID();
+				ElementPresentation elem = this.cp.getElementPresentation(ID_Apes);
+				if ( elem != null )
 				{
-					mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ " " +"\">\n");
+					IdObjetModele id = elem.getElementModele();
+					if (id != null)
+					{
+						// rajouté: info-bulle contenant la description de l'élément
+						String description = "ALT=\"\"";
+						if (elem.getDescription() != null)
+						{
+							description = "ALT=\"" + elem.getDescription() + "\"";
+						}
+						mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ this.getLienChemin(id)+ "\" " + description + ">\n");
+					}
 				}
 				else
 				{
-					// récupérer l'ID de l'élément courant
-					int ID_Apes = ((ApesGraphCell)o[i]).getID();
-					ElementPresentation elem = this.cp.getElementPresentation(ID_Apes);
-					if ( elem != null )
+					// S'il s'agit d'un produit exterieur (sans element de presentation)
+					if (o[i] instanceof WorkProductCell)
 					{
-						IdObjetModele id = elem.getElementModele();
-						if (id != null)
-						{
-							// rajouté: info-bulle contenant la description de l'élément
-							String description = "ALT=\"\"";
-							if (elem.getDescription() != null)
-							{
-								description = "ALT=\"" + elem.getDescription() + "\"";
-							}
-							mapcode += ("<AREA Shape=\"Polygon\" coords = \""+x1 +","+y1+","+x2+","+y1+","+x2+","+y2+","+x1+","+y2+"\" HREF=\""+ this.getLienChemin(id)+ "\" " + description + ">\n");
-						}
-					}
-					else
-					{
-						// S'il s'agit d'un produit exterieur (sans element de presentation)
-						if (o[i] instanceof WorkProductCell)
-						{
-							// S'occuper du paquetage special
-						}
+						// S'occuper du paquetage special
 					}
 				}
 			}
