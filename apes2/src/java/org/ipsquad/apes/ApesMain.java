@@ -22,6 +22,7 @@
 
 package org.ipsquad.apes;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -39,6 +40,7 @@ import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
+import org.ipsquad.apes.processing.LoadProject;
 import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.actions.AboutAction;
 import org.ipsquad.apes.ui.actions.AddToModelAction;
@@ -68,13 +70,14 @@ import org.ipsquad.apes.ui.actions.ValidateAction;
 import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
+import org.ipsquad.utils.TaskMonitorDialog;
 
 /**
  * APES' main class
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApesMain
 {
@@ -192,5 +195,41 @@ public class ApesMain
 		ErrorManager.getInstance().setOwner(f.getContentPane());
 		
 		f.show();
+		
+		//Open a file given in parameter
+		if(args.length>0)
+		{
+			if(args[0].endsWith(".apes"))
+			{	
+			try
+			{
+				
+				File mFile = new File(args[0]);
+				
+				LoadProject mMonitor = new LoadProject(mFile);
+				
+				ApesFrame parent = (ApesFrame)Context.getInstance().getTopLevelFrame();
+				
+				TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
+				mTask.setName("Loading");
+				mTask.setLocation(parent.getWidth()/2-mTask.getWidth() / 2,parent.getHeight()/2-mTask.getHeight()/2);
+				
+				mMonitor.setTask(mTask);
+				
+				mTask.show();
+				mTask.hide();
+			}
+			
+			catch(Throwable t)
+			{
+				t.printStackTrace();
+				ErrorManager.getInstance().display("errorTitleOpenProcess", "errorOpenProcess");
+			}
+			}
+			else
+			{
+				ErrorManager.getInstance().println(args[0]+" : "+ResourceManager.getInstance().getString("errorOpenFileNameInvalid"));	
+			}
+		}
 	}
 }
