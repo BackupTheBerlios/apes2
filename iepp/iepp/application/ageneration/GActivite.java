@@ -129,7 +129,20 @@ public class GActivite extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+	}
+	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbActivites");
+		ArbreGeneration.mapCompteur.put("nbActivites", new Integer(oldValue.intValue() + 1));
 		
-		GenerationManager.nbActivites++;
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
+		
+		Vector oldVecteur = (Vector)ArbreGeneration.mapRecap.get("activites");
+		oldVecteur.addElement(this);
 	}
 }

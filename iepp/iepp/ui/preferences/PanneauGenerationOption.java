@@ -30,7 +30,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Vector;
 
 
@@ -50,7 +49,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import org.ipsquad.apes.ui.PreferencesDialog;
 
 
 public class PanneauGenerationOption extends PanneauOption 
@@ -206,7 +204,7 @@ public class PanneauGenerationOption extends PanneauOption
 		makeLabel(" ", gridbag, c);
 		
 		// Info bulles sur les diagrammes
-		this.bInfoBulles = new JCheckBox("Info-bulle sur les diagrammes");
+		this.bInfoBulles = new JCheckBox(Application.getApplication().getTraduction("Info-bulle"));
 		this.bInfoBulles.setSelected(Application.getApplication().getConfigPropriete("info_bulle").equals(GenerationManager.PRESENT));
 		c.gridwidth = 6 ;//next-to-last in row
 		gridbag.setConstraints(bInfoBulles, c);
@@ -218,7 +216,8 @@ public class PanneauGenerationOption extends PanneauOption
 		makeLabel(" ", gridbag, c);
 		
 		// Statistiques sur la génération
-		this.bstatistique = new JCheckBox("Générer une page de statistiques");
+		this.bstatistique = new JCheckBox(Application.getApplication().getTraduction("Stats"));
+		this.bstatistique.setSelected(Application.getApplication().getConfigPropriete("statistiques").equals(GenerationManager.PRESENT));
 		c.gridwidth = 6 ;//next-to-last in row
 		gridbag.setConstraints(bstatistique, c);
 		mPanel.add(bstatistique);
@@ -229,7 +228,8 @@ public class PanneauGenerationOption extends PanneauOption
 		makeLabel(" ", gridbag, c);
 		
 		// Récapitulatif des roles, produits, et activités
-		this.brecap = new JCheckBox("Insérer un récapitulatif (rôles, produits, activités)");
+		this.brecap = new JCheckBox(Application.getApplication().getTraduction("Recap"));
+		this.brecap.setSelected(Application.getApplication().getConfigPropriete("recapitulatif").equals(GenerationManager.PRESENT));
 		c.gridwidth = 6 ;//next-to-last in row
 		
 		gridbag.setConstraints(brecap, c);
@@ -281,6 +281,17 @@ public class PanneauGenerationOption extends PanneauOption
 				Application.getApplication().setConfigPropriete("info_bulle", GenerationManager.PRESENT);
 			else
 				Application.getApplication().setConfigPropriete("info_bulle", GenerationManager.NON_PRESENT);	
+		
+			if (this.bstatistique.isSelected())
+				Application.getApplication().setConfigPropriete("statistiques", GenerationManager.PRESENT);
+			else
+				Application.getApplication().setConfigPropriete("statistiques", GenerationManager.NON_PRESENT);	
+		
+			if (this.brecap.isSelected())
+				Application.getApplication().setConfigPropriete("recapitulatif", GenerationManager.PRESENT);
+			else
+				Application.getApplication().setConfigPropriete("recapitulatif", GenerationManager.NON_PRESENT);	
+		
 		}
 	}
 	

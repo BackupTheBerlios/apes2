@@ -51,9 +51,18 @@ public class GGuide extends GElement
 	public void traiterGeneration(long id) throws IOException
 	{
 		super.traiterGeneration(id);
-		GenerationManager.nbGuides++;
-		GenerationManager.nbElementPresentation--;
 	}
 	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbGuides");
+		ArbreGeneration.mapCompteur.put("nbGuides", new Integer(oldValue.intValue() + 1));
+		
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
+	}
 	
 }

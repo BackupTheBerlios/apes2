@@ -98,7 +98,21 @@ public class GProduit extends GElementModele
 		fd.write("</BODY></HTML>") ;
 		fd.close();
 		
-		GenerationManager.nbProduits++;
+	}
+	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbProduits");
+		ArbreGeneration.mapCompteur.put("nbProduits", new Integer(oldValue.intValue() + 1));
+		
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
+		
+		Vector oldVecteur = (Vector)ArbreGeneration.mapRecap.get("produits");
+		oldVecteur.addElement(this);
 	}
 	
 }

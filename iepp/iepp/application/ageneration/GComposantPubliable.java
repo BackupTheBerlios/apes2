@@ -90,7 +90,6 @@ public class GComposantPubliable  extends GElementModele
 		this.ecrireArbre();
 		// on crée le fichier correspondant
 		this.creerFichierDescription();
-		GenerationManager.nbPagesTotal++;
 	}
 	
 	/**
@@ -234,10 +233,20 @@ public class GComposantPubliable  extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
-		
-		GenerationManager.nbComposants++;
-	}
 
+	}
+	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbComposants");
+		ArbreGeneration.mapCompteur.put("nbComposants", new Integer(oldValue.intValue() + 1));
+		
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
+	}
 }
 
 

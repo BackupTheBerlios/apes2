@@ -21,6 +21,7 @@ package iepp.ui.preferences;
 import iepp.Application;
 import iepp.Projet;
 import iepp.application.CGenererSite;
+import iepp.application.ageneration.ArbreGeneration;
 import iepp.application.ageneration.GenerationManager;
 import iepp.domaine.DefinitionProcessus;
 
@@ -123,21 +124,21 @@ public class PanneauGeneration extends PanneauOption
 	 */
 	public void afficherStatistiques()
 	{
-		this.mOutput.append(Application.getApplication().getTraduction("NB_COMPOSANTS") + " " + GenerationManager.nbComposants + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_ROLES") + " " + GenerationManager.nbRoles + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_PRODUITS") + " " + GenerationManager.nbProduits + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_ACTIVITES") + " " + GenerationManager.nbActivites + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_DEFS_TRAVAIL") + " " + GenerationManager.nbDefinitionsTravail + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_DIAGRAMMES") + " " + GenerationManager.nbDiagrammes + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_GUIDES") + " " + GenerationManager.nbGuides + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_PAQ_PRESENT") + " " + GenerationManager.nbPaquetagesPresentation + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_PAQ") + " " + GenerationManager.nbPaquetages + "\n");
-		this.mOutput.append(Application.getApplication().getTraduction("NB_ELEM_PRESENT") + " " + GenerationManager.nbElementPresentation + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_COMPOSANTS") + " " + ArbreGeneration.mapCompteur.get("nbComposants")+ "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_ROLES") + " " + ArbreGeneration.mapCompteur.get("nbRoles") + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PRODUITS") + " " + ArbreGeneration.mapCompteur.get("nbProduits") + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_ACTIVITES") + " " + ArbreGeneration.mapCompteur.get("nbActivites") + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_DEFS_TRAVAIL") + " " + ArbreGeneration.mapCompteur.get("nbDefinitionsTravail") + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_DIAGRAMMES") + " " + ArbreGeneration.mapCompteur.get("nbDiagrammes") + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_GUIDES") + " " + ArbreGeneration.mapCompteur.get("nbGuides") + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PAQ_PRESENT") + " " + ArbreGeneration.mapCompteur.get("nbPaquetagesPresentation") + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PAQ") + " " + ArbreGeneration.mapCompteur.get("nbPaquetages")+ "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_ELEM_PRESENT") + " " + ArbreGeneration.mapCompteur.get("nbElementPresentation")  + "\n");
 		this.mOutput.append(Application.getApplication().getTraduction("NB_ACCUEIL") + " " + "1" + "\n");
 		
 		this.mOutput.append("-------------------------------------------------------------------------------\n");
 		
-		this.mOutput.append(Application.getApplication().getTraduction("NB_PAGES_TOTAL") + " " + GenerationManager.nbPagesTotal + "\n");
+		this.mOutput.append(Application.getApplication().getTraduction("NB_PAGES_TOTAL") + " " + ArbreGeneration.mapCompteur.get("nbPagesTotal") + "\n");
 	}
 	
 	public PanneauOption openPanel(String key)

@@ -67,7 +67,12 @@ public class CGenererSite extends CommandeNonAnnulable
 		// contenu
 		GenerationManager.getInstance().setPlaceContenu(Application.getApplication().getConfigPropriete("place_contenu"));
 		// info-bulle
-		GenerationManager.getInstance().setInfoBulle(Application.getApplication().getConfigPropriete("info_bulle"));
+		GenerationManager.getInstance().setStatistiques(Application.getApplication().getConfigPropriete("info_bulle"));
+		// statistiques
+		GenerationManager.getInstance().setStatistiques(Application.getApplication().getConfigPropriete("statistiques"));
+		// recapitulatif
+		GenerationManager.getInstance().setRecap(Application.getApplication().getConfigPropriete("recapitulatif"));
+		
 	}
 }
 

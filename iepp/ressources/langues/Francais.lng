@@ -311,6 +311,11 @@ WEB_ACTIVITES=Activités :
 WEB_LINK=Lien :
 WEB_ENTREE_ACT=En entrée des activités :
 WEB_SORTIE_ACT=En sortie des activités :
+WEB_STATS=Statistiques du site
+WEB_RECAP=Récapitulatif
+WEB_ROLES_RECAP=Rôles
+WEB_PRODUITS_RECAP=Produits
+WEB_ACTIVITES_RECAP=Activités
 
 #Boite de propriétés
 couleur_fond_diagramme=Couleur de fond du diagramme
@@ -348,3 +353,6 @@ Generation_DP_Desc=Site Intranet
 ContenuTitle=Contenu
 Generation_GO_Desc=Générer
 titre_choix_ref=Choisir un référentiel
+Info-bulle=Info-bulle sur les diagrammes
+Stats=Générer une page de statistiques
+Recap=Insérer un récapitulatif (rôles, produits, activités)

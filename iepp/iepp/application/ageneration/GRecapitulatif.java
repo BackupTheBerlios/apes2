@@ -16,78 +16,70 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * 
  */
-
-
 package iepp.application.ageneration;
 
 
+import iepp.Application;
 import iepp.domaine.ElementPresentation;
-
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-
-
 
 /**
- * Classe permettant de créer une page dont le contenu correspond à un paquetage
+ *
  */
-public class GPaquetage extends GElementModele
+public class GRecapitulatif extends GElement 
 {
 
-	
 	/**
-	 * Constructeur du gestionnaire de génération
-	 * @param elem element de présentation associé au paquetage courant
-	 * @param pwFicTree lien vers le fichier tree.js construit durant la génération du site
+	 * Constructeur du gestionnaire de génération pour la page de statistiques
 	 */
-	public GPaquetage(ElementPresentation elem, PrintWriter pwFicTree)
+	public GRecapitulatif(PrintWriter pwFicTree)
 	{
-		super(elem, pwFicTree);
+		super(null, pwFicTree);
+		
+		this.element = new ElementPresentation();
+		this.element.setIcone("TreePackage.gif");
+		this.element.setNomPresentation(Application.getApplication().getTraduction("WEB_RECAP"));
 	}
-	
-	
+
 	/**
-	 * Méthode permettant de créer le contenu de la page associée à l'activité courante
-	 * Affichage des listes de produits et du rôle responsable de l'activité
+	 * Créer le fichier de contenu d'un élément de présentation simple, sans modèle
 	 */
-	public void creerFichierDescription() throws IOException
+	protected void creerFichierDescription() throws IOException
 	{
-		// création du fichier de contenu
 		File ficHTML = new File (this.cheminAbsolu) ;
 		FileWriter fd = new FileWriter(ficHTML);
-
+		
 		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='" + this.getCheminStyle() + "'>"
 								+ "</head>" + "<body><center>\n"
 								+ "<table width=\"84%\" align=\"center\">\n"
 								+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
 								+ "<p align=\"center\" class=\"entete\">\n"
-								+ "<b>" + this.element.getNomPresentation() + "</b>\n"
-								+ "</p></td></tr></table></center><BR>\n");
+								+ "<b>" + Application.getApplication().getTraduction("WEB_RECAP") + "</b>\n"
+								+ "</p></td></tr></table></center><BR><BR>\n");
 		
-		fd.write(getBarreNavigation() + "<br>");
-		
-		this.ajouterDescription(fd);
-		this.ajouterContenu(fd);
 		this.ajouterMail(fd);
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
-		
+
 	}
 	
 	/**
-	 * 
+	 * Méthode permettant d'écrire le code html correspondant au bouton mail à chaque bas de page
+	 * @param fd lien vers le fichier html de contenu
+	 * @throws IOException
 	 */
-	public void recenser() 
+	public void ajouterMail(FileWriter fd) throws IOException
 	{
-		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPaquetages");
-		ArbreGeneration.mapCompteur.put("nbPaquetages", new Integer(oldValue.intValue() + 1));
-		
-		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
-		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
+		fd.write("<br><hr>");
+		fd.write("<div align=\"center\" class=\"boutonemail\"><a href=\"mailto:" 
+					+ Application.getApplication().getProjet().getDefProc().getEmailAuteur() 
+					+ "?subject=" + this.element.getNomPresentation() + "\">" 
+					+ Application.getApplication().getTraduction("WEB_MAIL") + "</A></div>");
 	}
+	
 }

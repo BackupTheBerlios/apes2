@@ -18,7 +18,6 @@
  */
  
 package iepp.application.ageneration;
-import iepp.Application;
 import iepp.domaine.ComposantProcessus;
 import iepp.domaine.ElementPresentation;
 import iepp.domaine.IdObjetModele;
@@ -131,8 +130,7 @@ public class GDiagramme extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
-		
-		GenerationManager.nbDiagrammes++;
+
 	}
 	
 	/**
@@ -221,5 +219,17 @@ public class GDiagramme extends GElementModele
 		mapcode += ("<IMG SRC=\"diagramme.png\" USEMAP=\"#"+ CodeHTML.normalizeName(mAdapter.getName())+"\">\n");
 
 		return mapcode;
+	}
+	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbDiagrammes");
+		ArbreGeneration.mapCompteur.put("nbDiagrammes", new Integer(oldValue.intValue() + 1));
+		
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
 	}
 }

@@ -78,8 +78,19 @@ public class GDefinitionTravail extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+	}
+	
+
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbDefinitionsTravail");
+		ArbreGeneration.mapCompteur.put("nbDefinitionsTravail", new Integer(oldValue.intValue() + 1));
 		
-		GenerationManager.nbDefinitionsTravail++;
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
 	}
 
 }

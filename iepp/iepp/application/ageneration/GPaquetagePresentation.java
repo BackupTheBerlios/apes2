@@ -68,9 +68,6 @@ public class GPaquetagePresentation extends GElement
 		this.ecrireArbre();
 		// on crée le fichier correspondant
 		this.creerFichierDescription();
-		GenerationManager.nbPagesTotal++;
-		GenerationManager.nbPaquetagesPresentation++;
-		GenerationManager.nbElementPresentation--;
 	}
 	
 	/**
@@ -86,6 +83,18 @@ public class GPaquetagePresentation extends GElement
 		// Création du dossier images
 		rep = new File(this.cheminParent + File.separator + GenerationManager.IMAGES_PATH );
 		rep.mkdirs();
+	}
+	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPaquetagesPresentation");
+		ArbreGeneration.mapCompteur.put("nbPaquetagesPresentation", new Integer(oldValue.intValue() + 1));
+		
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
 	}
 
 }

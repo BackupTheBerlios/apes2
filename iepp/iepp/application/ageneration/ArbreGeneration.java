@@ -24,6 +24,7 @@ import iepp.domaine.IdObjetModele;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Vector;
 
 import util.ToolKit;
@@ -50,6 +51,15 @@ public class ArbreGeneration
 	 */
 	private GElement element = null;
 	
+	
+	/**
+	 * map permettant d'avoir des statistiques sur les pages
+	 */
+	public static HashMap mapCompteur = new HashMap();
+	
+	public static HashMap mapRecap = new HashMap();
+	
+	
 	private static long IDGenere = 1;
 	
 	
@@ -60,10 +70,7 @@ public class ArbreGeneration
 	{
 		this.element = elem;
 		this.listeSousArbres = new Vector();
-		this.IDGenere = 1;
 	}
-	
-	
 	
 	/**
 	 * Constructeur
@@ -71,7 +78,6 @@ public class ArbreGeneration
 	public ArbreGeneration() 
 	{
 		this.listeSousArbres = new Vector();
-		this.IDGenere = 1;
 	}
 
 
@@ -109,6 +115,24 @@ public class ArbreGeneration
 		return (this.listeSousArbres.isEmpty());
 	}
 
+	public static void initialiserMap()
+	{
+		mapCompteur.put("nbPagesTotal", new Integer(1));
+		mapCompteur.put("nbComposants", new Integer(0));
+		mapCompteur.put("nbRoles", new Integer(0));
+		mapCompteur.put("nbProduits", new Integer(0));
+		mapCompteur.put("nbActivites", new Integer(0));
+		mapCompteur.put("nbDefinitionsTravail", new Integer(0));
+		mapCompteur.put("nbDiagrammes", new Integer(1));
+		mapCompteur.put("nbGuides", new Integer(0));
+		mapCompteur.put("nbPaquetagesPresentation", new Integer(0));
+		mapCompteur.put("nbPaquetages", new Integer(0));
+		mapCompteur.put("nbElementPresentation", new Integer(0));
+		
+		mapRecap.put("roles", new Vector());
+		mapRecap.put("produits", new Vector());
+		mapRecap.put("activites", new Vector());
+	}
 
 	/**
 	 * @param noeud
@@ -147,6 +171,7 @@ public class ArbreGeneration
 			this.element.setChemin(nouveauChemin);
 			this.element.setID(IDGenere);
 			this.element.setArbre(this);
+			this.element.recenser();
 			//System.out.println("Chemin après " + this.element.getChemin());
 			if (this.element.getElementPresentation().getElementModele() != null)
 			{
@@ -257,4 +282,5 @@ public class ArbreGeneration
 	{
 		return element;
 	}
+
 }

@@ -33,11 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 import java.awt.*;
-import java.io.FileWriter;
 import java.io.PrintWriter;
-
-import util.MonitoredTaskBase;
-import util.TaskMonitorDialog;
 
 /**
  * Classe permettant de garder la configuration de la génération
@@ -62,6 +58,8 @@ public class GenerationManager
     private static Vector listeProduitsSortie;
 	private static String place_contenu;
 	private static String info_bulle;
+	private static String statistiques;
+	private static String recapitulatif;
 	private static TacheGeneration tache;
 	
 	// mettre tous les autres attributs en private static
@@ -73,26 +71,14 @@ public class GenerationManager
 	public static final String APRES_CONTENU = "1";
 	
 	public static final String CONTENU_PATH = "contenu";
-	public static final String DESCRIPTION_PATH = "description";
-	public static final String EXTERIEUR_PATH = "exterieur";
 	public static final String APPLET_PATH = "applet";
 	public static final String STYLES_PATH = "styles";
 	public static final String IMAGES_PATH = "images";
-    
+	public static final String STATS_PATH = "stats";
+	
 	public static final String PRESENT = "1";
 	public static final String NON_PRESENT = "0";
 	
-	public static long nbPagesTotal = 1; // un pour la page d'accueil
-	public static long nbComposants = 0;
-	public static long nbRoles = 0;
-	public static long nbProduits = 0;
-	public static long nbActivites = 0;
-	public static long nbDefinitionsTravail = 0;
-	public static long nbDiagrammes = 0;	// un pour le diagramme d'accueil
-	public static long nbGuides = 0;
-	public static long nbPaquetagesPresentation = 0;
-	public static long nbPaquetages = 0;
-	public static long nbElementPresentation = 0;
 
 	/**
 	 * Constructeur du manager de la génération
@@ -106,6 +92,9 @@ public class GenerationManager
 		GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
 		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
 		GenerationManager.tache = null;
+		GenerationManager.info_bulle = Application.getApplication().getConfigPropriete("info_bulle");
+		GenerationManager.statistiques = Application.getApplication().getConfigPropriete("statistiques");
+		GenerationManager.recapitulatif = Application.getApplication().getConfigPropriete("recapitulatif");
 	}
 
 
@@ -136,18 +125,6 @@ public class GenerationManager
 		//this.setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
 		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
 		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
-		
-		nbPagesTotal = 2; // un pour la page d'accueil
-		nbComposants = 0;
-		nbRoles = 0;
-		nbProduits = 0;
-		nbActivites = 0;
-		nbDefinitionsTravail = 0;
-		nbDiagrammes = 1;	// un pour le diagramme d'accueil
-		nbGuides = 0;
-		nbPaquetagesPresentation = 0;
-		nbPaquetages = 0;
-		nbElementPresentation = 0;
 	}
 	
 	/**
@@ -271,6 +248,21 @@ public class GenerationManager
 	{
 		GenerationManager.info_bulle = info;
 	}
+	
+	/**
+	 * @param configPropriete
+	 */
+	public void setStatistiques(String configPropriete) 
+	{
+		GenerationManager.statistiques = configPropriete;
+	}
+	
+	public void setRecap(String recap)
+	{
+		GenerationManager.recapitulatif = recap;
+	}
+	
+	
 	/**
 	 * Indique si le contenu doit être placé avant ou après le diagramme
 	 * @return
@@ -288,6 +280,18 @@ public class GenerationManager
 	{
 	    return (GenerationManager.info_bulle.equals(GenerationManager.PRESENT));
 	}
+	
+	public boolean estStatistiques()
+	{
+		return (GenerationManager.statistiques.equals(GenerationManager.PRESENT));
+	}
+	
+	
+	public boolean estRecapitulatif()
+	{
+		return (GenerationManager.recapitulatif.equals(GenerationManager.PRESENT));
+	}
+	
 	
 	/**
 	 * Renvoie la couleur de surlignement dans l'arbre de navigation
@@ -707,5 +711,9 @@ public class GenerationManager
 	    }
 	    return null;
 	}
+
+
+
+	
 	
 }

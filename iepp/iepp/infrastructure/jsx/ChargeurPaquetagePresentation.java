@@ -509,7 +509,7 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 				{
 					if (this.baliseCourante.equals("nom_presentation"))
 					{
-						System.out.println("Nom Paq Pre : " + valeur);
+						//System.out.println("Nom Paq Pre : " + valeur);
 						ChargeurPaquetagePresentation.this.nomPresentation = valeur;
 					}
 				}

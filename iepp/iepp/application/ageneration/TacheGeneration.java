@@ -54,17 +54,39 @@ public class TacheGeneration extends MonitoredTaskBase {
 			GenerationManager.getInstance().debuterGeneration();
 			GenerationManager.getInstance().setTache(this);
 			this.arbre = new ArbreGeneration();
+			ArbreGeneration.initialiserMap();
 			
 			GenerationManager.recupererProduitsExterieurs();
 			this.preparerGeneration();
 			GenerationManager.construireArbre(this.arbre, pwFicTree);
 			File f = new File(GenerationManager.getInstance().getCheminGeneration());
+			
+			
+			//mettre ici les rajouts de page
+			if (GenerationManager.getInstance().estRecapitulatif())
+			{
+				ArbreGeneration recap = new ArbreGeneration(new GRecapitulatif(this.pwFicTree));
+				this.arbre.ajouterSousArbre(recap);
+				ArbreGeneration aux = new ArbreGeneration(new GRecapitulatifObject(GRecapitulatifObject.ROLES, this.pwFicTree));
+				recap.ajouterSousArbre(aux);
+				aux = new ArbreGeneration(new GRecapitulatifObject(GRecapitulatifObject.PRODUITS, this.pwFicTree));
+				recap.ajouterSousArbre(aux);
+				aux = new ArbreGeneration(new GRecapitulatifObject(GRecapitulatifObject.ACTIVITES, this.pwFicTree));
+				recap.ajouterSousArbre(aux);
+			}
+			
+			if (GenerationManager.getInstance().estStatistiques())
+			{
+				ArbreGeneration stats = new ArbreGeneration(new GStatistiques(this.pwFicTree));
+				this.arbre.ajouterSousArbre(stats);
+			}
+			
+			
+			
 			this.arbre.initialiserArbre(ToolKit.removeSlashTerminatedPath(f.getAbsolutePath()));
+			// System.out.println(arbre);
 			
-			//System.out.println(arbre);
-			// mettre ici les rajouts de page
-			
-			
+
 			//Création des pages contenues dans la page d'accueil
 			this.creerPageAccueil();
 			this.print(Application.getApplication().getTraduction("creation_pages"));
@@ -93,10 +115,6 @@ public class TacheGeneration extends MonitoredTaskBase {
 		this.print(Application.getApplication().getTraduction("creation_rep"));
 		// Creation du dossier du site
 		File rep = new File(GenerationManager.getInstance().getCheminGeneration());
-		rep.mkdirs();
-
-		// Création du dossier pour le contenu extérieur au processus
-		rep = new File(GenerationManager.getInstance().getCheminGeneration() + File.separator + GenerationManager.EXTERIEUR_PATH );
 		rep.mkdirs();
 			
 		// copie des répertoires ressource (javascript ...)

@@ -38,6 +38,7 @@ import util.ToolKit;
 
 import iepp.Application;
 import iepp.domaine.ElementPresentation;
+import iepp.domaine.IdObjetModele;
 import iepp.domaine.PaquetagePresentation;
 
 /**
@@ -101,7 +102,6 @@ public class GElement
 		this.ecrireArbre();
 		// on crée le fichier correspondant
 		this.creerFichierDescription();
-		GenerationManager.nbPagesTotal++;
 	}
 
 	/**
@@ -330,8 +330,6 @@ public class GElement
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
-		
-		GenerationManager.nbElementPresentation++;
 	}
 
 	/**
@@ -531,5 +529,42 @@ public class GElement
 		 // Fermer le flux d'entrée
 		 zin.close(); 
 	}
+
+	/**
+	 * Retourne le lien vers un id donné
+	 */
+	public String getLienChemin(IdObjetModele id)
+	{
+		String res = id.getChemin();
+		if (res != null && res.length()> 2)
+		{
+			res = res.substring(2);
+		}
+		else
+		{
+			System.out.println("BOUHOU LE CHEMIN : " + id);
+		}
+		//System.out.println("RES " + id.getChemin() + " : " + id);
+		ArbreGeneration aux = this.arbre;
+		// on remonte jusqu'à la racine
+		while (!aux.isRacine())
+		{
+			res = "../" + res;
+			aux = aux.getArbreParent();
+		}
+		//System.out.println("REtour : " + res);
+		return res;
+	}
 	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
+		
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbElementPresentation");
+		ArbreGeneration.mapCompteur.put("nbElementPresentation", new Integer(oldValue.intValue() + 1));
+	}
 }

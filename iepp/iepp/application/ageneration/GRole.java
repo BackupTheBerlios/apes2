@@ -88,7 +88,21 @@ public class GRole extends GElementModele
 		this.ajouterVersionDate(fd);
 		fd.write("</BODY></HTML>") ;
 		fd.close();
+
+	}
+	
+	/**
+	 * 
+	 */
+	public void recenser() 
+	{
+		Integer oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbRoles");
+		ArbreGeneration.mapCompteur.put("nbRoles", new Integer(oldValue.intValue() + 1));
 		
-		GenerationManager.nbRoles++;
+		oldValue = (Integer)ArbreGeneration.mapCompteur.get("nbPagesTotal");
+		ArbreGeneration.mapCompteur.put("nbPagesTotal", new Integer(oldValue.intValue() + 1));
+		
+		Vector oldVecteur = (Vector)ArbreGeneration.mapRecap.get("roles");
+		oldVecteur.addElement(this);
 	}
 }

@@ -254,6 +254,9 @@ public class Application {
 		this.config.put("chemin_referentiel","./Repository/");
 		this.config.put("place_contenu","1");
 		this.config.put("info_bulle", "1");
+		this.config.put("statistiques", "0");
+		this.config.put("recapitulatif", "0");
+		
 		this.sauvegarderConfig();
 	}
 	
