@@ -661,9 +661,12 @@ public class GenerationManager
 	 */
 	public static IdObjetModele estProduitChange (IdObjetModele id)
 	{
-	    if (listeProduitsChanges.containsKey(id.getRef().toString() +"::"+ id.toString()))
+	    if (id != null)
 	    {
-	        return ((IdObjetModele)listeProduitsChanges.get(id.getRef().toString() + "::"+ id.toString()));
+		    if (listeProduitsChanges.containsKey(id.getRef().toString() +"::"+ id.toString()))
+		    {
+		        return ((IdObjetModele)listeProduitsChanges.get(id.getRef().toString() + "::"+ id.toString()));
+		    }
 	    }
 	    return null;
 	}

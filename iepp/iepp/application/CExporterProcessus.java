@@ -38,6 +38,7 @@ import util.SmartChooser;
 import util.ToolKit;
 import iepp.Application;
 import iepp.domaine.ComposantProcessus;
+import iepp.domaine.ElementPresentation;
 import iepp.domaine.IdObjetModele;
 import iepp.domaine.LienProduits;
 import iepp.domaine.PaquetagePresentation;
@@ -119,8 +120,10 @@ public class CExporterProcessus extends CommandeNonAnnulable
 			
 			// liste des roles de la définition	
 			data.write("\t\t<listeRoles>\n");
+			ComposantProcessus courant;
 			for (int i = 0; i < listeComposant.size(); i++)
 			{
+			    courant = (ComposantProcessus)((IdObjetModele)listeComposant.elementAt(i)).getRef();
 				Vector roles = ((IdObjetModele)listeComposant.elementAt(i)).getRole();
 				for (int j = 0; j < roles.size(); j++)
 				{
@@ -148,9 +151,31 @@ public class CExporterProcessus extends CommandeNonAnnulable
 					
 					// liste des responsabilités
 					data.write("\t\t\t\t<listeResponsabilites>\n");
+					Integer produit;
 					for (int k = 0; k < io.getIDProduit().size(); k++)
 					{
-						Integer produit = new Integer(((Integer) io.getIDProduit().elementAt(k)).intValue() +  (i * 10000));
+					    int prodID = ((Integer)io.getIDProduit().elementAt(k)).intValue();
+					    
+					    // Recherche de l'ID objet modele du produit courant
+					    IdObjetModele prod = null;
+					    Vector listeProd = courant.getProduits();
+					    for (int l = 0; l < listeProd.size(); l++)
+					    {
+					        if (((IdObjetModele)listeProd.elementAt(l)).getID() == prodID)
+					        {
+					            prod = (IdObjetModele)listeProd.elementAt(l);
+					        }
+					    }
+					    
+					    // Si le produit est change, on remplace par l'id du produit en sortie
+					    if (GenerationManager.estProduitChange(prod) == null)
+					    {
+					        produit = new Integer(prodID +  (i * 10000));
+					    }
+					    else
+					    {
+					        produit = new Integer(GenerationManager.estProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.estProduitChange(prod).getRef()).getIdComposant()) * 10000));
+					    }
 						data.write("\t\t\t\t\t<responsabilite>");
 						data.write(produit.toString());
 						data.write("</responsabilite>\n");
@@ -169,6 +194,7 @@ public class CExporterProcessus extends CommandeNonAnnulable
 			 data.write("\t\t<listeActivites>\n");
 			 for (int i = 0; i < listeComposant.size(); i++)
 			 {
+			     courant = (ComposantProcessus)((IdObjetModele)listeComposant.elementAt(i)).getRef();
 				 Vector activites = ((IdObjetModele)listeComposant.elementAt(i)).getActivite();
 				 for (int j = 0; j < activites.size(); j++)
 				 {
@@ -189,10 +215,33 @@ public class CExporterProcessus extends CommandeNonAnnulable
 					// produits en entrée
 					data.write("\t\t\t\t<listeProdEntree>\n");
 					Vector listeId = io.getIDProduitEntree();
+					Integer produit;
 					for (int k = 0; k < listeId.size(); k++)
 					{
-						data.write("\t\t\t\t\t<prodEntree>");
-						data.write(new Integer( ((Integer)listeId.elementAt(k)).intValue() + ( i * 10000)).toString());
+					    int prodID = ((Integer)listeId.elementAt(k)).intValue();
+					    
+					    // Recherche de l'ID objet modele du produit courant
+					    IdObjetModele prod = null;
+					    Vector listeProd = courant.getProduits();
+					    for (int l = 0; l < listeProd.size(); l++)
+					    {
+					        if (((IdObjetModele)listeProd.elementAt(l)).getID() == prodID)
+					        {
+					            prod = (IdObjetModele)listeProd.elementAt(l);
+					        }
+					    }
+					    
+					    // Si le produit est change, on remplace par l'id du produit en sortie
+					    if (GenerationManager.estProduitChange(prod) == null)
+					    {
+					        produit = new Integer(prodID +  (i * 10000));
+					    }
+					    else
+					    {
+					        produit = new Integer(GenerationManager.estProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.estProduitChange(prod).getRef()).getIdComposant()) * 10000));
+					    }					    					    
+					    data.write("\t\t\t\t\t<prodEntree>");
+						data.write(produit.toString());
 						data.write("</prodEntree>\n");
 					}
 					data.write("\t\t\t\t</listeProdEntree>\n");
@@ -202,8 +251,30 @@ public class CExporterProcessus extends CommandeNonAnnulable
 					listeId = io.getIDProduitSortie();
 					for (int k = 0; k < listeId.size(); k++)
 					{
+					    int prodID = ((Integer)listeId.elementAt(k)).intValue();
+					    
+					    // Recherche de l'ID objet modele du produit courant
+					    IdObjetModele prod = null;
+					    Vector listeProd = courant.getProduits();
+					    for (int l = 0; l < listeProd.size(); l++)
+					    {
+					        if (((IdObjetModele)listeProd.elementAt(l)).getID() == prodID)
+					        {
+					            prod = (IdObjetModele)listeProd.elementAt(l);
+					        }
+					    }
+					    
+					    // Si le produit est change, on remplace par l'id du produit en sortie
+					    if (GenerationManager.estProduitChange(prod) == null)
+					    {
+					        produit = new Integer(prodID +  (i * 10000));
+					    }
+					    else
+					    {
+					        produit = new Integer(GenerationManager.estProduitChange(prod).getID() +  (listeComposant.indexOf(((ComposantProcessus)GenerationManager.estProduitChange(prod).getRef()).getIdComposant()) * 10000));
+					    }
 						data.write("\t\t\t\t\t<prodSortie>");
-						data.write(new Integer( ((Integer)listeId.elementAt(k)).intValue() + ( i * 10000)).toString());
+						data.write(produit.toString());
 						data.write("</prodSortie>\n");
 					}
 					data.write("\t\t\t\t</listeProdSortie>\n");
@@ -215,60 +286,18 @@ public class CExporterProcessus extends CommandeNonAnnulable
 			 }
 			data.write("\t\t</listeActivites>\n");		
 
-			
-			// Traitement des produits de la definition
-			
-			
-			// Recherche des produits lies de la definition: ces produits en entree ne doivent pas etre exportes
-			// car si les produits sont lies, il ne faut qu'un seul export
-			// celui des produits en sortie
-			
-			// Liste des produits en entree lies avec d'autres
-			Vector listeProduitsChanges = new Vector();
-
-			IdObjetModele idComposant ;
-			for (int i = 0; i < listeComposant.size(); i++)
-			{
-				if (listeComposant.elementAt(i) instanceof IdObjetModele)
-				{
-					// On recupere l'ID du ième composant de la definition de Processus
-					idComposant = (IdObjetModele)listeComposant.elementAt(i);
-					Vector listeProduits = idComposant.getProduitEntree();
-					Vector listeLiens = ((ComposantProcessus)idComposant.getRef()).getLien();
-					
-					// Parcours des produits
-					for(int j = 0; j < listeProduits.size(); j++)
-					{
-					 	IdObjetModele idProduit = (IdObjetModele)listeProduits.elementAt(j);
-					 	// Si le composant n'a pas de lien, les produits ne peuvent etre lies
-					 	if (! (listeLiens.size() == 0))
-					 	{
-						 	for (int k = 0; k < listeLiens.size(); k++)
-						 	{
-						 		LienProduits lien = (LienProduits)listeLiens.elementAt(k);
-						 		if (lien.contient(idProduit))
-						 		{
-						 		    // Si le produit est lie, on le note
-						 		    IdObjetModele produitCible;
-						 		    listeProduitsChanges.add(idProduit.getRef().toString() +"::"+ idProduit.toString());
-						 		}
-						 	}
-					 	}
-					}
-				}
-			}
-			
 			// Ecriture des produits
 			
 			data.write("\t\t<listeProduits>\n");
             for (int i = 0; i < listeComposant.size(); i++)
             {
+                courant = (ComposantProcessus)((IdObjetModele)listeComposant.elementAt(i)).getRef();
                 Vector produits = ((IdObjetModele) listeComposant.elementAt(i)).getProduit();
                 for (int j = 0; j < produits.size(); j++)
                 {
                     IdObjetModele io = (IdObjetModele) produits.elementAt(j);
                     // On ecrit le produit que s'il ne s'agit pas d'un produit en entree lie vers un autre
-                    if (!listeProduitsChanges.contains(io.getRef().toString() + "::" + io.toString()))
+                    if (GenerationManager.estProduitChange(io) == null)
                     {
                         data.write("\t\t\t<produit>\n");
 
@@ -313,9 +342,12 @@ public class CExporterProcessus extends CommandeNonAnnulable
                             data.write("</etat>\n");
                         }
                         data.write("\t\t\t\t</listeEtats>\n");
-                        data.write("\t\t\t\t<cheminPage>");
-                        data.write(io.getChemin());
-                        data.write("</cheminPage>\n");
+                        if (GenerationManager.estProduitExterieur(io) == 0)
+                        {
+	                        data.write("\t\t\t\t<cheminPage>");
+	                        data.write(io.getChemin());
+	                        data.write("</cheminPage>\n");
+                        }
                         data.write("\t\t\t</produit>\n");
                     }
                 }
@@ -326,6 +358,7 @@ public class CExporterProcessus extends CommandeNonAnnulable
             data.write("\t\t<listeDefTravail>\n");
             for (int i = 0; i < listeComposant.size(); i++)
             {
+                courant = (ComposantProcessus)((IdObjetModele)listeComposant.elementAt(i)).getRef();
                 Vector definition = ((IdObjetModele) listeComposant.elementAt(i)).getDefinitionTravail();
                 for (int j = 0; j < definition.size(); j++)
                 {
