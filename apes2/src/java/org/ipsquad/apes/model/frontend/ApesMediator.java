@@ -42,6 +42,7 @@ import javax.swing.undo.UndoableEditSupport;
 import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Identity;
+import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
@@ -73,7 +74,7 @@ import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -200,6 +201,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			me = new ApesProcess.ProvidedInterface(mConfig.getProperty("Provided"));
 			ap.addModelElement(me);
 			insertInModel(new Object[]{me}, new Object[]{ap}, null);
+			
 		}
 		else
 		{
@@ -696,8 +698,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
     protected Collection addExtraEdits(ApesEdit edit) 
     {
         Collection edits = insertWorkProductRef(edit, edit.getInserted());
+        edits.addAll(changeWorkProductRef(edit, edit.getChanged()));
         edits.addAll(removeWorkProductRef(edit, edit.getRemoved()));
-
+        
         return edits;
     }
 
@@ -722,12 +725,12 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
                     if(link.getSource() != null && link.getSource() instanceof WorkProduct)
                     {
                         ref = new WorkProductRef((WorkProduct)link.getSource());
-                        parent = Context.getInstance().getProject().getProcess().getProvidedInterface();
+                        parent = Context.getInstance().getProject().getProcess().getRequiredInterface();
                     }
                     else if(link.getTarget() != null && link.getTarget() instanceof WorkProduct)
                     {
                         ref = new WorkProductRef((WorkProduct)link.getTarget());
-                        parent = Context.getInstance().getProject().getProcess().getRequiredInterface();
+                        parent = Context.getInstance().getProject().getProcess().getProvidedInterface();
                     }
                     
                     ApesEdit tmpEdit = createInsertModelEdit(new Object[]{ref},new Object[]{parent}, null);
@@ -771,6 +774,49 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
                     }
                     
                     ApesEdit tmpEdit = createRemoveModelEdit(new Object[]{ref}, null);
+                    if(tmpEdit != null && tmpEdit.execute())
+                    {
+                        fireModelChanged(null, tmpEdit);
+                        tmpEdit.end();
+            			edits.add(tmpEdit);
+                    }
+                }
+            }
+        }
+        return edits;
+    }
+    
+    
+    /**
+     * @param edit
+     * @param edits
+     * @param inserted
+     */
+    protected Collection changeWorkProductRef(ApesEdit edit, Map change) 
+    {
+        Vector edits = new Vector();
+        
+        if(change != null)
+        {
+            Iterator it = change.entrySet().iterator();
+    		while(it.hasNext())
+    		{
+        		Map.Entry entry = (Map.Entry)it.next();
+    			ModelElement element = (ModelElement)entry.getKey();
+            
+                if(element instanceof WorkProduct)
+                {
+                    WorkProduct wp = (WorkProduct)element;
+                    WorkProductRef ref = null;
+                    
+                    
+                    ref = getWorkProductRef(wp);
+                    
+                    Map extrasChanges = new HashMap();
+                    String value = ConfigManager.getInstance().getProperty("Reference") + wp.getName();
+                    
+                    extrasChanges.put(ref, value);
+                    ApesEdit tmpEdit = createChangeEdit(extrasChanges, null);
                     if(tmpEdit != null && tmpEdit.execute())
                     {
                         fireModelChanged(null, tmpEdit);
@@ -1066,7 +1112,11 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				edit.mExecuteRedoEditsFirst=false;
 				edit.mExecuteUndoEditsFirst=false;
 				fireModelChanged(edit.getSource(), edit);
-				postEdit(edit, Context.getInstance().getUndoManager().restore());
+				
+				Collection extraEdits = addExtraEdits(edit);
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+				//postEdit(edit, Context.getInstance().getUndoManager().restore());
+				postEdit(edit, extraEdits);
 			}
 		}
 	}
