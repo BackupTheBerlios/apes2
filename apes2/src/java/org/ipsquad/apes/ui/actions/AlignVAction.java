@@ -38,7 +38,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Align the centers of selected objects vertically
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class AlignVAction extends ApesAction
 {
@@ -69,6 +69,9 @@ public class AlignVAction extends ApesAction
 		Rectangle newRect, oldRect = null;
 		JGraph mGraph = ((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph();
 		Map attr, myMap = new HashMap();
+		double oldY,newY;
+		oldY=0;
+		newY=0;
 		
 		for( int i = 0; i < listCells.length; i++)
 		{
@@ -79,12 +82,17 @@ public class AlignVAction extends ApesAction
 				if( oldRect == null )
 				{
 					oldRect = GraphConstants.getBounds(c.getAttributes());
+					oldY=oldRect.getCenterY();
 				}
 				else
 				{	
 					attr = GraphConstants.createMap();
 					newRect=new Rectangle(GraphConstants.getBounds(c.getAttributes())); 
-					newRect.setRect(newRect.getX(),oldRect.getY(),newRect.getWidth(),newRect.getHeight()); 
+					newY=newRect.getCenterY();
+					newY=oldY-newRect.getHeight()/2;
+					if(newY<0)
+						newY=0;
+					newRect.setRect(newRect.getX(),newY,newRect.getWidth(),newRect.getHeight()); 
 					GraphConstants.setBounds(attr,newRect); 
 					myMap.put(c, attr); 
 				}
