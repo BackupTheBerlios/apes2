@@ -85,6 +85,11 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 	 */
 	private boolean presentationTrouve = false ;
 	
+	/**
+	 * Nom du paquetage de présentation
+	 */
+	private String nomPresentation = null;
+	
 
 	/**
 	 * Paquetage de présentation à charger
@@ -342,4 +347,125 @@ public class ChargeurPaquetagePresentation extends MonitoredTaskBase
 			mTask.forceRefresh();
 		}
 	}
+
+	/**
+	 * @param chemin
+	 * @return
+	 * @throws FichierException
+	 */
+	public String chercherNomPresentation(String projectZip) throws FichierException 
+	{
+		this.presentationTrouve = false;
+		ZipInputStream zipFile = null ;
+		try
+		{
+			// récupérer un flux vers le fichier zip
+			zipFile = new ZipInputStream( new FileInputStream (new File(projectZip)));
+			ZipEntry zipEntry = zipFile.getNextEntry();
+			while( zipEntry != null && !this.presentationTrouve )
+			{
+				DataInputStream data = new DataInputStream( new BufferedInputStream(zipFile) );
+				if( zipEntry.getName().equals("Presentation.xml") )
+				{	
+					this.presentationTrouve = true;
+					SAXParserFactory factory = SAXParserFactory.newInstance();
+					SAXParser saxparser = factory.newSAXParser();
+					PaquetagePresentationHandler handler = new PaquetagePresentationHandler();
+					saxparser.parse( data, handler );
+				}
+				else
+				{
+					zipEntry = zipFile.getNextEntry();
+				}
+			}
+			zipFile.close();
+		}
+		catch (FileNotFoundException e)
+		{
+			// ne devrait pas arriver
+			this.presentationTrouve = false;
+			this.traiterErreur();
+			ErrorManager.getInstance().display("ERR","ERR_Fichier_Non_Trouve");
+			
+		}
+		catch (ParserConfigurationException e)
+		{
+			this.presentationTrouve = false;
+			e.printStackTrace();
+			ErrorManager.getInstance().displayError(e.getMessage());
+		} 
+		catch (SAXException e) 
+		{
+			this.presentationTrouve = false;
+			e.printStackTrace();
+			ErrorManager.getInstance().displayError(e.getMessage());
+		}
+		catch (IOException e) 
+		{
+			this.presentationTrouve = false;
+			e.printStackTrace();
+			ErrorManager.getInstance().displayError(e.getMessage());
+		}
+		
+		if (! this.presentationTrouve )
+		{
+			throw new FichierException ("Presentation");
+		}
+	
+		return  this.nomPresentation;
+	}
+	
+//	-------------------------------------------------------------
+	// Paquetage de présentation
+	//-------------------------------------------------------------
+	/**
+	 * Classe permettant de récupérer le nom de présentation d'un composant
+	 */
+	private class PaquetagePresentationHandler extends DefaultHandler
+	{
+		private boolean isProprietes = false;
+		private boolean isElement = false;
+		private boolean isGuide = false;
+		private String baliseCourante ;
+		
+		public PaquetagePresentationHandler()
+		{
+			ChargeurPaquetagePresentation.this.nomPresentation = null;
+		}
+		
+		/**
+		 * On récupère l'évènement "je rentre sur une nouvelle balise"
+		 */
+		public void startElement (String uri, String localName, String baliseName, Attributes attributes)
+		{	
+			this.baliseCourante = baliseName ;
+			if(baliseName=="proprietes")
+			{
+				this.isProprietes = true;
+			}
+		}
+		
+		public void endElement(String namespace, String name, String raw) 
+		{
+			if(raw == "proprietes") this.isProprietes = false; 
+		}
+	
+		public void characters(char buf[], int offset, int len) throws SAXException
+		{	
+			String valeur = new String(buf, offset, len);
+			if (!valeur.trim().equals(""))
+			{
+				//System.out.println(valeur);
+				if(this.isProprietes)
+				{
+					if (this.baliseCourante.equals("nom_presentation"))
+					{
+						System.out.println("Nom Paq Pre : " + valeur);
+						ChargeurPaquetagePresentation.this.nomPresentation = valeur;
+					}
+				}
+			} 
+		}
+	}
+	
 }

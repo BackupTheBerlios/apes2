@@ -243,15 +243,10 @@ public class Referentiel extends Observable implements TreeModel
 						{ 
 							try
 							{
-								System.out.println("LIGNE : " + ligne);
-								
 								// Création du chargeur permettant de récupérer le nom de l'élément
 								chargeur = new ChargeurComposant(ligne);
 			
-								// Création du flux permettant de chercher le nom de l'élément 			
-								//ZipInputStream zipFile = new ZipInputStream(new FileInputStream(new File(ligne)));
-							
-								System.out.println("LIGNE : " + ligne);
+								//System.out.println("LIGNE : " + ligne);
 								// Chargement du nom de l'élément à partir du fichier .pre pour les composants non vides
 								nomElt = chargeur.chercherNomComposant(ligne);
 								
@@ -419,14 +414,25 @@ public class Referentiel extends Observable implements TreeModel
 					
 				case (ElementReferentiel.PRESENTATION):
 					
-					//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
-					Copie.copieFic(chemin, pathFic);
+					// Création du chargeur permettant de récupérer le nom de la présentation
+					ChargeurPaquetagePresentation chargeur = new ChargeurPaquetagePresentation(chemin);
 
-					// pathFic reçoit le chemin absolu du fichier copié dans le référentiel	
-					pathFic += chemin.substring(chemin.lastIndexOf(File.separator));
+					nomElt = chargeur.chercherNomPresentation(chemin);
 					
-					// On récupère le nom du fichier de l'élément
-					nomElt = this.extraireNomFichier(pathFic);
+					// Permet de savoir si le fichier est un composant ou pas
+					// Renvoie -2 si c'est pas le cas
+					if (nomElt == null)
+					{ return -2; }
+					/*
+					else
+					{
+						nomElt = this.extraireNomFichier(chemin);	
+					}
+					*/
+					
+					//Copie du fichier dans le référentiel (création de son répertoire + attribution de l'ID)				
+					pathFic += File.separator + nomElt + ".pre";
+					Copie.copieFicCh(chemin, pathFic);
 					
 					this.getNoeudPresentation().add(new ElementReferentiel(nomElt, this.getLastId(), pathFic, ElementReferentiel.PRESENTATION));				
 					break;			

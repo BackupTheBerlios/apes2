@@ -18,7 +18,6 @@
  */
 package iepp.infrastructure.jsx;
 
-import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -385,9 +384,9 @@ public class ChargeurComposant extends MonitoredTaskBase
 			ErrorManager.getInstance().displayError(e.getMessage());
 		}
 		
-		this.componentTrouve = this.findData("Component.xml",projectZip);
-		this.presentationTrouve = this.findData("Presentation.xml",projectZip);
-		this.interfaceTrouve = this.findData("Interfaces.xml",projectZip);
+		this.componentTrouve = ChargeurComposant.findData("Component.xml",projectZip);
+		this.presentationTrouve = ChargeurComposant.findData("Presentation.xml",projectZip);
+		this.interfaceTrouve = ChargeurComposant.findData("Interfaces.xml",projectZip);
 		
 		if ((! this.componentTrouve) || (! this.presentationTrouve ) || (! this.interfaceTrouve ))
 		{
@@ -662,58 +661,6 @@ public class ChargeurComposant extends MonitoredTaskBase
 		}
 	}
 	
-	//-------------------------------------------------------------
-	// Paquetage de présentation
-	//-------------------------------------------------------------
-	/**
-	 * Classe permettant de récupérer le nom de présentation d'un composant
-	 */
-	private class PaquetagePresentationHandler extends DefaultHandler
-	{
-		private boolean isProprietes = false;
-		private boolean isElement = false;
-		private boolean isGuide = false;
-		private String baliseCourante ;
-		
-		public PaquetagePresentationHandler()
-		{
-			ChargeurComposant.this.nomComposant = null;
-		}
-		
-		/**
-		 * On récupère l'évènement "je rentre sur une nouvelle balise"
-		 */
-		public void startElement (String uri, String localName, String baliseName, Attributes attributes)
-		{	
-			this.baliseCourante = baliseName ;
-			if(baliseName=="proprietes")
-			{
-				this.isProprietes = true;
-			}
-		}
-		
-		public void endElement(String namespace, String name, String raw) 
-		{
-			if(raw == "proprietes") this.isProprietes = false; 
-		}
-	
-		public void characters(char buf[], int offset, int len) throws SAXException
-		{	
-			String valeur = new String(buf, offset, len);
-			if (!valeur.trim().equals(""))
-			{
-				//System.out.println(valeur);
-				if(this.isProprietes)
-				{
-					if (this.baliseCourante.equals("nom_presentation"))
-					{
-						System.out.println("Nom Paq Pre : " + valeur);
-						ChargeurComposant.this.nomComposant = valeur;
-					}
-				}
-			} 
-		}
-	}
 	
 	//-------------------------------------------------------------
 	// Résultat du chargement
@@ -764,7 +711,7 @@ public class ChargeurComposant extends MonitoredTaskBase
 	 * Recherche le fichier de nom fileName dans le fichier zip
 	 * @return true si le fichier a bien été trouvé, false sinon
 	 */
-	private boolean findData(String fileName, String fileZip) throws IOException
+	public static boolean findData(String fileName, String fileZip) throws IOException
 	{	
 		ZipInputStream zipFile = new ZipInputStream( new FileInputStream(new File(fileZip)));
 		ZipEntry zipEntry = zipFile.getNextEntry();
