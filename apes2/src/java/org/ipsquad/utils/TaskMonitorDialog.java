@@ -43,7 +43,7 @@ import javax.swing.Timer;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class TaskMonitorDialog extends JDialog
 {
@@ -151,6 +151,10 @@ public class TaskMonitorDialog extends JDialog
 			setDefaultCloseOperation( DISPOSE_ON_CLOSE);
 			
 			Toolkit.getDefaultToolkit().beep();
+			if(mTask.closeOnFinish())
+			{
+				dispose();
+			}
 			return;
 		}
 		

@@ -81,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class ApesMain
 {
@@ -187,14 +187,14 @@ public class ApesMain
 
 		ApesFrame f = new ApesFrame();
 		context.setTopLevelFrame(f);
+		ErrorManager.getInstance().setOwner(f.getContentPane());
 		
+	
 		Project project = new Project();
 		
 		context.setProject(project);
-		
-		ErrorManager.getInstance().setOwner(f.getContentPane());
-		
 		f.show();
+		Context.getInstance().getAction("TreeOpenDiagram").actionPerformed(null);
 		
 		//Open a file given in parameter
 		if(args.length>0)

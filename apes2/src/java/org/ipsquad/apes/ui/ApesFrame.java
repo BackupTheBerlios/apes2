@@ -52,7 +52,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
@@ -183,70 +183,76 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 	{
 		JInternalFrame[] tab = mDesktop.getAllFrames();
 
+		GraphFrame w = null;
+		
+		// Find if diagram exists
 		for(int i=0;i<tab.length;i++)
 		{
 			GraphFrame g = (GraphFrame)tab[i];
 
 			if(model==g.getGraphModel())
 			{
-				try
-				{
-					if(mDesktop.getSelectedFrame()!=null)
-					{
-						mDesktop.getSelectedFrame().setSelected(false);
-						mDesktop.setSelectedFrame(null);
-					}
-
-					g.setIcon(false);
-					g.show();
-					g.toFront();
-					g.setSelected(true);
-					mDesktop.setSelectedFrame(g);
-				}
-				catch(Throwable t)
-				{
-					if(Debug.enabled) t.printStackTrace();
-				}
-				return;
+				w = g;
 			}
 		}
 
-		GraphFrame w;
+		// If diagram is not found we create it
+		if(w == null)
+		{
+			if(model instanceof FlowGraphAdapter)
+			{
+				FlowGraphAdapter adapter = (FlowGraphAdapter) model;
+				w = new FlowGraphFrame(adapter);
+			}
+			else if(model instanceof ResponsabilityGraphAdapter)
+			{
+				ResponsabilityGraphAdapter adapter = (ResponsabilityGraphAdapter) model;
+				w = new ResponsabilityGraphFrame(adapter);
+			}
+			else if(model instanceof ActivityGraphAdapter)
+			{
+				ActivityGraphAdapter adapter = (ActivityGraphAdapter) model;
+				w = new ActivityGraphFrame(adapter);
+			}
+			else if(model instanceof ContextGraphAdapter)
+			{
+				ContextGraphAdapter adapter = (ContextGraphAdapter) model;
+				w = new ContextGraphFrame(adapter);
+			}
+			else if(model instanceof WorkDefinitionGraphAdapter)
+			{
+				WorkDefinitionGraphAdapter adapter = (WorkDefinitionGraphAdapter) model;
+				w = new WorkDefinitionGraphFrame(adapter);
+			}
+			else
+			{
+				return;
+			}
+			
+			Rectangle bounds = mDesktop.getGraphicsConfiguration().getBounds();
+			w.setBounds(bounds.x+10,bounds.y+10,bounds.width/3,bounds.height/3);
+			mDesktop.add(w);
+		}
 		
-		if(model instanceof FlowGraphAdapter)
+		try
 		{
-			FlowGraphAdapter adapter = (FlowGraphAdapter) model;
-			w = new FlowGraphFrame(adapter);
+			if(mDesktop.getSelectedFrame()!=null)
+			{
+				mDesktop.getSelectedFrame().setSelected(false);
+				mDesktop.setSelectedFrame(null);
+			}
+
+			w.setIcon(false);
+			w.show();
+			w.toFront();
+			w.setSelected(true);
+			mDesktop.setSelectedFrame(w);
 		}
-		else if(model instanceof ResponsabilityGraphAdapter)
+		catch(Throwable t)
 		{
-			ResponsabilityGraphAdapter adapter = (ResponsabilityGraphAdapter) model;
-			w = new ResponsabilityGraphFrame(adapter);
+			if(Debug.enabled) t.printStackTrace();
 		}
-		else if(model instanceof ActivityGraphAdapter)
-		{
-			ActivityGraphAdapter adapter = (ActivityGraphAdapter) model;
-			w = new ActivityGraphFrame(adapter);
-		}
-		else if(model instanceof ContextGraphAdapter)
-		{
-			ContextGraphAdapter adapter = (ContextGraphAdapter) model;
-			w = new ContextGraphFrame(adapter);
-		}
-		else if(model instanceof WorkDefinitionGraphAdapter)
-		{
-			WorkDefinitionGraphAdapter adapter = (WorkDefinitionGraphAdapter) model;
-			w = new WorkDefinitionGraphFrame(adapter);
-		}
-		else
-		{
-			return;
-		}
-		
-		Rectangle bounds = mDesktop.getGraphicsConfiguration().getBounds();
-		w.setBounds(bounds.x+10,bounds.y+10,bounds.width/3,bounds.height/3);
-		mDesktop.add(w);
-		w.show();
+		return;
 	}
 	
 	public void deleteDiagram(GraphModel model)

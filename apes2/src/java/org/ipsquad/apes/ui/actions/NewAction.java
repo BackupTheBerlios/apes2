@@ -23,17 +23,25 @@ package org.ipsquad.apes.ui.actions;
 
 import java.awt.Event;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Project;
+import org.ipsquad.apes.processing.LoadProject;
 import org.ipsquad.apes.ui.ApesFrame;
+import org.ipsquad.utils.ConfigManager;
+import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
+import org.ipsquad.utils.SmartChooser;
+import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Create a new project in the application
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class NewAction extends ProjectManagementAction
 {
@@ -46,9 +54,7 @@ public class NewAction extends ProjectManagementAction
 	{    
 		if(!context.getAction("Undo").isEnabled())
 		{
-			Project newProject = new Project();
-			context.setProject(newProject);
-			context.setFilePath(null);
+			newProject();
 		}
 		else
 		{
@@ -69,17 +75,75 @@ public class NewAction extends ProjectManagementAction
 
 				if(choice!=JOptionPane.CANCEL_OPTION)
 				{
-					Project newProject=new Project();
-					context.setProject(newProject);
-					context.setFilePath(null);
+					newProject();
 				}
 			}
 			else
 			{
-				Project newProject=new Project();
-				context.setProject(newProject);
-				context.setFilePath(null);
+				newProject();
 			}
 		}
+	}
+	
+	public void newProject()
+	{
+		try
+		{
+			String templateDirPath = ConfigManager.getInstance().getProperty("WorkspaceTitledefaultPath") + File.separator + "Templates";
+			File templateDir = new File(templateDirPath);
+			
+				
+			if(templateDir.exists() && templateDir.isDirectory() && templateDir.listFiles().length != 0)
+			{
+				int choice=JOptionPane.showInternalConfirmDialog(
+						   ((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
+						   ResourceManager.getInstance().getString("msgNewProcessFromTemplate"),
+						   ResourceManager.getInstance().getString("msgTitleNewProcess"),
+						   JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+				if(choice==JOptionPane.YES_OPTION)
+				{
+					SmartChooser chooser = SmartChooser.getChooser();
+					chooser.setAcceptAllFileFilterUsed(false);
+					chooser.setFileFilter(filter);
+					chooser.setDirectory(templateDirPath);
+					
+					if(chooser.showOpenDialog(((ApesFrame)context.getTopLevelFrame()).getContentPane())==JFileChooser.APPROVE_OPTION)
+					{
+						if(!filter.accept(chooser.getSelectedFile()) || chooser.getSelectedFile().isDirectory())
+						{
+							ErrorManager.getInstance().display("errorTitleOpenProcess", "errorWrongFileName");
+							return;
+						}
+						
+						File file = chooser.getSelectedFile();
+						
+						LoadProject mMonitor = new LoadProject(file);
+						
+						ApesFrame parent = (ApesFrame)Context.getInstance().getTopLevelFrame();
+						
+						TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
+						mTask.setName(ResourceManager.getInstance().getString("titleLoading"));
+						mTask.setLocation(parent.getWidth()/2-mTask.getWidth() / 2,parent.getHeight()/2-mTask.getHeight()/2);
+						
+						mMonitor.setTask(mTask);
+						
+						mTask.show();
+						mTask.hide();
+					}
+
+				}
+
+			}
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+			ErrorManager.getInstance().display("errorTitleOpenProcess", "errorOpenProcess");
+		}
+	/////////////
+		/*Project newProject=new Project();
+		context.setProject(newProject);
+		context.setFilePath(null);*/
 	}
 }

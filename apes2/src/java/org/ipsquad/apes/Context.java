@@ -42,7 +42,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class Context
 {
@@ -160,8 +160,9 @@ public class Context
 		
 		updateActions();
 		
-		ApesTreeNode toSelect = (ApesTreeNode)((ApesTreeNode)getTopLevelFrame().getTree().getModel().getRoot()).getChildAt(0);
+		ApesTreeNode toSelect = (ApesTreeNode)((ApesTreeNode)getTopLevelFrame().getTree().getModel().getRoot()).getChildAt(0).getChildAt(1);
 		getTopLevelFrame().getTree().setSelectionPath(new TreePath( toSelect.getPath()) );
+		Context.getInstance().getAction("TreeOpenDiagram").actionPerformed(null);
 	}
 
 	

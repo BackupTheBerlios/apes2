@@ -70,11 +70,10 @@ import org.ipsquad.utils.Debug;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 import org.jgraph.graph.GraphConstants;
-import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -287,8 +286,8 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		insertInModel(new Object[]{pc}, new Object[]{ap}, null);
 		insertInModel(new Object[]{cd,wd}, new Object[]{pc,pc}, null);		
 		insertInModel(new Object[]{api,ari}, new Object[]{ap,ap}, null);
-		GraphModel graph = Context.getInstance().getProject().getGraphModel(wd);
-		Context.getInstance().getTopLevelFrame().openDiagram(graph);
+		SpemGraphAdapter wdModel = Context.getInstance().getProject().getGraphModel(wd);
+		Context.getInstance().getTopLevelFrame().openDiagram(wdModel);
 	}
 		
 	/**

@@ -23,7 +23,7 @@ package org.ipsquad.utils;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class MonitoredTaskBase
 {
@@ -33,6 +33,7 @@ public abstract class MonitoredTaskBase
 	private int mCurrent = 0;
 	private String mMessage = null;
 	private boolean mDone;
+	protected boolean mCloseOnFinish = false;
 
 	protected abstract Object processingTask();
 
@@ -90,6 +91,12 @@ public abstract class MonitoredTaskBase
 	{
 		mMessage = message;
 	}
+	
+	public boolean closeOnFinish()
+	{
+		return mCloseOnFinish;
+	}
+	
 	/**
 	 * Called to find out if the task has completed.
 	 */
