@@ -53,7 +53,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesMediator.Listener
 {
@@ -490,6 +490,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	protected void inserted( InsertEvent e )
 	{
 		//System.out.println("tree insert "+e);
+		
 		if( !e.isAlreadyExistInModel() )
 		{
 			ApesTreeNode  node = null;
@@ -513,24 +514,23 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 				parent = findNodeByUserObject((ApesTreeNode)getRoot(), e.getParent());
 			}
 
+			if( node == null )
+			{
+				node = new ApesTreeNode( e.getInserted(), true );
+			}
+			
 			if( parent != null )
-			{	
-				if( node == null )
-				{
-					node = new ApesTreeNode( e.getInserted(), true );
-				}
-				
+			{
 				if( node.getParent() == null )
 				{
 					parent.add(node);
 				}
-				
+
 				fireTreeNodesInserted( this, parent.getPath(), new int[]{ parent.getIndex(node) }, new Object[]{ node });
 				
 				NodeInsertedEdit edit = new NodeInsertedEdit( this, node, parent );
 				postEdit( edit );
 			}
-			
 		}
 	}
 	
@@ -568,7 +568,12 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	
 	protected ApesTreeNode findNodeByUserObject( ApesTreeNode root, Object element )
 	{
-		if( root != null && element != null && root.getUserObject().toString().equals(element.toString()) )
+		if( root == null || element == null )
+		{
+			return null;
+		}
+		
+		if( root.getUserObject().toString().equals(element.toString()) )
 		{
 			return root;
 		}

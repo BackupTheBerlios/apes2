@@ -36,13 +36,12 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellViewRenderer;
 import org.jgraph.graph.GraphConstants;
-import org.jgraph.graph.VertexRenderer;
 
 
 /**
  * Display an Activity cell
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
  
 public class ActivityView extends ApesVertexView
@@ -181,7 +180,7 @@ public class ActivityView extends ApesVertexView
 	}
 
 	// Define the Renderer for a ActivityView
-	static class ActivityRenderer extends VertexRenderer
+	static class ActivityRenderer extends ApesVertexView.ApesVertexRenderer
 	{
 		public void paint(Graphics g)
 		{

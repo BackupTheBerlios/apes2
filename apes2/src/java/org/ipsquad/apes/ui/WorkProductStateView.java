@@ -39,13 +39,12 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellViewRenderer;
 import org.jgraph.graph.GraphConstants;
-import org.jgraph.graph.VertexRenderer;
 
 
 /**
  * Display a WorkProductState cell
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
  
 public class WorkProductStateView extends ApesVertexView
@@ -215,7 +214,7 @@ public class WorkProductStateView extends ApesVertexView
 	}
 
 	// Define the Renderer for a WorkProductView
-	static class WorkProductRenderer extends VertexRenderer
+	static class WorkProductRenderer extends ApesVertexView.ApesVertexRenderer
 	{
 		public static String name = "";
 		public static Font font = null;

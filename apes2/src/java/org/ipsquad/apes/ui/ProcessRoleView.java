@@ -36,13 +36,12 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellViewRenderer;
 import org.jgraph.graph.GraphConstants;
-import org.jgraph.graph.VertexRenderer;
 
 
 /**
  * Display a Process Role cell
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
  
 public class ProcessRoleView extends ApesVertexView
@@ -186,7 +185,7 @@ public class ProcessRoleView extends ApesVertexView
 	}
 
 	// Define the Renderer for a ProcessRoleView
-	static class ProcessRoleRenderer extends VertexRenderer
+	static class ProcessRoleRenderer extends ApesVertexView.ApesVertexRenderer
 	{
 		public void paint(Graphics g)
 		{

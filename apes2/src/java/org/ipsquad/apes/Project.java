@@ -40,18 +40,19 @@ import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.frontend.ApesMediator;
+import org.ipsquad.utils.ResourceManager;
 
 /**
  * Application Project
  *
  * This class represent a project in the application
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Project implements Serializable
 {
 	//private ProcessComponent mProcess = new ProcessComponent();
-	private ApesProcess mProcess = new ApesProcess("Project");
+	private ApesProcess mProcess = new ApesProcess(ResourceManager.getInstance().getString("project"));
 	private HashMap mDiagramMap = new HashMap();
 	
 	/**

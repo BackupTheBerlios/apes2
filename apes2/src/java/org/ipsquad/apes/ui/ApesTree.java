@@ -68,13 +68,15 @@ import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Identity;
 import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
+import org.ipsquad.apes.ui.actions.ChangeBoldAction;
 import org.ipsquad.apes.ui.actions.ChangeColorAction;
+import org.ipsquad.apes.ui.actions.ChangeItalicAction;
 import org.jgraph.graph.GraphConstants;
 
 /**
  * Application tree view
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {
@@ -285,7 +287,11 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 		
 	}
 
-	private class ApesTreeCellEditor extends DefaultTreeCellEditor implements ChangeColorAction.ColorChangeListener, CellEditorListener
+	private class ApesTreeCellEditor extends DefaultTreeCellEditor 
+		implements ChangeColorAction.ColorChangeListener, 
+			ChangeItalicAction.ItalicChangeListener, 
+			ChangeBoldAction.BoldChangeListener, 
+			CellEditorListener
 	{
 		private ApesTreeNode mCurrentNode = null;
 		
@@ -300,12 +306,17 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 		
 		private ChangeColorAction mActionForeground = (ChangeColorAction)Context.getInstance().getAction("ChangeForeground");
 		private ChangeColorAction mActionBackground = (ChangeColorAction)Context.getInstance().getAction("ChangeBackground");
+		private ChangeItalicAction mActionItalic = (ChangeItalicAction)Context.getInstance().getAction("ChangeItalic");
+		private ChangeBoldAction mActionBold = (ChangeBoldAction)Context.getInstance().getAction("ChangeBold");
 		
 		public ApesTreeCellEditor(JTree tree, DefaultTreeCellRenderer renderer)
 		{
 			super(tree, renderer);
 			mActionForeground.addChangeColorListener(this);
 			mActionBackground.addChangeColorListener(this);
+			mActionItalic.addChangeItalicListener(this);
+			mActionBold.addChangeBoldListener(this);
+			
 			addCellEditorListener(this);
 		}
 		
@@ -352,7 +363,53 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 				getCellEditor().getTreeCellEditorComponent(ApesTree.this,node,true,true,getModel().isLeaf(node),getModel().getIndexOfChild(node.getParent(),node));
 			}
 		}
-
+		
+		public void italicChanged(boolean newValue) 
+		{
+			TreePath path = getEditingPath();
+			if(path != null && mCurrentFont != null)
+			{
+				int style = mCurrentFont.getStyle();
+				
+				if( newValue )
+				{
+					style += Font.ITALIC;
+				}
+				else
+				{
+					style -= Font.ITALIC;
+				}
+				
+				mCurrentFont = new Font(mCurrentFont.getName(),style,mCurrentFont.getSize());
+				
+				ApesTreeNode node = (ApesTreeNode)path.getLastPathComponent();
+				getCellEditor().getTreeCellEditorComponent(ApesTree.this,node,true,true,getModel().isLeaf(node),getModel().getIndexOfChild(node.getParent(),node));
+			}
+		}
+		
+		public void boldChanged(boolean newValue) 
+		{
+			TreePath path = getEditingPath();
+			if(path != null && mCurrentFont != null)
+			{
+				int style = mCurrentFont.getStyle();
+				
+				if( newValue )
+				{
+					style += Font.BOLD;
+				}
+				else
+				{
+					style -= Font.BOLD;
+				}
+				
+				mCurrentFont = new Font(mCurrentFont.getName(), style, mCurrentFont.getSize());
+				
+				ApesTreeNode node = (ApesTreeNode)path.getLastPathComponent();
+				getCellEditor().getTreeCellEditorComponent(ApesTree.this,node,true,true,getModel().isLeaf(node),getModel().getIndexOfChild(node.getParent(),node));
+			}
+		}
+		
 		protected boolean canEditImmediately(EventObject event)
 		{
 			boolean canEdit = super.canEditImmediately(event);
@@ -361,6 +418,8 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 			{
 				mActionForeground.setEnabled(true);
 				mActionBackground.setEnabled(true);
+				mActionItalic.setEnabled(true);
+				mActionBold.setEnabled(true);
 				
 				ApesTreeNode node = (ApesTreeNode)tree.getSelectionPath().getLastPathComponent();
 				
@@ -369,7 +428,8 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 					mCurrentNode = node;
 					mInitForeground = GraphConstants.getForeground(node.getAttributes());
 					mInitBackground = GraphConstants.getBackground(node.getAttributes());
-					mInitFont = GraphConstants.getFont(node.getAttributes());	
+					mInitFont = GraphConstants.getFont(node.getAttributes());
+					mCurrentFont = mInitFont;
 				}
 			}
 			return canEdit;
@@ -384,6 +444,8 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 			
 			mActionForeground.setEnabled(false);
 			mActionBackground.setEnabled(false);
+			mActionItalic.setEnabled(false);
+			mActionBold.setEnabled(false);
 		}
 
 		public void editingStopped(ChangeEvent e)
@@ -404,7 +466,8 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 					GraphConstants.setBackground(map,mCurrentBackground);
 					hasChanged = true;
 				}
-				if(  mCurrentFont != null && mInitFont != mCurrentFont )
+				if(  mCurrentFont != null 
+						&& mInitFont.getStyle() != mCurrentFont.getStyle() )
 				{
 					GraphConstants.setFont(map,mCurrentFont);
 					hasChanged = true;
@@ -421,6 +484,8 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 				
 				mActionForeground.setEnabled(false);
 				mActionBackground.setEnabled(false);
+				mActionItalic.setEnabled(false);
+				mActionBold.setEnabled(false);
 			}
 		}
 	}

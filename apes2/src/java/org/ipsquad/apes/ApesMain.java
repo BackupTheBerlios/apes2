@@ -43,7 +43,9 @@ import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.apes.ui.actions.AboutAction;
 import org.ipsquad.apes.ui.actions.AddToModelAction;
 import org.ipsquad.apes.ui.actions.BiggerAction;
+import org.ipsquad.apes.ui.actions.ChangeBoldAction;
 import org.ipsquad.apes.ui.actions.ChangeColorAction;
+import org.ipsquad.apes.ui.actions.ChangeItalicAction;
 import org.ipsquad.apes.ui.actions.InteractWithModelAction;
 import org.ipsquad.apes.ui.actions.NewAction;
 import org.ipsquad.apes.ui.actions.OpenAction;
@@ -69,7 +71,7 @@ import org.ipsquad.utils.ResourceManager;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ApesMain
 {
@@ -117,7 +119,6 @@ public class ApesMain
 		properties.setProperty("ToolPresentationTitledefaultPath","");
 		properties.setProperty("WorkspaceTitledefaultPath","");
 
-
 		return properties;
 	}
 	
@@ -152,8 +153,8 @@ public class ApesMain
 		
 		context.registerAction("ChangeForeground", new ChangeColorAction("changeForeground"));
 		context.registerAction("ChangeBackground", new ChangeColorAction("changeBackground"));
-		context.registerAction("ChangeItalic", new ChangeColorAction("changeItalic"));
-		context.registerAction("ChangeBold", new ChangeColorAction("changeBold"));
+		context.registerAction("ChangeItalic", new ChangeItalicAction("changeItalic"));
+		context.registerAction("ChangeBold", new ChangeBoldAction("changeBold"));
 		
 		context.registerAction("About", new AboutAction());
 

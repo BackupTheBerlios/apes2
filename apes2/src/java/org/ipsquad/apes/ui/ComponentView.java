@@ -36,13 +36,12 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellViewRenderer;
 import org.jgraph.graph.GraphConstants;
-import org.jgraph.graph.VertexRenderer;
 
 
 /**
  * Display a Component cell
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
  
 public class ComponentView extends ApesVertexView
@@ -182,7 +181,7 @@ public class ComponentView extends ApesVertexView
 	}
 
 	// Define the Renderer for a ComponentView
-	static class ComponentViewRenderer extends VertexRenderer
+	static class ComponentViewRenderer extends ApesVertexView.ApesVertexRenderer
 	{
 		public void paint(Graphics g)
 		{

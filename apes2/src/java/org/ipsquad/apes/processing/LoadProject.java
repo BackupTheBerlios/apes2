@@ -51,7 +51,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -85,7 +85,7 @@ public class LoadProject extends MonitoredTaskBase
 			boolean hasComponent = true;
 			
 			Project p = new Project();
-			ApesProcess ap = new ApesProcess("Project");
+			ApesProcess ap = new ApesProcess(mResource.getString("project"));
 			
 			ZipInputStream zipFile = new ZipInputStream( new FileInputStream(new File(mFile.getAbsolutePath())));
 			
