@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1240,10 +1240,27 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	    while(it.hasNext())
 	    {
 	        Map.Entry entry = (Map.Entry) it.next();
-	        if(entry.getKey() instanceof Activity)
+	        if(entry.getKey() instanceof Activity && entry.getValue() instanceof ApesWorkDefinition)
 	        {
-	            activities.add(entry.getKey());
-	            newParents.add(entry.getValue());
+	        	boolean duplicateName = false;
+	        	ApesWorkDefinition wd = (ApesWorkDefinition)entry.getValue();
+	        	Activity a = (Activity)entry.getKey();
+	        	//test if there is not already an element with the same name in the work definition
+	        	int i = 0;
+	        	while(i<wd.subWorkCount() && !duplicateName)
+	        	{
+	        		if(wd.getSubWork(i).getName().equals(a.getName()))
+	        		{
+	        			duplicateName = true;
+	        		}
+	        		i++;
+	        	}
+	        	
+	        	if(!duplicateName)
+	        	{
+	        		activities.add(entry.getKey());
+	        		newParents.add(entry.getValue());
+	        	}
 	        }
 	    }
 	    
