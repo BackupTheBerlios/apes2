@@ -35,7 +35,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * Responsability graph editing internal frame
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ContextGraphFrame extends GraphFrame {
 	

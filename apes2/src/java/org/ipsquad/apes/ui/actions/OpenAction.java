@@ -41,7 +41,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class OpenAction extends ProjectManagementAction
 {

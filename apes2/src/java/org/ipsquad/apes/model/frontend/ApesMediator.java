@@ -24,7 +24,6 @@ import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,7 +43,6 @@ import org.ipsquad.apes.ApesGraphConstants;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Identity;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
-import org.ipsquad.apes.adapters.WorkProductCell;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
@@ -71,10 +69,11 @@ import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.Debug;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
+import org.jgraph.graph.GraphConstants;
 
 /**
  * 
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -88,13 +87,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 
 	private Vector mListeners = new Vector();
 	private Vector mDiagrams = new Vector();
-	
-	/**
-	 *allow to store the edits in place to add them to the undo manager
-	 *@see private method postEdit and restorePostEdits for more information 
-	 */
-	private boolean mStorePostEdits = false;
-	private Vector mPostEdits = new Vector();
 	
 	private ApesMediator() { }
 	
@@ -193,27 +185,48 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	
 	/**
 	 * Create or load the provided interface
-	 * 
 	 * @param ap
 	 */
 	private void loadProvidedInterface(ApesProcess ap)
 	{
+		WorkProductRef ref = null;
+		ModelElement me = null;
+		ProcessComponent c = ap.getComponent();
+		
 		if( ap.getProvidedInterface() == null )
 		{	
-		    ModelElement me = new ApesProcess.ProvidedInterface(mConfig.getProperty("Provided"));
+			me = new ApesProcess.ProvidedInterface(mConfig.getProperty("Provided"));
 			ap.addModelElement(me);
 			insertInModel(new Object[]{me}, new Object[]{ap}, null);
 			
 		}
 		else
 		{
-		    loadInterface(ap, ap.getProvidedInterface());
+			SpemDiagram diag = (SpemDiagram)ap.getComponent().getModelElement(0);
+			Map link = new HashMap();
+			
+			int i = ap.getProvidedInterface().modelElementCount()-1;
+			int index = 0;
+			while( i >= 0 )
+			{
+				ref = (WorkProductRef)ap.getProvidedInterface().getModelElement(index);
+				me = ref.getReference();
+				ap.getProvidedInterface().removeModelElement(ref);
+				
+				Map apply = ApesGraphConstants.createMap();
+				Map attr = ApesGraphConstants.createMap();
+				Rectangle bounds = new Rectangle(350,i*75+10,50,50);
+				GraphConstants.setBounds(attr,bounds);
+				ApesGraphConstants.setAttributes(apply, attr);
+				
+				insertIn(diag, new Object[]{me, new Link(c,me)}, apply);
+				--i;
+			}
 		}
 	}
 	
 	/**
 	 * Create or load the required interface
-	 * 
 	 * @param ap
 	 */
 	private void loadRequiredInterface(ApesProcess ap)
@@ -230,57 +243,29 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 		else
 		{
-			loadInterface(ap, ap.getRequiredInterface());
+			SpemDiagram diag = (SpemDiagram)ap.getComponent().getModelElement(0);
+			Map link = new HashMap();
+			
+			int i = ap.getRequiredInterface().modelElementCount()-1;
+			int index = 0;
+			while( i >= 0 )
+			{
+				ref = (WorkProductRef)ap.getRequiredInterface().getModelElement(index);
+				me = ref.getReference();
+				ap.getRequiredInterface().removeModelElement(ref);
+				Map apply = GraphConstants.createMap();
+				Map attr = GraphConstants.createMap();
+				Rectangle bounds = new Rectangle(10,i*75+10,50,50);
+				GraphConstants.setBounds(attr,bounds);
+				ApesGraphConstants.setAttributes(apply, attr);
+				
+				insertIn(diag, new Object[]{me, new Link(me, c)}, apply);				
+				--i;
+			}
 		}
 	}
 	
 	/**
-	 * Load the content of an interface
-	 * 
-     * @param ap
-     * @param in
-     */
-    private void loadInterface(ApesProcess ap, ApesProcess.Interface in) 
-    {
-        ProcessComponent c = ap.getComponent();
-        WorkProductRef ref = null;
-        
-        ap.removeModelElement(in);
-        insertInModel(new Object[]{in}, new Object[]{ap}, null);
-        
-        SpemDiagram diag = (SpemDiagram)ap.getComponent().getModelElement(0);
-        SpemGraphAdapter adapt = Context.getInstance().getProject().getGraphModel(diag);
-        
-        Map link = new HashMap();
-        
-        int i = in.modelElementCount()-1;
-        int index = 0;
-        while( i >= 0 )
-        {
-        	ref = (WorkProductRef)in.getModelElement(index);
-        	in.removeModelElement(ref);
-        	
-        	WorkProductCell cell = new WorkProductCell(ref.getReference());
-        	Map apply = ApesGraphConstants.createMap();
-        	Map attr = cell.getAttributes();
-        	Rectangle bounds = new Rectangle(in instanceof ApesProcess.ProvidedInterface?350:50,i*75+10,50,50);
-        	ApesGraphConstants.setBounds(attr,bounds);
-        	apply.put(cell, attr);
-        	
-        	adapt.insert(new Object[]{cell}, apply, null, null, null);
-        	if(in instanceof ApesProcess.ProvidedInterface)
-        	{
-        	    insertIn(diag, new Object[]{new Link(c,ref.getReference())}, null);
-        	}
-        	else
-        	{
-        	    insertIn(diag, new Object[]{new Link(ref.getReference(),c)}, null);       	    
-        	}
-        	--i;
-        }
-    }
-
-    /**
 	 * Create a new process
 	 * @param ap
 	 */
@@ -691,26 +676,26 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		if(edit != null)
 		{
-			saveEdits();				
-			if(executeModelEdit(edit, getDependantInsertEdits( elements )))
+			Context.getInstance().getUndoManager().save();				
+			if(executeModelEdit(edit, getInsertExtraEdits( elements )))
 			{
-				Collection extraEdits = addDependantEdits(edit);
-				extraEdits.addAll(restoreEdits());
+				Collection extraEdits = addExtraEdits(edit);
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
 				postEdit(edit, extraEdits);
 			}
-			else restoreEdits();
+			else Context.getInstance().getUndoManager().restore();
    		}
 		/****NEWLINE*****/
-		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "");
+		System.err.println();
 	}
 	
 	/**
-	 * Adds edits dependant of another edit
+	 * Adds extra edits dependant of another edit
 	 * 
      * @param edit the precedent executed edit
      * @return a collection of edits dependant of the precedent edit 
      */
-    protected Collection addDependantEdits(ApesEdit edit) 
+    protected Collection addExtraEdits(ApesEdit edit) 
     {
         Collection edits = insertWorkProductRef(edit, edit.getInserted());
         edits.addAll(changeWorkProductRef(edit, edit.getChanged()));
@@ -871,12 +856,12 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	}
 	
 	/**
-	 * Adds elements to the model depending of the type of the elements
+	 * Adds extra elements to the model depending of the type of the elements
 	 * 
 	 * @param elements
 	 * @return a vector of ApesEdit representing the changes
 	 */
-	protected Vector getDependantInsertEdits( Object[] elements )
+	protected Vector getInsertExtraEdits( Object[] elements )
 	{
 		Vector edits = new Vector();
 		for ( int i = 0; i < elements.length; i++ )
@@ -930,28 +915,28 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	            
 	            if(diagEdit != null)
 	            {
-	            	saveEdits();
+	            	Context.getInstance().getUndoManager().save();
 	            	if(diagEdit.execute())
 	            	{
 	            		fireModelChanged(diagEdit.getSource(), diagEdit);
 		            	if(modelEdit != null)
 		            	{
-		            		if(executeModelEdit(modelEdit, getDependantInsertEdits(elements)))
+		            		if(executeModelEdit(modelEdit, getInsertExtraEdits(elements)))
 		            		{
 				            	modelEdit.end();
 		            			diagEdit.addEdit(modelEdit);
 		            		}
 		            	}
 		            	
-		            	Collection extraEdits = addDependantEdits(diagEdit);						
-		            	extraEdits.addAll(restoreEdits());
+		            	Collection extraEdits = addExtraEdits(diagEdit);						
+		            	extraEdits.addAll(Context.getInstance().getUndoManager().restore());
 		            	postEdit(diagEdit, extraEdits);
 	            	}	            	
 				}
 	        }
 	    }
 	    /****NEWLINE*****/
-		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "");
+		System.err.println();
 	}
 	
 	/**
@@ -975,8 +960,8 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	    ApesEdit edit = createRemoveModelEdit(elements, extras);
 		if(edit != null)
 		{
-			saveEdits();				
-			Collection extraEdits = addDependantEdits(edit);
+			Context.getInstance().getUndoManager().save();				
+			Collection extraEdits = addExtraEdits(edit);
 			
 			for ( int i = 0; i < edits.size(); i++ )
 			{
@@ -985,20 +970,20 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				{
 					fireModelChanged(tmpEdit.getSource(), tmpEdit);	            
 					edit.addEdit((UndoableEdit)edits.get(i));
-					extraEdits.addAll(addDependantEdits((ApesEdit)edits.get(i)));
+					extraEdits.addAll(addExtraEdits((ApesEdit)edits.get(i)));
 				}
 			}
 			if(edit.execute())
 			{
 				fireModelChanged(null, edit);	            
 				
-				extraEdits.addAll(restoreEdits());
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
 				postEdit(edit, extraEdits);
 			}
-			else restoreEdits();
+			else Context.getInstance().getUndoManager().restore();
    		}
 		/****NEWLINE*****/
-		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "");
+		System.err.println();
 	}
 	
 	/**
@@ -1073,19 +1058,19 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			ApesDiagramEdit edit = createRemoveDiagramEdit(diagram, getDependanciesFromDiagram( (SpemDiagram)source, elements ), extras);
 			if (edit != null) 
 			{
-			    if(edit.execute())
+				if(edit.execute())
 				{
-					saveEdits();
+					Context.getInstance().getUndoManager().save();
 					fireModelChanged(edit.getSource(), edit);
 					
-					Collection extraEdits = addDependantEdits(edit);
-					extraEdits.addAll(restoreEdits());
+					Collection extraEdits = addExtraEdits(edit);
+					extraEdits.addAll(Context.getInstance().getUndoManager().restore());
 					postEdit(edit, extraEdits);
 				}
 			}
 		}
 		/****NEWLINE*****/
-		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "");
+		System.err.println();
 	}
 
 	/**
@@ -1125,105 +1110,75 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		{
 			if(edit.execute())
 			{
-				saveEdits();
+				Context.getInstance().getUndoManager().save();
 				edit.mExecuteRedoEditsFirst=false;
 				edit.mExecuteUndoEditsFirst=false;
 				fireModelChanged(edit.getSource(), edit);
 				
-				Collection extraEdits = addDependantEdits(edit);
-				extraEdits.addAll(restoreEdits());
-				//postEdit(edit, restoreEdits());
+				Collection extraEdits = addExtraEdits(edit);
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+				//postEdit(edit, Context.getInstance().getUndoManager().restore());
 				postEdit(edit, extraEdits);
 			}
 		}
 	}
 
 	/**
-	 * Moves elements in the model or links in a diagram
+	 * Moves elements in the model
 	 * 
 	 * @param moves a map representing the changes
 	 * @param extras a stored map wich will be returned by the ApesModelEvent
 	 */
-	public void move(Object source, Map moves, Map extras)
+	public void move(Map moves, Map extras)
 	{
 		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "\n(ApesMediator) -> move ");
 		
 		if(moves == null || moves.isEmpty())
 			return;
 		
-		if(source != null && source instanceof SpemDiagram)
+		ApesModelEdit edit =
+			createMoveEdit(moves, extras);
+		
+		//retrieve extra edits, for example when you move an activity, you must remove it from its work definition 
+		//before insert it in the new work definition
+		Collection extraEdits = getSpecialMoveEdits(moves,extras);
+		
+		if(edit != null)
 		{
-		    moveLinkInDiagram((SpemDiagram)source, moves, extras);
-		}
-		else
-		{
-			moveInModel(moves, extras);
-		}
+			Context.getInstance().getUndoManager().save();
+			
+			boolean postEdit = false;
+			//execute the edit
+			if(edit.execute())
+			{
+				fireModelChanged(null, edit);
+				postEdit = true;
+			}
+			//execute the extra edits
+			for (Iterator it = extraEdits.iterator(); it.hasNext();) 
+			{
+			    ApesEdit tmpEdit = (ApesEdit) it.next();
+			    if(tmpEdit.execute())
+			    {
+			        fireModelChanged(null, tmpEdit);					
+			    }
+			    postEdit = true;
+			}
+			//if edit or extra edits execution is true, create a post edit
+			if(postEdit)
+			{
+				extraEdits.addAll(Context.getInstance().getUndoManager().restore());
+				postEdit(edit, extraEdits);
+			}
+			else Context.getInstance().getUndoManager().restore();
+   		}
 		
 		/****NEWLINE*****/
-		if(Debug.enabled) Debug.print(Debug.MEDIATOR, "");
+		System.err.println();
 	}
 	
-	/**
-	 * Moves elements in the model
-	 * 
-	 * @param moves the containing element/new parent pairs
-	 * @param extras a stored map wich will be returned by the ApesModelEvent
-	 */
-	protected void moveInModel(Map moves, Map extras) 
+	protected Collection getSpecialMoveEdits(Map moves, Map extras)
 	{
-		//create the edit which represents the move
-		ApesEdit edit = createMoveEdit(moves, extras);
-		
-		//gets edits for each activity
-		//when you move it, you must remove it from its work definition 
-		//before insert it in the new work definition
-		Collection extraEdits = moveActivitiesInModel(moves,extras);
-		
-		saveEdits();
-			
-		//execute the edit
-		boolean postEdit = false;
-		if(edit != null && edit.execute())
-		{
-			fireModelChanged(null, edit);
-			
-			//execute the extra edits
-			if(extraEdits != null)
-			{
-				for (Iterator it = extraEdits.iterator(); it.hasNext();) 
-				{
-					ApesEdit tmpEdit = (ApesEdit) it.next();
-					if(tmpEdit.execute())
-					{
-						fireModelChanged(null, tmpEdit);					
-					}
-				}
-			}
-			else
-			{
-				extraEdits = new Vector();
-			}
-
-		    //postEdit
-			extraEdits.addAll(restoreEdits());
-			postEdit(edit, extraEdits);
-		}
-		else restoreEdits();
-	}
-
-	/**
-	 * Creates edits for each moved activities in moves 
-	 * 
-	 * @param moves the map containing element/new parent pairs
-	 * @param extras
-	 * @return a stored map wich will be returned by the ApesModelEvent
-	 */
-	protected Collection moveActivitiesInModel(Map moves, Map extras)
-	{
-		if(moves == null)
-			return null;
-		
 	    Vector activities = new Vector();
 	    Vector newParents = new Vector();
 	    
@@ -1233,91 +1188,25 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	        Map.Entry entry = (Map.Entry) it.next();
 	        if(entry.getKey() instanceof Activity)
 	        {
+	            System.out.println("ADD EXTA "+entry.getKey());
 	            activities.add(entry.getKey());
 	            newParents.add(entry.getValue());
 	        }
 	    }
-	    
+
 	    Vector edits = new Vector();
 	    ApesEdit edit = createRemoveModelEdit(activities.toArray(),extras);
-	    if(edit != null)
-	    {
-	    	edit.end();
-	    	edits.add(edit);
-	    	edit = createInsertModelEdit(activities.toArray(), newParents.toArray(), extras);
-	    	edit.end();
-	    	edits.add(edit);
-	    }
-	    
+	    edit.end();
+        edits.add(edit);
+        edit = createInsertModelEdit(activities.toArray(), newParents.toArray(), extras);
+        edit.end();
+        edits.add(edit);
+        
         return !edits.isEmpty()?edits:null;
 	}
 	
 	/**
-	 * Moves source or target of a link in a diagram
-	 * 
-	 * @param diagram the diagram
-	 * @param moves a map containing old link/new link pairs
-	 * @param extra a stored map wich will be returned by the ApesModelEvent
-	 */
-	protected void moveLinkInDiagram(SpemDiagram diagram, Map moves, Map extras) 
-	{
-		mStorePostEdits = true;
-		
-		Iterator it = moves.entrySet().iterator();
-		while(it.hasNext())
-		{
-		    Map.Entry entry = (Map.Entry)it.next();
-		    Link oldLink = (Link)entry.getKey();
-		    Link newLink = (Link)entry.getValue();
-		    
-		    //checks the data
-		    if(oldLink.getSource() instanceof ModelElement && oldLink.getTarget() instanceof ModelElement
-		    		&& newLink.getSource() instanceof ModelElement && newLink.getTarget() instanceof ModelElement)
-		    {
-		    	//removes the old link before tests if the new link can be created
-		    	//because dependencies can be found beetween the two links which abort the creation of the new link
-		    	removeFrom(diagram, new Object[]{oldLink}, extras);
-		    
-		    	//tests if the old link has been removed from the diagram
-		    	//and tests if the new link can be created
-		    	if(!diagram.existsLinkModelElements((ModelElement)oldLink.getSource(), (ModelElement)oldLink.getTarget())
-		    			&& diagram.areLinkableModelElements((ModelElement)newLink.getSource(), (ModelElement)newLink.getTarget()))
-			    {
-			    	insertIn(diagram, new Object[]{newLink}, extras);
-			    }
-		    	else
-		    	{
-		    		//backup changes made the removal of the old link
-		    		Vector edits = restorePostEdits();
-		    		if(edits != null && !edits.isEmpty())
-		    		{
-		    			for (it = edits.iterator(); it.hasNext();) 
-		    			{
-							ApesEdit edit = (ApesEdit) it.next();
-							if(edit.canUndo())
-							{
-								edit.undo();
-							}
-						}
-		    		}
-		    	}
-		    }
-		}
-		
-		Vector edits = restorePostEdits();
-		Collections.reverse(edits);
-		
-		if(edits != null && !edits.isEmpty())
-		{
-			//create an empty ApesEdit which will contained all edits
-			ApesEdit edit = new ApesModelEdit(null,null,null,null,null,null);
-			postEdit(edit, edits);
-		}
-	}
-
-	/**
-	 * Compounds each undoable edits in the ApesEdit
-	 * Calls the postEdit method of super class if mStorePostEdits is true
+	 * Compound each undoable edits in the ApesEdit and call posetEdit
 	 * 
 	 * @param edit
 	 * @param undoableEdits
@@ -1329,49 +1218,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		    edit.addEdit((UndoableEdit)iter.next());
 		}    	
 		edit.end();
-    	if(mStorePostEdits)
-    	{
-    		mPostEdits.add(edit);
-    	}
-    	else
-    	{
-       		postEdit(edit);
-    	}
+    	postEdit(edit);
 	}
 	
-	/**
-	 * Restores the edits previously save since mStorePostEdits has been changed to true
-	 * And affects false in mStorePostEdits
-	 * 
-	 * @return the vector containing the previously saved edits
-	 */
-	private Vector restorePostEdits()
-	{
-		Vector temp = mPostEdits;
-		mPostEdits = new Vector();
-		mStorePostEdits = false;
-		return temp;
-	}
-	
-	/**
-	 * Convenience method to call the save method of the undo manager
-	 *
-	 */
-	private void saveEdits()
-    {
-        Context.getInstance().getUndoManager().save();
-    }
-    
-	/**
-	 * Convenience method to call the restore method of the undo manager
-	 * 
-	 * @return the vector containing the stored edits 
-	 */
-    private Vector restoreEdits()
-    {
-    	return Context.getInstance().getUndoManager().restore();
-    }
-    
 	/**
 	 * Returns an edit which represents an insert.
 	 * 
@@ -1704,7 +1553,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 
 	/**
 	 * Changes elements of the model
-	 * 
 	 * @param changes the map representing the changes
 	 * @return a map to undo the changes
 	 */
@@ -1727,17 +1575,13 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				ModelElement me = (ModelElement)entry.getKey();
 				undo.put(me, me.getName());
 				me.setName((String)entry.getValue());
-				if(me instanceof SpemDiagram)
-				{
-					Context.getInstance().graphNameChanged(Context.getInstance().getProject().getGraphModel((SpemDiagram)me),me.getName());
-				}
 			}
 		}
 		return undo;	    
 	}
 	
 	/**
-	 * Moves elements 
+	 * Moves elements in the model 
 	 * 
 	 * @param moves a map representing the move
 	 * @return a map to undo the changes
@@ -1781,32 +1625,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		return undo;
 	}
 	
-	/**
-	 * Moves an element in the model
-	 * 
-	 * @param me the model element to moved
-	 * @param parent the new parent of the model element
-	 * @param undo the map which can undo the change
-	 */
-	protected void handleMoveInModel(ModelElement me, IPackage parent, Map undo) 
-	{
-		IPackage oldParent = me.getParent();
-		
-		if(oldParent != parent)
-		{
-			oldParent.removeModelElement(me);
-			if(parent.addModelElement(me))
-			{
-				undo.put(me, oldParent);
-			}
-			else
-			{
-				oldParent.addModelElement(me);
-				ErrorManager.getInstance().printKey("errorMoveElement");
-			}
-		}
-	}
-
 	/**
 	 * Notify all listeners that the model has changed
 	 * 

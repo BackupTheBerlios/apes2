@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * Class for represent a link in a diagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Link implements Serializable, Cloneable
 {
@@ -101,8 +101,7 @@ public class Link implements Serializable, Cloneable
 	
 	public int hashCode()
 	{
-		return (mSource != null?mSource.hashCode():0)
-		        +(mTarget != null?mTarget.hashCode():0);
+		return mSource.hashCode()+mTarget.hashCode();
 	}
 	
 	/*public void visit(ModelVisitor visitor)

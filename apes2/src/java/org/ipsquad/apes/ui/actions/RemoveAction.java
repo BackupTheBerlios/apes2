@@ -32,7 +32,7 @@ import org.jgraph.JGraph;
 /**
  * Remove the selection from the current graph
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class RemoveAction extends ApesAction
 {

@@ -41,7 +41,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * Activity graph editing internal frame
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ActivityGraphFrame extends GraphFrame
 {

@@ -41,7 +41,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a WorkDefinitionDiagram
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class WorkDefinitionJGraph extends JGraph
 {

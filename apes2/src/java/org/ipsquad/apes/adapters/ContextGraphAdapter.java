@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * This adapter allows to display a context diagram in a JGraph
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -61,7 +61,7 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 				else if( o instanceof Link )
 				{
 					Link link = (Link)o;
-					DefaultEdge edge = new ContextEdge();
+					DefaultEdge edge = new DefaultEdge();
 					edge.setSource(getCellByUserObject(link.getSource(), null, false).getChildAt(0));
 					edge.setTarget(getCellByUserObject(link.getTarget(), null, false).getChildAt(0));
 					return edge;

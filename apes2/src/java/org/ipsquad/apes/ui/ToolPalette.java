@@ -39,7 +39,7 @@ import org.jgraph.JGraph;
 /**
  * Base class for the graph editing toolpalettes
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ToolPalette extends JToolBar implements ToolListener
 {

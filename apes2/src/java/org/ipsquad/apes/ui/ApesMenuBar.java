@@ -35,7 +35,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Application menu bar
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ApesMenuBar extends JMenuBar
 {

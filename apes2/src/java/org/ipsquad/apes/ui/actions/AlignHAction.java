@@ -44,7 +44,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Align the centers of selected objects horizontally
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class AlignHAction extends ApesAction
 {

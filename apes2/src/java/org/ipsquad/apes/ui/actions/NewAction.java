@@ -40,7 +40,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Create a new project in the application
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class NewAction extends ProjectManagementAction
 {

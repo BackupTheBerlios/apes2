@@ -44,7 +44,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a WorkProductState cell
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
  
 public class WorkProductStateView extends ApesVertexView

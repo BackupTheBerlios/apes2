@@ -39,7 +39,7 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a ResponsabilityDiagram
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ContextJGraph extends JGraph
 {

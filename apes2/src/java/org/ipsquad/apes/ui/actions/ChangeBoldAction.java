@@ -27,7 +27,7 @@ import java.util.Vector;
 /**
  * 
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *
  */
 public class ChangeBoldAction extends ApesAction

@@ -36,7 +36,7 @@ import org.jgraph.graph.DefaultGraphCell;
 /**
  * Work definition graph editing internal frame
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class WorkDefinitionGraphFrame extends GraphFrame {
 	

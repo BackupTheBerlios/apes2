@@ -45,7 +45,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class PreferencesDialog extends JDialog 
 {

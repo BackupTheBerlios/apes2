@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display an Activity cell
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
  
 public class ActivityView extends ApesVertexView

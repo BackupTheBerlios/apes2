@@ -30,7 +30,7 @@ import org.ipsquad.apes.ui.GraphFrame;
 /**
  * Scale down the currently displayed graph
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class SmallerAction extends ApesAction
 {

@@ -41,7 +41,7 @@ import javax.swing.border.TitledBorder;
 
 import org.ipsquad.utils.ConfigManager;
 /**
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ColorFontPanel extends OptionPanel
 {

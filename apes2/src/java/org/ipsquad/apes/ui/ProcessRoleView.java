@@ -41,7 +41,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Display a Process Role cell
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
  
 public class ProcessRoleView extends ApesVertexView

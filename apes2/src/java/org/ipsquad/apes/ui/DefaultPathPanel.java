@@ -42,7 +42,7 @@ import org.ipsquad.utils.ResourceManager;
 import org.ipsquad.utils.SimpleFileFilter;
 
 /**
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 public class DefaultPathPanel extends OptionPanel
 {

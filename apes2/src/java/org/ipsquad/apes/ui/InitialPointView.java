@@ -42,7 +42,7 @@ import org.jgraph.graph.VertexRenderer;
 /**
  * Display a Decision cell
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
  
 public class InitialPointView extends ApesVertexView

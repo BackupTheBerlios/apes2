@@ -43,7 +43,7 @@ import org.jgraph.graph.DefaultGraphCell;
  * This tool allows to create cells in the graph It use the prototype design
  * pattern to clone cells
  * 
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class SyncWithModelTool extends Tool

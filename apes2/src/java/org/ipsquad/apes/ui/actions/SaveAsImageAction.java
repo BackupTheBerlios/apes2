@@ -43,7 +43,7 @@ import org.ipsquad.utils.SmartChooser;
 /**
  * Save the selected diagram in a jpeg file
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class SaveAsImageAction extends AbstractAction
 {

@@ -32,7 +32,7 @@ import org.jgraph.JGraph;
 /**
  * Undo the last modification
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class UndoAction extends ApesAction
 {
@@ -43,12 +43,9 @@ public class UndoAction extends ApesAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		try 
-		{
+		try {
 			context.getUndoManager().undo(null);
 			context.updateActions();
-			//stop all current editing
-			//else when an edited cell is removed from a diagram, the editing box stayed in the diagram
 			JInternalFrame[] frames = context.getTopLevelFrame().getDesktop().getAllFrames();
 			for(int i=0; i<frames.length; i++)
 			{
@@ -56,10 +53,8 @@ public class UndoAction extends ApesAction
 				{
 					JGraph graph = ((GraphFrame)frames[i]).getGraph();
 					graph.setModel(graph.getModel());
-					graph.stopEditing();
 				}
 			}
-			context.getTopLevelFrame().getTree().stopEditing();
 		} 
 		catch (Exception ex) 
 		{

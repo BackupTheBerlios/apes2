@@ -31,7 +31,7 @@ import javax.swing.JTextArea;
 /**
  * The ErrorManager contains all the methods needed to log messages and errors
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ErrorManager {
 

@@ -55,7 +55,7 @@ import org.jgraph.JGraph;
 /**
  * Print the current graph displayed
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 
 public class PrintDiagramAction extends AbstractAction implements Printable

@@ -29,7 +29,7 @@ import org.ipsquad.apes.ApesClipboardManager;
 /**
  * Copy the current selection to the clipboard
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class CopyAction extends ApesAction
 {

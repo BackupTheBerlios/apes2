@@ -34,7 +34,7 @@ import org.jgraph.graph.CellView;
  * Allows to move, resize, select and edit portion of the graph
  * You can use the marquee handler.
  * 
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class DefaultTool extends Tool
 {

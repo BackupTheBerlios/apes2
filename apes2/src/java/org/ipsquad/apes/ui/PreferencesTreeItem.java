@@ -22,7 +22,7 @@ package org.ipsquad.apes.ui;
 
 /**
  * 
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class PreferencesTreeItem 
 {

@@ -40,7 +40,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Align the centers of selected objects vertically
  *
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class AlignVAction extends ApesAction
 {

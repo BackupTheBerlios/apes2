@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/units"/>
-	<classpathentry sourcepath="/jgraph" kind="lib" path="src/lib/jgraph.jar"/>
+	<classpathentry sourcepath="/home/ptiyo/logiciels/jgraph3/src" kind="lib" path="src/lib/jgraph.jar"/>
 	<classpathentry sourcepath="src/lib/JSX.jar" kind="lib" path="src/lib/JSX.jar"/>
 	<classpathentry kind="lib" path="src/lib/junit.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

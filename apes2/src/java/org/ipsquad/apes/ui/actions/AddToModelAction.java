@@ -35,7 +35,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Add an element into the currently selected element
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class AddToModelAction extends AbstractAction
 {

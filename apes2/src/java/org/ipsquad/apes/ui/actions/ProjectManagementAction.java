@@ -40,7 +40,7 @@ import org.ipsquad.utils.SmartChooser;
 /**
  * Base class for action that needs to manage the current project
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class ProjectManagementAction extends ApesAction
 {

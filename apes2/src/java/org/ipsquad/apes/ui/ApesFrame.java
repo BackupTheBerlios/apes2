@@ -52,7 +52,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
