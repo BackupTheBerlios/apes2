@@ -39,17 +39,17 @@ import org.jgraph.graph.GraphConstants;
 
 
 /**
- * Display a Component cell
+ * Display a WorkDefinition cell
  *
- * @version $Revision: 1.3 $
+ * @version $$
  */
- 
-public class ComponentView extends ApesVertexView
+
+public class WorkDefinitionView extends ApesVertexView
 {
-	static ComponentViewRenderer renderer = new ComponentViewRenderer();
+	static WorkDefinitionRenderer renderer = new WorkDefinitionRenderer();
 	// Constructor for Superclass
 	
-	public ComponentView(Object cell, JGraph graph, CellMapper cm)
+	public WorkDefinitionView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
 	}
@@ -59,9 +59,9 @@ public class ComponentView extends ApesVertexView
 	protected Dimension calculateSize()
 	{
 		int width=calculateLabelLength();
-		if(width<100)
-			width=100;
-		return new Dimension(width, 100);
+		if(width<45)
+			width=45;
+		return new Dimension(width, 70);
 	}
 	
 	
@@ -79,16 +79,16 @@ public class ComponentView extends ApesVertexView
 		int x[]=new int[5];
 		int y[]=new int[5];	
 		
-		x[0]= r.x; //+ r.width/2 - 20;
-		x[1]= r.x +r.width/2+50;//+ r.width/2 + 15;
-		x[2]= r.x +r.width/2+50;//+ r.width/2 + 20;
-		x[3]= r.x ;//+ r.width/2 + 20;
-		x[4]= r.x ;//+ r.width/2 - 20;
+		x[0]= r.x ;
+		x[1]= r.x + r.width;
+		x[2]= r.x + r.width;
+		x[3]= r.x;
+		x[4]= r.x;
 		y[0]= r.y;
 		y[1]= r.y;
-		y[2]= r.y +85;//+ 5;
-		y[3]= r.y +85;//+ r.height - 16;
-		y[4]= r.y + r.height - 16;
+		y[2]= r.y + r.height-16;
+		y[3]= r.y + r.height-16;
+		y[4]= r.y;
 		
 		line2 = new Line2D.Double((double) x[0], (double) y[0], (double) x[1], (double) y[1]);
 		
@@ -103,7 +103,7 @@ public class ComponentView extends ApesVertexView
 			double det = a1 * b2 - a2 * b1 ;
 			
 			double xout = (c2 * b1 - c1 * b2) / det ;
-		double yout = (a2 * c1 - a1 * c2) / det ;
+			double yout = (a2 * c1 - a1 * c2) / det ;
 			return new Point((int)xout, (int)yout);
 		}
 		
@@ -119,7 +119,7 @@ public class ComponentView extends ApesVertexView
 			double det = a1 * b2 - a2 * b1 ;
 			
 			double xout = (c2 * b1 - c1 * b2) / det ;
-		double yout = (a2 * c1 - a1 * c2) / det ;
+			double yout = (a2 * c1 - a1 * c2) / det ;
 			return new Point((int)xout, (int)yout);
 		}
 		
@@ -135,7 +135,7 @@ public class ComponentView extends ApesVertexView
 			double det = a1 * b2 - a2 * b1 ;
 			
 			double xout = (c2 * b1 - c1 * b2) / det ;
-		double yout = (a2 * c1 - a1 * c2) / det ;
+			double yout = (a2 * c1 - a1 * c2) / det ;
 			return new Point((int)xout, (int)yout);
 		}
 		
@@ -151,7 +151,7 @@ public class ComponentView extends ApesVertexView
 			double det = a1 * b2 - a2 * b1 ;
 			
 			double xout = (c2 * b1 - c1 * b2) / det ;
-		double yout = (a2 * c1 - a1 * c2) / det ;
+			double yout = (a2 * c1 - a1 * c2) / det ;
 			return new Point((int)xout, (int)yout);
 		}
 		
@@ -167,7 +167,7 @@ public class ComponentView extends ApesVertexView
 			double det = a1 * b2 - a2 * b1 ;
 			
 			double xout = (c2 * b1 - c1 * b2) / det ;
-		double yout = (a2 * c1 - a1 * c2) / det ;
+			double yout = (a2 * c1 - a1 * c2) / det ;
 			return new Point((int)xout, (int)yout);
 		}
 		
@@ -180,8 +180,8 @@ public class ComponentView extends ApesVertexView
 		return renderer;
 	}
 
-	// Define the Renderer for a ComponentView
-	static class ComponentViewRenderer extends ApesVertexView.ApesVertexRenderer
+	// Define the Renderer for a WorkDefinitionView
+	static class WorkDefinitionRenderer extends ApesVertexView.ApesVertexRenderer	
 	{
 		public void paint(Graphics g)
 		{
@@ -191,127 +191,48 @@ public class ComponentView extends ApesVertexView
 			Dimension d = getSize();
 			boolean tmp = selected;
 			Color c;
-			
 			int x1[]=new int[5];
 			int y1[]=new int[5];
-			int x2[]=new int[20];
-			int y2[]=new int[20];
-			int x3[]=new int[5];
-			int y3[]=new int[5];
+			int x2[]=new int[5];
+			int y2[]=new int[5];
 			
-			x1[0]= d.width/2 + 5;
-			x1[1]= d.width/2 + 35;
-			x1[2]= d.width/2 + 45;
-			x1[3]= d.width/2 + 45;
-			x1[4]= d.width/2 +5;
-			y1[0]= d.height/2-45;
-			y1[1]= d.height/2-45;
-			y1[2]= d.height/2-35;
-			y1[3]= d.height + b - 46;
-			y1[4]= d.height + b - 46;
 			
-			x2[0]= (d.width)/2-19;
-			x2[1]= (d.width)/2-19 ;
-			x2[2]= (d.width)/2-4;
-			x2[3]= (d.width)/2-4;
-			x2[4]= (d.width)/2-19;
-			x2[5]= (d.width)/2-19;
-			x2[6]= (d.width)/2-4;
-			x2[7]= (d.width)/2-4;
-			x2[8]= (d.width)/2-9;
-			x2[9]= (d.width)/2-9;
-			x2[10]= (d.width)/2-39;
-			x2[11]= (d.width)/2-39;
-			x2[12]= (d.width)/2-44;
-			x2[13]= (d.width)/2-44;
-			x2[14]= (d.width)/2-29;
-			x2[15]= (d.width)/2-29;
-			x2[16]= (d.width)/2-44;
-			x2[17]= (d.width)/2-44;
-			x2[18]= (d.width)/2-29;
-			x2[19]= (d.width)/2-29;
-		
-			y2[0]=25;
-			y2[1]= 30;
-			y2[2]= 30;
-			y2[3]= 35;
-			y2[4]= 35;
-			y2[5]= 45;	
-			y2[6]= 45;
-			y2[7]= 65;
-			y2[8]= 65;
-			y2[9]= 50;
-			y2[10]= 50;	
-			y2[11]= 65;
-			y2[12]= 65;
-			y2[13]= 45;
-			y2[14]= 45;
-			y2[15]= 35;	
-			y2[16]= 35;
-			y2[17]= 30;
-			y2[18]= 30;
-			y2[19]= 25;	
-		
-			x3[0]= (d.width)/2-25;
-			x3[1]= (d.width)/2+30;
-			x3[2]= (d.width)/2+45;
-			x3[3]= (d.width)/2+30;
-			x3[4]= (d.width)/2-25;
-			y3[0]=50;
-			y3[1]= 50;
-			y3[2]= 66;
-			y3[3]=82;
-			y3[4]= 82;
-
-
-			//Draws the Component
+			x1[0]= d.width/2-26; //5
+			x1[1]= d.width/2-6;
+			x1[2]= d.width/2+4;
+			x1[3]= d.width/2-6;
+			x1[4]= d.width/2-26;
+			y1[0]= 5;
+			y1[1]= 5;
+			y1[2]= 15;
+			y1[3]= 25;
+			y1[4]= 25;
+			
+			x2[0]= d.width/2-4;
+			x2[1]= d.width/2+16;
+			x2[2]= d.width/2+26;
+			x2[3]= d.width/2+16;
+			x2[4]= d.width/2-4;
+			y2[0]= 31;
+			y2[1]= 31;
+			y2[2]= 41;
+			y2[3]= 51;
+			y2[4]= 51;
+			
+			
 			if (super.isOpaque()) 
 			{
-				
-				c = new Color(223,146,126);
-				g.setColor(c);
-				g.fillPolygon(x1,y1,5);
-				
-				
-				g.setColor(bordercolor);
-				
-				for(int i=5+5; i<15+5; i+=5)
-				{
-					g.drawLine(d.width/2+10,i,d.width/2+30,i);
-				}
-
-				
-				for(int i=15+5; i<55; i+=5)
-				{
-					g.drawLine(d.width/2+10,i,d.width/2+40,i);
-				}
-				
-					
-				g.setColor(bordercolor);
-				g2.setStroke(new BasicStroke(b));
-				g.drawPolygon(x1,y1,5);
-				g.drawLine(d.width/2 + 35,b+3,d.width/2 + 35,b+13);
-				g.drawLine(d.width/2 + 35,b+13,d.width/2 + 45,b+13);
-				
-				c = new Color(0,0,255);
-				g.setColor(c);
-				g.fillOval(d.width/2-35, 5, 20,20);
-				g.fillPolygon(x2,y2,20);
-				
-				g.setColor(bordercolor);
-				g2.setStroke(new BasicStroke(b));
-				g.drawOval(d.width/2-35,5,20,20);
-				g.drawPolygon(x2,y2,20);		
-				
 				c = new Color(255,252,43);
 				g.setColor(c);
-				g.fillPolygon(x3,y3,5);		
-				
+				g.fillPolygon(x1,y1,5);
+				g.fillPolygon(x2,y2,5);
 				g.setColor(bordercolor);
-				
 				g2.setStroke(new BasicStroke(b));
-				g.drawPolygon(x3,y3,5);
-					
+				g.drawLine(d.width/2+4,15,d.width/2+19,15);
+				g.drawArc(d.width/2+14,15,13,13,-90,180);
+				g.drawLine(d.width/2+19,28,d.width/2-19,28);
+				g.drawArc(d.width/2-26,28,13,13,90,180);
+				g.drawLine(d.width/2-19,41,d.width/2-4,41);
 			}
 			try 
 			{
@@ -326,39 +247,31 @@ public class ComponentView extends ApesVertexView
 			}
 			if (bordercolor != null) 
 			{
-				/*g.setColor(bordercolor);
-				g2.setStroke(new BasicStroke(b));
-				g.drawPolygon(x,y,5);
+				g.setColor(bordercolor);
+				g2.setStroke(new BasicStroke(1));	
+				g.drawLine(d.width/2-30,1,d.width/2+29,1);
+				g.drawLine(d.width/2+29,1,d.width/2+29,54);
+				g.drawLine(d.width/2+29,54,d.width/2-30,54);
+				g.drawLine(d.width/2-30,54,d.width/2-30,1);
 				
 				g.setColor(bordercolor);
 				g2.setStroke(new BasicStroke(b));
-				g.drawPolygon(x2,y2,5);*/
-				g.setColor(bordercolor);
-				g2.setStroke(new BasicStroke(1));
-				g.drawLine(d.width/2-50,d.height/2-50,d.width/2+49,d.height/2-50);
-				g.drawLine(d.width/2+49,d.height/2-50,d.width/2+49,d.height/2+35);
-				g.drawLine(d.width/2+49,d.height/2+35,d.width/2-50,d.height/2+35);
-				g.drawLine(d.width/2-50,d.height/2+35,d.width/2-50,d.height/2-50);
+				g.drawPolygon(x1,y1,5);
+				g.drawPolygon(x2,y2,5);
 			}
 			if (selected) 
 			{
-				/*g2.setStroke(GraphConstants.SELECTION_STROKE);
-				g.setColor(graph.getHighlightColor());
-				g.drawPolygon(x,y,5);
-				
 				g2.setStroke(GraphConstants.SELECTION_STROKE);
 				g.setColor(graph.getHighlightColor());
-				g.drawPolygon(x2,y2,5);*/
-				g2.setStroke(GraphConstants.SELECTION_STROKE);
-				g.setColor(graph.getHighlightColor());
-				g.drawLine(d.width/2-50,d.height/2-50,d.width/2+49,d.height/2-50);
-				g.drawLine(d.width/2+49,d.height/2-50,d.width/2+49,d.height/2+35);
-				g.drawLine(d.width/2+49,d.height/2+35,d.width/2-50,d.height/2+35);
-				g.drawLine(d.width/2-50,d.height/2+35,d.width/2-50,d.height/2-50);
-				
-				
+				g.drawPolygon(x1,y1,5);
+				g.drawPolygon(x2,y2,5);
+
+				g.drawLine(d.width/2+4,15,d.width/2+19,15);
+				g.drawArc(d.width/2+14,15,13,13,-90,180);
+				g.drawLine(d.width/2+19,28,d.width/2-19,28);
+				g.drawArc(d.width/2-26,28,13,13,90,180);
+				g.drawLine(d.width/2-19,41,d.width/2-4,41);
 			}
-		
 		}
 	}
 }
