@@ -40,7 +40,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Create a new project in the application
  *
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class NewAction extends ProjectManagementAction
 {
@@ -146,6 +146,7 @@ public class NewAction extends ProjectManagementAction
 			Project newProject=new Project();
 			context.setProject(newProject);
 			context.setFilePath(null);
+			context.getAction("TreeOpenDiagram").actionPerformed(null);
 		}
 		catch(Throwable t)
 		{

@@ -41,7 +41,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
 /**
  * Open a new project in the application
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class OpenAction extends ProjectManagementAction
 {
@@ -88,6 +88,7 @@ public class OpenAction extends ProjectManagementAction
 				mMonitor.setTask(mTask);
 				
 				mTask.show();
+				context.getAction("TreeOpenDiagram").actionPerformed(null);
 			}
 		}
 		catch(Throwable t)
