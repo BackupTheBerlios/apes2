@@ -43,7 +43,7 @@ import org.jgraph.graph.PortView;
  */
 public class ApesEdgeView extends EdgeView
 {
-	static boolean mIsMove = true;
+	//static boolean mIsMove = true;
 	
 	public ApesEdgeView(Object cell, JGraph graph, CellMapper mapper) 
 	{	
@@ -55,10 +55,10 @@ public class ApesEdgeView extends EdgeView
 		return new ApesEdgeHandle(this, context);
 	}
 
-	public static void setIsMove( boolean isMove )
+	/*public static void setIsMove( boolean isMove )
 	{
 		mIsMove = isMove;
-	}
+	}*/
 	
 	public class ApesEdgeHandle extends EdgeView.EdgeHandle
 	{
@@ -72,8 +72,8 @@ public class ApesEdgeView extends EdgeView
 		
 		public void mousePressed(MouseEvent event)
 		{
-			if( mIsMove )
-			{
+			//if( mIsMove )
+			//{
 				int index = indexOfPoint(event.getPoint());
 				
 				if( index != -1 )
@@ -90,17 +90,17 @@ public class ApesEdgeView extends EdgeView
 					}
 					event.consume();			
 				}
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				super.mousePressed(event);
-			}
+			//}
 		}
 		
 		public void mouseReleased(MouseEvent e)
 		{
-			if( mIsMove )
-			{	
+			//if( mIsMove )
+			//{	
 				if( e!=null && !e.isConsumed() && mPort!=null && mFirstPort!=null && mFirstPort!=mPort)
 				{
 					graph.clearSelection();
@@ -117,21 +117,21 @@ public class ApesEdgeView extends EdgeView
 					graph.repaint();
 				}
 			
-				e.consume();
+				//e.consume();
 			
 				mFirstPort = mPort = null;
 				mStart = mCurrent = null;
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				super.mouseReleased(e);
-			}
+			//}
 		}
 		
 		public void mouseDragged(MouseEvent e)
 		{
-			if( mIsMove )
-			{
+			//if( mIsMove )
+			//{
 				if( mStart!=null && !e.isConsumed())
 				{
 					Graphics g = graph.getGraphics();
@@ -153,27 +153,28 @@ public class ApesEdgeView extends EdgeView
 				
 					e.consume();
 				}
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				super.mouseDragged(e);
-			}
+			//}
 		}
 		
 		public void mouseMoved(MouseEvent e)
 		{
-			if( mIsMove )
-			{
-				if( e != null && !e.isConsumed() && indexOfPoint(e.getPoint()) != -1 )
+			//if( mIsMove )
+			//{
+			
+				if( e != null && indexOfPoint(e.getPoint()) != -1 )
 				{
 					graph.setCursor(new Cursor(Cursor.HAND_CURSOR));
-					e.consume();
+			//		e.consume();
 				}
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				super.mouseMoved(e);
-			}
+			//}
 		}
 		
 		private void paintConnector(Color fg, Color bg, Graphics g)

@@ -22,6 +22,7 @@ package org.ipsquad.apes.model.extension;
 
 import java.util.Vector;
 
+import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.ModelVisitor;
 import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
@@ -33,7 +34,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ApesProcess extends ModelElement implements IPackage 
 {
@@ -221,49 +222,38 @@ public class ApesProcess extends ModelElement implements IPackage
 		return count;
 	}	
 	
-	public void checkInterfaces()
+	public void buildInterfaces()
 	{
 		if( mComponent == null )
 		{
 			return;
 		}
 		
-		checkInterfaces( mComponent );
+		buildInterfaces( mComponent );
 	}
 	
-	protected void checkInterfaces( IPackage p )
+	protected void buildInterfaces( IPackage p )
 	{
 		for( int i = 0; i < p.modelElementCount(); i++)
 		{
 			ModelElement me = p.getModelElement(i); 
 			if( me instanceof SPackage )
 			{
-				checkInterfaces((SPackage)me);
+				buildInterfaces((SPackage)me);
 			}
 			else if( me instanceof WorkProduct )
 			{
-				if( mProvidedInterface == null || !checkInterface( mProvidedInterface, (WorkProduct)me) )
-				{	
-					if( mRequiredInterface != null )
-					{
-						checkInterface( mRequiredInterface, (WorkProduct)me);
-					}
+				WorkProduct w = (WorkProduct)me;
+				if( w.getReferences() == WorkProduct.REFERENCES_BY_PROVIDED_INTERFACE )
+				{
+					ApesMediator.getInstance().update(ApesMediator.getInstance().createInsertCommandToSpemDiagram((SpemDiagram)mComponent.getModelElement(0),mComponent,w,null));
+				}
+				else if( w.getReferences() == WorkProduct.REFERENCES_BY_REQUIRED_INTERFACE )
+				{
+					ApesMediator.getInstance().update(ApesMediator.getInstance().createInsertCommandToSpemDiagram((SpemDiagram)mComponent.getModelElement(0),w,mComponent,null));
 				}
 			}
 		}
-	}
-	
-	protected boolean checkInterface( Interface in, WorkProduct w)
-	{
-		for( int j = 0; j < in.modelElementCount(); j++ )
-		{
-			if( ((WorkProductRef)in.getModelElement(j)).getReference().equals(w) )
-			{
-				((WorkProductRef)in.getModelElement(j)).setReference(w);
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	public static abstract class Interface extends ModelElement implements IPackage

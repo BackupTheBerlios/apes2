@@ -74,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -91,16 +91,28 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		mDiagram = diagram;
 	}
 	
+	/**
+	 * Return the name of the diagram
+	 * @return the diagram name
+	 */
 	public String getName()
 	{
 		return mDiagram.getName();
 	}
 	
+	/**
+	 * Change the name of the diagram
+	 * @param name the new diagram name
+	 */
 	public void setName(String name)
 	{
 		mDiagram.setName(name);
 	}
 	
+	/**
+	 * Return the diagram id
+	 * @return the diagram id
+	 */
 	public int getID()
 	{
 		return mDiagram.getID();
@@ -113,12 +125,6 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	public SpemDiagram getDiagram()
 	{
 		return mDiagram;
-	}
-	
-	// method used by JUnit Test
-	public void setBuilder( Builder b )
-	{
-		mBuilder = b;
 	}
 	
 	/**

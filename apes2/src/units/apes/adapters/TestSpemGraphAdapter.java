@@ -84,6 +84,44 @@ public class TestSpemGraphAdapter extends TestCase
 		
 		adapter = new SpemGraphAdapter(diagram)
 		{
+			{
+				mBuilder = new Builder(){
+					public Object create( Object o )
+					{
+						if( o instanceof Element )
+						{
+							((Element)o).visit( this );
+							return mCreated;
+						}
+						return null;
+					}
+					
+					public void visitProduct(WorkProduct product) 
+					{
+						mCreated = new WorkProductCell( product );
+					}
+
+					public void visitRole(ProcessRole role) 
+					{
+						mCreated = new ProcessRoleCell( role );
+					}
+
+					public void visitActivity(Activity activity) 
+					{
+						mCreated = new ActivityCell( activity );
+					}
+
+					public boolean shouldGoInGraph(Object o)
+					{
+						if( o instanceof Activity || o instanceof WorkProduct || o instanceof ProcessRole)
+						{	
+							return true;
+						}
+						return false;
+					}
+				};
+			}
+			
 			public ApesGraphCell associateGraphCell(Object o)
 			{
 				if(o instanceof Activity)
@@ -113,7 +151,7 @@ public class TestSpemGraphAdapter extends TestCase
 			}
 		};
 		
-		adapter.setBuilder( adapter.new Builder(){
+		/*adapter.setBuilder( adapter.new Builder(){
 			public Object create( Object o )
 			{
 				if( o instanceof Element )
@@ -147,7 +185,7 @@ public class TestSpemGraphAdapter extends TestCase
 				}
 				return false;
 			}
-		} );
+		} );*/
 		
 		context.setTopLevelFrame(new MainFrameInterface()
 		{

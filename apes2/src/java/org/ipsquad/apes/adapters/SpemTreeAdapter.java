@@ -53,7 +53,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesMediator.Listener
 {
@@ -604,7 +604,7 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	 */
 	protected void removed( RemoveEvent event )
 	{
-		//System.out.println("tree remove "+e);
+		//System.out.println("tree remove "+event);
 		
 		//if the remove concerns a diagram, do nothing
 		if( event.getDiagram() == null )

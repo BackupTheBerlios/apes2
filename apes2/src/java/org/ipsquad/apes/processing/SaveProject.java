@@ -190,13 +190,19 @@ public class SaveProject
 		DataOutputStream data = new DataOutputStream( new BufferedOutputStream(mZipFile) );
 		ObjOut out = new ObjOut( data );
 		
+		//vector to save
 		Vector  v = new Vector();
 		Project project = Context.getInstance().getProject();
 		
+		//isolate the component
 		project.getProcess().getComponent().setParent( null );
+		//add the component at index 0
 		v.add(project.getProcess().getComponent());
+		//add the map of the diagrams at index 1 (diagrams and SpemGraphAdapter)
 		v.add(project.getDiagramMap());
+		//add the SpemTreeAdapter at index 2 (use to save the colors)
 		v.add(((SpemTreeAdapter)Context.getInstance().getTopLevelFrame().getTree().getModel()).getRoot());
+		//add an extra element to know the current max id
 		Activity a = new Activity();
 		v.add(new Activity());
 		

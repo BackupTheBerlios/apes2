@@ -41,7 +41,7 @@ import javax.swing.border.TitledBorder;
 
 import org.ipsquad.utils.ConfigManager;
 /**
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ColorFontPanel extends OptionPanel
 {
@@ -133,27 +133,33 @@ public class ColorFontPanel extends OptionPanel
 	
 	public static Color getColor(String key)
 	{
-		int red = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"red"));
-		int green = Integer.parseInt (ConfigManager.getInstance().getProperty(key+"green"));
-		int blue = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"blue"));
-		Color color = new Color(red,green,blue);
-		color = new Color(red,green,blue);
-		return color ;
+		try
+		{
+			int red = ConfigManager.getInstance().getPropertyInteger(key+"red");
+			int green = ConfigManager.getInstance().getPropertyInteger(key+"green");
+			int blue = ConfigManager.getInstance().getPropertyInteger(key+"blue");
+			Color color = new Color(red,green,blue);
+			color = new Color(red,green,blue);
+			return color ;
+		}
+		catch(NumberFormatException ne)
+		{
+			return Color.black;
+		}
 	}
 		
 	public void setColor (String key)
 	{
-		int red = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"foregroundred"));
-		int green = Integer.parseInt (ConfigManager.getInstance().getProperty(key+"foregroundgreen"));
-		int blue = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"foregroundblue"));
+		int red = ConfigManager.getInstance().getPropertyInteger(key+"foregroundred");
+		int green = ConfigManager.getInstance().getPropertyInteger(key+"foregroundgreen");
+		int blue = ConfigManager.getInstance().getPropertyInteger(key+"foregroundblue");
 		Color color = new Color(red,green,blue);
 		this.mForegroundColorButton.setBackground(color);
-		red = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"backgroundred"));
-		green = Integer.parseInt (ConfigManager.getInstance().getProperty(key+"backgroundgreen"));
-		blue = Integer.parseInt(ConfigManager.getInstance().getProperty(key+"backgroundblue"));
+		red = ConfigManager.getInstance().getPropertyInteger(key+"backgroundred");
+		green = ConfigManager.getInstance().getPropertyInteger(key+"backgroundgreen");
+		blue = ConfigManager.getInstance().getPropertyInteger(key+"backgroundblue");
 		color = new Color(red,green,blue);
 		this.mBackgroundColorButton.setBackground(color);
-			
 	}
 		
 	public static int getStyle (String key)

@@ -17,7 +17,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the responsability diagram
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ResponsabilityDiagram extends SpemDiagram {
 
@@ -25,7 +25,6 @@ public class ResponsabilityDiagram extends SpemDiagram {
 
 	public ResponsabilityDiagram()
 	{
-
 	}
 
 	public ResponsabilityDiagram( String name )
@@ -287,6 +286,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	{
 		ResponsabilityDiagram d = (ResponsabilityDiagram) super.clone();
 		d.mElements = (Vector) mElements.clone();
+		
 		return d;
 	}
 }

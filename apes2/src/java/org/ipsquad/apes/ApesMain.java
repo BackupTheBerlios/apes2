@@ -80,11 +80,11 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class ApesMain
 {
-	protected static Properties createDefaultProperties()
+	public static Properties createDefaultProperties()
 	{
 		ResourceManager resManager = ResourceManager.getInstance();
 		Properties properties = new Properties();

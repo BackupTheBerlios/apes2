@@ -53,7 +53,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -66,15 +66,14 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	
 	private ApesMediator() { }
 	
+	/**
+	 * Return the unique instance of the ApesMediator
+	 * @return the unique instance of the ApesMediator
+	 */
 	public static ApesMediator getInstance()
 	{
 		return mInstance;
 	}
-	
-	/*public void setDiagram( Vector diagrams )
-	{
-		mDiagrams = diagrams;
-	}*/
 	
 	/**
 	 * Register a diagram which has been created
@@ -113,7 +112,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				loadProvidedInterface(ap);
 				loadRequiredInterface(ap);
 				
-				loadProcess(ap);
+				loadProcess(ap);	
 			}
 		}
 		else
@@ -175,6 +174,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		}
 		else
 		{
+			System.out.println("begin loadRequired");
 			SpemDiagram diag = (SpemDiagram)ap.getComponent().getModelElement(0);
 			Map link = new HashMap();
 			
@@ -182,6 +182,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			int index = 0;
 			while( i >= 0 )
 			{
+				System.out.println("loadRequire");
 				ref = (WorkProductRef)ap.getRequiredInterface().getModelElement(index);
 				me = ref.getReference();
 				ap.getRequiredInterface().removeModelElement(ref);
@@ -443,9 +444,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 * @param me the element to insert
 	 * @param p the concerned package
 	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
+	 * @param extraActions events or commands to proceed
 	 */
-	protected void insertModelElementToIPackage( ModelElement me, IPackage p, Map attr, Vector events )
+	protected void insertModelElementToIPackage( ModelElement me, IPackage p, Map attr, Vector extraActions )
 	{
 		if( !p.containsModelElement( me ) && me.getParent() == null )
 		{
@@ -453,10 +454,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			{	
 				if(me instanceof ApesWorkDefinition)
 				{
-					insertModelElementToIPackage(new ActivityDiagram(ResourceManager.getInstance().getString("activityDiagram")),(IPackage)me,null,events);
-					insertModelElementToIPackage(new FlowDiagram(ResourceManager.getInstance().getString("flowDiagram")),(IPackage)me,null,events);
+					extraActions.add(createInsertCommand(new ActivityDiagram(ResourceManager.getInstance().getString("activityDiagram")),me,null));
+					extraActions.add(createInsertCommand(new FlowDiagram(ResourceManager.getInstance().getString("flowDiagram")),me,null));
 				}
-				events.add( new InsertEvent( me, p, attr ) );
+				extraActions.add( new InsertEvent( me, p, attr ) );
 			}
 		}
 	}
@@ -466,9 +467,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 * @param parent the parent 
 	 * @param e the element
 	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
+	 * @param extraActions events or commands to proceed
 	 */
-	protected void insertElementToModel( Object parent, Element e, Map attr, Vector events )
+	protected void insertElementToModel( Object parent, Element e, Map attr, Vector extraEvents )
 	{
 		if( ( e instanceof Activity
 				|| e instanceof FlowDiagram
@@ -480,7 +481,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		if( parent instanceof IPackage && e instanceof ModelElement )
 		{
-			insertModelElementToIPackage((ModelElement)e, (IPackage)parent, attr, events);
+			insertModelElementToIPackage((ModelElement)e, (IPackage)parent, attr, extraEvents);
 		}
 	}
 	
@@ -490,10 +491,10 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 * @param source the source of the link
 	 * @param target the target of the link
 	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
+	 * @param extraActions events or commands to proceed
 	 */
 	protected void insertLinkToDiagram( SpemDiagram diagram, ModelElement source, ModelElement target, 
-											   Map attr, Vector events )
+											   Map attr, Vector extraActions )
 	{
 		if( diagram.areLinkableModelElements(source, target))
 		{	
@@ -501,7 +502,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			
 			if( diagram instanceof ActivityDiagram )
 			{
-				events.add( new InsertEvent( diagram, ((ActivityDiagram)diagram).getTransition(source, target), null, true, attr ) );
+				extraActions.add( new InsertEvent( diagram, ((ActivityDiagram)diagram).getTransition(source, target), null, true, attr ) );
 				return;
 			}
 			else if( diagram instanceof ContextDiagram )
@@ -511,20 +512,18 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				if( source instanceof WorkProduct )
 				{
 					ref = new WorkProductRef((WorkProduct)source);
-					ap.getRequiredInterface().addModelElement(ref);
-					events.add( new InsertEvent( ref, ref.getParent(), null ) );
+					extraActions.add( createInsertCommand(ref, ap.getRequiredInterface(), null));
 				}
 				else
 				{
 					ref = new WorkProductRef((WorkProduct)target);
-					ap.getProvidedInterface().addModelElement(ref);
-					events.add( new InsertEvent( ref, ref.getParent(), null ) );				
+					extraActions.add( createInsertCommand(ref, ap.getProvidedInterface(), null));
 				}
 			}
 			
 			Map link = new HashMap();
 			link.put( source, target );
-			events.add( new InsertEvent( diagram, link, attr ) );
+			extraActions.add( new InsertEvent( diagram, link, attr ) );
 		}
 	}
 	
@@ -533,9 +532,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 * @param diagram the concerned diagram
 	 * @param me the element to insert
 	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @return the corresponding event
+	 * @param extraActions events or commands to proceed
 	 */
-	protected void insertModelElementToDiagram( SpemDiagram diagram, ModelElement me, Map attr, Vector events )
+	protected void insertModelElementToDiagram( SpemDiagram diagram, ModelElement me, Map attr, Vector extraActions )
 	{
 		boolean isAlreadyExist = me.getParent() == null ? false : true;
 
@@ -553,7 +552,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				}
 			}
 
-			events.add(new InsertEvent( diagram, me, me.getParent(), isAlreadyExist, attr ));
+			extraActions.add(new InsertEvent( diagram, me, me.getParent(), isAlreadyExist, attr ));
 		}
 	}
 	
@@ -565,12 +564,11 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 * @param target the target of a link or null
 	 * @param parent the parent of the element or null
 	 * @param attr Attributes to send in the event. This attribute is not modified.
-	 * @param events the corresponding events
-	 * @return the corresponding event
+	 * @param extraActions events or commands to proceed
 	 */
-	protected InsertEvent insert( SpemDiagram diagram, Object element, 
+	protected void insert( SpemDiagram diagram, Object element, 
 								  Object source, Object target, Object parent, Map attr, 
-								  Vector events )
+								  Vector extraActions )
 	{
 		//System.out.println("ApesMediator::insert "+diagram+" "+element+" "+parent);
 		if( element != null )
@@ -578,22 +576,20 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			// add an element in a diagram
 			if( diagram != null  && element instanceof ModelElement )
 			{
-				insertModelElementToDiagram( diagram, (ModelElement)element, attr, events );
+				insertModelElementToDiagram( diagram, (ModelElement)element, attr, extraActions );
 			}
 			// add a modelElement in a package
 			else if( element instanceof Element )
 			{
-				insertElementToModel( parent, (Element) element, attr, events );				
+				insertElementToModel( parent, (Element) element, attr, extraActions );				
 			}
 		}
 		// add a transition beetween two elements in a diagram
 		if( source != null && target != null 
 				&& source instanceof ModelElement && target instanceof ModelElement )
 		{
-			insertLinkToDiagram( diagram, (ModelElement)source, (ModelElement)target, attr, events );
+			insertLinkToDiagram( diagram, (ModelElement)source, (ModelElement)target, attr, extraActions );
 		}
-		
-		return null;
 	}
 	
 	/**
@@ -605,30 +601,37 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	protected void insert( InsertCommand c, boolean linkedEvent )
 	{
 		//System.out.println("Mediator::insert "+c);
-		Vector events = new Vector();
-		insert( c.getDiagram(), c.getElement(), c.getSource(), c.getTarget(), c.getParent(), c.getAttributes(), events );
+		Vector extraActions = new Vector();
+		insert( c.getDiagram(), c.getElement(), c.getSource(), c.getTarget(), c.getParent(), c.getAttributes(), extraActions );
 		
-		if( events.size() > 0 )
+		if( extraActions.size() > 0 )
 		{
-			for( int i = events.size()-1; i >= 0; i-- )
+			for( int i = extraActions.size()-1; i >= 0; i-- )
 			{	
 				Context.getInstance().getUndoManager().save();
 				
-				InsertEvent event = (InsertEvent) events.get(i);
-				fireModelUpdated( event );
-				InsertedUndo edit = null;
+				if(extraActions.get(i) instanceof Event)
+				{	
+					InsertEvent event = (InsertEvent) extraActions.get(i);
+					fireModelUpdated( event );
+					InsertedUndo edit = null;
 				
-				if( event.isAlreadyExistInModel() )
-				{
-					edit = new InsertedUndo( event.getDiagram(), event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
-				}
-				else
-				{
-					edit = new InsertedUndo( null, event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
-				}
+					if( event.isAlreadyExistInModel() )
+					{
+						edit = new InsertedUndo( event.getDiagram(), event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
+					}
+					else
+					{
+						edit = new InsertedUndo( null, event.getInserted(), event.getSource(), event.getTarget(), (ModelElement)event.getParent(), Context.getInstance().getUndoManager().restore() );
+					}
 				
-				edit.setIsChained( i == events.size()-1 ? linkedEvent : true );
-				postEdit( edit );
+					edit.setIsChained( i == extraActions.size()-1 ? linkedEvent : true );
+					postEdit( edit );
+				}
+				else if(extraActions.get(i) instanceof InsertCommand)
+				{
+					insert((InsertCommand)extraActions.get(i),true);
+				}
 			}
 		}
 	}
@@ -650,8 +653,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			fireModelUpdated( e );
 		 	
 			MovedUndo edit = new MovedUndo( (ModelElement)c.getElement(), (IPackage)e.getOldParent(), (IPackage)e.getNewParent(), Context.getInstance().getUndoManager().restore());
-			edit.setIsChained(chainedEdit);
-				
+			edit.setIsChained(chainedEdit);			
 			postEdit( edit );
 		}
 		else
@@ -772,8 +774,9 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 						parent.put(toRemove, toRemove.getParent());
 						index.put(toRemove, new Integer(getIndexOfChild(toRemove.getParent(),toRemove)));
 						toRemove.getParent().removeModelElement(toRemove);
-						events.add(new RemoveEvent( new Object[]{toRemove}, null,null,parent,index,null));				}
+						events.add(new RemoveEvent( new Object[]{toRemove}, null,null,parent,index,null));				
 					}
+				}
 			}
 			return true;
 		}
@@ -987,7 +990,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			
 				RemovedUndo edit = new RemovedUndo( e.getDiagram(), e.getElements(), e.getSources(), e.getTargets(), e.getParents(),  Context.getInstance().getUndoManager().restore() );
 				edit.setIsChained( i == 0 ? linkedEvent : true );
-							
 				postEdit( edit );
 			}
 		}
@@ -1016,7 +1018,6 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			
 			ChangedUndo edit = new ChangedUndo( event.getElement(), event.getOldValue(), event.getNewValue(), Context.getInstance().getUndoManager().restore() );
 			edit.setIsChained( i == events.size()-1 ? chainedEdit : true );
-			
 			postEdit( edit );
 		}
 	}
@@ -1480,6 +1481,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		public void undo()
 		{
+			//System.out.println("undoinsert "+this);
 			super.undo();
 			super.undoExtraEdits();
 			
@@ -1492,6 +1494,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		public void redo()
 		{
+			//System.out.println("redoinsert "+this);
 			super.redo();
 			
 			insert( mDiagram, mElement, mSource, mTarget, mParent, null, new Vector() );
@@ -1540,6 +1543,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		public void undo()
 		{
+			//System.out.println("undoremove "+this);
 			super.undo();
 			
 			for( int i = 0; i < mRemovedElements.length; i++ )
@@ -1567,6 +1571,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		public void redo()
 		{
+			//System.out.println("redoremove "+this);
 			super.redo();
 			super.redoExtraEdits();
 			

@@ -30,6 +30,7 @@ import javax.swing.JTree;
 
 import junit.framework.TestCase;
 
+import org.ipsquad.apes.ApesMain;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.MainFrameInterface;
 import org.ipsquad.apes.Project;
@@ -59,7 +60,7 @@ import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.3 $ 
+ * @version $Revision: 1.4 $ 
  */
 public class TestApesMediator extends TestCase
 {
@@ -105,7 +106,7 @@ public class TestApesMediator extends TestCase
 			public GraphFrame getGraphFrame(GraphModel model) { fail(); return null; }
 		});
 		
-		ConfigManager.init(null);
+		ConfigManager.init(ApesMain.createDefaultProperties());
 		ResourceManager.setResourceFile("resources/Apes", new Locale(ConfigManager.getInstance().getProperty("Language")));
 		
 		mediator = ApesMediator.getInstance();

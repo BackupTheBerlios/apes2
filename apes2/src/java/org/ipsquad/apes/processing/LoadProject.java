@@ -54,7 +54,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -92,16 +92,13 @@ public class LoadProject extends MonitoredTaskBase
 			
 			if( !loadComponent( zipFile ) )
 			{
-				hasComponent = false;
+				loadInterfaces(zipFile, mProject.getProcess());
+				print(mResource.getString("loadRebuild"));
 			}
-			
-			loadInterfaces(zipFile, mProject.getProcess());
-			
-			print(mResource.getString("loadRebuild"));
-			
-			if( hasComponent )
+			else
 			{	
-				mProject.getProcess().checkInterfaces();
+				print(mResource.getString("loadRebuild"));
+				mProject.getProcess().buildInterfaces();
 			}
 			
 			Context.getInstance().setProject(mProject, mFile.getAbsolutePath());
@@ -205,7 +202,7 @@ public class LoadProject extends MonitoredTaskBase
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	public void processInterfaces(DataInputStream data, ApesProcess ap)
+	protected void processInterfaces(DataInputStream data, ApesProcess ap)
 	throws IOException, SAXException, ParserConfigurationException
 	{
 		print(mResource.getString("loadSaxInit"));
@@ -272,7 +269,7 @@ public class LoadProject extends MonitoredTaskBase
 	 * 
 	 * @param msg
 	 */
-	private void print( String msg )
+	protected void print( String msg )
 	{
 		setMessage(msg);
 		if( mTask != null )
@@ -281,7 +278,7 @@ public class LoadProject extends MonitoredTaskBase
 		}
 	}
 	
-	private class InterfacesHandler extends DefaultHandler
+	protected class InterfacesHandler extends DefaultHandler
 	{
 		private boolean mIsProvidedInterface = true;
 		private Vector mProvidedProductNames = new Vector();

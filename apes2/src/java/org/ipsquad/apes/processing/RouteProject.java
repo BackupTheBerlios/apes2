@@ -38,7 +38,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class allow to glance through a project
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class RouteProject extends MonitoredTaskBase
 {
@@ -92,6 +92,7 @@ public class RouteProject extends MonitoredTaskBase
 		if(((ValidateVisitor)mVisitor).getHasErrors())
 		{
 			print(ResourceManager.getInstance().getString("errorValidate"));
+			mProject.getProcess().getComponent().setValidate(true);
 		}
 		else
 		{
