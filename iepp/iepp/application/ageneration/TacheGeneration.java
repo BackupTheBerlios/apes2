@@ -30,16 +30,21 @@ import iepp.Application;
 import util.*;
 import util.ImageUtil;
 import util.MonitoredTaskBase;
-import util.TaskMonitorDialog;
 import util.ErrorManager;
 
 
 public class TacheGeneration extends MonitoredTaskBase {
 
 	private PrintWriter pwFicTree ;
-	private TaskMonitorDialog mTask = null;
+	private TaskMonitorPanel mTask = null;
 	private boolean generationReussie = false;
 	
+	
+	public TacheGeneration()
+	{
+		this.setLengthOfTask(100);
+		this.setCurrent(0);
+	}
 	protected Object processingTask()
 	{
 		this.genererSite();
@@ -75,7 +80,7 @@ public class TacheGeneration extends MonitoredTaskBase {
 		}
 	}
 
-	public void setTask(TaskMonitorDialog task)
+	public void setTask(TaskMonitorPanel task)
 	{
 		this.mTask = task;
 	}

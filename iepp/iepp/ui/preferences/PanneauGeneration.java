@@ -8,6 +8,7 @@ import iepp.domaine.DefinitionProcessus;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -36,12 +37,13 @@ import javax.swing.border.TitledBorder;
 import org.ipsquad.apes.ui.PreferencesDialog;
 
 import util.TaskMonitorDialog;
+import util.TaskMonitorPanel;
 
 
 public class PanneauGeneration extends PanneauOption 
 {
 	private DefinitionProcessus defProc;
-	private TaskMonitorDialog dialogAvancee = null;
+	private TaskMonitorPanel panneauAvancement = null;
 	private TacheGeneration tacheGener;
 	private JButton bGenerer;
 	
@@ -77,20 +79,39 @@ public class PanneauGeneration extends PanneauOption
 		gridbag.setConstraints(mTitleLabel, c);
 		mPanel.add(mTitleLabel);
 
-		// linefeed
-		c.weighty = 0;      		
+		//linefeed
+		c.weighty = 1;  
+		c.gridx = 0; c.gridy = 1;
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		makeLabel(" ", gridbag, c);
+		
+		this.tacheGener = new TacheGeneration();
+		this.panneauAvancement = new TaskMonitorPanel(tacheGener);
+		c.gridx = 0; c.gridy = 2;
+		c.fill = GridBagConstraints.BOTH;
+		c.gridwidth = 4;
+		c.gridheight = 1;
+		//this.panneauAvancement.setPreferredSize(new Dimension(150,100));
+		mPanel.add(this.panneauAvancement, c);
+		
+		//linefeed
+		c.weighty = 1;  
+		c.gridx = 0; c.gridy = 3;
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
 		
 		this.bGenerer = new JButton("Generer");
 		this.bGenerer.addActionListener(man);
-		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 2; c.gridy = 4;
+		c.gridwidth = 1;
 		mPanel.add(this.bGenerer, c);
 		
-		c.fill = GridBagConstraints.VERTICAL;
-		c.weighty = 2.0;   		
+		//linefeed
+		c.weighty = 1;  
+		c.gridx = 0; c.gridy = 5;
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		makeLabel(" ", gridbag, c);
+	
 		this.add(new JLabel("    "),BorderLayout.WEST);
 		this.add(mPanel,BorderLayout.CENTER);  
 	}
@@ -102,21 +123,6 @@ public class PanneauGeneration extends PanneauOption
 		return this ;
 	}
 
-	/*
-	public void save ()
-	{
-		
-	}
-	*/
-	
-	/**
-	 * Vérifie les informations saisies 
-	 * @return
-	 */
-	public boolean verifierDonnees()
-	{
-		return true;
-	}
 	
 	public void initGeneration()
 	{
@@ -143,19 +149,10 @@ public class PanneauGeneration extends PanneauOption
 			if (source == PanneauGeneration.this.bGenerer)
 			{
 				PanneauGeneration.this.initGeneration();
-				PanneauGeneration.this.tacheGener = new TacheGeneration();
-				PanneauGeneration.this.dialogAvancee = new TaskMonitorDialog(Application.getApplication().getFenetrePrincipale(), PanneauGeneration.this.tacheGener);
-				PanneauGeneration.this.dialogAvancee.setTitle(Application.getApplication().getTraduction("generation_en_cours"));
 				
-				PanneauGeneration.this.tacheGener.setTask(dialogAvancee);
-				PanneauGeneration.this.dialogAvancee.show();
+				PanneauGeneration.this.tacheGener.setTask(PanneauGeneration.this.panneauAvancement);
+				PanneauGeneration.this.panneauAvancement.go();
 			
-				if(tacheGener.isGenerationReussie())
-				{
-					 JOptionPane.showMessageDialog(Application.getApplication().getFenetrePrincipale(),Application.getApplication().getTraduction("Generation_ok"),
-					 				Application.getApplication().getTraduction("Generation_site_titre"),
-									JOptionPane.INFORMATION_MESSAGE);
-				}
 			}
 		}
 	}

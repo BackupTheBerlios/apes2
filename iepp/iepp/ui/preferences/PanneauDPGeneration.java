@@ -98,8 +98,10 @@ public class PanneauDPGeneration extends PanneauOption
 		makeLabel(" ", gridbag, c);
 		
 		
-		
-		this.initPanelArbre(c, gridbag);
+		if (Application.getApplication().getReferentiel() != null)
+		{
+			this.initPanelArbre(c, gridbag);
+		}
 		
 		c.fill = GridBagConstraints.VERTICAL;
 		c.weighty = 2.0; 
