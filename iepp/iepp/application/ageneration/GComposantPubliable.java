@@ -137,7 +137,8 @@ public class GComposantPubliable
 			}
 			else if (id.estComposant())
 			{
-				// produit
+				// composant
+				
 				GComposant compo = new GComposant(elem, elem2, this.idDossier, this.pwFicTree ); 
 				compo.traiterGeneration();
 			}
