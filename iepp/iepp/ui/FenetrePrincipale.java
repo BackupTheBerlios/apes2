@@ -106,8 +106,13 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 				private JMenuItem fermer ;
 				private JMenuItem sauver ;
 				private JMenuItem imprimer ;
-				private JMenuItem propriete ;
 				private JMenuItem quitter ;
+				
+		private JMenu affichage ;
+				private JMenuItem zoomin ;
+				private JMenuItem zoomout ;
+				private JMenuItem propriete ;
+				
 		private JMenu outil ;
 				private JMenuItem verifier ;
 				private JMenuItem exporter ;
@@ -212,12 +217,19 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 		this.fichier.add(this.imprimer);
 		this.fichier.addSeparator();
 
-		this.propriete = new JMenuItem(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "configure.png"));
-		this.fichier.add(this.propriete);
-		this.fichier.addSeparator();
-
 		this.quitter = new JMenuItem(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "FileQuit.gif"));
 		this.fichier.add(this.quitter);
+		
+		// affichage
+		this.affichage = new JMenu();
+		this.barre_menu.add(this.affichage);
+		this.zoomin = new JMenuItem(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "zoomin.png"));
+		this.affichage.add(this.zoomin);
+		this.zoomout = new JMenuItem(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "zoomout.png"));
+		this.affichage.add(this.zoomout);
+		this.affichage.addSeparator();
+		this.propriete = new JMenuItem(IconManager.getInstance().getIcon(Application.getApplication().getConfigPropriete("dossierIcons") + "configure.png"));
+		this.affichage.add(this.propriete);
 		
 		 // Outils
 		this.outil = new JMenu();
@@ -338,9 +350,12 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 		this.ouvrir_proc.addActionListener(this) ;
 		this.sauver.addActionListener(this) ;
 		this.fermer.addActionListener(this) ;
-		this.propriete.addActionListener(this) ;
 		this.quitter.addActionListener(this) ; 
 
+		this.zoomin.addActionListener(this);
+		this.zoomout.addActionListener(this);
+		this.propriete.addActionListener(this) ;
+		
 		this.verifier.addActionListener(this) ;
 		this.exporter.addActionListener(this) ;
 		this.generer.addActionListener(this) ;
@@ -428,8 +443,11 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 		this.sauver.setText( Application.getApplication().getTraduction("Sauver")) ;
 		this.fermer.setText( Application.getApplication().getTraduction("Fermer")) ;
 		this.imprimer.setText(Application.getApplication().getTraduction("Imprimer"));
-		this.propriete.setText( Application.getApplication().getTraduction("Preferences")) ;
 		this.quitter.setText( Application.getApplication().getTraduction("Quitter")) ;
+		this.affichage.setText(Application.getApplication().getTraduction("Affichage"));
+		this.zoomin.setText(Application.getApplication().getTraduction("Agrandir"));
+		this.zoomout.setText(Application.getApplication().getTraduction("Reduire"));
+		this.propriete.setText( Application.getApplication().getTraduction("Preferences")) ;
 		this.outil.setText( Application.getApplication().getTraduction("Outils"));
 		this.verifier.setText( Application.getApplication().getTraduction("Valider_le_projet"));
 		this.exporter.setText( Application.getApplication().getTraduction("Exporter"));
@@ -481,6 +499,8 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 			this.sauver.setEnabled(projet.estModifie());
 		}
 		
+		this.zoomin.setEnabled(projetOuvert);
+		this.zoomout.setEnabled(projetOuvert);
 		this.bzoomin.setEnabled(projetOuvert);
 		this.bzoomout.setEnabled(projetOuvert);
 		this.bimprimer.setEnabled(projetOuvert);
@@ -572,7 +592,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 				c.executer();
 			}
 			// zoom in
-			else if  (source == this.bzoomin)
+			else if  ((source == this.bzoomin) || (source == this.zoomin))
 			{
 				CZoomer c = new CZoomer(1.25);
 				if (c.executer())
@@ -581,7 +601,7 @@ public class FenetrePrincipale extends JFrame implements ActionListener
 				}
 			}
 			// zoom out
-			else if  (source == this.bzoomout)
+			else if  ((source == this.bzoomout) || (source == this.zoomout))
 			{
 				CZoomer c = new CZoomer(0.8);
 				if (c.executer())
