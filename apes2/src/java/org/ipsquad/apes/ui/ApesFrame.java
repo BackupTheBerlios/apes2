@@ -51,7 +51,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
@@ -120,7 +120,7 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 	public void setFilePath(String filePath)
 	{
 		mFilePath = filePath;
-		if(filePath.equals(""))
+		if(filePath == null || filePath.equals(""))
 		{
 			setTitle(ResourceManager.getInstance().getString("Title"));
 		}

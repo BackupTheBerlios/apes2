@@ -24,6 +24,7 @@ package org.ipsquad.apes.ui;
 
 import java.awt.Dimension;
 
+import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.ActivityCell;
 import org.ipsquad.apes.adapters.DecisionCell;
 import org.ipsquad.apes.adapters.FinalPointCell;
@@ -39,13 +40,15 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for an ActivityDiagram
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ActivityJGraph extends JGraph
 {
 	public ActivityJGraph(SpemGraphAdapter model)
 	{
 		super(model);
+		getActionMap().put("copy",Context.getInstance().getAction("Copy"));
+		getActionMap().put("paste",Context.getInstance().getAction("Paste"));
 	}
 
 	protected VertexView createVertexView(Object v, CellMapper cm) 

@@ -24,6 +24,7 @@ package org.ipsquad.apes.ui;
 import java.awt.Dimension;
 import java.util.Map;
 
+import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.NoteCell;
 import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
@@ -38,13 +39,15 @@ import org.jgraph.graph.VertexView;
 /**
  * Create a JGraph for a ResponsabilityDiagram
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ResponsabilityJGraph extends JGraph
 {
 	public ResponsabilityJGraph( SpemGraphAdapter model )
 	{
 		super(model);
+		getActionMap().put("copy",Context.getInstance().getAction("Copy"));
+		getActionMap().put("paste",Context.getInstance().getAction("Paste"));
 	}
 
 	protected VertexView createVertexView(Object v, CellMapper cm) 
