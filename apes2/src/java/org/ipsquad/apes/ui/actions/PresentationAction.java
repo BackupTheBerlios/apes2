@@ -22,10 +22,8 @@ package org.ipsquad.apes.ui.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.ui.ApesFrame;
@@ -33,11 +31,12 @@ import org.ipsquad.apes.ui.DefaultPathPanel;
 import org.ipsquad.apes.ui.PreferencesDialog;
 import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ResourceManager;
+import org.ipsquad.utils.SimpleFileFilter;
 
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class PresentationAction extends ApesAction
 {
@@ -48,51 +47,27 @@ public class PresentationAction extends ApesAction
 	
 	public void actionPerformed(ActionEvent e)
 	{
+		String name = ResourceManager.getInstance().getString("toolsPresentation") ;
 		JFileChooser  chooser = new JFileChooser(ConfigManager.getInstance().getProperty(DefaultPathPanel.TOOL_PRESENTATION_KEY+"defaultPath"));
-		chooser.setDialogTitle(ResourceManager.getInstance().getString("toolsPresentation"));
+		chooser.setDialogTitle(name);
 		chooser.setAcceptAllFileFilterUsed(true);
-		chooser.setFileFilter(new ExtensionFileFilter("jar", ".jar"));
+		chooser.setFileFilter(new SimpleFileFilter("jar",name));
 		int result = chooser.showDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),PreferencesDialog.resMan.getString("fileOpen"));
 		if (result == JFileChooser.APPROVE_OPTION )
 		{
 			try 
 			{
 				File file = chooser.getSelectedFile();
-				Process proc = Runtime.getRuntime().exec("java -jar "+ file.getName() );
+				Process proc = Runtime.getRuntime().exec("java -jar "+ " \""+ file.getPath() +"\" " );
 			} 
-			catch (IOException io) 
+			catch (Throwable t) 
 			{
-				io.printStackTrace() ;
+				t.printStackTrace() ;
 			} 
 			
 		}
 
 	}
-	
 
-	public class ExtensionFileFilter extends FileFilter
-	{
-		private String fileExtension = null;
-		private String fileDescription = null;
-
-		public ExtensionFileFilter(String aFileExtension, String aFileDescription)
-		{
-			this.fileExtension = aFileExtension;
-			this.fileDescription = aFileDescription;
-		}
-
-		public boolean accept(File f)
-		{
-			String name = f.getName();
-			String extension = name.substring((name.lastIndexOf(".")+1));
-			return extension.equals(this.fileExtension);
-		}
-
-		public String getDescription()
-		{
-			return this.fileDescription;
-		}
-
-	}
 }
 
