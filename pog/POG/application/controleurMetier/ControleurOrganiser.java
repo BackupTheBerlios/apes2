@@ -22,11 +22,13 @@
 
 package POG.application.controleurMetier;
 
-import java.io.File;
+import java.net.URI;
 import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
 
+import POG.interfaceGraphique.action.POGListener;
+import POG.interfaceGraphique.action.Systeme;
 import POG.objetMetier.Contenu;
 import POG.objetMetier.ElementPresentation;
 
@@ -40,7 +42,7 @@ public class ControleurOrganiser
     super(ctrlpres);
   }
 
-  public void associerContenu(ElementPresentation elemPres, File fichier) {
+  public void associerContenu(ElementPresentation elemPres, URI fichier) {
     Contenu contenu = this.lnkControleurPresentation.getlnkPresentation().
         lnkBibliotheque.getContenu(fichier);
     elemPres.setContenu(contenu);
@@ -83,7 +85,7 @@ public class ControleurOrganiser
         get_id());
   }
 
-  public Hashtable monter(ElementPresentation elt) {
+  public Hashtable monter(ElementPresentation elt, Systeme systeme) {
     if (elt.get_id().equals("1")) {
       return null;
     }
@@ -104,10 +106,14 @@ public class ControleurOrganiser
     }
     Hashtable res = this.lnkControleurPresentation.getlnkPresentation().echangerPositions(elt,
         el2);
+    if (res != null) {
+	    systeme.fireEvenement(elt, POGListener.MODIFIER);
+		systeme.fireEvenement(el2, POGListener.MODIFIER);
+    }
     return res;
   }
 
-  public Hashtable descendre(ElementPresentation elt) {
+  public Hashtable descendre(ElementPresentation elt, Systeme systeme) {
     if (elt.get_id().equals("1")) {
       return null;
     }
@@ -125,6 +131,10 @@ public class ControleurOrganiser
     }
     Hashtable res = this.lnkControleurPresentation.getlnkPresentation().echangerPositions(elt,
      el2);
+	if (res != null) {
+		systeme.fireEvenement(elt, POGListener.MODIFIER);
+		systeme.fireEvenement(el2, POGListener.MODIFIER);
+	}
     return res;
   }
 

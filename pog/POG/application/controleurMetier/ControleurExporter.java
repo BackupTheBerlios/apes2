@@ -29,6 +29,7 @@ import java.util.Vector;
 
 import POG.interfaceGraphique.action.Systeme;
 import POG.interfaceGraphique.utile.trace.Debug;
+import POG.objetMetier.Contenu;
 import POG.objetMetier.ElementPresentation;
 import POG.utile.PogToolkit;
 import POG.utile.ZIP;
@@ -158,10 +159,11 @@ public class ControleurExporter extends ControleurSemantique {
 
     for(int i = 0; i < listElmtPres.length; i++){
     	lnkSysteme.lnkFenetrePrincipale.getLnkDebug().patienter("duplfich", i, listElmtPres.length);
-      if (((ElementPresentation)listElmtPres[i]).getContenu() != null) {
-        source = ( (ElementPresentation) listElmtPres[i]).getContenu().getAbsolutePath();
+    	Contenu conte = ((ElementPresentation)listElmtPres[i]).getContenu();
+      if ((conte != null) && conte.isFile()) {
+        source = conte.getAbsolutePath();
         index = source.lastIndexOf(File.separator);
-        dest = destination + File.separator + "Contenu" + File.separator + ((ElementPresentation)listElmtPres[i]).getContenu().get_uri();
+        dest = destination + File.separator + "Contenu" + File.separator + conte.get_uri();
         //Si le fichier n'a pas ete duplique, le dupliquer
         if(!PogToolkit.fileExists(dest))
           PogToolkit.copyFile(source, dest);

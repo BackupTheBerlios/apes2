@@ -41,6 +41,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -60,6 +62,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 import POG.interfaceGraphique.action.ControleurPanneaux;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
+import POG.objetMetier.Contenu;
 import POG.objetMetier.ElementPresentation;
 import POG.objetMetier.Guide;
 import POG.objetMetier.PresentationElementModele;
@@ -109,8 +112,7 @@ abstract public class PanneauDetail
         String s = (String) transferable.getTransferData(DataFlavor.
             stringFlavor);
         if (s.startsWith("CONT=> ") && ((DropTarget)event.getSource()).getComponent().equals(fichier_associe)){
-          lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant,
-              new File(s.substring(7)));
+          lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant, new File(s.substring(7)).toURI());
           FenetrePrincipale.INSTANCE.getLnkArbreExplorateur().load();
         }
         else if (s.startsWith("IMG=> ") && ((DropTarget)event.getSource()).getComponent().equals(jLabel9)){
@@ -163,7 +165,7 @@ abstract public class PanneauDetail
       public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
           lnkControleurPanneaux.getLnkSysteme().modifierElement(_elementCourant, getNom_Pres(), getDesc());
-        lnkControleurPanneaux.getLnkSysteme().lnkFenetrePrincipale.getLnkArbrePresentation().loadElement(_elementCourant);
+//        lnkControleurPanneaux.getLnkSysteme().lnkFenetrePrincipale.getLnkArbrePresentation().loadElement(_elementCourant);
       }
     });
 
@@ -179,7 +181,20 @@ abstract public class PanneauDetail
         lnkControleurPanneaux.getLnkSysteme().choisirContenu(_elementCourant);
       }
     });
-    buttonAttach.setBounds(new Rectangle(300, 93, 30, 21));
+    buttonAttach.setBounds(new Rectangle(270, 93, 30, 21));
+
+	JButton butWeb = new JButton("", FenetrePrincipale.INSTANCE.getLnkSysteme().getLnkPreferences().getIconeDefaut("globe"));
+	butWeb.addActionListener(new ActionListener() {
+	  public void actionPerformed(ActionEvent evt) {
+	  	String urrl = PogToolkit.askForString("URL du contenu", "URLChooser");
+		try {
+			lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant, new URI(urrl));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	  }
+	});
+	butWeb.setBounds(new Rectangle(300, 93, 30, 21));
 
     JButton buttonView = new JButton("", FenetrePrincipale.INSTANCE.getLnkSysteme().getLnkPreferences().getIconeDefaut("view"));
     buttonView.addActionListener(new ActionListener() {
@@ -251,6 +266,7 @@ abstract public class PanneauDetail
     this.add(buttonView, null);
     this.add(buttonCreate, null);
     this.add(buttonAttach, null);
+	this.add(butWeb, null);
     this.add(fichier_associe, null);
     this.add(areaScrollPane, null);
     this.add(buttonDel, null);
@@ -307,16 +323,15 @@ abstract public class PanneauDetail
     jLabel9.setIcon(icon);
   }
 
-  public void setFichier_associe(File fich) {
+  public void setFichier_associe(Contenu fich) {
     if (fich != null){
-      fichier_associe.setText(fich.getName());
-      fichier_associe.setToolTipText(fich.getAbsolutePath());
-    }
+		fichier_associe.setText(fich.get_uri());
+		fichier_associe.setToolTipText(fich.getAbsolutePath());
+  	}
     else{
-      fichier_associe.setText("<aucun>");
-      fichier_associe.setToolTipText("");
+		fichier_associe.setText("<aucun>");
+		fichier_associe.setToolTipText("");
     }
-
   }
 
 
@@ -351,8 +366,7 @@ abstract public class PanneauDetail
         return;
       }
       if (fichier.exists()) {
-        lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant,
-            fichier);
+        lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant, fichier.toURI());
       }
     }
     else if (evt.getActionCommand().equals(lnkControleurPanneaux.getLnkSysteme().
@@ -466,7 +480,7 @@ abstract public class PanneauDetail
             return "aucun";
           }
           else {
-            return this._guides[rowIndex].getContenu().getFile().getName();
+            return this._guides[rowIndex].getContenu().get_uri();
           }
         }
       }

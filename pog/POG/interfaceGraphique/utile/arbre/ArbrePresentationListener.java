@@ -53,8 +53,8 @@ public class ArbrePresentationListener
 
   private ArbrePresentation lnkArbrePresentation;
 
-  protected static Object _objetCourantSelectionne = null;
-  protected static DefaultMutableTreeNode _noeudCourantSelectionne = null;
+  protected static ElementPresentation _objetCourantSelectionne = null;
+//  protected static DefaultMutableTreeNode _noeudCourantSelectionne = null;
 
   public ArbrePresentationListener (ArbrePresentation tree) {
     super();
@@ -87,16 +87,18 @@ public class ArbrePresentationListener
       
 	lnkArbrePresentation.get_arbre().setSelectionRow(row);
 
-    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)lnkArbrePresentation._arbre.getLastSelectedPathComponent();
+ /*   DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)lnkArbrePresentation._arbre.getLastSelectedPathComponent();
     _noeudCourantSelectionne = noeud;
 
     Object objet = noeud.getUserObject();
     _objetCourantSelectionne = objet;
+*/
+	_objetCourantSelectionne = (ElementPresentation) lnkArbrePresentation._arbre.getLastSelectedPathComponent();
 
 	if (e.getButton() == MouseEvent.BUTTON3)
 		afficherPopup(e);
 	
-	lnkArbrePresentation.afficherCentreCorrespondant(_objetCourantSelectionne);
+//	lnkArbrePresentation.afficherCentreCorrespondant(_objetCourantSelectionne);
   }
 
   public void mousePressed(MouseEvent e) {
@@ -170,7 +172,7 @@ public class ArbrePresentationListener
 
 		_mnurenommer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				lnkArbrePresentation.setNodeEditable(_noeudCourantSelectionne);
+				lnkArbrePresentation.setNodeEditable(_objetCourantSelectionne);
 			}
 		});
 

@@ -44,6 +44,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import POG.interfaceGraphique.action.ControleurPanneaux;
+import POG.interfaceGraphique.action.POGListener;
 import POG.interfaceGraphique.action.Systeme;
 import POG.interfaceGraphique.utile.arbre.ArbreExplorateur;
 import POG.interfaceGraphique.utile.arbre.ArbrePresentation;
@@ -90,6 +91,14 @@ public class FenetrePrincipale
 	public static abstract class TheTraitement {
 
 		public abstract void traitement();
+		
+		public void attendre() {
+			try {
+				Thth.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
 		private Thread Thth = new Thread() {
 			public void run() {
@@ -277,7 +286,7 @@ public class FenetrePrincipale
 
   public static void main(String[] args) {
     try {
-    	
+    	System.out.println("URL: " + ClassLoader.getSystemResource("JSX/Wheel.class"));
       // Ne pas enlever les println d'ici...
       DateFormat dt = DateFormat.getTimeInstance();
       System.out.println("Start POG at " + dt.format(new Date()));
@@ -292,6 +301,7 @@ public class FenetrePrincipale
         fp = new FenetrePrincipale();
       }
       catch (Exception e) {
+      	e.printStackTrace();
         boolean yes = (args.length == 0);
         if (!yes)
           yes = !args[args.length - 1].equals("SEC");
@@ -459,7 +469,7 @@ public class FenetrePrincipale
 
     brefr.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
-        lnkArbrePresentation.load();
+		lnkSysteme.fireEvenement(null, POGListener.INITIALISE);
       }
     });
 

@@ -23,6 +23,7 @@
 package POG.application.controleurMetier;
 
 import java.io.File;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
@@ -84,19 +85,22 @@ public class ControleurPresentation {
     return lnkPresentation;
   }
 
-  public void majLiensFichiers(String orig, String dest) {
+  public Vector majLiensFichiers(String orig, String dest) {
     // Change les liens de tous les contenus concernes
+    Vector elems = new Vector();
     if (this.lnkPresentation != null) {
       Object[] listeElements = this.lnkPresentation.listeElementPresentation();
       for (int i = 0; i < listeElements.length; i++) {
         Contenu c = ( (ElementPresentation) listeElements[i]).getContenu();
         if (c != null && c.getAbsolutePath().equals(orig))
-          c.setFile(new File(dest));
+          c.setURI(new File(dest).toURI());
+        	elems.add(listeElements[i]);
       }
     }
 
     // Renomme le fichier
     PogToolkit.renameFile(orig, dest);
+    return elems;
   }
 
   public boolean estFichierAffecte(String f)
@@ -116,20 +120,24 @@ public class ControleurPresentation {
    * Supprime toute reference a l'icone specifie (restaure l'icone par defaut de l'element)
    * @param icone Icone que l'on souhaite dereferencer
    */
-  public void supprimerLienIcone(ImageIcon icone)
+  public Vector supprimerLienIcone(ImageIcon icone)
   {
+  	Vector elems = new Vector();
     if (this.lnkPresentation != null) {
       Object[] listeElements = this.lnkPresentation.listeElementPresentation();
       for (int i = 0; i < listeElements.length; i++)
       {
         ElementPresentation courant = (ElementPresentation) listeElements[i] ;
-        if (courant.get_icone().getImage().equals(icone.getImage()))
+        if (courant.get_icone().getImage().equals(icone.getImage())) {
           if (courant instanceof PresentationElementModele)
             courant.set_icone(this.lnkPreferences.getIconeDefaut(((PresentationElementModele)courant).getLnkModelElement()));
           else
             courant.set_icone(this.lnkPreferences.getIconeDefaut(courant));
+          elems.add(courant);
+        }
       }
     }
+    return elems;
   }
 
   public File get_pathModele() {

@@ -123,7 +123,7 @@ public class PanneauElementPresentation extends PanneauDetail {
     setNom_Pres(elem.get_nomPresentation());
     setDesc(elem.get_description());
     if (elem.getContenu() != null)
-      setFichier_associe(elem.getContenu().getFile());
+      setFichier_associe(elem.getContenu());
     else
       setFichier_associe(null);
     setTable_guide(lnkControleurPanneaux.getLnkSysteme().getGuides(_elementCourant));

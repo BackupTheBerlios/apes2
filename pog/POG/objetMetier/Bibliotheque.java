@@ -23,9 +23,8 @@
 package POG.objetMetier;
 
 import java.io.File;
-
 import java.io.FileFilter;
-
+import java.net.URI;
 import java.util.Vector;
 
 public class Bibliotheque {
@@ -90,11 +89,16 @@ public class Bibliotheque {
     return res.toArray();
 
   }
-
+/*
   public Contenu getContenu(File fichier) {
-    Contenu nouveauContenu = new Contenu(fichier, _pathBibliotheque);
+    Contenu nouveauContenu = new Contenu(fichier.toURI(), _pathBibliotheque);
     return nouveauContenu;
   }
+*/
+  public Contenu getContenu(URI urr) {
+	 Contenu nouveauContenu = new Contenu(urr, _pathBibliotheque);
+	 return nouveauContenu;
+   }
 
   class FiltrerExt implements FileFilter{
     private String _ext;

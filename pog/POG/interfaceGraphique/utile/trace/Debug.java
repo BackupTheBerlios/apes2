@@ -95,6 +95,7 @@ public class Debug {
 		} catch (Exception e) {
 		  e.printStackTrace();
 		}
+		System.out.println("DEBUG:" + message);
 	}
 
 

@@ -584,6 +584,12 @@ public class Preferences {
 		return getIconeDefaut(_associationProduit.get(typeprod));
 	}
 
+	public ImageIcon getIconeTypeGuide(String typeguide) {
+		if (typeguide.equals(""))
+			return null;
+		return getIconeDefaut(_associationGuide.get(typeguide));
+	}
+
 	public String get_defIcoElem() {
 		return (String) _preferences.get("_defIcoElem");
 	}

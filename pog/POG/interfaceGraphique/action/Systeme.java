@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Enumeration;
@@ -54,6 +55,7 @@ import POG.application.importExport.Apes;
 import POG.application.importExport.Importer;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.fenetre.Patientez;
+import POG.interfaceGraphique.fenetre.FenetrePrincipale.TheTraitement;
 import POG.objetMetier.ElementPresentation;
 import POG.objetMetier.Guide;
 import POG.objetMetier.PresentationElementModele;
@@ -128,6 +130,8 @@ public class Systeme {
    * @supplierCardinality 1
    */
   private ControleurGuide lnkControleurGuide;
+  
+  private Vector _POGListeners;
 
   private Patientez lnkPatientez;
 
@@ -144,8 +148,30 @@ public class Systeme {
     lnkControleurOrganiser = new ControleurOrganiser(lnkControleurPresentation);
     lnkControleurPresenter = new ControleurPresenter(lnkControleurPresentation);
     lnkFenetrePrincipale = fenetrePrin;
+    _POGListeners = new Vector();
     //lnkPatientez = new Patientez(lnkFenetrePrincipale);
   }
+
+	public void ajouterListener(POGListener pl) {
+		_POGListeners.add(pl);
+	}
+
+	public void enleverListener(POGListener pl) {
+		_POGListeners.remove(pl);
+	}
+
+	public void fireEvenement(ElementPresentation el, String methode) {
+		Class cl = POGListener.class;
+		for (int i = 0; i < _POGListeners.size(); i++) {
+			POGListener pl = (POGListener) _POGListeners.get(i);
+			try {
+				cl.getMethod(methode, new Class [] {ElementPresentation.class}).invoke(pl, new Object [] {el});
+			} catch (Exception e) {
+				lnkFenetrePrincipale.getLnkDebug().debogage("Erreur action " + methode);
+				e.printStackTrace();
+			}
+		}
+	}
 
 	private void _invaliderTAG() {
 		if (_save)
@@ -193,11 +219,11 @@ public class Systeme {
     lnkFenetrePrincipale.set_pathSave("");
     lnkFenetrePrincipale.set_pathExport("");
     lnkControleurPresentation.nouvellePresentation(pathBibli, nomPres); //, ElementPresentation.POG_RACINE_PAQUETAGE);
-    lnkFenetrePrincipale.getLnkArbrePresentation().load();
+//    lnkFenetrePrincipale.getLnkArbrePresentation().load();
     lnkFenetrePrincipale.getLnkArbreExplorateur().load();
     lnkFenetrePrincipale.getLnkPanneauBibliotheque().load();
-    lnkFenetrePrincipale.getLnkControleurPanneaux().loadVide();
     System.setProperty("user.dir", pathBibli.getAbsolutePath());
+    fireEvenement(null, POGListener.INITIALISE);
 	_invaliderTAG();
   }
 
@@ -214,8 +240,9 @@ public class Systeme {
 			lnkFenetrePrincipale.set_pathSave(pathOuv);
 			lnkFenetrePrincipale.set_pathExport("");
     		lnkFenetrePrincipale.getLnkArbreExplorateur().load();
-    		lnkFenetrePrincipale.getLnkArbrePresentation().load();
+//    		lnkFenetrePrincipale.getLnkArbrePresentation().load();
             lnkFenetrePrincipale.jLabelPathBib.setText(lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
+			fireEvenement(null, POGListener.INITIALISE);
             _invaliderTAG();
 		}
 	};
@@ -280,8 +307,9 @@ public class Systeme {
     g.set_nomPresentation(nomDefaut);
     this.lnkControleurPresentation.getlnkPresentation().
         ajouterElementPresentation(g);
-    refreshAll(g);
-    lnkFenetrePrincipale.getLnkControleurPanneaux().loadCentre("DGuide", g);
+//    refreshAll(g);
+	fireEvenement(g, POGListener.AJOUTER);
+    lnkFenetrePrincipale.getLnkControleurPanneaux().afficherCentreCorrespondant(g);
   }
 
   /**
@@ -290,10 +318,11 @@ public class Systeme {
    * @param elemPres elem
    * @param file file
    */
-  public void associerContenu(ElementPresentation elemPres, File file) {
+  public void associerContenu(ElementPresentation elemPres, URI file) {
     _invaliderTAG();
     this.lnkControleurOrganiser.associerContenu(elemPres, file);
-    refreshAll(elemPres);
+    fireEvenement(elemPres, POGListener.MODIFIER);
+//    refreshAll(elemPres);
   }
 
   public void choisirContenu(ElementPresentation elem){
@@ -307,7 +336,7 @@ public class Systeme {
           lnkFenetrePrincipale);
     }
     else {
-      associerContenu(elem, fichier);
+      associerContenu(elem, fichier.toURI());
     }
 
   }
@@ -409,15 +438,28 @@ public class Systeme {
      */
 //    this.lnkFenetrePrincipale.lnkControleurPanneaux.loadCentre("DRole");
     //this.lnkFenetrePrincipale.lnkArbreExplorateur.load();
-    this.lnkFenetrePrincipale.getLnkArbrePresentation().loadElement(element); //ajouterNoeud(element);
-    this.lnkFenetrePrincipale.getLnkControleurPanneaux().loadCentre("DElementPresentation", element);
-    this.lnkFenetrePrincipale.getLnkArbrePresentation().setNodeEditable();
+    fireEvenement(element, POGListener.AJOUTER);    
+//    this.lnkFenetrePrincipale.getLnkArbrePresentation().loadElement(element); //ajouterNoeud(element);
+    this.lnkFenetrePrincipale.getLnkControleurPanneaux().afficherCentreCorrespondant(element);
+    this.lnkFenetrePrincipale.getLnkArbrePresentation().setNodeEditable(element);
   }
 
   public void supprimerContenu(ElementPresentation elem) {
 	_invaliderTAG();
     lnkControleurOrganiser.supprimerContenu(elem);
-    refreshAll(elem);
+    fireEvenement(elem, POGListener.MODIFIER);
+//    refreshAll(elem);
+  }
+
+  public void changerTypeGuide(ElementPresentation elem, String type) {
+	_invaliderTAG();
+	if (!(elem instanceof Guide))
+		return;	
+	ImageIcon newico = getLnkPreferences().getIconeTypeGuide(type);
+	elem.set_icone(newico);
+	((Guide)elem).setType(type);
+	fireEvenement(elem, POGListener.MODIFIER);
+	//refreshAll(elem);
   }
 
   public void changerTypeProduit(ElementPresentation elem, String type) {
@@ -425,25 +467,24 @@ public class Systeme {
 	if (!(elem instanceof PresentationElementModele))
 		return;	
 	ImageIcon newico = getLnkPreferences().getIconeTypeProduit(type);
-	ImageIcon previco = getLnkPreferences().getIconeTypeProduit(((PresentationElementModele)elem).get_typeProduit());
-	if (previco == null)
-		elem.set_icone(newico);
-	else if (previco.equals(elem.get_icone()))
-		elem.set_icone(newico);
+	elem.set_icone(newico);
 	((PresentationElementModele)elem).set_typeProduit(type);
-	refreshAll(elem);
+	fireEvenement(elem, POGListener.MODIFIER);
+	//refreshAll(elem);
   }
 
   public void modifierElement(ElementPresentation elem, String nom, String desc) {
 	_invaliderTAG();
     lnkControleurOrganiser.modifierElement(elem, nom, desc);
-    refreshAll(elem);
+	fireEvenement(elem, POGListener.MODIFIER);
+  //  refreshAll(elem);
   }
 
   public void modifierNomDePresentation(ElementPresentation elem, String nom){
 	_invaliderTAG();
     lnkControleurOrganiser.modifierNomDePresentation(elem, nom);
-    refreshAll(elem);
+	fireEvenement(elem, POGListener.MODIFIER);
+ //   refreshAll(elem);
   }
 
   public ControleurPresentation getlnkControleurPresentation() {
@@ -453,7 +494,8 @@ public class Systeme {
   public void changerIcone(ElementPresentation elemt, File file) {
 	_invaliderTAG();
     elemt.set_icone(lnkPreferences.getIconeDefaut(file.getAbsolutePath()));
-	refreshAll(elemt);
+	fireEvenement(elemt, POGListener.MODIFIER);
+//	refreshAll(elemt);
   }
 
   public Preferences getLnkPreferences() {
@@ -483,7 +525,7 @@ public class Systeme {
                                     valeurDe("errmsgmodeleinvalide"),
                                     lnkFenetrePrincipale);
           else {
-            lnkFenetrePrincipale.getLnkArbrePresentation().load();
+//            lnkFenetrePrincipale.getLnkArbrePresentation().load();
             lnkFenetrePrincipale.getLnkArbreExplorateur().load();
             lnkFenetrePrincipale.getLnkPanneauBibliotheque().load();
             _modele = getlnkControleurPresentation().get_pathModele().
@@ -491,6 +533,7 @@ public class Systeme {
             System.setProperty("user.dir", pathBibli);
             _invaliderTAG();
           }
+          fireEvenement(null, POGListener.INITIALISE);
         }
         catch (Exception e) {
           e.printStackTrace();
@@ -503,7 +546,9 @@ public class Systeme {
   public void majLiensFichiers(String orig, String dest) {
     if (!orig.equals(dest)) {
 		_invaliderTAG();
-      this.lnkControleurPresentation.majLiensFichiers(orig, dest);
+      Vector elems = this.lnkControleurPresentation.majLiensFichiers(orig, dest);
+      for (int i = 0; i < elems.size(); i++)
+      	fireEvenement((ElementPresentation) elems.get(i), POGListener.MODIFIER);
     }
   }
 
@@ -519,7 +564,9 @@ public class Systeme {
   public void supprimerLienIcone(ImageIcon icone)
   {
 	_invaliderTAG();
-    this.lnkControleurPresentation.supprimerLienIcone(icone);
+    Vector elems = this.lnkControleurPresentation.supprimerLienIcone(icone);
+	for (int i = 0; i < elems.size(); i++)
+		fireEvenement((ElementPresentation) elems.get(i), POGListener.MODIFIER);
   }
 
   public void lancer_editeur(String p0) {
@@ -564,14 +611,13 @@ public class Systeme {
       elPere.supprimerGuide( (Guide) elem);
     }
     lnkFenetrePrincipale.getLnkControleurPanneaux().supprimerElement(elem);
-    refreshAll(elem);
-    lnkFenetrePrincipale.getLnkControleurPanneaux().loadVide();
+    fireEvenement(elem, POGListener.SUPPRIMER);
   }
 
-  private void refreshAll(ElementPresentation elem) {
-    lnkFenetrePrincipale.getLnkArbrePresentation().loadElement(elem);
-    lnkFenetrePrincipale.getLnkControleurPanneaux().reload();
-  }
+//  private void refreshAll(ElementPresentation elem) {
+//    lnkFenetrePrincipale.getLnkArbrePresentation().loadElement(elem);
+    //lnkFenetrePrincipale.getLnkControleurPanneaux().reload();
+  //}
 
   /*En fonction du type de l'element et du type reclame( in ou out), cree la
    liste des elements en entre ou sortie pour l'element concerne*/
@@ -634,14 +680,14 @@ public class Systeme {
     //return new Object[0];
   }
 
-  public void synchroniserApes(final ApesProcess ap)
+  public TheTraitement synchroniserApes(final ApesProcess ap)
   {
   	if ((_modele == getlnkControleurPresentation().get_pathModele().lastModified()) && (ap == null))
-  		return;
+  		return null;
 
 	_invaliderTAG();
 
-	new FenetrePrincipale.TheTraitement("Synchro") {
+	return new FenetrePrincipale.TheTraitement("Synchro") {
 		public void traitement() {
 			if (ap == null)
 				Apes.loadModel(lnkControleurPresentation.get_pathModele());
@@ -649,7 +695,7 @@ public class Systeme {
 				Apes.chargeProcessComponent(ap);
 			getLnkControleurPresenter().synchroniserApes(true);
 			lnkFenetrePrincipale.getLnkDebug().patienter("", 0, 0);
-			lnkFenetrePrincipale.getLnkArbrePresentation().load();
+//			lnkFenetrePrincipale.getLnkArbrePresentation().load();
 			_modele = lnkControleurPresentation.get_pathModele().lastModified();
 		}
 	};
@@ -662,18 +708,18 @@ public class Systeme {
   public void monter(ElementPresentation elt) {
     _invaliderTAG();
 	String ancienId = elt.get_id();
-    Hashtable res = this.lnkControleurOrganiser.monter(elt);
+    Hashtable res = this.lnkControleurOrganiser.monter(elt, this);
     if (res != null) { // Impossibilite de monter si deja en 1ere position (cas null)
-      this.lnkFenetrePrincipale.getLnkArbrePresentation().reloadElement(ancienId, elt.get_id(), elt.get_id(), ancienId);
+//      this.lnkFenetrePrincipale.getLnkArbrePresentation().reloadElement(ancienId, elt.get_id(), elt.get_id(), ancienId);
     }
   }
 
   public void descendre(ElementPresentation elt) {
     _invaliderTAG();
 	String ancienId = elt.get_id();
-    Hashtable res = this.lnkControleurOrganiser.descendre(elt);
+    Hashtable res = this.lnkControleurOrganiser.descendre(elt, this);
     if (res != null) { // Impossibilite de descendre si deja en derniere position (cas null)
-      this.lnkFenetrePrincipale.getLnkArbrePresentation().reloadElement(ancienId, elt.get_id(), elt.get_id(), ancienId);
+//      this.lnkFenetrePrincipale.getLnkArbrePresentation().reloadElement(ancienId, elt.get_id(), elt.get_id(), ancienId);
     }
   }
 
@@ -716,12 +762,13 @@ public class Systeme {
 			ElementPresentation ep = (ElementPresentation)elem[i];
 			if (ep.getContenu() == null)
 				continue;
-			if (allmap.containsKey(ep.getContenu().getFile().getName()))
-				lnkControleurOrganiser.associerContenu(ep, (File)allmap.get(ep.getContenu().getFile().getName()));
+			if (allmap.containsKey(ep.getContenu().get_uri()))
+				lnkControleurOrganiser.associerContenu(ep, ((File)allmap.get(ep.getContenu().get_uri())).toURI());
 			else {
 				sscontenu.add("\t" + ep.get_nomPresentation());
 				lnkControleurOrganiser.supprimerContenu(ep);
 			}
+			fireEvenement(ep, POGListener.MODIFIER);
 		}
 		if (sscontenu.size() > 0) {
 			lnkFenetrePrincipale.getLnkDebug().afficher("perdulien");

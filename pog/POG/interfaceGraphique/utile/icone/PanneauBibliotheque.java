@@ -140,7 +140,7 @@ public class PanneauBibliotheque extends JPanel
               fileIcone.delete();
               load();
               lnkFenetrePrincipale.getLnkArbreExplorateur().load();
-              lnkFenetrePrincipale.getLnkArbrePresentation().load();
+//              lnkFenetrePrincipale.getLnkArbrePresentation().load();
               lnkFenetrePrincipale.getLnkControleurPanneaux().reload();
             }
         }

@@ -24,27 +24,22 @@ package POG.interfaceGraphique.utile.arbre;
 
 import java.awt.Component;
 import java.awt.Image;
-import java.util.Enumeration;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
-import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
-import org.ipsquad.apes.model.spem.process.structure.Activity;
-import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
-import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
-import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 import POG.interfaceGraphique.action.Systeme;
 import POG.objetMetier.ElementPresentation;
 import POG.objetMetier.Guide;
+import POG.objetMetier.Presentation;
 import POG.objetMetier.PresentationElementModele;
 
 public class ArbrePresentation
@@ -65,8 +60,23 @@ public class ArbrePresentation
     this._arbre.setCellRenderer(monRenderer);
     CellEditor monEditor = new CellEditor(this._arbre, monRenderer);
     this._arbre.setCellEditor(monEditor);
-    this.load();
-
+	ArbrePOGListener abpl = new ArbrePOGListener(lnkSysteme) {
+		public void valueForPathChanged(TreePath path, Object newValue) {
+			Object el = path.getLastPathComponent();
+			if (el instanceof ElementPresentation) {
+				lnkSysteme.modifierNomDePresentation((ElementPresentation) el, (String) newValue);
+			}
+			get_arbre().setEditable(false);
+		}
+	};
+	lnkSysteme.ajouterListener(abpl);
+	get_arbre().setModel(abpl);
+	get_arbre().addTreeSelectionListener(new TreeSelectionListener() {
+		public void valueChanged(TreeSelectionEvent arg0) {
+			lnkSysteme.lnkFenetrePrincipale.getLnkControleurPanneaux().afficherCentreCorrespondant(arg0.getPath().getLastPathComponent());
+		}
+		
+	});
   }
 
   public ArbrePresentationListener getListenerArbrePresentation() {
@@ -77,22 +87,35 @@ public class ArbrePresentation
    * La racine de l'arbre de presentation
    */
 
-  DefaultMutableTreeNode racine;
+//  DefaultMutableTreeNode racine;
 
   /**
    * Fonction pour recharger TOUT l'arbre de presentation :
    * N'APPELER QUE AU DEBUT ou apres une synchronisation !!!
    * Ensuite appeler plutot loadElement( ElementPresentation).
    */
-  public void load() {
+/*  public void load() {
     if (lnkSysteme.getlnkControleurPresentation().getlnkPresentation() != null) {
-      ElementPresentation tete = lnkSysteme.getlnkControleurPresentation().
+/*      ElementPresentation tete = lnkSysteme.getlnkControleurPresentation().
           getlnkPresentation().getElementPresentation(lnkSysteme.
           getlnkControleurPresentation().getlnkPresentation().getIdRacine());
       racine = new DefaultMutableTreeNode(tete);
 
       this.setModelWithRenamingListener(racine);
       this.ajouterNoeuds("1");
+      
+      
+      this.get_arbre().setModel(new ArbrePOGListener(lnkSysteme.getlnkControleurPresentation().getlnkPresentation()){
+
+		public void valueForPathChanged(TreePath path, Object newValue) {
+			Object el = path.getLastPathComponent();
+			if (el instanceof ElementPresentation) {
+				lnkSysteme.modifierNomDePresentation((ElementPresentation) el, (String) newValue);
+			}
+			_arbre.setEditable(false);			
+		}
+      
+      });
     }
     else {
       this.get_arbre().setModel(null);
@@ -103,7 +126,7 @@ public class ArbrePresentation
    * Ajoute tous les noeuds fils a la racine d'ID idPere
    * @param idPere
    */
-  private void ajouterNoeuds(String idPere) {
+/*  private void ajouterNoeuds(String idPere) {
     DefaultMutableTreeNode noeudPere = this.getNoeud(idPere);
     int numFils = 1;
     ElementPresentation el = null;
@@ -143,7 +166,7 @@ public class ArbrePresentation
    * noeud anciennement selectionn\uFFFD
    * @param racineCourante
    */
-  public void setModelAndRefresh(DefaultMutableTreeNode racineCourante,
+/*  public void setModelAndRefresh(DefaultMutableTreeNode racineCourante,
                                  DefaultMutableTreeNode n) {
     Enumeration enum = _arbre.getExpandedDescendants(this._arbre.getPathForRow(
         0));
@@ -166,7 +189,7 @@ public class ArbrePresentation
     * @param element L'element de presentation qui a subi des modifications
     * (ElementPresentation ou PresentationElementModele ou Guide)
     */
-   public void loadElement(ElementPresentation element) {
+/*   public void loadElement(ElementPresentation element) {
      boolean dsPresentation = false;
      boolean dsArbre = false;
      DefaultMutableTreeNode noeudElement;
@@ -229,7 +252,7 @@ public class ArbrePresentation
    * ReLoad quand reorganisation de l'arbre
    * @param map
    */
-  public void reloadElement(String ancienId1, String nouvelId1,
+/*  public void reloadElement(String ancienId1, String nouvelId1,
                             String ancienId2, String nouvelId2) {
     DefaultMutableTreeNode n1 = this.getNoeud(ancienId1);
     DefaultMutableTreeNode n2 = this.getNoeud(ancienId2);
@@ -282,8 +305,8 @@ public class ArbrePresentation
       this._arbre.expandPath(new TreePath(n2.getPath()));
     }
     this._arbre.setSelectionPath(new TreePath(n1.getPath()));
-  }
-
+  }*/
+/*
   private DefaultMutableTreeNode getNoeudPere(ElementPresentation element) {
 
     DefaultMutableTreeNode pere;
@@ -314,7 +337,7 @@ public class ArbrePresentation
    * Retourne le noeud par son identifiant.
    * @param id
    * @return
-   */
+   *//*
   public DefaultMutableTreeNode getNoeud(String id) {
     if (id == "1") {
       return this.racine;
@@ -325,7 +348,7 @@ public class ArbrePresentation
   /**
    * Attention : appeler avec noeudParent = null si idFils de longueur 2
    * @param idFils L'id RELATIF par rapport au noeud pere.
-   */
+   *//*
   private DefaultMutableTreeNode getNoeud(DefaultMutableTreeNode
                                           noeudPere, String idFils) {
     if (noeudPere == null) {
@@ -380,6 +403,18 @@ public class ArbrePresentation
    * @param o Object a rechercher dans l'arbre
    */
   public void selectNodeContaining(Object o) {
+  	Presentation thepres = lnkSysteme.getlnkControleurPresentation().getlnkPresentation();
+	if (o instanceof ModelElement)
+		o = thepres.getElementPresentation((ModelElement) o);
+	Object [] pth = ArbrePOGListener.thePath(o, thepres);
+	if (o instanceof ElementPresentation) {
+		TreePath tp = new TreePath(pth);
+		this._arbre.scrollPathToVisible(tp);
+		this._arbre.setSelectionPath(tp);
+		lnkSysteme.lnkFenetrePrincipale.getLnkControleurPanneaux().afficherCentreCorrespondant((ElementPresentation) o);
+	}
+  }
+  	/*
     for (Enumeration e = this.racine.depthFirstEnumeration(); e.hasMoreElements(); ) {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
       Object oNoeud = node.getUserObject();
@@ -400,65 +435,38 @@ public class ArbrePresentation
       }
     }
   }
-
+*/
   public void selectionnerRacine()
   {
-    Object o = this.racine.getUserObject() ;
-    if (this._arbre != null && this.racine != null && o instanceof ElementPresentation)
+    Object o = lnkSysteme.getlnkControleurPresentation().getlnkPresentation().getElementPresentation(lnkSysteme.getlnkControleurPresentation().getlnkPresentation().getIdRacine());
+    if (o != null && this._arbre != null && o instanceof ElementPresentation)
     {
       this._arbre.setSelectionRow(0);
       this.lnkSysteme.lnkFenetrePrincipale.
-          getLnkControleurPanneaux().loadCentre("DElementPresentation", (ElementPresentation)o);
+          getLnkControleurPanneaux().afficherCentreCorrespondant((ElementPresentation)o);
     }
   }
 
 
-	public void afficherCentreCorrespondant(Object obj) {
-		String _centre = "";
-		if (obj instanceof Guide)
-			_centre = "DGuide";
-		else if (obj instanceof PresentationElementModele) {
-			ModelElement m = ((PresentationElementModele)obj).getLnkModelElement();
-			if (m instanceof Activity)
-				_centre = "DActivite";
-			else if (m instanceof WorkProduct)
-				_centre = "DProduit";
-			else if (m instanceof ProcessRole)
-				_centre = "DRole";
-			else if (m instanceof WorkDefinition) 
-				_centre = "DDefinitionTravail";
-			else if (m instanceof SPackage) 
-				_centre = "DPackage";
-			else if (m instanceof SpemDiagram)
-				_centre = "DDiagram";    	
-		}
-		else if (obj instanceof ElementPresentation)
-			_centre = "DElementPresentation";
-		if (_centre == "")
-			lnkSysteme.lnkFenetrePrincipale.getLnkControleurPanneaux().loadVide();
-		else
-			lnkSysteme.lnkFenetrePrincipale.getLnkControleurPanneaux().loadCentre(_centre, (ElementPresentation)obj);
-	}
-
   /**
    * Met editable le noeud pour renomage.
    * @param n Le noeud en cours de renommage.
    */
-  public void setNodeEditable(DefaultMutableTreeNode n) {
+  public void setNodeEditable(ElementPresentation n) {
     this._arbre.setEditable(true);
-    this._arbre.startEditingAtPath(new TreePath(n.getPath()));
+    this._arbre.startEditingAtPath(new TreePath(ArbrePOGListener.thePath(n, lnkSysteme.getlnkControleurPresentation().getlnkPresentation())));
   }
 
   /**
    * Met editable le noeud pour renomage.
    * @param n Le noeud en cours de renommage.
-   */
+   *//*
   public void setNodeEditable() {
     this._arbre.setEditable(true);
     this._arbre.startEditingAtPath(new TreePath(((DefaultMutableTreeNode)_arbre.getLastSelectedPathComponent()).getPath()));
   }
 
-
+/*
   public void setModelWithRenamingListener(DefaultMutableTreeNode n) {
     DefaultTreeModel tm = new DefaultTreeModel(n) {
       public void valueForPathChanged(TreePath path, Object newValue) {
@@ -471,7 +479,7 @@ public class ArbrePresentation
       
     };
     this._arbre.setModel(tm);
-  }
+  }*/
 
   class IconesRenderer
 	  extends DefaultTreeCellRenderer {
@@ -494,8 +502,15 @@ public class ArbrePresentation
 		  tree, value, sel,
 		  expanded, leaf, row,
 		  hasFocus);
-	  DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
-	  Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
+		  
+		Object objet;
+		if (value instanceof DefaultMutableTreeNode)
+			objet = ((DefaultMutableTreeNode)value).getUserObject();
+		else
+			objet = value;
+		
+//	  DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
+//	  Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
 	  if (objet instanceof Guide || objet instanceof ElementPresentation
 		  || objet instanceof PresentationElementModele) {
 		ImageIcon icone;
@@ -528,8 +543,14 @@ public class ArbrePresentation
 												boolean leaf, int row) {
 	  Component c = super.getTreeCellEditorComponent(tree, value, sel, expanded,
 		  leaf, row);
-	  DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
-	  Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
+		  
+		  Object objet;
+		  if (value instanceof DefaultMutableTreeNode)
+			  objet = ((DefaultMutableTreeNode)value).getUserObject();
+		  else
+			  objet = value;
+//	  DefaultMutableTreeNode noeud = (DefaultMutableTreeNode) value;
+//	  Object objet = ( (DefaultMutableTreeNode) value).getUserObject();
 	  if (objet instanceof Guide || objet instanceof ElementPresentation
 		  || objet instanceof PresentationElementModele) {
 		ImageIcon icone;

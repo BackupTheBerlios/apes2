@@ -643,8 +643,8 @@ public class appliTest extends javax.swing.JFrame {
                     stateFeuille=false;
                 }
                 if(_panel != null){
-                  _panel.setFichier_associe(fichier);
-                  _fp.getLnkSysteme().associerContenu(_panel.get_elementCourant(), fichier);
+					_fp.getLnkSysteme().associerContenu(_panel.get_elementCourant(), fichier.toURI());
+                  	_panel.setFichier_associe(_panel.get_elementCourant().getContenu());                  
                 }
             }
             catch (Exception ex)
@@ -749,8 +749,8 @@ public class appliTest extends javax.swing.JFrame {
                 setTitle(uneFile.getName());
                 stateFeuille=false;
                 if(_panel != null){
-                  _panel.setFichier_associe(fichier);
-                  _fp.getLnkSysteme().associerContenu(_panel.get_elementCourant(), fichier);
+                  _fp.getLnkSysteme().associerContenu(_panel.get_elementCourant(), fichier.toURI());
+				  _panel.setFichier_associe(_panel.get_elementCourant().getContenu());
                 }
             }
             catch (Exception ex)

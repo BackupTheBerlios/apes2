@@ -178,7 +178,7 @@ public class PanneauActivite
       this.setNom_modele("");
     }
     if (elem.getContenu() != null) {
-      setFichier_associe(elem.getContenu().getFile());
+      setFichier_associe(elem.getContenu());
     }
     else {
       setFichier_associe(null);

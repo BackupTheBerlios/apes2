@@ -23,56 +23,55 @@
 package POG.objetMetier;
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 
 /**
  * @stereotype entity
  */
 
 public class Contenu {
-  private File _file;
-  private String _pathBiblio;
 
-  public Contenu(File fich, String pathB) {
-    _pathBiblio = pathB;
-    _file = fich;
-  }
+	private File _file;
+	private URI _urr;
+	private String _pathBiblio;
 
-  public String toString() {
-    return this._file.getName();
-  }
+	public Contenu(URI urr, String pathB) {
+		setURI(urr);
+		_pathBiblio = pathB;
+	}
 
-  public URL get_url() {
-    try {
-      return _file.toURL();
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
+	public String getAbsolutePath() {
+		if (_file != null)
+			return _file.getAbsolutePath();
+		else
+			return _urr.toString().replaceAll("\\\\", "/");
+	}
 
-  public File getFile() {
-    return _file;
-  }
+	public String get_uri() {
+		if (_file != null)
+			return _file.getName();
+		else
+			return _urr.toString().replaceAll("\\\\", "/");
+	}
 
-  public String getAbsolutePath() {
-    return _file.getAbsolutePath();
-  }
+	public String getRelativeToBiblioPath() {
+		if (_file == null)
+			return _urr.toString().replaceAll("\\\\", "/");
+		String abso = getAbsolutePath();
+		if (!abso.startsWith(_pathBiblio))
+			return abso;
+		return abso.substring(_pathBiblio.length() + 1);
+	}
 
-  public String get_uri() {
-    return _file.getName();
-  }
-
-  public String getRelativeToBiblioPath() {
-    String abso = getAbsolutePath();
-    if (!abso.startsWith(_pathBiblio))
-      return abso;
-    String relat = abso.substring(_pathBiblio.length() + 1);
-    return relat;
-  }
-
-  public void setFile(File file) {
-    this._file = file ;
-  }
+	public boolean isFile() {
+		return _file != null;
+	}
+	
+	public void setURI(URI urr) {
+		_urr = urr;
+		if (urr.getScheme().equals("file"))
+			_file = new File(urr.getPath());
+		else
+			_file = null;
+	}
 }

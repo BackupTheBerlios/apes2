@@ -22,9 +22,11 @@
 package POG.interfaceGraphique.fenetre.PanneauxDetails;
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
+import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 
 import POG.interfaceGraphique.action.ControleurPanneaux;
@@ -34,7 +36,7 @@ import POG.objetMetier.Guide;
 
 public class PanneauGuide extends PanneauDetail {
   private JScrollPane jScrollPane1;
-  private JLabel type = new JLabel();
+  private JComboBox list_type = new JComboBox();
 
   public PanneauGuide(ControleurPanneaux control) {
     super(control);
@@ -44,6 +46,7 @@ public class PanneauGuide extends PanneauDetail {
     catch (Exception e) {
       e.printStackTrace();
     }
+     setList_type((String[]) control.getLnkSysteme().getLnkPreferences().get_guide().keySet().toArray(new String[0]));
   }
 
   private void jbInit() throws Exception {
@@ -56,10 +59,7 @@ public class PanneauGuide extends PanneauDetail {
         BorderFactory.createTitledBorder("Type du guide"),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         jScrollPane1.getBorder()));
-
-    type.setBounds(new Rectangle(26, 275, 240, 54));
-
-    this.add(type);
+    this.add(list_type);
     this.add(jScrollPane1, null);
   }
 
@@ -73,19 +73,26 @@ public class PanneauGuide extends PanneauDetail {
     setDesc(elem.get_description());
     setIcon(elem.get_icone());
     if (elem.getContenu() != null)
-      setFichier_associe(elem.getContenu().getFile());
+      setFichier_associe(elem.getContenu());
     else
       setFichier_associe(null);
     setIcon(elem.get_icone());
-    type.setText(((Guide)elem).getType());
+	list_type.setSelectedItem(((Guide)elem).getType());
     this.updateUI();
 
   }
 
- /* public void setList_type(String[] list) {
-
+  private void setList_type(String[] list) {
     list_type = new JComboBox(list);
     jScrollPane1.setViewportView(list_type);
-  }*/
+	list_type.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			JComboBox cb = (JComboBox)e.getSource();
+			String type = (String)cb.getSelectedItem();
+			if (!type.equals(((Guide)_elementCourant).getType()))
+				lnkControleurPanneaux.getLnkSysteme().changerTypeGuide(_elementCourant, type);
+		}
+	});
+  }
 }
 

@@ -23,6 +23,8 @@ package POG.objetMetier;
 
 import java.io.File;
 import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -73,6 +75,13 @@ public class ElementPresentation implements Sauvegarde {
 
   public String toString(){
     return this._nomPresentation;
+  }
+
+	/*
+	 * UNIQUEMENT POUR LES TABLEAUX
+	 */
+  public ElementPresentation() {
+  	
   }
 
   public ElementPresentation(String id, ImageIcon icone) {
@@ -249,13 +258,18 @@ public class ElementPresentation implements Sauvegarde {
       _chargement_guide.set_nomPresentation(_tmp_charger_guide.nom_presentation);
 	  _chargement_guide.set_description(_tmp_charger_guide.description);
 	  if (!_tmp_charger_guide.contenu.equals("")) {
-		File toto = new File(_tmp_charger_guide.contenu);
-		if (!toto.exists())
-			toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_guide.contenu);
-		if (toto.exists())
-		_chargement_guide.setContenu(new Contenu(toto, lnkBibliotheque.getAbsolutePath()));
-		else 
-			FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("attachefich").replaceFirst("ARG0", _tmp_charger_guide.contenu).replaceFirst("ARG1", _tmp_charger_guide.nom_presentation));			
+		try {
+			URI urr = new URI(_tmp_charger_guide.contenu.replaceAll("\\\\", "/"));
+			_chargement_guide.setContenu(new Contenu(urr, lnkBibliotheque.getAbsolutePath()));
+		} catch (URISyntaxException e) {
+			File toto = new File(_tmp_charger_guide.contenu);
+			if (!toto.exists())
+				toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_guide.contenu);
+			if (toto.exists())
+				_chargement_guide.setContenu(new Contenu(toto.toURI(), lnkBibliotheque.getAbsolutePath()));
+			else
+				FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("attachefich").replaceFirst("ARG0", _tmp_charger_guide.contenu).replaceFirst("ARG1", _tmp_charger_guide.nom_presentation));
+		}
 	  }
 
       
@@ -281,12 +295,14 @@ public class ElementPresentation implements Sauvegarde {
       }
       else {
         //s'il a un fichier associe, verifier que le lien existe
-        if (!this.lnkContenu.getFile().exists()){
-			String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifrep");
-			mess = mess.replaceFirst("ARG0", this.get_nomPresentation());
-			mess = mess.replaceFirst("ARG1", this.lnkContenu.getFile().getAbsolutePath());
-          lnkDebug.verificationMessage(mess);
-          ok = false;
+		if (this.getContenu().isFile()) {
+			if (!new File(this.getContenu().getAbsolutePath()).exists()) {
+				String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifrep");
+				mess = mess.replaceFirst("ARG0", this.get_nomPresentation());
+				mess = mess.replaceFirst("ARG1", this.lnkContenu.getAbsolutePath());
+				lnkDebug.verificationMessage(mess);
+				ok = false;
+			}
         }
       }
     }

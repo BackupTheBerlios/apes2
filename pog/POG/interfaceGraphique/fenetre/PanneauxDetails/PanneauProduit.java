@@ -96,7 +96,8 @@ public class PanneauProduit extends PanneauDetail {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox)e.getSource();
 			String type = (String)cb.getSelectedItem();
-			lnkControleurPanneaux.getLnkSysteme().changerTypeProduit(_elementCourant, type);
+			if (!type.equals(((PresentationElementModele)_elementCourant).get_typeProduit()))
+				lnkControleurPanneaux.getLnkSysteme().changerTypeProduit(_elementCourant, type);
 		}
 	});
 	typeProduit.setBounds(new Rectangle(12, 262, 195, 55));
@@ -209,7 +210,7 @@ public class PanneauProduit extends PanneauDetail {
       this.setNom_modele("");
     }
     if (elem.getContenu() != null)
-      setFichier_associe(elem.getContenu().getFile());
+      setFichier_associe(elem.getContenu());
     else
       setFichier_associe(null);
     setList_inActivite(lnkControleurPanneaux.getLnkSysteme().getList_Element(_elementCourant, "in"));

@@ -32,6 +32,14 @@ import javax.swing.JSplitPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import org.ipsquad.apes.model.extension.SpemDiagram;
+import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
+import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauActivite;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauDefinitionTravail;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauDetail;
@@ -43,6 +51,8 @@ import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauRole;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauVide;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.listenerSousMenusGuides;
 import POG.objetMetier.ElementPresentation;
+import POG.objetMetier.Guide;
+import POG.objetMetier.PresentationElementModele;
 //import application.controleurMetier.ControleurOrganiser;
 
 public class ControleurPanneaux {
@@ -131,7 +141,53 @@ public class ControleurPanneaux {
     lnkSysteme = sys;
     _menu = new MenuCentral(mnu, this);
     loadVide();
+    lnkSysteme.ajouterListener(new POGListener() {
+		public void ajouter(ElementPresentation el) {
+			reload();
+		}
+
+		public void supprimer(ElementPresentation el) {
+			reload();
+		}
+
+		public void modifier(ElementPresentation el) {
+			reload();
+		}
+
+		public void initialise(ElementPresentation el) {
+			reload();
+		}
+    });
   }
+
+  public void afficherCentreCorrespondant(Object obj) {
+	  String _centre = "";
+	  if (obj instanceof Guide)
+		  _centre = "DGuide";
+	  else if (obj instanceof PresentationElementModele) {
+		  ModelElement m = ((PresentationElementModele)obj).getLnkModelElement();
+		  if (m instanceof Activity)
+			  _centre = "DActivite";
+		  else if (m instanceof WorkProduct)
+			  _centre = "DProduit";
+		  else if (m instanceof ProcessRole)
+			  _centre = "DRole";
+		  else if (m instanceof WorkDefinition) 
+			  _centre = "DDefinitionTravail";
+		  else if (m instanceof SPackage) 
+			  _centre = "DPackage";
+		  else if (m instanceof SpemDiagram)
+			  _centre = "DDiagram";    	
+	  }
+	  else if (obj instanceof ElementPresentation)
+		  _centre = "DElementPresentation";
+	  if (_centre == "")
+		  loadVide();
+	  else
+		  loadCentre(_centre, (ElementPresentation)obj);
+  }
+
+
 
   /*
    * FONCTION INPORTANTE !!!
@@ -139,7 +195,7 @@ public class ControleurPanneaux {
    * peut qu'il y ai besoin de reload le panneau central : APPELEER cette
    * fonction qui s'en occupe.
    */
-  public void loadCentre(String fenetre, ElementPresentation idelem){
+  private void loadCentre(String fenetre, ElementPresentation idelem){
     if (lnkPanneauVide.isVisible()) {
       lnkPanneauVide.setVisible(false);
       _jsplit.remove(lnkPanneauVide);
