@@ -75,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesModelListener
 {
@@ -396,9 +396,9 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
     		ParentMap pm,
     		UndoableEdit[] edits) 
     {
-	    try{
-    	if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemGraphAdater/"+getName()+" -> edit( attr "+attributes+" cs "+cs+" pm "+pm+" "+edits+")");
-    	if(attributes != null)
+	    if(Debug.enabled) Debug.print(Debug.ADAPTER, "(SpemGraphAdater/"+getName()+" -> edit( attr "+attributes+" cs "+cs+" pm "+pm+" "+edits+")");
+    	
+	    if(attributes != null)
     	{
     		Map changes = new HashMap();
     		Map attr = new HashMap();
@@ -434,10 +434,8 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
     	
     	if(!attributes.isEmpty())
     	{
-    	    System.out.println("attr "+attributes);
     		super.edit(attributes, cs, pm, edits);
     	}
-	    }catch(Exception e){e.printStackTrace(); }
     }
     
 	/**
