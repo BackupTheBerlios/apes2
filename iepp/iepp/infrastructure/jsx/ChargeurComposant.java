@@ -131,11 +131,11 @@ public class ChargeurComposant extends MonitoredTaskBase
 			chargerComposant(zipFile);
 			
 			// revenir au début du flux pour un dernier parsing
-			 zipFile = new ZipInputStream( new FileInputStream (new File(this.nomFic)));
-			 chargerPresentation(zipFile);
+			zipFile = new ZipInputStream( new FileInputStream (new File(this.nomFic)));
+			chargerPresentation(zipFile);
 			 
-			 // si on arrive ici c'est que l'interface a été trouvée
-			 // pour que ce soit un composant vide il ne faut ni de composant ni de presentation
+			// si on arrive ici c'est que l'interface a été trouvée
+			// pour que ce soit un composant vide il ne faut ni de composant ni de presentation
 			if ((! this.componentTrouve) && (! this.presentationTrouve ))
 			{
 				// on a un compo vide

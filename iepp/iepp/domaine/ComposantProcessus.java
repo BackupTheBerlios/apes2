@@ -804,7 +804,26 @@ public class ComposantProcessus extends ObjetModele implements ObjetAnnulable
 			case ROLE: ((Element)(this.roles.elementAt(numrang))).setName(chaine);break;
 			case PAQUETAGE: ((Element)(this.listePaquetage.elementAt(numrang))).setName(chaine);break;
 			//case DIAGRAMME: ((Element)(this.listeDiagramme.elementAt(numrang))).setName(chaine);break;
-			case PRODUIT: ((Element)(this.produits.elementAt(numrang))).setName(chaine);break;
+			case PRODUIT:
+			    		String nomActuel = ((WorkProduct)this.produits.elementAt(numrang)).getName();
+			    		// Recherche de l'ancien nom dans les interfaces in
+			    		for (int i = 0; i < this.interfaceIn.size(); i++)
+			    		{
+			    		    if (this.interfaceIn.elementAt(i).toString().equals(nomActuel))
+			    		    {
+					    		((Produit)this.interfaceIn.elementAt(i)).setNom(chaine);
+			    		    }
+			    		}
+			    		// Recherche de l'ancien nom dans les interfaces out
+			    		for (int i = 0; i < this.interfaceOut.size(); i++)
+			    		{
+			    		    if (this.interfaceOut.elementAt(i).toString().equals(nomActuel))
+			    		    {
+					    		((Produit)this.interfaceOut.elementAt(i)).setNom(chaine);
+			    		    }
+			    		}
+			    		((Element)(this.produits.elementAt(numrang))).setName(chaine);
+						break;
 			case DEFINITION_TRAVAIL: ((Element)(this.listeDefinition.elementAt(numrang))).setName(chaine);break;
 		}
 	}
