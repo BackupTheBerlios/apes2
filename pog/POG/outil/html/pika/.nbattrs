@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<attributes version="1.0">
+   <fileobject name="OuvrirFiltre.java">
+      <attr name="class_dependency_javax.swing.filechooser.FileFilter" stringvalue="OuvrirFiltre"/>
+   </fileobject>
+   <fileobject name="DialogueAbout.java">
+      <attr name="class_dependency_javax.swing.JDialog" stringvalue="DialogueAbout;OkCancelDialog"/>
+   </fileobject>
+   <fileobject name="DialogueBox.java">
+      <attr name="class_dependency_javax.swing.JDialog" stringvalue="DialogueBox"/>
+   </fileobject>
+   <fileobject name="appliTest.java">
+      <attr name="class_dependency_javax.swing.JFrame" stringvalue="appliTest"/>
+   </fileobject>
+   <fileobject name="DialogueApercu.java">
+      <attr name="class_dependency_javax.swing.JDialog" stringvalue="DialogueApercu"/>
+      <attr name="class_dependency_javax.swing.text.BoxView" stringvalue="DialogueApercu.PrintView"/>
+      <attr name="class_dependency_java.awt.print.Printable" stringvalue="DialogueApercu"/>
+   </fileobject>
+</attributes>

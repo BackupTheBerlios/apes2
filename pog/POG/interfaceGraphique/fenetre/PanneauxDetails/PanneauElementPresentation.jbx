@@ -1,0 +1,18 @@
+[PropertyInfo]
+areaScrollPane,JScrollPane,false,false, , ,false,<default>
+desc_elempres,String,false,false, , ,true,<default>
+desc_guide,String,false,false, , ,true,<default>
+fichier_associe,JLabel,false,false, , ,false,<default>
+jButton1,JButton,false,false, , ,false,<default>
+jButton2,JButton,false,false, , ,false,<default>
+jLabel1,JLabel,false,false, , ,false,<default>
+jLabel2,JLabel,false,false, , ,false,<default>
+jLabel3,JLabel,false,false, , ,false,<default>
+jLabel9,JLabel,false,false, , ,false,<default>
+nom_elempres,String,false,false, , ,true,<default>
+titre_modele,String,false,false, , ,true,<default>
+[IconNames]
+
+
+
+

@@ -1,0 +1,10 @@
+[PropertyInfo]
+fichier,String,false,false, , ,false,<default>
+liste,Vector,false,false, , ,false,<default>
+nom,String,false,false, , ,true,<default>
+nombreFichier,int,false,false, , ,true,<default>
+[IconNames]
+
+
+
+

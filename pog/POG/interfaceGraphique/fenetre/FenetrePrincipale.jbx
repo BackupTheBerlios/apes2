@@ -1,0 +1,43 @@
+[PropertyInfo]
+_fenetrePrincipale,FenetrePrincipale,false,false, , ,true,<default>
+_menu,POGMenu,false,false, , ,false,<d?faut>
+borderLayout1,BorderLayout,false,false, , ,false,<d?faut>
+borderLayout2,BorderLayout,false,false, , ,false,<d?faut>
+borderLayout3,BorderLayout,false,false, , ,false,<d?faut>
+borderLayout5,BorderLayout,false,false, , ,false,<d?faut>
+borderLayout6,BorderLayout,false,false, , ,false,<d?faut>
+borderLayout7,BorderLayout,false,false, , ,false,<d?faut>
+borderLayout8,BorderLayout,false,false, , ,false,<d?faut>
+INSTANCE,FenetrePrincipale,false,false, , ,false,<default>
+jPanel4,JPanel,false,false, , ,false,<d?faut>
+jPanel5,JPanel,false,false, , ,false,<d?faut>
+jScrollPane1,JScrollPane,false,false, , ,false,<d?faut>
+jScrollPane2,JScrollPane,false,false, , ,false,<d?faut>
+jScrollPane3,JScrollPane,false,false, , ,false,<d?faut>
+jSplitPane1,JSplitPane,false,false, , ,false,<d?faut>
+jSplitPane2,JSplitPane,false,false, , ,false,<d?faut>
+jSplitPane3,JSplitPane,false,false, , ,false,<d?faut>
+jSplitPane4,JSplitPane,false,false, , ,false,<d?faut>
+lnkappliTest,appliTest,false,false, , ,false,<d?faut>
+lnkArbreExplorateur,ArbreExplorateur,false,false, , ,false,<d?faut>
+lnkArbrePresentation,ArbrePresentation,false,false, , ,false,<d?faut>
+lnkControleurPanneaux,ControleurPanneaux,false,false, , ,false,<d?faut>
+lnkDebug,Debug,false,false, , ,false,<d?faut>
+lnkFenetreAPropos,FenetreAPropos,false,false, , ,false,<d?faut>
+lnkFenetreEnregistrerSous,FenetreEnregistrerSous,false,false, , ,true,<default>
+lnkFenetreExport,FenetreExport,false,false, , ,false,<d?faut>
+lnkFenetreNouvellePresentationAvecModele,FenetreNouvellePresentationAvecModele,false,false, , ,false,<d?faut>
+lnkFenetreOuverture,FenetreNouvellePresentationSansModele,false,false, , ,false,<d?faut>
+lnkFenetrePreferences,FenetrePreferences,false,false, , ,false,<d?faut>
+lnkJIconChooser,JFileChooser,false,false, , ,true,<default>
+lnkLangues,Langues,false,false, , ,false,<d?faut>
+lnkMainToolBar,MainToolBar,false,false, , ,true,<default>
+lnkMenu,POGMenu,false,false, , ,true,<default>
+lnkPanneauBibliotheque,PanneauBibliotheque,false,false, , ,false,<d?faut>
+lnkPreferences,Preferences,false,false, , ,false,<d?faut>
+lnkSysteme,Systeme,false,false, , ,false,<d?faut>
+[IconNames]
+
+
+
+
