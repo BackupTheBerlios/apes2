@@ -37,7 +37,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a flow diagram in a JGraph
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ContextGraphAdapter extends SpemGraphAdapter 
 {
@@ -95,20 +95,37 @@ public class ContextGraphAdapter extends SpemGraphAdapter
 		{	
 			ContextEdge edge = new ContextEdge();
 			
-			Vector cells = findCellsByUserObject( new Object[]{ e.getSource() } );
-			Port firstPort = (Port) ((ApesGraphCell)cells.get(0)).getChildAt(0);
+			Object component = Context.getInstance().getProject().getProcess().getComponent();
 			
-			cells = findCellsByUserObject( new Object[]{ e.getTarget() } );
-			Port port = (Port) ((ApesGraphCell)cells.get(0)).getChildAt(0);
-		
-			ConnectionSet cs = new ConnectionSet();
-			edge.setSource( firstPort);
-			edge.setTarget( port );
-			firstPort.addEdge( edge );
-			port.addEdge( edge );
-			cs.connect(edge, firstPort, port );
-		
-			super.insert(new Object[]{ edge },null,cs, null,null);
+			Object source = ( e.getSource() instanceof ProcessComponent ? component : e.getSource() );
+			Object target = ( e.getTarget() instanceof ProcessComponent ? component : e.getTarget() );
+			
+			Port firstPort = null , 
+						port = null;
+			
+			Vector cells = findCellsByUserObject( new Object[]{ source } );
+			if( cells.size() > 0 )
+			{	
+				firstPort = (Port) ((ApesGraphCell)cells.get(0)).getChildAt(0);
+			}
+			
+			cells = findCellsByUserObject( new Object[]{ target } );
+			if( cells.size() > 0 )
+			{	
+				port = (Port) ((ApesGraphCell)cells.get(0)).getChildAt(0);
+			}
+			
+			if( firstPort != null && port != null )
+			{	
+				ConnectionSet cs = new ConnectionSet();
+				edge.setSource( firstPort);
+				edge.setTarget( port );
+				firstPort.addEdge( edge );
+				port.addEdge( edge );
+				cs.connect(edge, firstPort, port );
+			
+				super.insert(new Object[]{ edge },null,cs, null,null);
+			}
 		}
 		else
 		{
