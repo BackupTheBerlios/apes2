@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AWTTestScript>
+  <component id="JScrollPane Instance 3" class="javax.swing.JScrollPane" parent="null.contentPane 3" index="0" title="APES" />
+  <component id="null.contentPane 2" class="javax.swing.JPanel" name="null.contentPane" parent="null.layeredPane" index="1" title="APES" />
+  <component id="null.layeredPane 2" class="javax.swing.JLayeredPane" name="null.layeredPane" parent="noname11 Root Pane" index="1" title="APES" />
+  <component id="JToggleButton Instance" class="javax.swing.JToggleButton" parent="ToolPalette Instance" index="2" title="APES" />
+  <component id="JGraph Instance 1" class="com.jgraph.JGraph" parent="JViewport Instance 3" index="0" title="APES" />
+  <component id="ToolPalette Instance" class="org.ipsquad.apes.ui.ToolPalette" parent="JPanel Instance" index="1" title="APES" />
+  <component id="JScrollPane Instance 2" class="javax.swing.JScrollPane" parent="JSplitPane Instance 1" index="1" title="APES" />
+  <component id="ApesToolBar Instance" class="org.ipsquad.apes.ui.ApesToolBar" parent="null.contentPane" index="0" title="APES" />
+  <component id="JTextField Instance" class="javax.swing.JTextField" parent="Container Instance 1" index="0" title="APES" />
+  <component id="null.layeredPane" class="javax.swing.JLayeredPane" name="null.layeredPane" parent="APES Root Pane" index="1" title="APES" />
+  <component id="null.contentPane" class="javax.swing.JPanel" name="null.contentPane" parent="null.layeredPane" index="0" title="APES" />
+  <component id="JPanel Instance" class="javax.swing.JPanel" parent="JSplitPane Instance" index="2" title="APES" />
+  <component id="ApesTree Instance" class="org.ipsquad.apes.ui.ApesTree" parent="JViewport Instance" index="0" title="APES" />
+  <component id="null.contentPane 3" class="javax.swing.JPanel" name="null.contentPane" parent="null.layeredPane 2" index="0" title="APES" />
+  <component id="JTextField Instance 1" class="javax.swing.JTextField" parent="Container Instance 2" index="0" title="APES" />
+  <component id="JViewport Instance 3" class="javax.swing.JViewport" parent="JScrollPane Instance 3" index="0" title="APES" />
+  <component id="Container Instance" class="java.awt.Container" parent="JSplitPane Instance" index="0" title="APES" />
+  <component id="JScrollPane Instance" class="javax.swing.JScrollPane" parent="JSplitPane Instance" index="1" title="APES" />
+  <component id="JScrollPane Instance 4" class="javax.swing.JScrollPane" parent="null.contentPane 4" index="0" title="APES" />
+  <component id="Created with The GIMP 1" class="javax.swing.JToggleButton" index="6" title="APES" tag="Created with The GIMP" />
+  <component id="null.layeredPane 1" class="javax.swing.JLayeredPane" name="null.layeredPane" parent="noname10 Root Pane" index="1" title="APES" />
+  <component id="APES Root Pane" class="javax.swing.JRootPane" index="0" title="APES" tag="APES Root Pane" />
+  <component id="null.contentPane 1" class="javax.swing.JPanel" name="null.contentPane" parent="null.layeredPane 1" index="0" title="APES" />
+  <component id="JScrollPane Instance 1" class="javax.swing.JScrollPane" parent="null.contentPane 1" index="0" title="APES" />
+  <component id="JSplitPane Instance" class="javax.swing.JSplitPane" parent="null.contentPane" index="1" title="APES" />
+  <component id="Agrandir" class="javax.swing.JButton" index="1" title="APES" tag="Agrandir" />
+  <component id="JButton Instance" class="javax.swing.JButton" parent="ApesToolBar Instance" index="0" title="APES" />
+  <component id="JViewport Instance 1" class="javax.swing.JViewport" parent="JScrollPane Instance 1" index="0" title="APES" />
+  <component id="APES" class="org.ipsquad.apes.ui.ApesFrame" title="APES" tag="APES" />
+  <component id="JGraph Instance 2" class="com.jgraph.JGraph" parent="JViewport Instance 4" index="0" title="APES" />
+  <component id="JViewport Instance" class="javax.swing.JViewport" parent="JScrollPane Instance" index="0" title="APES" />
+  <component id="null.layeredPane 3" class="javax.swing.JLayeredPane" name="null.layeredPane" parent="noname1 Root Pane" index="1" title="APES" />
+  <component id="noname11 Root Pane" class="javax.swing.JRootPane" index="0" title="APES" tag="noname11 Root Pane" />
+  <component id="noname1 Root Pane" class="javax.swing.JRootPane" index="0" title="APES" tag="noname1 Root Pane" />
+  <component id="Container Instance 2" class="java.awt.Container" parent="JGraph Instance 2" index="1" title="APES" />
+  <component id="Created with The GIMP" class="javax.swing.JToggleButton" index="4" title="APES" tag="Created with The GIMP" />
+  <component id="JViewport Instance 2" class="javax.swing.JViewport" parent="JScrollPane Instance 2" index="0" title="APES" />
+  <component id="ApesTree Instance 1" class="org.ipsquad.apes.ui.ApesTree" parent="JViewport Instance 2" index="0" title="APES" />
+  <component id="Created with The GIMP 2" class="javax.swing.JToggleButton" index="5" title="APES" tag="Created with The GIMP" />
+  <component id="JSplitPane Instance 1" class="javax.swing.JSplitPane" parent="null.contentPane 2" index="1" title="APES" />
+  <component id="noname10 Root Pane" class="javax.swing.JRootPane" index="0" title="APES" tag="noname10 Root Pane" />
+  <component id="Container Instance 1" class="java.awt.Container" parent="ApesTree Instance 1" index="1" title="APES" />
+  <component id="null.contentPane 4" class="javax.swing.JPanel" name="null.contentPane" parent="null.layeredPane 3" index="0" title="APES" />
+  <component id="JViewport Instance 4" class="javax.swing.JViewport" parent="JScrollPane Instance 4" index="0" title="APES" />
+  <component id="JGraph Instance" class="com.jgraph.JGraph" parent="JViewport Instance 1" index="0" title="APES" />
+  <launch classpath="../apes.jar" args="[]" class="org.ipsquad.apes.ApesMain" method="main" desc="Lancement abbot" />
+  <sequence>
+    <wait timeout="10000000" pollInterval="10000" args="APES" method="assertFrameShowing" />
+    <action class="java.awt.Frame" args="APES,0,0" method="actionMove" />
+    <action class="java.awt.Frame" args="APES,750,550" method="actionResize" />
+    <wait timeout="10000000" pollInterval="10000" args="Container Instance" method="assertComponentShowing" />
+    <action args="Container Instance,1,1" method="actionDrag" />
+    <action args="Container Instance,1,1" method="actionDrop" />
+    <action args="ApesTree Instance 1,41,10,Add Class Diagram" method="actionSelectPopupMenuItem" />
+    <action args="ApesTree Instance 1,2,57,25" method="actionMultipleClick" />
+    <wait timeout="10000000" pollInterval="1000" args="JGraph Instance" method="assertComponentShowing" />
+    <action class="javax.swing.AbstractButton" args="Agrandir" method="actionClick" />
+    <action class="javax.swing.AbstractButton" args="Created with The GIMP" method="actionClick" />
+    <action args="JGraph Instance 2,223,159" method="actionClick" />
+    <action class="javax.swing.AbstractButton" args="Created with The GIMP 2" method="actionClick" />
+    <action args="JGraph Instance 2,437,77" method="actionClick" />
+    <action class="javax.swing.AbstractButton" args="Created with The GIMP 2" method="actionClick" />
+    <action args="JGraph Instance 2,455,294" method="actionClick" />
+    <action class="javax.swing.AbstractButton" args="Created with The GIMP 1" method="actionClick" />
+    <action args="JGraph Instance 2,66,191" method="actionClick" />
+    <action class="javax.swing.AbstractButton" args="JToggleButton Instance" method="actionClick" />
+    <action args="JGraph Instance 2,464,113" method="actionDrag" />
+    <action args="JGraph Instance 2,250,187" method="actionDrop" />
+    <action class="javax.swing.AbstractButton" args="JToggleButton Instance" method="actionClick" />
+    <action args="JGraph Instance 2,250,187" method="actionDrag" />
+    <action args="JGraph Instance 2,470,315" method="actionDrop" />
+    <action class="javax.swing.AbstractButton" args="JToggleButton Instance" method="actionClick" />
+    <action args="JGraph Instance 2,93,226" method="actionDrag" />
+    <action args="JGraph Instance 2,250,187" method="actionDrop" />
+    <action class="javax.swing.AbstractButton" args="JToggleButton Instance" method="actionClick" />
+    <action args="JGraph Instance 2,94,226" method="actionDrag" />
+    <action args="JGraph Instance 2,470,315" method="actionDrop" />
+    <action args="JGraph Instance 2,228,336" method="actionClick" />
+    <action args="ApesTree Instance 1,65,150" method="actionClick" />
+    <sequence>
+      <action args="VK_F2" method="actionKeyStroke" />
+      <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+      <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+      <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+      <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+      <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+      <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+      <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+      <action args="diagramme de classe" method="actionKeyString" />
+      <action args="VK_ENTER" method="actionKeyStroke" />
+    </sequence>
+    <action args="JGraph Instance 2,2,78,255" method="actionMultipleClick" />
+    <action args="VK_BACK_SPACE" method="actionKeyStroke" />
+    <action args="Chef de projet" method="actionKeyString" />
+    <action args="VK_ENTER" method="actionKeyStroke" />
+    <action args="JGraph Instance 2,458,104" method="actionClick" />
+    <action args="VK_DELETE" method="actionKeyStroke" />
+    <action args="ApesTree Instance 1,48,39" method="actionClick" />
+    <action args="ApesTree Instance 1,48,39,Remove from model" method="actionSelectPopupMenuItem" />
+    <wait timeout="10000000" invert="true" args="JGraph Instance 2" method="assertComponentShowing" />
+  </sequence>
+  <terminate />
+</AWTTestScript>
+
