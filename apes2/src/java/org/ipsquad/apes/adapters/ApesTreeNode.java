@@ -21,6 +21,7 @@
 package org.ipsquad.apes.adapters;
 
 import java.awt.Font;
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -35,7 +36,7 @@ import org.jgraph.graph.GraphConstants;
  * @version $Revision
  *
  */
-public class ApesTreeNode extends DefaultMutableTreeNode implements Identity
+public class ApesTreeNode extends DefaultMutableTreeNode implements Identity, Serializable
 {
 	private Map mAttributes = GraphConstants.createMap();
 	
@@ -75,6 +76,11 @@ public class ApesTreeNode extends DefaultMutableTreeNode implements Identity
 		Map undo = GraphConstants.applyMap(change, getAttributes());
 		
 		return undo;
+	}
+	
+	public void setAttributes(Map attr)
+	{System.out.println("setArrt");
+		mAttributes = attr;
 	}
 	
 	public int getID()

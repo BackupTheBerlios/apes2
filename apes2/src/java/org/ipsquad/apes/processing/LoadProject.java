@@ -36,6 +36,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Project;
+import org.ipsquad.apes.adapters.ApesTreeNode;
+import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
@@ -51,13 +53,14 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
 	private File mFile = null;
 	private TaskMonitorDialog mTask = null;
 	private ResourceManager mResource = ResourceManager.getInstance();
+	private Project mProject = new Project();
 	
 	public LoadProject(File file)
 	{
@@ -84,28 +87,23 @@ public class LoadProject extends MonitoredTaskBase
 		{
 			boolean hasComponent = true;
 			
-			Project p = new Project();
-			ApesProcess ap = new ApesProcess(mResource.getString("project"));
-			
 			ZipInputStream zipFile = new ZipInputStream( new FileInputStream(new File(mFile.getAbsolutePath())));
 			
-			if( !loadComponent( zipFile, p, ap ) )
+			if( !loadComponent( zipFile ) )
 			{
 				hasComponent = false;
 			}
 			
-			loadInterfaces(zipFile, ap);
+			loadInterfaces(zipFile, mProject.getProcess());
 			
 			print(mResource.getString("loadRebuild"));
 			
 			if( hasComponent )
 			{	
-				ap.checkInterfaces();
+				mProject.getProcess().checkInterfaces();
 			}
 			
-			p.setProcess(ap);
-			
-			Context.getInstance().setProject(p, mFile.getAbsolutePath());
+			Context.getInstance().setProject(mProject, mFile.getAbsolutePath());
 			print(mResource.getString("loadSuccess"));
 		}
 		catch(Throwable t)
@@ -114,6 +112,7 @@ public class LoadProject extends MonitoredTaskBase
 			print(mResource.getString("loadFailed"));
 			t.printStackTrace();
 		}
+		mProject = null;
 	}
 
 	/**
@@ -126,20 +125,23 @@ public class LoadProject extends MonitoredTaskBase
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	protected boolean loadComponent(ZipInputStream projectZip, Project p, ApesProcess ap) throws IOException, ClassNotFoundException
+	protected boolean loadComponent(ZipInputStream projectZip) throws IOException, ClassNotFoundException
 	{
 		print(mResource.getString("loadSearchComponent"));
 		
 		DataInputStream data = findData("Component.xml");
 			
-			
+		SpemTreeAdapter adapter = (SpemTreeAdapter)Context.getInstance().getTopLevelFrame().getTree().getModel(); 	
+
 		if( data != null )
 		{
 			print(mResource.getString("loadComponent"));
 			ObjIn in = new ObjIn(data);
 			Vector v = (Vector)in.readObject();
-			ap.addModelElement((ProcessComponent)v.get(0));
-			p.setDiagramMap((HashMap)v.get(1));
+			adapter.setRoot((ApesTreeNode)v.get(2));
+			mProject.setProcess((ApesProcess)((ApesTreeNode)adapter.getRoot()).getUserObject());
+			mProject.getProcess().addModelElement((ProcessComponent)v.get(0));
+			mProject.setDiagramMap((HashMap)v.get(1));
 			projectZip.close();
 				
 			print(mResource.getString("loadComponentSuccess"));

@@ -42,6 +42,7 @@ import org.ipsquad.apes.adapters.ProcessRoleCell;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
+import org.ipsquad.apes.adapters.SpemGraphAdapter.Builder;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.core.Element;

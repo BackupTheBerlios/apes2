@@ -32,6 +32,7 @@ import java.util.zip.ZipOutputStream;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Project;
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
+import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.utils.ErrorManager;
@@ -194,6 +195,7 @@ public class SaveProject
 		project.getProcess().getComponent().setParent( null );
 		v.add(project.getProcess().getComponent());
 		v.add(project.getDiagramMap());
+		v.add(((SpemTreeAdapter)Context.getInstance().getTopLevelFrame().getTree().getModel()).getRoot());
 		
 		out.writeObject(v);
 		mZipFile.closeEntry();

@@ -53,7 +53,7 @@ import org.ipsquad.utils.IconManager;
 /**
  * This adapter allows to display a process in a JTree
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, ApesMediator.Listener
 {
@@ -72,13 +72,22 @@ public class SpemTreeAdapter extends UndoableEditSupport implements TreeModel, A
 	 */
 	public void setRoot(ApesProcess root)
 	{
-		mRoot = new ApesTreeNode(root, false);
-		Object[] path = {mRoot};
-		fireTreeStructureChanged(this, path, null, null);
+		if( mRoot == null || mRoot.getUserObject() != root )
+		{	
+			mRoot = new ApesTreeNode(root, false);
+			Object[] path = {mRoot};
+			fireTreeStructureChanged(this, path, null, null);
+		}
 		//mRoot.addModelElement(new ProcessComponent("Component"));
 		//fireTreeNodesInserted(this,path,new int[]{0},new Object[]{mRoot.getComponent()});
 	}
 
+	public void setRoot(ApesTreeNode root)
+	{
+		mRoot = root;
+		fireTreeStructureChanged(this,new Object[]{mRoot},null,null);
+	}
+	
 	/**
 	 * Get the root of the tree model
 	 *

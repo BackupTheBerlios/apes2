@@ -40,7 +40,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Context
 {
@@ -125,7 +125,11 @@ public class Context
 			frames[i].dispose();
 		}
 		
-		((SpemTreeAdapter)mTopLevel.getTree().getModel()).setRoot(project.getProcess());
+		SpemTreeAdapter adapter = (SpemTreeAdapter)mTopLevel.getTree().getModel();
+		if( ((ApesTreeNode)adapter.getRoot()).getUserObject() != project.getProcess() )
+		{
+			adapter.setRoot(project.getProcess());
+		}
 		
 		project.setListeners();
 		project.initApesMediator();
