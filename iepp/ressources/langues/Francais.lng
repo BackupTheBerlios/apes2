@@ -94,8 +94,8 @@ ERR_Composant_Supprimer_partie2=a été supprimé du référentiel. Il sera donc supp
 
 ERR_Ann_CP_separ=Annulation impossible : le séparateur n'a pas ete trouvé
 ERR_Ann_CP_param=Annulation impossible : pas de paramètre
-ERR_Nom_Proc_Incorrect=Un nom de processus ne peut contenir l'un des caractères suivants : \n \/:*?"<>|
-ERR_Nom_Ref_Incorrect=Un nom de référentiel ne peut contenir l'un des caractères suivants : \n \/:*?"<>|
+ERR_Nom_Proc_Incorrect=Un nom de processus ne peut contenir l'un des caractères suivants : \n \/:*?"<>|+
+ERR_Nom_Ref_Incorrect=Un nom de référentiel ne peut contenir l'un des caractères suivants : \n \/:*?"<>|+
 ERR_AucuneDP=Aucune définition de processus n'a été enregistrée dans ce référentiel.
 ERR_DpInexistante=Il n'existe aucune définition de processus de ce nom !
 ERR_Fic_Ref_Corromp=Ce fichier référentiel est corrompu.
@@ -149,7 +149,7 @@ Creer_DP=Créer une nouvelle définition de processus
 Ouvrir_DP=Ouvrir la définition de processus
 
 #Fenetre Propriete
-Propriete_DP=Propriétés de la définition de processus
+Proprietes_DP=Propriétés de la définition de processus
 Proprietes_Generales_DP=Propriétés générales
 Nom_DP=Nom du processus :
 Auteur_DP=Nom de l'auteur :
@@ -187,6 +187,7 @@ M_nomauteur=Le nom de l'auteur du nouveau processus doit être saisi.
 M_emailauteur=L'e-mail de l'auteur n'a pas été saisi.
 M_emailinvalide=L'e-mail de l'auteur est invalide.
 M_creer_proc_titre=Erreur de saisie
+M_repGen=Le chemin de génération doit être saisi
 
 #Fenetre propriete note
 Proprietes_Note=Modifier la note
@@ -315,4 +316,6 @@ ContenuAvant=Avant le diagramme
 ContenuApres=Après le diagramme
 Propriete_DPTitle=Propriétés du processus
 Propriete_DP=Processus
-Propriete_DP_Desc=Description du processus
+Propriete_DP_Desc=Description
+ContenuDP=Fichier de contenu associé
+Generation_DP_Desc=Site Intranet

@@ -93,8 +93,8 @@ ERR_Composant_Supprimer_partie2=has been removed from the repository. It will no
 
 ERR_Ann_CP_separ=Unable to undo the action: separator not found
 ERR_Ann_CP_param=Unable to undo the action: parameter not found
-ERR_Nom_Proc_Incorrect=A process name can't contain one of the following characters : \n \/:*?"<>|
-ERR_Nom_Ref_Incorrect=A repository name can't contain one of the following characters : \n \/:*?"<>|
+ERR_Nom_Proc_Incorrect=A process name can't contain one of the following characters : \n \/:*?"<>|+
+ERR_Nom_Ref_Incorrect=A repository name can't contain one of the following characters : \n \/:*?"<>|+
 ERR_AucuneDP=No process has been recorded in this repository.
 ERR_DpInexistante=The specified process does not exist !
 
@@ -146,7 +146,7 @@ Creer_DP=Create new process
 Ouvrir_DP=Open this process
 
 #Fenetre Propriete
-
+Proprietes_DP=Processus properties
 Proprietes_Generales_DP=General properties
 Nom_DP=Processus name :
 Auteur_DP=Author name :
@@ -186,6 +186,7 @@ M_nomauteur=You have to enter an author name for this process.
 M_emailauteur=You have to enter author E-mail.
 M_emailinvalide=Author E-mail is invalid.
 M_creer_proc_titre=Wrong data entry
+M_repGen=You have to enter a website generation path
 
 
 #Fenetre propriete note
@@ -315,5 +316,7 @@ PlaceContenu=In generated pages, content is placed
 ContenuAvant=Before diagram
 ContenuApres=After diagram
 Propriete_DPTitle=Processus properties
-Propriete_DP=Processus
-Propriete_DP_Desc=Process description
+Propriete_DP=Process
+Propriete_DP_Desc=Description
+ContenuDP=Associated content file
+Generation_DP_Desc=Intranet website

@@ -44,6 +44,7 @@ public class FenetrePreference extends JDialog
 	private JPanel panneau ;
 	
 	private PanneauDP panneauDP;
+	private PanneauDPGeneration panneauDPGeneration;
 	private PanneauDPDescription panneauDPDesc;
 	private PanneauDiagramme panneauDiagramme;
 	private PanneauReferentiel panneauReferentiel;
@@ -64,7 +65,7 @@ public class FenetrePreference extends JDialog
 	
 	public FenetrePreference (FenetrePrincipale parent, int type)
 	{
-		super(parent, Application.getApplication().getTraduction("Preferences"), true);
+		super(parent, true);
 		this.setSize(600, 450);
 		
 		this.type_courant = type;
@@ -137,17 +138,23 @@ public class FenetrePreference extends JDialog
 		
 		this.panneauDPDesc = new PanneauDPDescription(Application.getApplication().getTraduction(PanneauDPDescription.DP_DESCRIPTION_PANEL_KEY)); 
 		this.panneauDPDesc.setVisible(false);
+		
+		this.panneauDPGeneration = new PanneauDPGeneration(Application.getApplication().getTraduction(PanneauDPGeneration.DP_GENERATION_PANEL_KEY)); 
+		this.panneauDPGeneration.setVisible(false);
+		
 	   
 		switch (this.type_courant)
 		{
 		    case FenetrePreference.TYPE_PREFERENCES:
 		        this.panneauDescription.setVisible(true);
 		        this.setInnerPanel(PreferenceTreeItem.DESC_PANEL, PanneauDescription.GENERAL_KEY);
+		        this.setTitle(Application.getApplication().getTraduction("Preferences"));
 						break;
 			case FenetrePreference.TYPE_DP:
 			    this.panneauDescription.setVisible(true);
 			    this.setInnerPanel(PreferenceTreeItem.DESC_PANEL, PanneauDescription.DP_KEY);
-						break;
+			    this.setTitle(Application.getApplication().getTraduction("Proprietes_DP"));
+			    break;
 			case FenetrePreference.TYPE_GENERATION:
 					
 						break;
@@ -156,7 +163,9 @@ public class FenetrePreference extends JDialog
 	
 	public void setInnerPanel(int panel,String key)
 	{
-	    if(panel == PreferenceTreeItem.DP_DESCRIPTION_PANEL)
+		if(panel == PreferenceTreeItem.DP_GENERATION_PANEL)
+			panneau.add(this.panneauDPGeneration.openPanel(key),BorderLayout.CENTER);
+	    else if(panel == PreferenceTreeItem.DP_DESCRIPTION_PANEL)
 			panneau.add(this.panneauDPDesc.openPanel(key),BorderLayout.CENTER);
 	    else if(panel == PreferenceTreeItem.DP_PANEL)
 			panneau.add(this.panneauDP.openPanel(key),BorderLayout.CENTER);
@@ -170,6 +179,11 @@ public class FenetrePreference extends JDialog
 			panneau.add(this.panneauDescription.openPanel(key),BorderLayout.CENTER);
 		else if(panel == PreferenceTreeItem.LANGUAGE_PANEL)   
 			panneau.add(this.panneauLangue.openPanel(key),BorderLayout.CENTER);
+	}
+	
+	public PanneauDPGeneration getDPGenPanel()
+	{
+	    return this.panneauDPGeneration;
 	}
 	
 	public PanneauDPDescription getDPDescPanel()
@@ -224,7 +238,9 @@ public class FenetrePreference extends JDialog
 							 	}
 								break;
 			case FenetrePreference.TYPE_DP:
-			    				
+			    				this.panneauDP.save();
+								this.panneauDPDesc.save();
+								this.panneauDPGeneration.save();
 								break;
 			case FenetrePreference.TYPE_GENERATION:
 			    				this.panneauDP.save();

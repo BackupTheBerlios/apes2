@@ -96,7 +96,7 @@ public class GElementModele extends GElement
 	public void ajouterLienRacine(FileWriter fd) throws IOException
 	{
 		fd.write("<br>");
-		fd.write("<a href=\"../../" + this.getCheminRacine() + "\" target=\"_new\" >" + " Page d'accueil du composant" + "</a>");
+		fd.write("<a href=\"../../" + this.getCheminRacine() + "\" >" + " Page d'accueil du composant" + "</a>");
 		fd.write("<br>");
 	}
 	

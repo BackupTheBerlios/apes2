@@ -10,6 +10,7 @@ public class PreferenceTreeItem
 	public static final int LANGUAGE_PANEL = 5;
 	public static final int DP_PANEL = 6;
 	public static final int DP_DESCRIPTION_PANEL = 7;
+	public static final int DP_GENERATION_PANEL = 8;
 	
 	private String mKey;
 	private String mValue;

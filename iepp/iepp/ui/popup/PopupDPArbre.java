@@ -22,7 +22,6 @@ package iepp.ui.popup;
 import iepp.Application;
 import iepp.application.CAjouterComposantVide;
 import iepp.domaine.IdObjetModele;
-import iepp.ui.FenetreProprieteDP;
 import iepp.ui.preferences.FenetrePreference;
 
 import java.awt.event.ActionEvent;
@@ -83,7 +82,6 @@ public class PopupDPArbre extends JPopupMenu implements ActionListener
 		 }
 	     else
 	     {
-			//(new FenetreProprieteDP(this.idDefProc)).show(); 
 			new FenetrePreference(Application.getApplication().getFenetrePrincipale(), FenetrePreference.TYPE_DP);
 	     }
 	 }

@@ -63,6 +63,11 @@ public class DefinitionProcessus extends ObjetModele
 	 */
 	private String emailAuteur ="webmaster@web.fr";
 	
+	/**
+	 * Fichier de contenu pour décrire la def proc
+	 */
+	private String ficContenu = "";
+	
 	
 
 	public DefinitionProcessus ()
@@ -106,9 +111,26 @@ public class DefinitionProcessus extends ObjetModele
 	
 	public void setNomDefProc(String nom)
 	{
-		this.nomDefinition = nom ;
-		// indiquer à tous les observeurs que la définition a change
-		this.maj("CHANGED");
+		if (! this.nomDefinition.equals(nom))
+		{
+			this.nomDefinition = nom ;
+			// indiquer à tous les observeurs que la définition a change
+			this.maj("CHANGED");
+		}
+	}
+	
+	public void setFicContenu(String fichier)
+	{
+		if (! this.ficContenu.equals(fichier))
+		{
+			this.ficContenu = fichier;
+			this.maj("CHANGED");
+		}
+	}
+	
+	public String getFichierContenu()
+	{
+		return this.ficContenu;
 	}
 
 	public String getAuteur()
@@ -121,16 +143,22 @@ public class DefinitionProcessus extends ObjetModele
 		return this.commentaires;
 	}
 
-	public void setAuteur(String string)
+	public void setAuteur(String auteur)
 	{
-		this.auteur = string;
-		this.maj("CHANGED");
+		if (! this.auteur.equals(auteur))
+		{
+			this.auteur = auteur;
+			this.maj("CHANGED");
+		}
 	}
 
 	public void setCommentaires(String string)
 	{
-		this.commentaires = string;
-		this.maj("CHANGED");
+		if (! this.commentaires.equals(string))
+		{
+			this.commentaires = string;
+			this.maj("CHANGED");
+		}
 	}
 
 	public IdObjetModele getIdDefProc()
@@ -158,8 +186,11 @@ public class DefinitionProcessus extends ObjetModele
 
 	public void setRepertoireGeneration(String string)
 	{
-		this.repertoireGeneration = string;
-		this.maj("CHANGED");
+		if (! this.repertoireGeneration.equals(string))
+		{
+			this.repertoireGeneration = string;
+			this.maj("CHANGED");
+		}
 	}
 	
 	public String toString()
@@ -208,8 +239,11 @@ public class DefinitionProcessus extends ObjetModele
 	 */
 	public void setNomElement(String chaine, int i, int j)
 	{
-		this.nomDefinition = chaine ;
-		this.maj("CHANGED");
+		if (! this.nomDefinition.equals(chaine))
+		{
+			this.nomDefinition = chaine ;
+			this.maj("CHANGED");
+		}
 	}
 	/**
 	 * @return
@@ -221,9 +255,13 @@ public class DefinitionProcessus extends ObjetModele
 	/**
 	 * @param string
 	 */
-	public void setEmailAuteur(String string) {
-		emailAuteur = string;
-		this.maj("CHANGED");
+	public void setEmailAuteur(String string) 
+	{
+		if (! this.emailAuteur.equals(string))
+		{
+			this.emailAuteur = string;
+			this.maj("CHANGED");
+		}
 	}
 
 }

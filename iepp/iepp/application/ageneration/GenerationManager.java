@@ -43,7 +43,6 @@ public class GenerationManager
 	private static String cheminGeneration ;
 	private static String feuilleCss ;
 	private static String dateGeneration ;
-	private static boolean brancheObjet ;
 	private static Vector listeAGenerer;
 	private static Color couleur_surlign;
 	private static Vector listeProduitsExterieurs;
@@ -81,7 +80,6 @@ public class GenerationManager
 		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
 		GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
 		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
-		GenerationManager.brancheObjet = false;
 	}
 
 
@@ -108,6 +106,30 @@ public class GenerationManager
 		Date current_date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		GenerationManager.dateGeneration =  "[" + formatter.format(current_date) + "] ";
+		
+		this.setFeuilleCss(Application.getApplication().getConfigPropriete("feuille_style"));
+		GenerationManager.couleur_surlign = new Color(Integer.parseInt(Application.getApplication().getConfigPropriete("couleur_arbre")));
+		GenerationManager.place_contenu = Application.getApplication().getConfigPropriete("place_contenu");
+		
+		if (Application.getApplication().getProjet() != null)
+		{
+			if (Application.getApplication().getProjet().getDefProc() != null)
+			{
+				GenerationManager.cheminGeneration = Application.getApplication().getProjet().getDefProc().getRepertoireGeneration();
+			}
+			else
+			{
+				GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
+			}
+		}
+		else
+		{
+			GenerationManager.cheminGeneration = Application.getApplication().getConfigPropriete("repertoire_generation");
+		}
+		if (GenerationManager.cheminGeneration.equals(""))
+		{
+			GenerationManager.cheminGeneration = "./";
+		}
 	}
 	
 	/**

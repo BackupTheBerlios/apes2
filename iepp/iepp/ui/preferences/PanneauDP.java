@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -156,9 +157,53 @@ public class PanneauDP extends PanneauOption
 	
 	public void save ()
 	{
-	    this.defProc.setNomDefProc(this.sNomDP.getText());
-	    this.defProc.setAuteur(this.sAuteurDP.getText());
-	    this.defProc.setEmailAuteur(this.sEmailDP.getText());
+		if (this.verifierDonnees())
+		{
+		    this.defProc.setNomDefProc(this.sNomDP.getText());
+		    this.defProc.setAuteur(this.sAuteurDP.getText());
+		    this.defProc.setEmailAuteur(this.sEmailDP.getText());
+		}
+	}
+	
+	/**
+	 * Vérifie les informations saisies : les champs nom, auteur et mail ne doivent pas être vides,
+	 * le nom du processus ne doit pas contenir les caractères /\":*<>|?
+	 * @return
+	 */
+	public boolean verifierDonnees(){
+		boolean atTrouve = false;
+		boolean pointTrouve = false;
+		if(! this.sNomDP.getText().equals(""))
+		{
+			for(int j = 0; j < this.sNomDP.getText().length(); j++)
+			{
+				char c = this.sNomDP.getText().charAt(j);
+				if(c=='/'||c=='\\'||c=='"'||c==':'||c=='*'||c=='<'||c=='>'||c=='|'||c=='?'||c=='+')
+				{
+					JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("ERR_Nom_Proc_Incorrect"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE); 
+					return false;
+				}
+			}
+		}
+		if(this.sAuteurDP.getText().equals("")){
+			JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_nomauteur"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		if(this.sEmailDP.getText().equals("")){
+			JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_emailauteur"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		for(int i = 0; i < this.sEmailDP.getText().length(); i++){
+			if(this.sEmailDP.getText().charAt(i)== '@')
+				atTrouve = true;
+			if(this.sEmailDP.getText().charAt(i)=='.')
+				pointTrouve = true;
+		}
+		if(atTrouve == false || pointTrouve == false){
+			JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_emailinvalide"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 	
 	private class ManagerButton implements ActionListener

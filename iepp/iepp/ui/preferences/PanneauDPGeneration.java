@@ -17,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -24,17 +25,16 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 
-public class PanneauDPDescription extends PanneauOption
+public class PanneauDPGeneration extends PanneauOption
 {
-	private JTextArea sCommentaireDP;
-	private JTextField sContenuDesc;
+	private JTextField sRepGen;
 	
 	private DefinitionProcessus defProc;
 	private JButton browseButton;
 	
-	public static final String DP_DESCRIPTION_PANEL_KEY = "Propriete_DP_Desc";
+	public static final String DP_GENERATION_PANEL_KEY = "Generation_DP_Desc";
 	
-	public PanneauDPDescription(String name)
+	public PanneauDPGeneration(String name)
 	{
 	    Projet p = Application.getApplication().getProjet();
 	    if (p != null)
@@ -71,44 +71,21 @@ public class PanneauDPDescription extends PanneauOption
 		c.weightx = 0 ;
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = GridBagConstraints.REMAINDER;
-		JLabel label = new JLabel(Application.getApplication().getTraduction("ContenuDP"));
+		JLabel label = new JLabel(Application.getApplication().getTraduction("Dossier_Generation"));
 		gridbag.setConstraints(label, c);
 		mPanel.add(label);
 		c.weightx = 3 ;
 		c.gridwidth = GridBagConstraints.RELATIVE;
-		sContenuDesc = new JTextField(25);
-		mPanel.add(sContenuDesc);
-		gridbag.setConstraints(sContenuDesc, c);
+		sRepGen = new JTextField(25);
+		mPanel.add(sRepGen);
+		gridbag.setConstraints(sRepGen, c);
 		c.weightx = 0 ;
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
 		this.browseButton = new JButton(Application.getApplication().getTraduction("Parcourir"));
 		browseButton.addActionListener(man);
 		gridbag.setConstraints(browseButton, c);
 		mPanel.add(browseButton);		
-		
-//		 linefeed
-		c.weighty = 0;      		
-		c.gridwidth = GridBagConstraints.REMAINDER; //end row
-		makeLabel(" ", gridbag, c);
 
-//		 fichier contenu
-		c.weighty = 0;
-		c.weightx = 0 ;
-		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		JLabel label2 = new JLabel(Application.getApplication().getTraduction("Commentaire_DP"));
-		gridbag.setConstraints(label2, c);
-		mPanel.add(label2);
-
-		c.weightx = 4 ;
-		c.weighty = 6;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		sCommentaireDP = new JTextArea(100,100);
-		JScrollPane sp = new JScrollPane(sCommentaireDP);
-		mPanel.add(sp);
-		gridbag.setConstraints(sp, c);
-		
-		
 		c.fill = GridBagConstraints.VERTICAL;
 		c.weighty = 2.0;   		
 		c.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -119,8 +96,7 @@ public class PanneauDPDescription extends PanneauOption
 		// initialiser les champs
 		if (this.defProc != null)
 		{
-		    sCommentaireDP.setText(this.defProc.getCommentaires());
-		    sContenuDesc.setText(this.defProc.getFichierContenu());
+		    sRepGen.setText(this.defProc.getRepertoireGeneration());
 		}
 	}
 	
@@ -134,8 +110,25 @@ public class PanneauDPDescription extends PanneauOption
 	
 	public void save ()
 	{
-	    this.defProc.setCommentaires(this.sCommentaireDP.getText());
-	    this.defProc.setFicContenu(this.sContenuDesc.getText());
+		if (this.verifierDonnees())
+		{
+			this.defProc.setRepertoireGeneration(this.sRepGen.getText());
+		}
+	}
+	
+	/**
+	 * Vérifie les informations saisies 
+	 * @return
+	 */
+	public boolean verifierDonnees()
+	{
+		if(this.sRepGen.getText().equals("")){
+			JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_repGen"),
+										Application.getApplication().getTraduction("M_creer_proc_titre"),
+										JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 	
 	private class ManagerButton implements ActionListener
@@ -145,19 +138,14 @@ public class PanneauDPDescription extends PanneauOption
 			//récupérer l'objet source de l'évènement reçu
 			Object source = e.getSource();
 			// selon cet objet, réagir en conséquence
-			if (source == PanneauDPDescription.this.browseButton)
+			if (source == PanneauDPGeneration.this.browseButton)
 			{
-				JFileChooser fileChooser;
-				if (PanneauDPDescription.this.sContenuDesc.getText() != "")
-					fileChooser = new JFileChooser(PanneauDPDescription.this.sContenuDesc.getText());
-				else
-					fileChooser = new JFileChooser(Application.getApplication().getConfigPropriete("rep_composant"));
-				
-				fileChooser.setAcceptAllFileFilterUsed(false);
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				int res = fileChooser.showDialog(PanneauDPDescription.this, Application.getApplication().getTraduction("OK"));
+				JFileChooser fileChooser = new JFileChooser(PanneauDPGeneration.this.sRepGen.getText());
+				fileChooser.setDialogTitle(Application.getApplication().getTraduction("titre_choix_rep"));
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int res = fileChooser.showDialog(PanneauDPGeneration.this, Application.getApplication().getTraduction("OK"));
 				if(res == JFileChooser.APPROVE_OPTION)
-					PanneauDPDescription.this.sContenuDesc.setText(fileChooser.getSelectedFile().getAbsolutePath());
+					PanneauDPGeneration.this.sRepGen.setText(fileChooser.getSelectedFile().getAbsolutePath());
 			}
 		}
 	}

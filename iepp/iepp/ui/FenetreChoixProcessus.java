@@ -133,7 +133,7 @@ public class FenetreChoixProcessus extends JDialog
 		creer.setText(Application.getApplication().getTraduction("Creer_proc"));
 		
 		// créer selectionné par défaut
-		creer.setSelected(true);
+		charger.setSelected(true);
 	
 		group.add(charger);
 		group.add(creer);	

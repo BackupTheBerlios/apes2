@@ -18,8 +18,11 @@
  */
 
 package iepp.application.ageneration;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Vector;
 
 import iepp.Application;
 import iepp.domaine.*;
@@ -62,8 +65,9 @@ public class CodeHTML
 	 * La page contient un titre encadré, le diagramme d'assemblage et des commentaires
 	 * @param nomProcessus nom du processus servant de titre à la page
 	 * @return code html de la page
+	 * @throws IOException
 	 */
-	public static String getPagePrincipale(String nomProcessus)
+	public static String getPagePrincipale(String nomProcessus) throws IOException
 	{
 
 		String retour = 
@@ -76,11 +80,44 @@ public class CodeHTML
 		+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
 		+ "<p align=\"center\">\n"
 		+ "<b><div align=\"center\" class=\"titreProcessus\">" + nomProcessus + "</div></b>\n"
-		+ "</p></td></tr></table></center><BR><BR> \n"
-		+ "<div align=\"center\" class=\"imgdiagramme\">"
-		+ construireImageMap()		+ "<IMG src=\"main.png\" usemap=\"#diag_principal\" border=\"0\">" 
-		+ "<p><i>" + Application.getApplication().getTraduction("WEB_DIAG_ASM") + "</i></p></div>\n";
+		+ "</p></td></tr></table></center><BR><BR> \n" ;
+		
+		if (!GenerationManager.getInstance().estContenuAvant())
+		{
+		    retour +=
+		    	"<div align=\"center\" class=\"imgdiagramme\">"
+				+ construireImageMap()
+				+ "<IMG src=\"main.png\" usemap=\"#diag_principal\" >" 
+				+ "<p><i>" + Application.getApplication().getTraduction("WEB_DIAG_ASM") + "</i></p></div>\n";
+		}
+		
+		File f = new File(Application.getApplication().getProjet().getDefProc().getFichierContenu());
+		if (f.exists())
+		{
+			FileReader fr = new FileReader(f);
+			BufferedReader  br = new BufferedReader(fr);
+			
+			String ligne ;
+			char[] retourChariot = new char[]{Character.LINE_SEPARATOR};
+			while ((ligne = br.readLine()) != null)
+			{
+				retour += ligne + new String(retourChariot);
+			}
+		}
+		else
+		{
+			System.out.println("Pas de fichier contenu ou le fichier n'existe pas : " + f.getName());
+		}
 
+		if (GenerationManager.getInstance().estContenuAvant())
+		{
+		    retour +=
+		    	"<div align=\"center\" class=\"imgdiagramme\">"
+				+ construireImageMap()
+				+ "<IMG src=\"main.png\" usemap=\"#diag_principal\" >" 
+				+ "<p><i>" + Application.getApplication().getTraduction("WEB_DIAG_ASM") + "</i></p></div>\n";
+		}
+		
 		retour += "<hr><div class=\"commentaires\" align=\"justify\">"
 		+ Application.getApplication().getProjet().getDefProc().getCommentaires() + "</div>"
 		+ "<div align=\"center\" class=\"boutonemail\"><a href=\"mailto:" + Application.getApplication().getProjet().getDefProc().getEmailAuteur() + "?subject=" +  nomProcessus + "\">"
