@@ -47,7 +47,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.EventObject;
 import java.util.Map;
 
 import javax.swing.Icon;
@@ -76,7 +75,7 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Application tree view
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApesTree extends JTree implements DragGestureListener, DragSourceListener, DropTargetListener, TreeModelListener
 {
@@ -295,15 +294,6 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 	{
 		private ApesTreeNode mCurrentNode = null;
 		
-		private Color mInitForeground = null;
-		private Color mCurrentForeground = null;
-		
-		private Color mInitBackground = null;
-		private Color mCurrentBackground = null;
-		
-		private Font mInitFont = new Font("Default",Font.PLAIN,13);
-		private Font mCurrentFont = null;
-		
 		private ChangeColorAction mActionForeground = (ChangeColorAction)Context.getInstance().getAction("ChangeForeground");
 		private ChangeColorAction mActionBackground = (ChangeColorAction)Context.getInstance().getAction("ChangeBackground");
 		private ChangeItalicAction mActionItalic = (ChangeItalicAction)Context.getInstance().getAction("ChangeItalic");
@@ -328,12 +318,19 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 			
 			if( editingComponent instanceof JTextField && value instanceof ApesTreeNode )
 			{
-				Color fc = mCurrentForeground == null ? mInitForeground : mCurrentForeground;
-				Color bc = mCurrentBackground == null ? mInitBackground : mCurrentBackground;
-				Font font = mCurrentFont == null ? mInitFont : mCurrentFont;
+				mCurrentNode = (ApesTreeNode)value;
+				
+				Color fc = GraphConstants.getForeground(mCurrentNode.getAttributes());
+				Color bc = GraphConstants.getBackground(mCurrentNode.getAttributes());
+				font = GraphConstants.getFont(mCurrentNode.getAttributes());
 				
 				mActionForeground.setColor(fc);
 				mActionBackground.setColor(bc);
+				
+				mActionForeground.setEnabled(true);
+				mActionBackground.setEnabled(true);
+				mActionItalic.setEnabled(true);
+				mActionBold.setEnabled(true);
 				
 				((JTextField)editingComponent).setForeground(fc);
 				((JTextField)editingComponent).setSelectedTextColor(fc);
@@ -347,29 +344,24 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 
 		public void colorChanged(Color c)
 		{
-			TreePath path = getEditingPath();
-			if(path != null)
+			if(editingComponent != null)
 			{
 				if( c == mActionForeground.getColor() )
 				{
-					mCurrentForeground = c;	
+					editingComponent.setForeground(c);	
 				}
 				else
 				{
-					mCurrentBackground = c;
+					editingComponent.setBackground(c);
 				}
-				
-				ApesTreeNode node = (ApesTreeNode)path.getLastPathComponent();
-				getCellEditor().getTreeCellEditorComponent(ApesTree.this,node,true,true,getModel().isLeaf(node),getModel().getIndexOfChild(node.getParent(),node));
 			}
 		}
 		
 		public void italicChanged(boolean newValue) 
 		{
-			TreePath path = getEditingPath();
-			if(path != null && mCurrentFont != null)
+			if(editingComponent != null)
 			{
-				int style = mCurrentFont.getStyle();
+				int style = font.getStyle();
 				
 				if( newValue )
 				{
@@ -379,20 +371,16 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 				{
 					style -= Font.ITALIC;
 				}
-				
-				mCurrentFont = new Font(mCurrentFont.getName(),style,mCurrentFont.getSize());
-				
-				ApesTreeNode node = (ApesTreeNode)path.getLastPathComponent();
-				getCellEditor().getTreeCellEditorComponent(ApesTree.this,node,true,true,getModel().isLeaf(node),getModel().getIndexOfChild(node.getParent(),node));
+				font = new Font(editingComponent.getFont().getName(),style,editingComponent.getFont().getSize());
+				editingComponent.setFont(font);
 			}
 		}
 		
 		public void boldChanged(boolean newValue) 
 		{
-			TreePath path = getEditingPath();
-			if(path != null && mCurrentFont != null)
+			if(editingComponent != null)
 			{
-				int style = mCurrentFont.getStyle();
+				int style = font.getStyle();
 				
 				if( newValue )
 				{
@@ -401,49 +389,14 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 				else
 				{
 					style -= Font.BOLD;
-				}
-				
-				mCurrentFont = new Font(mCurrentFont.getName(), style, mCurrentFont.getSize());
-				
-				ApesTreeNode node = (ApesTreeNode)path.getLastPathComponent();
-				getCellEditor().getTreeCellEditorComponent(ApesTree.this,node,true,true,getModel().isLeaf(node),getModel().getIndexOfChild(node.getParent(),node));
+				}	
+				font = new Font(editingComponent.getFont().getName(),style,editingComponent.getFont().getSize());
+				editingComponent.setFont(font);
 			}
-		}
-		
-		protected boolean canEditImmediately(EventObject event)
-		{
-			boolean canEdit = super.canEditImmediately(event);
-			
-			if( canEdit )
-			{
-				mActionForeground.setEnabled(true);
-				mActionBackground.setEnabled(true);
-				mActionItalic.setEnabled(true);
-				mActionBold.setEnabled(true);
-				
-				ApesTreeNode node = (ApesTreeNode)tree.getSelectionPath().getLastPathComponent();
-				
-				if( node != null )
-				{
-					mCurrentNode = node;
-					mInitForeground = GraphConstants.getForeground(node.getAttributes());
-					mInitBackground = GraphConstants.getBackground(node.getAttributes());
-					mCurrentFont = GraphConstants.getFont(node.getAttributes());
-					
-					mActionItalic.setItalic(mCurrentFont.isItalic());
-					mActionBold.setBold(mCurrentFont.isBold());
-				}
-			}
-			return canEdit;
 		}
 
 		public void editingCanceled(ChangeEvent e)
 		{
-			mCurrentNode = null;
-			mCurrentForeground = null;
-			mCurrentBackground = null;
-			mCurrentFont = mInitFont;
-			
 			mActionForeground.setEnabled(false);
 			mActionBackground.setEnabled(false);
 			mActionItalic.setEnabled(false);
@@ -457,21 +410,20 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 				ApesTreeNode node = (ApesTreeNode)mCurrentNode;
 				Map map = GraphConstants.cloneMap(node.getAttributes());
 				boolean hasChanged = false;
-			
-				if( mCurrentForeground != null && mInitForeground != mCurrentForeground )
+				
+				if(GraphConstants.getForeground(mCurrentNode.getAttributes()) != editingComponent.getForeground())
 				{
-					GraphConstants.setForeground(map,mCurrentForeground);
+					GraphConstants.setForeground(map,editingComponent.getForeground());
 					hasChanged = true;
 				}
-				if( mCurrentBackground != null &&  mInitBackground != mCurrentBackground )
+				if(GraphConstants.getBackground(mCurrentNode.getAttributes()) != editingComponent.getBackground())
 				{
-					GraphConstants.setBackground(map,mCurrentBackground);
+					GraphConstants.setBackground(map,editingComponent.getBackground());
 					hasChanged = true;
 				}
-				if(  mCurrentFont != null 
-						&& mInitFont.getStyle() != mCurrentFont.getStyle() )
+				if(  GraphConstants.getFont(mCurrentNode.getAttributes()) != editingComponent.getFont()) 
 				{
-					GraphConstants.setFont(map,mCurrentFont);
+					GraphConstants.setFont(map,editingComponent.getFont());
 					hasChanged = true;
 				}
 			
@@ -480,10 +432,6 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 					getModel().valueForPathChanged(new TreePath(node.getPath()), map);
 				}
 			
-				mCurrentForeground = null;
-				mCurrentBackground = null;
-				mCurrentFont = mInitFont;
-				
 				mActionForeground.setEnabled(false);
 				mActionBackground.setEnabled(false);
 				mActionItalic.setEnabled(false);
@@ -491,8 +439,7 @@ public class ApesTree extends JTree implements DragGestureListener, DragSourceLi
 			}
 		}
 	}
-
-
+	
 	private class ApesTransferable implements Transferable
 	{
 		Object mPayLoad;

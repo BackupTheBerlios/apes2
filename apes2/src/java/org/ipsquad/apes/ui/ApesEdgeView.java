@@ -43,7 +43,7 @@ import org.jgraph.graph.PortView;
  */
 public class ApesEdgeView extends EdgeView
 {
-	static boolean mIsMove = false;
+	static boolean mIsMove = true;
 	
 	public ApesEdgeView(Object cell, JGraph graph, CellMapper mapper) 
 	{	
