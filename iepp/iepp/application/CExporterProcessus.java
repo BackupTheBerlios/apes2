@@ -22,6 +22,7 @@ package iepp.application;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JFileChooser;
@@ -33,7 +34,10 @@ import util.ErrorManager;
 import util.SimpleFileFilter;
 import util.SmartChooser;
 import iepp.Application;
+import iepp.domaine.ComposantProcessus;
 import iepp.domaine.IdObjetModele;
+import iepp.domaine.LienProduits;
+import iepp.domaine.PaquetagePresentation;
 
 /**
  * 
@@ -199,105 +203,151 @@ public class CExporterProcessus extends CommandeNonAnnulable
 				 }
 			 }
 			data.write("\t\t</listeActivites>\n");		
-			
-			
-			// liste des produits de la définition
-			 data.write("\t\t<listeProduits>\n");
-			 for (int i = 0; i < listeComposant.size(); i++)
-			 {
-				 Vector produits = ((IdObjetModele)listeComposant.elementAt(i)).getProduit();
-				 for (int j = 0; j < produits.size(); j++)
-				 {
-					IdObjetModele io = (IdObjetModele)produits.elementAt(j);
-					data.write("\t\t\t<produit>\n");
-					 
-					// id et le nom
-					data.write("\t\t\t\t<id>");
-					data.write((new Integer(io.getID() + ( i * 10000))).toString());
-					data.write("</id>\n");
-					data.write("\t\t\t\t<nom>");
-					data.write(io.toString());
-					data.write("</nom>\n");
-					data.write("\t\t\t\t<responsabilite>"); 
-					data.write(new Integer(io.getIDRole() + ( i * 10000)).toString());
-					data.write("</responsabilite>\n");
 
-					//activités dont le produit est en entrée
-					data.write("\t\t\t\t<listeProdEntree>\n");
-					Vector listeId = io.getIDActiviteEntree();
-					for (int k = 0; k < listeId.size(); k++)
-					{
-						data.write("\t\t\t\t\t<prodEntree>");
-						data.write(new Integer( ((Integer)listeId.elementAt(k)).intValue() + ( i * 10000)).toString());
-						data.write("</prodEntree>\n");
-					}
-					data.write("\t\t\t\t</listeProdEntree>\n");
-					
-					//activités dont le produit est en sortie
-					data.write("\t\t\t\t<listeProdSortie>\n");
-					listeId = io.getIDActiviteSortie();
-					for (int k = 0; k < listeId.size(); k++)
-					{
-						data.write("\t\t\t\t\t<prodSortie>");
-						data.write(new Integer( ((Integer)listeId.elementAt(k)).intValue() + ( i * 10000)).toString());
-						data.write("</prodSortie>\n");
-					}
-					data.write("\t\t\t\t</listeProdSortie>\n");
-					data.write("\t\t\t\t<listeEtats>\n");
-					Vector listeEtat = io.getEtats();
-					for (int k = 0; k < listeEtat.size(); k++)
-					{
-						data.write("\t\t\t\t\t<etat>");
-						data.write(listeEtat.elementAt(k).toString());
-						data.write("</etat>\n");
-					}
-					data.write("\t\t\t\t</listeEtats>\n");
-					data.write("\t\t\t\t<cheminPage>");
-					data.write(io.getChemin());
-					data.write("</cheminPage>\n");
-					data.write("\t\t\t</produit>\n");
-				 }
-			 }
-			data.write("\t\t</listeProduits>\n");
 			
-			// liste des définition de travail
-			data.write("\t\t<listeDefTravail>\n");
+			// Traitement des produits de la definition
+			
+			
+			// Recherche des produits lies de la definition: ces produits en entree ne doivent pas etre exportes
+			// car si les produits sont lies, il ne faut qu'un seul export
+			// celui des produits en sortie
+			
+			// Liste des produits en entree lies avec d'autres
+			Vector listeProduitsChanges = new Vector();
+
+			IdObjetModele idComposant ;
 			for (int i = 0; i < listeComposant.size(); i++)
 			{
-				Vector definition = ((IdObjetModele)listeComposant.elementAt(i)).getDefinitionTravail();
-				for (int j = 0; j < definition.size(); j++)
+				if (listeComposant.elementAt(i) instanceof IdObjetModele)
 				{
-					IdObjetModele io = (IdObjetModele)definition.elementAt(j);
-					data.write("\t\t\t<definitionTravail>\n");
-					data.write("\t\t\t\t<nom>");
-					data.write(io.toString());
-					data.write("</nom>\n");
-					data.write("\t\t\t\t<listeActivites>\n");
-					for (int k = 0; k < io.getIDActivite().size(); k++)
+					// On recupere l'ID du ième composant de la definition de Processus
+					idComposant = (IdObjetModele)listeComposant.elementAt(i);
+					Vector listeProduits = idComposant.getProduitEntree();
+					Vector listeLiens = ((ComposantProcessus)idComposant.getRef()).getLien();
+					
+					// Parcours des produits
+					for(int j = 0; j < listeProduits.size(); j++)
 					{
-						Integer activite = (new Integer( ((Integer)io.getIDActivite().elementAt(k)).intValue() + ( i * 10000)));
-						data.write("\t\t\t\t\t<idAct>");
-						data.write(activite.toString());
-						data.write("</idAct>\n");
+					 	IdObjetModele idProduit = (IdObjetModele)listeProduits.elementAt(j);
+					 	// Si le composant n'a pas de lien, les produits ne peuvent etre lies
+					 	if (! (listeLiens.size() == 0))
+					 	{
+						 	for (int k = 0; k < listeLiens.size(); k++)
+						 	{
+						 		LienProduits lien = (LienProduits)listeLiens.elementAt(k);
+						 		if (lien.contient(idProduit))
+						 		{
+						 		    // Si le produit est lie, on le note
+						 		    IdObjetModele produitCible;
+						 		    listeProduitsChanges.add(idProduit.getRef().toString() +"::"+ idProduit.toString());
+						 		}
+						 	}
+					 	}
 					}
-					data.write("\t\t\t\t</listeActivites>\n");
-					data.write("\t\t\t</definitionTravail>\n");
 				}
 			}
-			data.write("\t\t</listeDefTravail>\n");
 			
+			// Ecriture des produits
 			
-			data.write("</exportExecution>\n");
-			data.close();
-		}
-		catch(Throwable t)
-		{
-			t.printStackTrace();
-			ErrorManager.getInstance().display(t);
-			return false;
-		}
+			data.write("\t\t<listeProduits>\n");
+            for (int i = 0; i < listeComposant.size(); i++)
+            {
+                Vector produits = ((IdObjetModele) listeComposant.elementAt(i)).getProduit();
+                for (int j = 0; j < produits.size(); j++)
+                {
+                    IdObjetModele io = (IdObjetModele) produits.elementAt(j);
+                    // On ecrit le produit que s'il ne s'agit pas d'un produit en entree lie vers un autre
+                    if (!listeProduitsChanges.contains(io.getRef().toString() + "::" + io.toString()))
+                    {
+                        data.write("\t\t\t<produit>\n");
 
-		return true;
-	}
-	
+                        // id et le nom
+                        data.write("\t\t\t\t<id>");
+                        data.write((new Integer(io.getID() + (i * 10000))).toString());
+                        data.write("</id>\n");
+                        data.write("\t\t\t\t<nom>");
+                        data.write(io.toString());
+                        data.write("</nom>\n");
+                        data.write("\t\t\t\t<responsabilite>");
+                        data.write(new Integer(io.getIDRole() + (i * 10000)).toString());
+                        data.write("</responsabilite>\n");
+
+                        //activités dont le produit est en entrée
+                        data.write("\t\t\t\t<listeProdEntree>\n");
+                        Vector listeId = io.getIDActiviteEntree();
+                        for (int k = 0; k < listeId.size(); k++)
+                        {
+                            data.write("\t\t\t\t\t<prodEntree>");
+                            data.write(new Integer(((Integer) listeId.elementAt(k)).intValue() + (i * 10000)).toString());
+                            data.write("</prodEntree>\n");
+                        }
+                        data.write("\t\t\t\t</listeProdEntree>\n");
+
+                        //activités dont le produit est en sortie
+                        data.write("\t\t\t\t<listeProdSortie>\n");
+                        listeId = io.getIDActiviteSortie();
+                        for (int k = 0; k < listeId.size(); k++)
+                        {
+                            data.write("\t\t\t\t\t<prodSortie>");
+                            data.write(new Integer(((Integer) listeId.elementAt(k)).intValue() + (i * 10000)).toString());
+                            data.write("</prodSortie>\n");
+                        }
+                        data.write("\t\t\t\t</listeProdSortie>\n");
+                        data.write("\t\t\t\t<listeEtats>\n");
+                        Vector listeEtat = io.getEtats();
+                        for (int k = 0; k < listeEtat.size(); k++)
+                        {
+                            data.write("\t\t\t\t\t<etat>");
+                            data.write(listeEtat.elementAt(k).toString());
+                            data.write("</etat>\n");
+                        }
+                        data.write("\t\t\t\t</listeEtats>\n");
+                        data.write("\t\t\t\t<cheminPage>");
+                        data.write(io.getChemin());
+                        data.write("</cheminPage>\n");
+                        data.write("\t\t\t</produit>\n");
+                    }
+                }
+            }
+            data.write("\t\t</listeProduits>\n");
+
+            // liste des définition de travail
+            data.write("\t\t<listeDefTravail>\n");
+            for (int i = 0; i < listeComposant.size(); i++)
+            {
+                Vector definition = ((IdObjetModele) listeComposant.elementAt(i)).getDefinitionTravail();
+                for (int j = 0; j < definition.size(); j++)
+                {
+                    IdObjetModele io = (IdObjetModele) definition.elementAt(j);
+                    data.write("\t\t\t<definitionTravail>\n");
+                    data.write("\t\t\t\t<nom>");
+                    data.write(io.toString());
+                    data.write("</nom>\n");
+                    data.write("\t\t\t\t<listeActivites>\n");
+                    for (int k = 0; k < io.getIDActivite().size(); k++)
+                    {
+                        Integer activite = (new Integer(((Integer) io.getIDActivite().elementAt(k)).intValue() + (i * 10000)));
+                        data.write("\t\t\t\t\t<idAct>");
+                        data.write(activite.toString());
+                        data.write("</idAct>\n");
+                    }
+                    data.write("\t\t\t\t</listeActivites>\n");
+                    data.write("\t\t\t</definitionTravail>\n");
+                }
+            }
+            data.write("\t\t</listeDefTravail>\n");
+
+            data.write("</exportExecution>\n");
+            data.close();
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+            ErrorManager.getInstance().display(t);
+            return false;
+        }
+
+        return true;
+    }
+
 }
