@@ -43,7 +43,7 @@ public class Application {
 	/**
 	 * Numéro de version de IEPP
 	 */
-	public static String NUMVESION = "1.0";
+	public static String NUMVESION = "1.1";
 	
 	/**
 	 * Lien vers l'instance courante de l'application
