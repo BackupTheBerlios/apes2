@@ -61,3 +61,7 @@ HR {
 
 A          {text-decoration:underline; color: #000000}
 A:hover    {text-decoration:none; color: #006699}
+
+.navigation_barre {
+	background-color:#B0B6BE;BORDER-BOTTOM: #69c 1px solid ;MARGIN-BOTTOM: 20;PADDING-BOTTOM: 5px;
+}

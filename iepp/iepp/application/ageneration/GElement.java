@@ -139,6 +139,19 @@ public class GElement
 		return ToolKit.removeSlashTerminatedPath(cheminRel);
 	}
 	
+	public String getCheminIcone(String icone)
+	{
+		String res = "./" + GenerationManager.APPLET_PATH + "/images/" + icone;
+		ArbreGeneration aux = this.arbre;
+		// on remonte jusqu'à la racine
+		while (!aux.isRacine())
+		{
+			res = "../" + res;
+			aux = aux.getArbreParent();
+		}
+		return res;
+	}
+	
 	/**
 	 * Renvoie le chemin relatif de la feuille de style par rapport à l'élément courant
 	 */
@@ -195,10 +208,11 @@ public class GElement
 	
 	public String getBarreNavigation()
 	{
-		String res = this.element.getNomPresentation() + "</div>\n";
+		String res = "<img src=\"" + this.getCheminIcone(this.element.getNomIcone()) 
+					+ "\" width=\"16\" height=\"16\" border=\"0\"> "  + this.element.getNomPresentation() + "</div>\n";
 		if (this.arbre.isRacine())
 		{
-			return "<div> " + res;
+			return "<div class=\"navigation_barre\"> " + res;
 		}
 		ArbreGeneration aux = this.arbre.getArbreParent();
 		// on remonte jusqu'à la racine
@@ -206,7 +220,8 @@ public class GElement
 		while (!aux.isRacine())
 		{
 			res = aux.getElement().getElementPresentation().getNomPresentation() + "</a>\n >> " + res;
-			res = CodeHTML.normalizeName(aux.getElement().getElementPresentation().getNomPresentation()) + "_" + aux.getElement().getID() + ".html\" >" + res;
+			res = CodeHTML.normalizeName(aux.getElement().getElementPresentation().getNomPresentation()) + "_" + aux.getElement().getID() + ".html\" >" 
+			+ "<img src=\"" + this.getCheminIcone(aux.getElement().getElementPresentation().getNomIcone()) + "\" width=\"16\" height=\"16\" border=\"0\"> " + res;
 			
 			for (int i = 0; i < niveau; i++)
 			{
@@ -216,7 +231,7 @@ public class GElement
 			aux = aux.getArbreParent();
 			niveau++;
 		}
-		return "<div> " + res;
+		return "<div class=\"navigation_barre\"> " + res;
 	}
 	
 	/**

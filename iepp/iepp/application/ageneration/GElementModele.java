@@ -61,7 +61,7 @@ public class GElementModele extends GElement
 		{
 			res = res.substring(2);
 		}
-		System.out.println("RES " + id.getChemin() + " : " + id);
+		//System.out.println("RES " + id.getChemin() + " : " + id);
 		ArbreGeneration aux = this.arbre;
 		// on remonte jusqu'à la racine
 		while (!aux.isRacine())
@@ -69,7 +69,7 @@ public class GElementModele extends GElement
 			res = "../" + res;
 			aux = aux.getArbreParent();
 		}
-		System.out.println("REtour : " + res);
+		//System.out.println("REtour : " + res);
 		return res;
 	}
 	

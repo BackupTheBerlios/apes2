@@ -58,7 +58,6 @@ public class GPaquetage extends GElementModele
 	{
 		// création du fichier de contenu
 		File ficHTML = new File (this.cheminAbsolu) ;
-		System.out.println("Fichier  à créér : " + ficHTML);
 		FileWriter fd = new FileWriter(ficHTML);
 
 		fd.write("<HTML><head> <link rel='STYLESHEET' type='text/css' href='" + this.getCheminStyle() + "'>"
