@@ -137,6 +137,9 @@ public class CExporterProcessus extends CommandeNonAnnulable
 			data.write("\t\t<cheminGeneration>");
 			data.write(GenerationManager.getInstance().getCheminGeneration());
 			data.write("</cheminGeneration>\n");
+			data.write("\t\t<identifiant>");
+			data.write(new Long(System.currentTimeMillis()).toString() );
+			data.write("</identifiant>\n");
 			data.write("\t</proprietes>\n");
 			
 			
