@@ -24,14 +24,12 @@ package org.ipsquad.apes.processing;
 
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
-
-import org.ipsquad.apes.Context;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
 import org.ipsquad.apes.model.spem.basic.GuidanceKind;
@@ -46,21 +44,24 @@ import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
-import org.ipsquad.apes.ui.ApesFrame;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
 	private boolean mHasErrors;
-
-	public void visitApesProcess(ApesProcess p)
+	private Vector mProductNames = new Vector();
+	
+	public boolean getHasErrors()
 	{
+		return mHasErrors;
 	}
+	
+	public void visitApesProcess(ApesProcess p) { }
 	
 	/**
 	 * Called when the visited element is a package
@@ -74,10 +75,10 @@ public class ValidateVisitor implements RoutedSpemVisitor
 			Vector temp=new Vector();
 			for(int i=0;i<pack.modelElementCount();i++)
 			{
-				if(temp.contains(pack.getModelElement(i).getName()))
+				if(mProductNames.contains(pack.getModelElement(i).getName()))
 				{	
 					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateDuplicateNameInAPackage")+" : "+((Element)pack).getName()+", duplicate name : "+pack.getModelElement(i).getName());
+							ResourceManager.getInstance().getString("errorValidateDuplicateNameInAPackage")+" : "+((Element)pack).getName()+", duplicate name : "+pack.getModelElement(i).getName());
 					mHasErrors = true;	
 				}
 				else temp.add(pack.getModelElement(i).getName());
@@ -115,7 +116,15 @@ public class ValidateVisitor implements RoutedSpemVisitor
 	 *
 	 * @param work the visited work definition
 	 */
-	public void visitWorkDefinition(WorkDefinition work) { }
+	public void visitWorkDefinition(WorkDefinition work) 
+	{ 
+		if( work.subWorkCount() < 2 )
+		{
+			ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateWorkDefinition")+" : "+work.getName());
+			mHasErrors = true;
+		}
+	}
 
 
 	/**
@@ -133,10 +142,28 @@ public class ValidateVisitor implements RoutedSpemVisitor
 	 */
 	public void visitProduct(WorkProduct product)
 	{
+		if( mProductNames.contains(product.getName()) )
+		{
+			ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateWorkProductDuplicateName")+" : "+product.getName());
+			mHasErrors = true;
+		}
+		else
+		{
+			mProductNames.add(product.getName());
+		}
+		
 		if (product.getResponsible()==null)
 		{
 			ErrorManager.getInstance().println(
 			ResourceManager.getInstance().getString("errorValidateWorkProductWithoutRole")+" : "+product.getName());
+			mHasErrors = true;
+		}
+		
+		if( product.getInputCount()==0 && product.getOutputCount()==0 && product.getResponsible()==null)
+		{
+			ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateWorkProductAlone")+" : "+product.getName());
 			mHasErrors = true;
 		}
 	}
@@ -147,7 +174,15 @@ public class ValidateVisitor implements RoutedSpemVisitor
 	 *
 	 * @param role the visited process role
 	 */
-	public void visitRole(ProcessRole role) { }
+	public void visitRole(ProcessRole role) 
+	{ 
+		if(role.getFeatureCount()==0 && role.getResponsibilityCount()==0)
+		{
+			ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateProcessRoleAlone")+" : "+role.getName());
+			mHasErrors = true;
+		}		
+	}
 
 
 	/**
@@ -161,6 +196,13 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		{
 			ErrorManager.getInstance().println(
 			ResourceManager.getInstance().getString("errorValidateActivityWithoutRole")+" : "+activity.getName());
+			mHasErrors = true;
+		}
+		
+		if(activity.getInputCount()==0 && activity.getOutputCount()==0 && activity.getOwner()==null)
+		{
+			ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : "+activity.getName());
 			mHasErrors = true;
 		}
 	}
@@ -197,48 +239,28 @@ public class ValidateVisitor implements RoutedSpemVisitor
 	 */
 	public void visitFlowDiagram(FlowDiagram diagram)
 	{
-		int nbElement = diagram.modelElementCount();
-		ModelElement me;
-		int i = 0;
-		
-		while(i < nbElement)
-		{
-			me = diagram.getModelElement(i);
-			if (me instanceof Activity)
-			{
-				if(((Activity)me).getInputCount()==0 && ((Activity)me).getOutputCount()==0 && ((Activity)me).getOwner()==null)
-				{
-					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateActivityAlone")+" : "+((Activity)me).getName());
-					mHasErrors = true;
-				}
-			}
-			if (me instanceof ProcessRole)
-			{
-				if( ((ProcessRole)me).getFeatureCount()==0 && ((ProcessRole)me).getResponsibilityCount()==0)
-				{
-					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateProcessRoleAlone")+" : "+((ProcessRole)me).getName());
-					mHasErrors = true;
-				}				
-			}
-			if (me instanceof WorkProduct)
-			{
-				if( ((WorkProduct)me).getInputCount()==0 && ((WorkProduct)me).getOutputCount()==0 && ((WorkProduct)me).getResponsible()==null)
-				{
-					ErrorManager.getInstance().println(
-					ResourceManager.getInstance().getString("errorValidateWorkProductAlone")+" : "+((WorkProduct)me).getName());
-					mHasErrors = true;
-				}
-			}
-			i++;
-		}
+		visitSpemDiagram(diagram);
 	}
 	
-	public void visitResponsabilityDiagram(ResponsabilityDiagram diagram) { }
+	public void visitResponsabilityDiagram(ResponsabilityDiagram diagram) 
+	{ 
+		visitSpemDiagram(diagram);
+	}
 
-	public void visitContextDiagram(ContextDiagram diagram) { }
+	public void visitContextDiagram(ContextDiagram diagram)
+	{ 
+		visitSpemDiagram(diagram);
+	}
 
+	public void visitSpemDiagram(SpemDiagram diagram)
+	{
+		if( diagram.modelElementCount() == 0 )
+		{
+			ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateEmptyDiagram")+" : "+diagram.getName());
+			mHasErrors = true;
+		}
+	}
 	/**
 	 * Called when the visited element is an activity diagram
 	 *
@@ -418,8 +440,8 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		ErrorManager.getInstance().println(
 		ResourceManager.getInstance().getString("errorValidateEnd"));
 		ErrorManager.getInstance().println("");
-
-		if(!mHasErrors)
+		
+		/*if(!mHasErrors)
 		{
 			JOptionPane.showInternalConfirmDialog(((ApesFrame)Context.getInstance().getTopLevelFrame()).getContentPane(),
 			                        	      ResourceManager.getInstance().getString("msgValidate"),
@@ -434,7 +456,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 							      ResourceManager.getInstance().getString("errorTitleValidate"),
 							      JOptionPane.DEFAULT_OPTION,
 							      JOptionPane.ERROR_MESSAGE);
-		}
+		}*/
 	}
 
 };

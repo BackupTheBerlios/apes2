@@ -41,6 +41,7 @@ import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.utils.MonitoredTaskBase;
 import org.ipsquad.utils.ResourceManager;
@@ -53,7 +54,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -138,21 +139,32 @@ public class LoadProject extends MonitoredTaskBase
 			print(mResource.getString("loadComponent"));
 			ObjIn in = new ObjIn(data);
 			Vector v = (Vector)in.readObject();
-			adapter.setRoot((ApesTreeNode)v.get(2));
-			mProject.setProcess((ApesProcess)((ApesTreeNode)adapter.getRoot()).getUserObject());
-			mProject.getProcess().addModelElement((ProcessComponent)v.get(0));
-			mProject.setDiagramMap((HashMap)v.get(1));
-			projectZip.close();
+			
+			if( v.size() == 4 )
+			{	
+				adapter.setRoot((ApesTreeNode)v.get(2));
+				mProject.setProcess((ApesProcess)((ApesTreeNode)adapter.getRoot()).getUserObject());
+				mProject.getProcess().addModelElement((ProcessComponent)v.get(0));
+				mProject.setDiagramMap((HashMap)v.get(1));
+			
+				Activity a = new Activity();
+				int count = new Integer(a.getName().substring(6)).intValue();
+				int nb = new Integer(((Activity)v.get(3)).getName().substring(6)).intValue();
+				while( count++ < nb )
+				{
+					new Activity().resetName();
+				}	
+			
+				projectZip.close();
 				
-			print(mResource.getString("loadComponentSuccess"));
-			return true;
+				print(mResource.getString("loadComponentSuccess"));
+				return true;
+			}
 		}
-		else
-		{	
-			print(mResource.getString("loadComponentFailed"));
-			projectZip.close();
-			return false;
-		}
+
+		print(mResource.getString("loadComponentFailed"));
+		projectZip.close();
+		return false;
 	}
 	
 	/**
@@ -203,8 +215,8 @@ public class LoadProject extends MonitoredTaskBase
 		print(mResource.getString("loadParsing"));
 		analyzer.parse( data, handler );
 		
-		ApesProcess.ProvidedInterface pi = new ApesProcess.ProvidedInterface("provided");
-		ApesProcess.RequiredInterface ri = new ApesProcess.RequiredInterface("required");
+		ApesProcess.ProvidedInterface pi = new ApesProcess.ProvidedInterface(mResource.getString("provided"));
+		ApesProcess.RequiredInterface ri = new ApesProcess.RequiredInterface(mResource.getString("required"));
 		
 		Vector names = handler.getProvidedProductNames();
 		for( int i = 0; i < names.size(); i++ )

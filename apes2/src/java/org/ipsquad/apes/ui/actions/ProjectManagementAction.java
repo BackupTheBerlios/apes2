@@ -40,7 +40,7 @@ import org.ipsquad.utils.SmartChooser;
 /**
  * Base class for action that needs to manage the current project
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ProjectManagementAction extends ApesAction
 {
@@ -87,7 +87,7 @@ public abstract class ProjectManagementAction extends ApesAction
 	 */
 	protected boolean saveProject()
 	{
-		if(context.getFilePath().equals(ConfigManager.getInstance().getProperty("WorkspaceTitledefaultPath")))
+		if(context.getFilePath() == null || context.getFilePath().equals(ConfigManager.getInstance().getProperty("WorkspaceTitledefaultPath")))
 		{
 			return saveProjectAs();
 		}

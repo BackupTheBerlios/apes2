@@ -40,14 +40,14 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Context
 {
 	private static final Context mInstance = new Context();
 	private MainFrameInterface mTopLevel;
 	private HashMap mActionMap = new HashMap();
-	private String mFilePath = null;
+	private String mFilePath = "";
 	private String mWebSitePath = null;
 	private Project mProject;
 	private ApesUndoManager mUndoManager = new ApesUndoManager()

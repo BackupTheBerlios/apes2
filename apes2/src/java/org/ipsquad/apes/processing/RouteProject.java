@@ -22,32 +22,32 @@
 
 package org.ipsquad.apes.processing;
 
-import java.awt.Component;
-
 import javax.swing.ProgressMonitor;
 
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Project;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.spem.core.ModelElement;
-import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
+import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
+import org.ipsquad.utils.MonitoredTaskBase;
 import org.ipsquad.utils.ResourceManager;
-import org.ipsquad.utils.SwingWorker;
+import org.ipsquad.utils.TaskMonitorDialog;
 
 /**
  * Route Project
  *
  * This class allow to glance through a project
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public class RouteProject
+public class RouteProject extends MonitoredTaskBase
 {
 	private Project mProject;
 	private RoutedSpemVisitor mVisitor;
 	private ProgressMonitor mMonitor = null;
 	private boolean mMonitored=false;
 	private int mCount=1;
+	private TaskMonitorDialog mTask = null;
 	
 	public RouteProject()
 	{
@@ -64,80 +64,77 @@ public class RouteProject
 		mVisitor=v;
 	}
 	
-	public void launch(Component parent)
+	public void setTask( TaskMonitorDialog task )
 	{
-		//mProgressBar.getProgressBar().setString("Initialization...");
-       		//mProgressBar.getProgressBar().setStringPainted(true);
+		mTask = task;
+	}
 
+	protected void launch()
+	{
 		RoutedSpemVisitor visitorTemp=mVisitor;
 		mVisitor=new ModelElementCountVisitor();
 
-		launch();
-
-		//System.out.println(((ModelElementCountVisitor)mVisitor).getModelElementCount());
-		//mProgressBar.initProgressBar(0,((ModelElementCountVisitor)mVisitor).getModelElementCount());
-		mMonitor = new ProgressMonitor(parent, ResourceManager.getInstance().getString("toolsGenerate"), "",
-		                               0, ((ModelElementCountVisitor)mVisitor).getModelElementCount());
-
-		mMonitor.setMillisToDecideToPopup(0);
-		mMonitor.setMillisToPopup(0);
-		
-		mVisitor=visitorTemp;
-		mMonitored=true;
-		
-		final SwingWorker worker = new SwingWorker()
-		{
-			public Object construct()
-			{
-                		launch();
-				return null;
-			}
-		};
-        	worker.start();
-		//launch();
-	}
-
-	public void launch()
-	{
 		mVisitor.routingBegin();
-		
 		ApesProcess p=mProject.getProcess();
-
 		visit(p);
-		/*for(int i=0;i<p.modelElementCount();i++)
-			visit(p.getModelElement(i));
-		*/
 		mVisitor.routingEnd();
+		
+		setLengthOfTask(((ModelElementCountVisitor)mVisitor).getModelElementCount());
+		
+		mMonitored = true;
+		mVisitor = visitorTemp;
+		
+		mVisitor.routingBegin();
+		p=mProject.getProcess();
+		visit(p);
+		mVisitor.routingEnd();
+		
+		if(((ValidateVisitor)mVisitor).getHasErrors())
+		{
+			print(ResourceManager.getInstance().getString("errorValidate"));
+		}
+		else
+		{
+			print(ResourceManager.getInstance().getString("msgValidate"));
+		}
 	}
 
-	public void visit(Object o)
+	protected void visit(Object o)
 	{
 		if(mMonitored) 
 		{
-			//System.out.println(cpt);
-			//mProgressBar.getProgressBar().setString(null);
-			//mProgressBar.getProgressBar().setValue(cpt);
-			mMonitor.setProgress(mCount);
-			mMonitor.setNote(o.toString());
+			setCurrent(mCount);
+			print(o.toString());
 			
 			mCount++;
 		}
 		
-		if(o instanceof SPackage)
+		if(o instanceof IPackage)
 		{
-			((SPackage)o).visit(mVisitor);
-			for(int i=0;i<((SPackage)o).modelElementCount();i++)
+			((IPackage)o).visit(mVisitor);
+			for(int i=0;i<((IPackage)o).modelElementCount();i++)
 			{
-				visit(((SPackage)o).getModelElement(i));
+				visit(((IPackage)o).getModelElement(i));
 			}
 		}
 		else if(o instanceof ModelElement)
 		{
 			((ModelElement)o).visit(mVisitor);
-			/*for(int j=0;j<((ModelElement)o).presentationCount();j++)
-			{
-				((ModelElement)o).getPresentation(j).visit(mVisitor);
-			}*/
 		}
+	}
+
+	private void print( String msg )
+	{
+		setMessage(msg);
+		if( mTask != null )
+		{
+			mTask.forceRefresh();
+		}
+	}
+	
+	protected Object processingTask()
+	{
+		launch();
+		return null;
 	}
 };

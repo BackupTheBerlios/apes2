@@ -23,14 +23,16 @@ package org.ipsquad.apes.ui.actions;
 
 import java.awt.event.ActionEvent;
 
+import org.ipsquad.apes.Context;
 import org.ipsquad.apes.processing.RouteProject;
 import org.ipsquad.apes.processing.ValidateVisitor;
 import org.ipsquad.apes.ui.ApesFrame;
+import org.ipsquad.utils.TaskMonitorDialog;
 
 /**
  * Validate the current project
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ValidateAction extends ApesAction
 {
@@ -44,9 +46,16 @@ public class ValidateAction extends ApesAction
 	{
 		ValidateVisitor vv = new ValidateVisitor();
 				
-		RouteProject r = new RouteProject(vv);
-		r.launch(((ApesFrame)context.getTopLevelFrame()).getContentPane());
+		RouteProject mMonitor = new RouteProject(vv);
 		
+		ApesFrame parent = (ApesFrame)Context.getInstance().getTopLevelFrame();
 		
+		TaskMonitorDialog mTask = new TaskMonitorDialog(parent,mMonitor);
+		mTask.setName("Validate");
+		mTask.setLocation(parent.getWidth()/2-mTask.getWidth()/2,parent.getHeight()/2-mTask.getHeight()/2);
+		
+		mMonitor.setTask(mTask);
+		
+		mTask.show();
 	}
 }

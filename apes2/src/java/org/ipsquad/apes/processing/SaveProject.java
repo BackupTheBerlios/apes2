@@ -35,6 +35,7 @@ import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.WorkProductRef;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.utils.ErrorManager;
 
 import JSX.ObjOut;
@@ -196,6 +197,8 @@ public class SaveProject
 		v.add(project.getProcess().getComponent());
 		v.add(project.getDiagramMap());
 		v.add(((SpemTreeAdapter)Context.getInstance().getTopLevelFrame().getTree().getModel()).getRoot());
+		Activity a = new Activity();
+		v.add(new Activity());
 		
 		out.writeObject(v);
 		mZipFile.closeEntry();

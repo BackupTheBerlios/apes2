@@ -33,7 +33,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ApesProcess extends ModelElement implements IPackage 
 {
@@ -44,22 +44,11 @@ public class ApesProcess extends ModelElement implements IPackage
 	public ApesProcess()
 	{
 		super("");
-		init();
 	}
 	
 	public ApesProcess(String name)
 	{
 		super(name);
-		//init();
-	}
-	
-	public void init()
-	{
-		ProcessComponent c = new ProcessComponent("Component");
-		addModelElement( c );
-		c.addModelElement( new ContextDiagram("Context Diagram") );
-		addModelElement(new ProvidedInterface("provided"));
-		addModelElement(new RequiredInterface("required"));
 	}
 	
 	public void visit(SpemVisitor visitor) 

@@ -53,7 +53,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -90,7 +90,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		{
 			if(ap.getComponent() == null)
 			{
-				ModelElement me = new ProcessComponent(ResourceManager.getInstance().getString("Component"));
+				ModelElement me = new ProcessComponent(ResourceManager.getInstance().getString("component"));
 				
 				ap.addModelElement(me);
 				fireModelUpdated(new InsertEvent(me,ap,null));
