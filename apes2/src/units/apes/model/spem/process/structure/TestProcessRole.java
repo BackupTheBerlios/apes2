@@ -22,9 +22,15 @@
 
 package apes.model.spem.process.structure;
 
+import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+
 import junit.framework.TestCase;
 
 public class TestProcessRole extends TestCase
 {
-	public void testNotImplemented() { }
+	ProcessRole proRole = new ProcessRole("process_role");
+	
+	public void testProcessRole() {
+		assertTrue(proRole.getName()=="process_role");	
+	}
 }
