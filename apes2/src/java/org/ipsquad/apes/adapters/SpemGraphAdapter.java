@@ -23,6 +23,7 @@
 package org.ipsquad.apes.adapters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -54,6 +55,7 @@ import org.ipsquad.apes.model.spem.ModelVisitor;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
 import org.ipsquad.apes.model.spem.basic.GuidanceKind;
+import org.ipsquad.apes.model.spem.core.Element;
 import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.components.SProcess;
@@ -64,6 +66,7 @@ import org.jgraph.graph.ConnectionSet;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultGraphModel;
+import org.jgraph.graph.DefaultPort;
 import org.jgraph.graph.Edge;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.ParentMap;
@@ -72,7 +75,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -301,6 +304,53 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		}
 	}
 
+	/**
+	 * Insert a list of elements in this diagram
+	 * 
+	 * @param to_inserts the elements to add
+	 */
+	public void insert( ArrayList to_inserts )
+	{
+		ApesGraphCell cell;
+		DefaultEdge edge;
+		Vector commands = new Vector();
+		
+		for( int i = 0; i < to_inserts.size(); i++ )
+		{
+			if (to_inserts.get(i) instanceof ApesGraphCell)
+			{
+				cell = (ApesGraphCell)to_inserts.get(i);
+				String name = cell.toString();
+				cell.setUserObject(((Element)cell.getUserObject()).clone());
+				Map attr = cell.getAttributes();
+				Map view = new HashMap();
+				view.put("Attributes", attr);
+				commands.add(
+						ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram, cell.getUserObject(), view ));
+				
+				if( !cell.toString().equals(name) )
+				{	
+					commands.add(
+							ApesMediator.getInstance().createChangeCommand(cell.getUserObject(),name,null));
+				}
+			}
+			if (to_inserts.get(i) instanceof DefaultEdge)
+			{				
+				edge = (DefaultEdge)to_inserts.get(i) ;
+				Map attr = edge.getAttributes() ;
+				Map view = new HashMap();
+				view.put("Attributes", attr);
+				DefaultPort sourcePort = (DefaultPort) edge.getSource();
+				DefaultPort targetPort = (DefaultPort) edge.getTarget();
+				ApesGraphCell target = (ApesGraphCell) targetPort.getParent();
+				ApesGraphCell source = (ApesGraphCell) sourcePort.getParent();
+				commands.add(
+						ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram,source.getUserObject(), target.getUserObject(), view) );
+			}
+		}
+		ApesMediator.getInstance().execute(commands);
+	}
+	
 	public void insertCell( ApesGraphCell vertex, Map attr )
 	{
 		//System.out.println("Graph::tryInsertCell "+vertex.getUserObject());

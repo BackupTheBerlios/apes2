@@ -53,7 +53,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -342,27 +342,58 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	}
 	
 	/**
+	 * execute a list of commands
+	 * 
+	 * @param commands
+	 */
+	public void execute( Vector commands )
+	{
+		if( commands == null )
+		{
+			return;
+		}
+		
+		if( commands.get(0) instanceof Command )
+		{
+			update( (Command)commands.get(0), false );
+		}
+		
+		for( int i = 1; i < commands.size(); i++ )
+		{
+			if( commands.get(i) instanceof Command )
+			{
+				update( (Command)commands.get(i), true );
+			}
+		}
+	}
+	
+	/**
 	 * Call this function when you want to modify the model
 	 * 
 	 * @param c the command representing a change to do in the model
 	 */
 	public void update( Command c )
 	{
+		update( c, false );
+	}
+	
+	public void update( Command c, boolean linked )
+	{
 		if( c instanceof InsertCommand )
 		{
-			insert( (InsertCommand) c,false );
+			insert( (InsertCommand) c, linked );
 		}
 		else if( c instanceof RemoveCommand )
 		{
-			remove( (RemoveCommand) c,false );
+			remove( (RemoveCommand) c, linked );
 		}
 		else if( c instanceof MoveCommand )
 		{
-			move( (MoveCommand) c,false );
+			move( (MoveCommand) c, linked );
 		}
 		else if( c instanceof ChangeCommand )
 		{
-			change( (ChangeCommand) c,false );
+			change( (ChangeCommand) c, linked );
 		}
 	}
 	
