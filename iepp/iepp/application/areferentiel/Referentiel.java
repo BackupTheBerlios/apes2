@@ -108,6 +108,12 @@ public class Referentiel extends Observable implements TreeModel
 	*/
 	private ElementReferentiel present = null;
 	
+	/**
+	 * Chemin du répository à utiliser
+	 */
+	private String cheminRepository = null;
+	
+	
 	// Constantes représentant les types possibles de mise à jour sur l'arbre
 	// Utile pour les observateurs
 	public static final int CHANGED = 0;
@@ -122,15 +128,29 @@ public class Referentiel extends Observable implements TreeModel
 	 */
 	public Referentiel (String nom) throws NumberFormatException
 	{
-		File fic = new File("." + File.separator + "Referentiels" + File.separator + nom);
+		File fic = new File(Application.getApplication().getConfigPropriete("chemin_referentiel") + File.separator + nom);
+		
+		this.cheminRepository = Application.getApplication().getConfigPropriete("chemin_referentiel");
 		
 		if (fic.exists())
-		{ this.chargerReferentiel(nom); }
+		{ this.chargerReferentiel(nom);}
 		else
 		{ this.creerReferentiel(nom); }
 	} // Fin constructeur Referentiel (String chemin)
 	
-	
+
+
+	/**
+	 * @param cheminRef
+	 */
+	public Referentiel(File cheminRef) 
+	{
+		this.cheminRepository = cheminRef.getParentFile().getParentFile().toString();
+		this.chargerReferentiel(cheminRef.getName().substring(0, cheminRef.getName().lastIndexOf(".ref")));
+	}
+
+
+
 	/**
 	 * Initialise le référentiel et crée un nouveau répertoire contenant le référentiel cité  
 	 * @param nom : nom du référentiel à créer
@@ -143,10 +163,7 @@ public class Referentiel extends Observable implements TreeModel
 		// Id initialisé à 0
 		lastId = 0;
 
-		// TODO Robin: Mettre le chemin du rep referentiel
-		//cheminReferentiel = Application.getApplication().getConfigPropriete("chemin");
-		
-		cheminReferentiel = "." + File.separator + "Referentiels" + File.separator + nomReferentiel;
+		cheminReferentiel = this.cheminRepository + File.separator + nomReferentiel;
 		
 		// Création du répertoire du référentiel
 		File rep = new File(cheminReferentiel);
@@ -201,11 +218,8 @@ public class Referentiel extends Observable implements TreeModel
 		// Initialisation du nom du référentiel
 		nomReferentiel = nom;
 
-		// TODO Robin: Mettre le chemin du rep referentiel
-		//cheminReferentiel = Application.getApplication().getConfigPropriete("chemin");
-		
 		// Initialisation du chemin du référentiel
-		cheminReferentiel = "." + File.separator + "Referentiels" + File.separator + nom;
+		cheminReferentiel = this.cheminRepository + File.separator + nom;
 		
 		// Création de la racine de l'arbre (racine) et des 2 noeuds principaux (composants et dp)
 		racine = new ElementReferentiel(nomReferentiel, 0, cheminReferentiel, ElementReferentiel.REFERENTIEL);
@@ -250,8 +264,6 @@ public class Referentiel extends Observable implements TreeModel
 								// Chargement du nom de l'élément à partir du fichier .pre pour les composants non vides
 								nomElt = chargeur.chercherNomComposant(ligne);
 								
-								System.out.println("NomELEMENT : " + nomElt);
-								
 								// si c'est un composant vide
 								if ( nomElt == null )
 								{
@@ -269,7 +281,6 @@ public class Referentiel extends Observable implements TreeModel
 							}
 							catch(SAXException e)
 							{
-								System.out.println("LIGNE : " + ligne);
 								e.printStackTrace();
 								ErrorManager.getInstance().displayError(e.getMessage()); 
 							}
@@ -365,8 +376,6 @@ public class Referentiel extends Observable implements TreeModel
 						ChargeurComposant chargeur = new ChargeurComposant(chemin);
 
 						nomElt = chargeur.chercherNomComposant(chemin);
-						
-						System.out.println("NOM COMPOSANT : " + nomElt);
 						
 						// Permet de savoir si le fichier est un composant ou pas
 						// Renvoie -2 si c'est pas le cas

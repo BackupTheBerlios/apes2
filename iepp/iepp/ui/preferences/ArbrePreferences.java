@@ -1,9 +1,4 @@
-/*
- * Created on 30 sept. 2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
+
 package iepp.ui.preferences;
 
 import iepp.Application;
@@ -16,12 +11,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-/**
- * @author SP
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
+
 public class ArbrePreferences extends JTree 
 {
 	/**
@@ -41,47 +31,28 @@ public class ArbrePreferences extends JTree
 				Application.getApplication().getTraduction("Preferences"),
 				Application.getApplication().getTraduction("Preferences"),0));
 
-		DefaultMutableTreeNode referentielItem = new DefaultMutableTreeNode(new PreferenceTreeItem
+		DefaultMutableTreeNode generalItem = new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauDescription.GENERAL_KEY,Application.getApplication().getTraduction(PanneauDescription.GENERAL_KEY),PreferenceTreeItem.DESC_PANEL));
 		
-		referentielItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+		generalItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
 				(PanneauLangue.LANGUAGE_PANEL_KEY,Application.getApplication().getTraduction(PanneauLangue.LANGUAGE_PANEL_KEY),PreferenceTreeItem.LANGUAGE_PANEL)));    
 	
-		/*
-			referentielItem.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(ColorFontPanel.DIAGRAMS_KEY,resMan.getString(ColorFontPanel.DIAGRAMS_KEY),PreferencesTreeItem.COLOR_PANEL)));
-			
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(ColorFontPanel.ACTIVITY_KEY,resMan.getString(ColorFontPanel.ACTIVITY_KEY),PreferencesTreeItem.COLOR_PANEL)));
-			
-			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(ColorFontPanel.ROLE_KEY,resMan.getString(ColorFontPanel.ROLE_KEY),PreferencesTreeItem.COLOR_PANEL)));
-			
-			
+		DefaultMutableTreeNode generationItem = new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauDescription.GENERATION_KEY,Application.getApplication().getTraduction(PanneauDescription.GENERATION_KEY),PreferenceTreeItem.DESC_PANEL));
 		
-			DefaultMutableTreeNode defaultTree = new DefaultMutableTreeNode(new PreferencesTreeItem
-				(DescriptionPanel.DEFAULT_PATH_KEY,resMan.getString(DescriptionPanel.DEFAULT_PATH_KEY),PreferencesTreeItem.DESC_PANEL));
-			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(DefaultPathPanel.TOOL_PRESENTATION_KEY,resMan.getString(DefaultPathPanel.TOOL_PRESENTATION_KEY),PreferencesTreeItem.PATH_PANEL)));
-			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(DefaultPathPanel.WORKSPACE_KEY,resMan.getString(DefaultPathPanel.WORKSPACE_KEY),PreferencesTreeItem.PATH_PANEL)));	
-			defaultTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-				(DefaultPathPanel.PICTURES_KEY,resMan.getString(DefaultPathPanel.PICTURES_KEY),PreferencesTreeItem.PATH_PANEL)));	
-				//defaultTree.setAllowsChildren(false);
-			
-		DefaultMutableTreeNode windowsTree = new DefaultMutableTreeNode(new PreferencesTreeItem
-					(DescriptionPanel.WINDOWS_KEY,resMan.getString(DescriptionPanel.WINDOWS_KEY),PreferencesTreeItem.DESC_PANEL));
-				windowsTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-					(WindowsPanel.ERROR_PANEL_KEY,resMan.getString(WindowsPanel.ERROR_PANEL_KEY),PreferencesTreeItem.ERROR_PANEL)));
-				windowsTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
-					(LanguagePanel.LANGUAGE_PANEL_KEY,resMan.getString(LanguagePanel.LANGUAGE_PANEL_KEY),PreferencesTreeItem.LANGUAGE_PANEL)));    
-		
+		generationItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauGeneration.GENERATION_PANEL_KEY,Application.getApplication().getTraduction(PanneauGeneration.GENERATION_PANEL_KEY),PreferenceTreeItem.GENERATION_PANEL)));    
 	
-		root.add(appearanceTree);
-		root.add(defaultTree);
-		root.add(windowsTree);
-		*/
+		DefaultMutableTreeNode referentielItem = new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauDescription.REPOSITORY_KEY,Application.getApplication().getTraduction(PanneauDescription.REPOSITORY_KEY),PreferenceTreeItem.DESC_PANEL));
 		
+		referentielItem.add(new DefaultMutableTreeNode(new PreferenceTreeItem
+				(PanneauReferentiel.REPOSITORY_PANEL_KEY,Application.getApplication().getTraduction(PanneauReferentiel.REPOSITORY_PANEL_KEY),PreferenceTreeItem.REPOSITORY_PANEL)));    
+	
+		
+		
+		root.add(generalItem);
+		root.add(generationItem);
 		root.add(referentielItem);
 		this.setRootVisible(false);
 		this.addTreeSelectionListener(gp);
@@ -123,15 +94,33 @@ public class ArbrePreferences extends JTree
 					mPrefDiag.getLanguagePanel().setVisible(false);
 				}
 				*/
+				if(panel == PreferenceTreeItem.REPOSITORY_PANEL)
+				{
+					mPrefDiag.getReferentielPanel().setVisible(true);
+					mPrefDiag.getGenerationPanel().setVisible(false);
+					mPrefDiag.getDescriptionPanel().setVisible(false);
+					mPrefDiag.getLanguagePanel().setVisible(false);
+				}
+				if(panel == PreferenceTreeItem.GENERATION_PANEL)
+				{
+					mPrefDiag.getGenerationPanel().setVisible(true);
+					mPrefDiag.getDescriptionPanel().setVisible(false);
+					mPrefDiag.getLanguagePanel().setVisible(false);
+					mPrefDiag.getReferentielPanel().setVisible(false);
+				}
 				if(panel == PreferenceTreeItem.DESC_PANEL)
 				{
 					mPrefDiag.getDescriptionPanel().setVisible(true);
 					mPrefDiag.getLanguagePanel().setVisible(false);
+					mPrefDiag.getGenerationPanel().setVisible(false);
+					mPrefDiag.getReferentielPanel().setVisible(false);
 				}
 				if( panel == PreferenceTreeItem.LANGUAGE_PANEL)
 				{
 					mPrefDiag.getDescriptionPanel().setVisible(false);
 					mPrefDiag.getLanguagePanel().setVisible(true);
+					mPrefDiag.getGenerationPanel().setVisible(false);
+					mPrefDiag.getReferentielPanel().setVisible(false);
 				}
 				mPrefDiag.setInnerPanel(panel,key);  
 			}

@@ -161,7 +161,7 @@ public class FenetreCreerReferentiel extends JDialog
 				// création du référentiel
 				Application.getApplication().setReferentiel(new Referentiel(this.nomRef.getText()));
 				this.estCree = true ;
-				new FenetreChoixProcessus(this.fparent, this.fenetreChoixRef);
+				new FenetreChoixProcessus(this.fparent);
 			}
 			else
 				JOptionPane.showMessageDialog(this,Application.getApplication().getTraduction("M_ref_existe"),Application.getApplication().getTraduction("M_creer_proc_titre"),JOptionPane.WARNING_MESSAGE);

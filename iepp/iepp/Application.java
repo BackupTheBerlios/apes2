@@ -30,7 +30,9 @@ import java.util.Vector;
 
 import org.ipsquad.utils.ErrorManager;
 
+import iepp.application.CChargerReferentielDemarrage;
 import iepp.application.areferentiel.Referentiel;
+import iepp.ui.FenetreChoixProcessus;
 import iepp.ui.FenetrePrincipale;
 import iepp.ui.FenetreChoixReferentiel;
 
@@ -96,6 +98,11 @@ public class Application {
 	 */
 	private Vector languesDisponibles = null ;
 	
+	/**
+	 * noms de toutes les feuilles de style disponibles
+	 */
+	private Vector stylesDisponibles = null ;
+	
 	
 	//----------------------------------------------------------------------------------//
 	// Methodes																			//
@@ -145,20 +152,45 @@ public class Application {
 		// ainsi que toutes les langues disponibles
 		this.recupererLanguesDisponibles(this.getConfigPropriete
 									("dossierLangues"),this.getConfigPropriete("extensionLangue"));
+		this.recupererStylesDisponibles(this.getConfigPropriete
+									("styles"),this.getConfigPropriete("extensionFeuilleStyle"));
 		this.chargerLangueCourante();
 		// afficher la fenetre principale
 		this.fenetrePpale = new FenetrePrincipale() ;
 		this.fenetrePpale.rafraichirLangue();
 		this.fenetrePpale.show();
-		/*******************************/
-		/* afficher fenetre de choix */
-		/*******************************/
-		FenetreChoixReferentiel fcr = new FenetreChoixReferentiel(this.fenetrePpale);
+		this.chargerReferentiel();
+		//
 		
 		// initialiser le gestionnaire d'erreur
 		ErrorManager.getInstance().setOwner(this.fenetrePpale);
 	}
 	
+	/**
+	 * 
+	 */
+	private void chargerReferentiel() 
+	{
+		// TODO Auto-generated method stub
+		File ref = new File(Application.getApplication().getConfigPropriete("referentiel_demarrage"));
+		if (ref.exists())
+		{
+			CChargerReferentielDemarrage c = new CChargerReferentielDemarrage(ref);
+			if (c.executer())
+			{
+				new FenetreChoixProcessus(this.fenetrePpale);
+			}
+			else
+			{
+				FenetreChoixReferentiel fcr = new FenetreChoixReferentiel(this.fenetrePpale);
+			}
+		}
+		else
+		{
+			FenetreChoixReferentiel fcr = new FenetreChoixReferentiel(this.fenetrePpale);
+		}
+	}
+
 	/**
 	 * Création du lien vers le projet courant utilisé dans l'application
 	 */
@@ -311,6 +343,31 @@ public class Application {
 		}
 	}
 
+	/**
+	 * Recupere l'ensemble des feuilles de style diponibles pour l'application
+	 */
+	public void recupererStylesDisponibles(String chemin, String extensionFic)
+	{
+		this.stylesDisponibles = new Vector();
+		// parcourir le répertoire chemin
+		File file = new File(chemin);
+		// lister tous les fichiers de ce répertoire
+		File[] fliste = file.listFiles();
+		for (int i = 0 ; i < fliste.length ; i++ )
+		{
+			// cherche uniquement sur les fichiers
+			if (fliste[i].isFile())
+			{
+				// si le fichier courant correspond bien un fichier.lng, c'est un fichier de langue
+			 	 if ( fliste[i].getName().substring(fliste[i].getName().length() - 1 - extensionFic.length()).equals(".".concat(extensionFic)))
+			  	 {
+			  		// on remplit notre liste de fichiers de langue
+			 	 	this.stylesDisponibles.addElement(fliste[i].getName().substring
+								( 0 , fliste[i].getName().length()-1- extensionFic.length()));
+			  	 }
+			 }
+		}
+	}
 
 	//----------------------------------------------------------------------------------//
 	// Getters et Setters																//
@@ -410,6 +467,14 @@ public class Application {
 	public Vector getLangues()
 	{
 		return this.languesDisponibles ;
+	}
+	
+	/**
+	 * Renvoie la liste des feuilles de style disponibles récupérée
+	 */
+	public Vector getStyles()
+	{
+		return this.stylesDisponibles ;
 	}
 	
 	/**

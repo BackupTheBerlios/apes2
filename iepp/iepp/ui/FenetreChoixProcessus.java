@@ -69,11 +69,10 @@ public class FenetreChoixProcessus extends JDialog
 	 * @param fcr
 	 */
 	
-	public FenetreChoixProcessus(FenetrePrincipale parent, FenetreChoixReferentiel fcr)
+	public FenetreChoixProcessus(FenetrePrincipale parent)
 	{
 		super(parent,Application.getApplication().getTraduction("Choix_processus"), true);
-		this.fenetrePrincipale = parent;
-		this.fenetreChoixRef = fcr;		
+		this.fenetrePrincipale = parent;	
 		try
 			{
 			  jbInit();

@@ -164,7 +164,7 @@ public class FenetreChoixReferentiel extends JDialog
 			{
 				this.dispose();
 				// fenêtre suivante
-				new FenetreChoixProcessus(fenetrePrincipale,this);
+				new FenetreChoixProcessus(fenetrePrincipale);
 			}
 		}
 		else if(this.creer.isSelected())

@@ -4,8 +4,8 @@ package iepp.ui.preferences;
 public class PreferenceTreeItem 
 {
 	public static final int COLOR_PANEL = 1;
-	public static final int PATH_PANEL = 2;
-	public static final int ERROR_PANEL = 3;
+	public static final int GENERATION_PANEL = 2;
+	public static final int REPOSITORY_PANEL = 3;
 	public static final int DESC_PANEL = 4;
 	public static final int LANGUAGE_PANEL = 5;
 	

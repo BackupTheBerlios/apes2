@@ -93,12 +93,4 @@ public class PanneauDescription extends PanneauOption
 		}
 	}
 
-	/**
-	 * 
-	 */
-	public void rafraichirLangue() 
-	{
-		
-	}
-
 }

@@ -19,6 +19,7 @@
 package iepp.ui.preferences;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -43,8 +44,10 @@ public class FenetrePreference extends JDialog
 	 */
 	private JPanel panneau ;
 	
+	private PanneauReferentiel panneauReferentiel;
 	private PanneauDescription panneauDescription;
 	private PanneauLangue panneauLangue;
+	private PanneauGeneration panneauGeneration;
 	
 	private JButton apply;
 	private JButton ok;
@@ -85,7 +88,7 @@ public class FenetrePreference extends JDialog
 		tree.setBorder(BorderFactory.createLoweredBevelBorder());
 		this.panneau.add(bottom,BorderLayout.SOUTH);
 		this.panneau.add(this.panneauDescription,BorderLayout.CENTER);
-		
+
 		// create the panel
 		panelMarge.add(this.panneau,BorderLayout.CENTER);
 		panelMarge.add(new JLabel(" "),BorderLayout.NORTH);
@@ -108,7 +111,13 @@ public class FenetrePreference extends JDialog
 		this.panneauDescription.setVisible(true);
 		
 		this.panneauLangue = new PanneauLangue(Application.getApplication().getTraduction(PanneauLangue.LANGUAGE_PANEL_KEY)); 
-		this.panneauDescription.setVisible(false);
+		this.panneauLangue.setVisible(false);
+		
+		this.panneauGeneration = new PanneauGeneration(Application.getApplication().getTraduction(PanneauGeneration.GENERATION_PANEL_KEY)); 
+		this.panneauGeneration.setVisible(false);
+		
+		this.panneauReferentiel= new PanneauReferentiel(Application.getApplication().getTraduction(PanneauReferentiel.REPOSITORY_PANEL_KEY)); 
+		this.panneauReferentiel.setVisible(false);
 	}
 	
 	public void setInnerPanel(int panel,String key)
@@ -121,9 +130,13 @@ public class FenetrePreference extends JDialog
 		if(panel == PreferenceTreeItem.ERROR_PANEL)
 			panneau.add(mWindowsOption.openPanel(key),BorderLayout.CENTER);
 		*/
-		if(panel == PreferenceTreeItem.DESC_PANEL)
-			panneau.add(this.panneauDescription.openPanel(key),BorderLayout.CENTER);		
-		if(panel == PreferenceTreeItem.LANGUAGE_PANEL)                                 						
+		if(panel == PreferenceTreeItem.REPOSITORY_PANEL)
+			panneau.add(this.panneauReferentiel.openPanel(key),BorderLayout.CENTER);
+		else if(panel == PreferenceTreeItem.GENERATION_PANEL)
+			panneau.add(this.panneauGeneration.openPanel(key),BorderLayout.CENTER);
+		else if(panel == PreferenceTreeItem.DESC_PANEL)
+			panneau.add(this.panneauDescription.openPanel(key),BorderLayout.CENTER);
+		else if(panel == PreferenceTreeItem.LANGUAGE_PANEL)   
 			panneau.add(this.panneauLangue.openPanel(key),BorderLayout.CENTER);
 	}
 	
@@ -135,24 +148,25 @@ public class FenetrePreference extends JDialog
 	{
 		return this.panneauLangue;
 	}
-	
-	/**
-	 * 
-	 */
-	private void rafraichirLangue() 
+	public PanneauGeneration getGenerationPanel()
 	{
-		Application.getApplication().getFenetrePrincipale().rafraichirLangue();
-		this.panneauDescription.rafraichirLangue();
-		this.panneauLangue.rafraichirLangue();
+		return this.panneauGeneration;
+	}
+	public PanneauReferentiel getReferentielPanel()
+	{
+		return this.panneauReferentiel;
 	}
 	
 	private void save()
 	{
 		// sauver tous les paramètres
+		this.panneauReferentiel.save();
 	 	this.panneauLangue.save();
+	 	this.panneauGeneration.save();
 	 	if (this.panneauLangue.hasLanguageChanged())
 	 	{
-	 		this.rafraichirLangue();
+	 		Application.getApplication().getFenetrePrincipale().rafraichirLangue();
+	 		this.dispose();
 	 	}
 	}
 	

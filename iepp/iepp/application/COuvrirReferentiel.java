@@ -46,7 +46,7 @@ public class COuvrirReferentiel extends CommandeNonAnnulable
 	/**
 	 * Filtre utilisé par la boîte de dialogue demandant le référentiel à ouvrr
 	 */
-	private SimpleFileFilter filter = new SimpleFileFilter("ref", "Référentiel") ;
+	private SimpleFileFilter filter = new SimpleFileFilter("ref", "Referentiel") ;
 	
 	
 	public boolean executer()

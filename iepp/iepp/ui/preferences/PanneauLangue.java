@@ -61,14 +61,7 @@ public class PanneauLangue extends PanneauOption
 		makeLabel(Application.getApplication().getTraduction("Choix_langue"), gridbag, c);
 		makeLabel(" ", gridbag, c);
 
-		//DefaultListModel listModel = new DefaultListModel();
-		//Application.getApplication().getConfigPropriete("langueCourante")
-		/*
-		for(int i = 0 ; i < listeLangues.size() ; i++)
-		{
-			fichiersLangue.add(listeLangues.elementAt(i));
-		}
-*/
+		// liste langues
 		Vector listeLangues = Application.getApplication().getLangues();
 		mList = new JList(listeLangues);
 		gridbag.setConstraints(mList, c);
@@ -98,7 +91,6 @@ public class PanneauLangue extends PanneauOption
 	
 		return this ;
 	}
-	
 
 	
 	public void save ()
@@ -113,12 +105,4 @@ public class PanneauLangue extends PanneauOption
 		return result;
 	}
 
-	/**
-	 * 
-	 */
-	public void rafraichirLangue() 
-	{
-		// TODO Auto-generated method stub
-		
-	}
 }

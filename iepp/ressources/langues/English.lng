@@ -305,3 +305,5 @@ GeneralTitle=General
 GenerationTitle=Génération
 RepositoryTitle=Référentiel
 LanguageTitle=Language
+CheminReferentiel=Default path :
+ReferentielDefaut=Loaded repository on startup :
