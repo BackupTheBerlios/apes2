@@ -24,6 +24,7 @@ package org.ipsquad.apes.processing;
 
 import java.util.Vector;
 
+import org.ipsquad.apes.Context;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
@@ -50,7 +51,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ValidateVisitor implements RoutedSpemVisitor
 {
@@ -119,7 +120,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 	 */
 	public void visitWorkDefinition(WorkDefinition work) 
 	{ 
-		if( work.subWorkCount() < 2 )
+		if( work.subWorkCount() == 0 )
 		{
 			ErrorManager.getInstance().println(
 					ResourceManager.getInstance().getString("errorValidateWorkDefinition")+" : "+work.getName());
@@ -183,6 +184,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 						ResourceManager.getInstance().getString("errorValidateProvidedWorkProductActivity")+" : "+product.getName());
 				mHasErrors = true;
 			}
+			checkProvidedProduct(product);
 		}	
 
 		if( product.getReferences() == WorkProduct.REFERENCES_BY_REQUIRED_INTERFACE )
@@ -198,7 +200,8 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				ErrorManager.getInstance().println(
 						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductActivity")+" : "+product.getName());
 				mHasErrors = true;
-			}	
+			}
+			checkRequiredProduct(product);
 		}
 		
 		if( product.getInputCount()==0 && product.getOutputCount()==0 && product.getResponsible()==null)
@@ -209,6 +212,64 @@ public class ValidateVisitor implements RoutedSpemVisitor
 		}
 	}
 
+	protected void checkRequiredProduct(WorkProduct w)
+	{
+		ProcessComponent c = Context.getInstance().getProject().getProcess().getComponent();
+		if( c.modelElementCount() > 2 && c.getModelElement(1) instanceof WorkDefinitionDiagram )
+		{
+			boolean isUsed = false, isProvided = false; 
+			WorkDefinitionDiagram diagram = (WorkDefinitionDiagram)c.getModelElement(1);
+			for( int i = 0; i < diagram.getTransitionCount(); i++ )
+			{
+				if(diagram.getTransition(i).getInputModelElement() == w)
+				{
+					isUsed = true;
+				}
+				if(diagram.getTransition(i).getOutputModelElement() == w)
+				{
+					isProvided = true;
+				}
+			}
+			if( isProvided )
+			{
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByWorkDefinition")
+							+" : "+w.getName());
+				mHasErrors = true;
+			}
+			if( !isUsed )
+			{
+				ErrorManager.getInstance().println(
+						ResourceManager.getInstance().getString("errorValidateRequiredWorkProductNotUsed")
+							+" : "+w.getName());
+				mHasErrors = true;
+			}	
+		}
+	}
+
+	protected void checkProvidedProduct(WorkProduct w)
+	{
+		ProcessComponent c = Context.getInstance().getProject().getProcess().getComponent();
+		if( c.modelElementCount() > 2 && c.getModelElement(1) instanceof WorkDefinitionDiagram )
+		{
+			boolean isProvided = false; 
+			WorkDefinitionDiagram diagram = (WorkDefinitionDiagram)c.getModelElement(1);
+			for( int i = 0; i < diagram.getTransitionCount(); i++ )
+			{
+				if(diagram.getTransition(i).getOutputModelElement() == w)
+				{
+					isProvided = true;
+				}
+			}
+			if( !isProvided )
+			{
+				ErrorManager.getInstance().println(
+					ResourceManager.getInstance().getString("errorValidateWorkProductNotProvidedByAnyWorkDefinition")
+						+" : "+w.getName());
+				mHasErrors = true;
+			}
+		}
+	}
 
 	/**
 	 * Called when the visited element is a process role
@@ -320,7 +381,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 				if( isProvided && !isUsed )
 				{
 					ErrorManager.getInstance().println(
-							ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByWorkDefinition")
+							ResourceManager.getInstance().getString("errorValidateRequiredWorkProductProvidedByActivity")
 								+" : "+diagram.getName()+" "+wp.getName()+" "+wd.getName());
 						mHasErrors = true;
 				}
@@ -356,7 +417,7 @@ public class ValidateVisitor implements RoutedSpemVisitor
 
 	public void visitContextDiagram(ContextDiagram diagram)
 	{ 
-		visitSpemDiagram(diagram);
+		visitSpemDiagram(diagram);		
 	}
 
 	public void visitSpemDiagram(SpemDiagram diagram)
