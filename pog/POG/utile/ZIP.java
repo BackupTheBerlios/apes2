@@ -196,10 +196,13 @@ public class ZIP
      /**
         *    Ajoute un fichier au fichier zip avec un commentaire
         */
-       public void ajouteFichier(File f, String fichier, String commentaire)     {
+       public void ajouteFichier(String fichierin, String commentaire)     {
          ZipEntry entre;
          //Transforme le fichier en entr\uFFFDe du zip
-         entre = new ZipEntry(fichier);
+         File f = new File(fichierin);
+         if (fichierin.startsWith(new File(fichier).getParent()))
+         	fichierin = fichierin.substring(new File(fichier).getParent().length() + 1);
+         entre = new ZipEntry(fichierin);
          entre.setSize(f.length());
          entre.setTime(f.lastModified());
          if(commentaire!=null)
@@ -266,9 +269,9 @@ public class ZIP
                  //Ajouter l'entr\uFFFDe au fichier physique zip
                  zos.putNextEntry(entre);
                  //Ouvrir l'entr\uFFFDe en lecture
-                 if ((new File(f.getParent()+File.separator+nom)).isDirectory())
+                 if ((new File(nom)).isDirectory())
                    continue;
-                 FileInputStream fis=new FileInputStream(f.getParent()+File.separator+nom);
+                 FileInputStream fis=new FileInputStream(new File(fichier).getParent() + File.separator + nom);
                  //Ziper l'entr\uFFFDe dans le fichier zip
                  byte[] tab=new byte[4096];
                  int lu=-1;

@@ -69,38 +69,36 @@ public class ControleurPresenter extends ControleurSemantique {
     if (lnkControleurPresentation.getlnkPresentation().lnkProcessComponent == null)
       return true;
     HashMap modelpog = new HashMap();
-    Object[] tpog = lnkControleurPresentation.getlnkPresentation().
-        listeElementPresentation();
+    Object[] tpog = lnkControleurPresentation.getlnkPresentation().listeElementPresentation();
+    
+    // Etape 1 : SUPPRIMER on enlève de POG ceux qui ne sont plus dans le modèle APES
+    
     for (int i = 0; i < tpog.length; i++) {
       FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", i, tpog.length * 3);
       if (tpog[i] instanceof PresentationElementModele)
         if ( ( (PresentationElementModele) tpog[i]).getLnkModelElement() == null)
           if (flag)
-            lnkControleurPresentation.getlnkPresentation().removeElementAndUp( ( (
-                PresentationElementModele) tpog[i]).get_id());
+            lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((PresentationElementModele)tpog[i]).get_id());
           else
             return false;
         else {
-          ModelElement md = Apes.getElementByID( ( (PresentationElementModele)
-                                                  tpog[i]).getLnkModelElement().
-                                                getID());
+          ModelElement md = Apes.getElementByID(((PresentationElementModele)tpog[i]).getLnkModelElement().getID());
           if ( (md == null) && !flag)
             return false;
           else if (md == null)
-            lnkControleurPresentation.getlnkPresentation().removeElementAndUp( ( (
-                PresentationElementModele) tpog[i]).get_id());
-          else if ( (md !=
-                     ( (PresentationElementModele) tpog[i]).getLnkModelElement()) &&
-                   flag)
-            ( (PresentationElementModele) tpog[i]).setModelElement(md);
+            lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((PresentationElementModele)tpog[i]).get_id());
+          else if ((md != ((PresentationElementModele)tpog[i]).getLnkModelElement()) && flag)
+            ((PresentationElementModele)tpog[i]).setModelElement(md);
 
 // Si ce sont des diagrammes, on corrige leur nom
           if (md instanceof SpemDiagram)
-            ( (PresentationElementModele) tpog[i]).set_nomPresentation(md.
-                getName());
+            ((PresentationElementModele)tpog[i]).set_nomPresentation(md.getName());
           modelpog.put(md, tpog[i]);
         }
     }
+    
+	//	Etape 2 : NOUVEAU on ajoute ceux de APES qui ne sont pas dans POG
+    
     Vector vapes = Apes.getListeElementApes();
     for (int i = 0; i < vapes.size(); i++) {
       FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", 33 * 3 * vapes.size() + i, vapes.size() * 3);
@@ -116,33 +114,27 @@ public class ControleurPresenter extends ControleurSemantique {
           continue;
         if (!flag)
           return false;
-        PresentationElementModele pp = new PresentationElementModele(
-            lnkControleurPresentation.getlnkPresentation().makeId(pere.get_id()),
-            lnkControleurPresentation.lnkPreferences.getIconeDefaut(md), md);
-        lnkControleurPresentation.getlnkPresentation().
-            ajouterElementPresentation(pp);
+        PresentationElementModele pp = new PresentationElementModele(lnkControleurPresentation.getlnkPresentation().makeId(pere.get_id()), lnkControleurPresentation.lnkPreferences.getIconeDefaut(md), md);
+        lnkControleurPresentation.getlnkPresentation().ajouterElementPresentation(pp);
         modelpog.put(md, pp);
       }
     }
+    
+    // Etape 3 : DEPLACER on remet à leurs place les éléments déplacé.
+    
     tpog = lnkControleurPresentation.getlnkPresentation().
         listeElementPresentation();
     for (int i = 0; i < tpog.length; i++) {
 		FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", 66 * 3 * tpog.length + i, tpog.length * 3);
       if (tpog[i] instanceof PresentationElementModele) {
-        PresentationElementModele pere = (PresentationElementModele) modelpog.
-            get( ( (PresentationElementModele) tpog[i]).getLnkModelElement().
-                getParent());
+        PresentationElementModele pere = (PresentationElementModele) modelpog.get(((PresentationElementModele)tpog[i]).getLnkModelElement().getParent());
         if (pere != null) {
           String myid = ( (PresentationElementModele) tpog[i]).get_id();
           if (!myid.substring(0, myid.lastIndexOf("-")).equals(pere.get_id())) {
             if (flag) {
-              lnkControleurPresentation.getlnkPresentation().
-                  supprimerElementPresentation( (ElementPresentation) tpog[i]);
-              ( (PresentationElementModele) tpog[i]).set_id(
-                  lnkControleurPresentation.getlnkPresentation().makeId(pere.
-                  get_id()));
-              lnkControleurPresentation.getlnkPresentation().
-                  ajouterElementPresentation( (ElementPresentation) tpog[i]);
+              lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((ElementPresentation)tpog[i]).get_id());
+              ((PresentationElementModele) tpog[i]).set_id(lnkControleurPresentation.getlnkPresentation().makeId(pere.get_id()));
+              lnkControleurPresentation.getlnkPresentation().ajouterElementPresentation((ElementPresentation)tpog[i]);
             }
             else
               return false;

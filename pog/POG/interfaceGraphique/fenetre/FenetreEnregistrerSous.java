@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 
 import POG.utile.MyMultiFileFilter;
 import POG.utile.PogToolkit;
+import POG.utile.propriete.Preferences;
 
 public class FenetreEnregistrerSous extends FenetrePOG   {
 
@@ -129,6 +130,18 @@ public class FenetreEnregistrerSous extends FenetrePOG   {
   
 	public void setVisible(boolean arg0) {
 		String nomficpog = lnkFenetrePrincipale.get_pathSave();
+		Preferences pref = lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences();
+		if (nomficpog.equals("")) {
+			if (pref.get_utiliseCheminModele() && (lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() != null)) {
+				nomficpog = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele().getAbsolutePath();
+				if (nomficpog.indexOf('.') != -1)
+					nomficpog = nomficpog.substring(0, nomficpog.lastIndexOf('.'));
+				nomficpog = nomficpog + ".pog";
+			}
+			else {
+				nomficpog = pref.get_pathPog() + File.separator + lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_nomPresentation() + ".pog";
+			}
+		}
 		jTextField1.setText(nomficpog);
 		super.setVisible(arg0);
 	}

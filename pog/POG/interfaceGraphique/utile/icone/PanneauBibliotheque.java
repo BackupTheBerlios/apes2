@@ -168,7 +168,7 @@ public class PanneauBibliotheque extends JPanel
   public void load(){
     JLabel jLabel;
     ImageIcon icon;
-    Object[] listFichIcon = filtreExtension(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getPathIcones(), "gif");
+    Object[] listFichIcon = filtreExtension(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut(), "gif");
 
 
     jPanel1.removeAll();
@@ -230,7 +230,10 @@ public class PanneauBibliotheque extends JPanel
 
     jButton1.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
-        //lnkFenetrePrincipale.lancerIconEditor(new String());
+        File ff = lnkFenetrePrincipale.iconeChooser(null);
+        if (ff != null)
+        	PogToolkit.copyFile(ff.getAbsolutePath(), lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut() + File.separator + ff.getName());
+        load();
       }
     });
 

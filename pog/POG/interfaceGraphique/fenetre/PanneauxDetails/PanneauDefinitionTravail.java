@@ -27,8 +27,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -136,10 +135,9 @@ public class PanneauDefinitionTravail extends PanneauDetail {
   public void afficherMenuGuides(Component compo, int x, int y) {
     JPopupMenu popup = new JPopupMenu();
     popup.setBackground(java.awt.Color.CYAN);
-    Vector vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().type("ApesWorkDefinition");
-    Enumeration enum = vTypes.elements();
-    while (enum.hasMoreElements()) {
-      String value = (String) enum.nextElement();
+	Iterator vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().types();
+	while (vTypes.hasNext()) {
+	  String value = (String) vTypes.next();
       JMenuItem choixEnPlus = new JMenuItem(value);
       listenerSousMenusGuides lis = new listenerSousMenusGuides(value, this, this.lnkControleurPanneaux);
       choixEnPlus.addActionListener(lis);

@@ -24,8 +24,7 @@ package POG.interfaceGraphique.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.Iterator;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -44,7 +43,6 @@ import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauRole;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauVide;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.listenerSousMenusGuides;
 import POG.objetMetier.ElementPresentation;
-import POG.objetMetier.PresentationElementModele;
 //import application.controleurMetier.ControleurOrganiser;
 
 public class ControleurPanneaux {
@@ -297,14 +295,9 @@ public class ControleurPanneaux {
       jMenuAjouterGuide.removeAll();
       if (ep != null)
       {
-        Vector vTypes;
-        if (ep instanceof PresentationElementModele)
-          vTypes = getLnkSysteme().getLnkControleurGuide().type( ( (PresentationElementModele) ep).getLnkModelElement().getClass().getName());
-        else
-          vTypes = getLnkSysteme().getLnkControleurGuide().type("ALL");
-        Enumeration enum = vTypes.elements();
-        while (enum.hasMoreElements()) {
-          String value = (String) enum.nextElement();
+		Iterator vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().types();
+		while (vTypes.hasNext()) {
+		  String value = (String) vTypes.next();
           JMenuItem mi = new JMenuItem(value);
           mi.addActionListener(new listenerSousMenusGuides(value, lnkPanneauDetail,
             this.lnkControleurPanneaux));
@@ -322,5 +315,10 @@ public class ControleurPanneaux {
     lnkPanneauDetail.supprimerElement(elt);
   }
 
+
+
+public JSplitPane get_jsplit() {
+	return _jsplit;
+}
 
 }

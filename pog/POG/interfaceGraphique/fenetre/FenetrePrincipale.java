@@ -47,6 +47,9 @@ import POG.interfaceGraphique.action.ControleurPanneaux;
 import POG.interfaceGraphique.action.Systeme;
 import POG.interfaceGraphique.utile.arbre.ArbreExplorateur;
 import POG.interfaceGraphique.utile.arbre.ArbrePresentation;
+import POG.interfaceGraphique.utile.icone.ImageFileView;
+import POG.interfaceGraphique.utile.icone.ImageFilter;
+import POG.interfaceGraphique.utile.icone.ImagePreview;
 import POG.interfaceGraphique.utile.icone.PanneauBibliotheque;
 import POG.interfaceGraphique.utile.menu.MainToolBar;
 import POG.interfaceGraphique.utile.menu.POGMenu;
@@ -65,8 +68,8 @@ public class FenetrePrincipale
   private JSplitPane jSplitPane3 = new JSplitPane();
   private JSplitPane jSplitPane4 = new JSplitPane();
 
-  private JPanel jPanel4 = new JPanel();
-  private JPanel jPanel5 = new JPanel();
+  private JPanel _panelArbrePresentation = new JPanel();
+  private JPanel _panelExploBiblio = new JPanel();
 
   private JScrollPane jScrollPane1 = new JScrollPane();
   private JScrollPane jScrollPane2 = new JScrollPane();
@@ -191,6 +194,10 @@ public class FenetrePrincipale
    * @directed
    */
   private ArbreExplorateur lnkArbreExplorateur = null;
+  
+	private FenetreElementLien lnkFenetreElementLien = null;
+	private FenetreChangerIcone lnkFenetreChangerIcone = null;
+  
   public JLabel jLabelPathBib = new JLabel();
   
   private MainToolBar lnkMainToolBar = null;
@@ -198,23 +205,34 @@ public class FenetrePrincipale
   private JFileChooser lnkJIconChooser = null;
 
   private String _pathSave = "";
+  private String _pathExport = "";
+  
 
   public static FenetrePrincipale INSTANCE;
 
 
   public void afficheChangerIcone(ElementPresentation elmt) {
-    //Show it.
-    File dir = new File(lnkSysteme.getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
-    getLnkJIconChooser().setCurrentDirectory(dir);
-    int returnVal = getLnkJIconChooser().showDialog(this, getLnkLangues().valeurDe("titreIconChooser"));
-
-    //Process the results.
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-      File file = getLnkJIconChooser().getSelectedFile();
+      File file = iconeChooser(null);
+      if (file == null)
+      	return;
       lnkSysteme.changerIcone(elmt, file);
       getLnkControleurPanneaux().reload();
-    }
   }
+
+	public File iconeChooser(String chem) {
+		//Show it.
+		File dir = new File(lnkPreferences.get_pathIconeDefaut());
+		getLnkJIconChooser().setCurrentDirectory(dir);
+		if (chem != null)
+			getLnkJIconChooser().setSelectedFile(new File(dir.getAbsolutePath() + File.separator + chem));
+		int returnVal = getLnkJIconChooser().showDialog(this, getLnkLangues().valeurDe("titreIconChooser"));
+
+		//Process the results.
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		  return getLnkJIconChooser().getSelectedFile();
+		}
+		return null;
+	}
 
 
   /**
@@ -347,7 +365,7 @@ public class FenetrePrincipale
     jSplitPane4.setDividerSize(10);
     jSplitPane4.setDividerLocation(600);
 
-    jPanel5.setLayout(borderLayout7);
+	_panelExploBiblio.setLayout(borderLayout7);
     JPanel panelBiblio = new JPanel();
 	panelBiblio.setLayout(new BorderLayout());
     
@@ -379,31 +397,51 @@ public class FenetrePrincipale
 	badd.setIcon(lnkPreferences.getIconeDefaut("menu_item_add_artefact"));
 	
 	badd.addActionListener(new ActionListener() {
+		private String oldPath;
+		
 		public void actionPerformed(ActionEvent evt) {
 			if (lnkSysteme.getlnkControleurPresentation().getlnkPresentation() == null)
 				return;
-			File tocopy = PogToolkit.chooseFile(fpp);
-			PogToolkit.copyFile(tocopy.getAbsolutePath(), lnkSysteme.getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath() + File.separator + tocopy.getName());
+			if (oldPath == null)
+				oldPath = System.getProperty("user.dir");
+			File [] tocopy = PogToolkit.chooseMultipleFile(fpp, oldPath);
+			if (tocopy == null)
+				return;
+			if (tocopy.length == 0)
+				return;
+			for (int i = 0; i < tocopy.length; i++) {
+				String desti = lnkSysteme.getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath() + File.separator + tocopy[i].getName();
+				boolean copi = true;
+				if (new File(desti).exists()) {
+					if (PogToolkit.askYesNoQuestion(fpp.getLnkLangues().valeurDe("questouinonremplacerfichier"), false, fpp) != PogToolkit._YES)
+						copi = false;
+				}
+				if (copi)
+					PogToolkit.copyFile(tocopy[i].getAbsolutePath(), desti);
+			}
+			oldPath = tocopy[0].getParent();
 			lnkArbreExplorateur.load();
 		}
   	});
-
+	jLabelPathBib.setPreferredSize(new Dimension(200,20));
+	jLabelPathBib.setMinimumSize(new Dimension(200,20));
+	jLabelPathBib.setAutoscrolls(true);
 	panelBiblio.add(jLabelPathBib, BorderLayout.NORTH);
 	panelBiblio.add(btnChangerBib, BorderLayout.EAST);
 	panelBiblio.add(badd, BorderLayout.CENTER);
 	panelBiblio.add(brefr, BorderLayout.WEST);
-    jPanel5.add(panelBiblio, BorderLayout.NORTH);
-    jPanel5.add(lnkArbreExplorateur.get_arbre(), BorderLayout.CENTER);
+	_panelExploBiblio.add(panelBiblio, BorderLayout.NORTH);
+	_panelExploBiblio.add(jScrollPane1, BorderLayout.CENTER);
 
-    jScrollPane1.getViewport().add(jPanel5, null);
+    jScrollPane1.getViewport().add(lnkArbreExplorateur.get_arbre(), null);
 
-    jSplitPane3.add(jScrollPane1, JSplitPane.TOP);
+    jSplitPane3.add(_panelExploBiblio, JSplitPane.TOP);
     jSplitPane3.add(lnkPanneauBibliotheque, JSplitPane.BOTTOM);
 
     jScrollPane3.getViewport().add(lnkDebug.get_texte(), null);
     jSplitPane4.add(jScrollPane3, JSplitPane.BOTTOM);
 
-    jPanel4.setLayout(borderLayout6);
+	_panelArbrePresentation.setLayout(borderLayout6);
 
     JPanel panelOrganiser = new JPanel();
     JButton bDown = new JButton();
@@ -448,13 +486,13 @@ public class FenetrePrincipale
       }
     });
 
-    jPanel4.add(panelOrganiser, BorderLayout.NORTH);
-    jPanel4.add(lnkArbrePresentation.get_arbre(), BorderLayout.CENTER);
+	_panelArbrePresentation.add(panelOrganiser, BorderLayout.NORTH);
+	_panelArbrePresentation.add(jScrollPane2, BorderLayout.CENTER);
 
-    jScrollPane2.getViewport().add(jPanel4, null);
+    jScrollPane2.getViewport().add(lnkArbrePresentation.get_arbre(), null);
 
     jSplitPane1.add(jSplitPane2, JSplitPane.RIGHT);
-    jSplitPane1.add(jScrollPane2, JSplitPane.LEFT);
+    jSplitPane1.add(_panelArbrePresentation, JSplitPane.LEFT);
 
     jSplitPane2.add(jSplitPane4, JSplitPane.LEFT);
     jSplitPane2.add(jSplitPane3, JSplitPane.RIGHT);
@@ -496,6 +534,20 @@ public class FenetrePrincipale
   }
 
   public JFileChooser getLnkJIconChooser() {
+  	if (lnkJIconChooser == null) {
+		 lnkJIconChooser = new JFileChooser();
+		
+		//Add a custom file filter and disable the default
+		//(Accept All) file filter.
+		lnkJIconChooser.addChoosableFileFilter(new ImageFilter());
+		lnkJIconChooser.setAcceptAllFileFilterUsed(false);
+		
+		//Add custom icons for file types.
+		lnkJIconChooser.setFileView(new ImageFileView());
+		
+		//Add the preview pane.
+		lnkJIconChooser.setAccessory(new ImagePreview(lnkJIconChooser));
+	}
     return lnkJIconChooser;
   }
 
@@ -527,6 +579,20 @@ public class FenetrePrincipale
       lnkFenetreEnregistrerSous = new FenetreEnregistrerSous(this);
     }
     return lnkFenetreEnregistrerSous;
+  }
+
+  public FenetreElementLien getLnkFenetreElementLien() {
+	if (lnkFenetreElementLien == null) {
+		lnkFenetreElementLien = new FenetreElementLien(this);
+	}
+	return lnkFenetreElementLien;
+  }
+
+  public FenetreChangerIcone getLnkFenetreChangerIcone() {
+	if (lnkFenetreChangerIcone == null) {
+		lnkFenetreChangerIcone = new FenetreChangerIcone(this);
+	}
+	return lnkFenetreChangerIcone;
   }
 
   public FenetreNouvellePresentationAvecModele
@@ -571,25 +637,37 @@ public class FenetrePrincipale
   public FenetrePrincipale get_fenetrePrincipale() {
     return _fenetrePrincipale;
   }
-/**
- * @return
- */
-public String get_pathSave() {
-	return _pathSave;
+
+	public String get_pathSave() {
+		return _pathSave;
+	}
+	
+	
+	public void set_pathSave(String save) {
+		_pathSave = save;
+	
+	        if(save.equalsIgnoreCase(""))
+	           this.setTitle(PogToolkit._APP_NAME);
+	        else
+	          this.setTitle(PogToolkit._APP_NAME+" : " + save);
+	}
+//*/
+
+	public String get_pathExport() {
+		return _pathExport;
+	}
+	
+	public void set_pathExport(String export) {
+		_pathExport = export;
+	}
+	
+
+public JPanel get_panelArbrePresentation() {
+	return _panelArbrePresentation;
 }
 
-/**
- * @param save
- */
-public void set_pathSave(String save) {
-	_pathSave = save;
-
-        if(save.equalsIgnoreCase(""))
-           this.setTitle(PogToolkit._APP_NAME);
-        else
-          this.setTitle(PogToolkit._APP_NAME+" : " + save);
+public JPanel get_panelExploBiblio() {
+	return _panelExploBiblio;
 }
 
 }
-/*
-// */

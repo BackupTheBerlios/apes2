@@ -468,6 +468,7 @@ public class ArbrePresentation
         lnkSysteme.modifierNomDePresentation(elt, (String) newValue);
         _arbre.setEditable(false);
       }
+      
     };
     this._arbre.setModel(tm);
   }

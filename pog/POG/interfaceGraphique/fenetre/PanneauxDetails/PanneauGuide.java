@@ -47,7 +47,7 @@ public class PanneauGuide extends PanneauDetail {
   }
 
   private void jbInit() throws Exception {
-    jButton1.setVisible(false);
+    btnajouterguide.setVisible(false);
     jScrollPane1 = new JScrollPane();
     jScrollPane1.setBounds(new Rectangle(11, 265, 250, 64));
     jScrollPane1.setBorder(

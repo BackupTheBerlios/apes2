@@ -76,7 +76,7 @@ abstract public class PanneauDetail
   private JLabel fichier_associe = new JLabel();
   private JTextArea desc = new JTextArea();
   private JScrollPane areaScrollPane;
-  public JButton jButton1 = new JButton();
+  public JButton btnajouterguide = new JButton();
   public PanneauDetail _instance;
 
   /** Traitement de l'\uFFFDvenement "un objet entre dans la zone de Drop"
@@ -238,11 +238,11 @@ abstract public class PanneauDetail
     });
 
 
-    jButton1.setBounds(new Rectangle(130, 489, 184, 22));
-    jButton1.setText(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("ajouterguide"));
-    jButton1.addActionListener(new ActionListener(){
+    btnajouterguide.setBounds(new Rectangle(130, 489, 184, 22));
+    btnajouterguide.setText(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("ajouterguide"));
+    btnajouterguide.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt) {
-        afficherMenuGuides(jButton1, jButton1.getParent().getX() + 15, jButton1.getParent().getY());
+        afficherMenuGuides(btnajouterguide, btnajouterguide.getParent().getX() + 15, btnajouterguide.getParent().getY());
       }
     });
 
@@ -257,7 +257,7 @@ abstract public class PanneauDetail
     this.add(jLabel3, null);
     this.add(jLabel2, null);
     this.add(jLabel9, null);
-    this.add(jButton1, null);
+    this.add(btnajouterguide, null);
 
   }
 

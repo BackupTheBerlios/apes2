@@ -47,7 +47,7 @@ public class Presentation
 
   public String _pathModele = null;
   private List _idElements = null;
-  private String _nomPresentation = new String();
+//  private String _nomPresentation = new String();
   private String _IdRacine;
   private ImageIcon _icone;
 
@@ -77,7 +77,7 @@ public class Presentation
     this.lnkElementPresentation.clear();
     _pathModele = null;
     _idElements = null;
-    _nomPresentation = name;
+//    _nomPresentation = name;
     _icone = icone;
 
     this.lnkBibliotheque = new Bibliotheque(path);
@@ -95,7 +95,7 @@ public class Presentation
     _idElements = null;
     _pathModele = null;
     _icone = icone;
-    _nomPresentation = name;
+//    _nomPresentation = name;
     this.lnkBibliotheque = new Bibliotheque(path);
     this._idElements = new Vector();
     PresentationElementModele elementRacine = new PresentationElementModele(this.
@@ -116,12 +116,9 @@ public class Presentation
   }
 
   public String get_nomPresentation() {
-    return _nomPresentation;
+    return getElementPresentation(getIdRacine()).get_nomPresentation();
   }
 
-  public List get_idElements() {
-    return this._idElements;
-  }
 
  public void setModele(ProcessComponent ap)
  {
@@ -345,7 +342,7 @@ public class Presentation
    * @param id
    * @return
    */
-  public ElementPresentation supprimerElementPresentation(String id) {
+ private ElementPresentation supprimerElementPresentation(String id) {
     Iterator it = this._idElements.iterator();
     int pos = 0;
     while (it.hasNext() && pos != -1) {
@@ -359,11 +356,6 @@ public class Presentation
         remove(id);
   }
 
-  public void supprimerElementPresentation(ElementPresentation elmt) {
-    lnkElementPresentation.remove(elmt.get_id());
-    _idElements.remove(elmt.get_id());
-  }
-
   public void sauver(OutputStreamWriter out, boolean FlagExporter) {
     String filename = new String();
     int index;
@@ -375,7 +367,7 @@ public class Presentation
 
       out.write("<proprietes>");
       out.write("<nom_presentation>");
-      out.write(this._nomPresentation);
+      out.write(get_nomPresentation());
       out.write("</nom_presentation>\n");
 
       //Recuperer le chemin de la bibliotheque
@@ -423,6 +415,9 @@ public class Presentation
     public String icone = "";
     public String contenu = "";
     public String description = "";
+	public String nominmodel = "";
+	public String placearbre = "";
+	public String typeproduit = "";
   }
 
   private tmp_charger_element _tmp_charger_element = new tmp_charger_element();
@@ -459,8 +454,16 @@ public class Presentation
     }
     else if (cle.equals(".exportation_presentation.element.description")) {
       _tmp_charger_element.description = new String(valeur);
-      //ajout de l'element de presentation a la presentation
     }
+	else if (cle.equals(".exportation_presentation.element.nominmodele")) {
+		_tmp_charger_element.nominmodel = new String(valeur);
+	}
+	else if (cle.equals(".exportation_presentation.element.placearbre")) {
+		_tmp_charger_element.placearbre = new String(valeur);
+	}
+	else if (cle.equals(".exportation_presentation.element.typeproduit")) {
+		_tmp_charger_element.typeproduit = new String(valeur);
+	}
     else if (cle.startsWith(".exportation_presentation.element.guide")) {
       //_chargement_element a ete cree dans finirChargement
       if (_chargement_element == null) {
@@ -472,6 +475,8 @@ public class Presentation
   }
 
   private boolean _flagcharge = true;
+  public boolean DEJADEMANDE = false;
+  public HashMap DEJASYNCHRO = null;
 
   public void finirChargement(String valeur) {
     if (valeur.equals(".exportation_presentation.element.guide")) {
@@ -492,40 +497,67 @@ public class Presentation
         _chargement_element.set_icone(Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone));
         _chargement_element.set_description(_tmp_charger_element.description);
       }
-      else {
-        _tmp_charger_element.contenu = _tmp_charger_element.contenu.replace('/', File.separatorChar);
-        _tmp_charger_element.contenu = _tmp_charger_element.contenu.replace('\\', File.separatorChar);
-        _tmp_charger_element.icone = _tmp_charger_element.icone.replace('/', File.separatorChar);
-        _tmp_charger_element.icone = _tmp_charger_element.icone.replace('\\', File.separatorChar);
-        if (this.lnkProcessComponent != null) {
-          ModelElement mm = Apes.getElementByID(Integer.parseInt(_tmp_charger_element.identificateur_externe));
-          _chargement_element = new PresentationElementModele(_tmp_charger_element.identificateur_interne, Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone), mm);
-        }
-        else
-          _chargement_element = new ElementPresentation(_tmp_charger_element.identificateur_interne, Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone));
-
-        ajouterElementPresentation(_chargement_element);
-      }
+		else {
+		    _tmp_charger_element.contenu = _tmp_charger_element.contenu.replace('/', File.separatorChar);
+		    _tmp_charger_element.contenu = _tmp_charger_element.contenu.replace('\\', File.separatorChar);
+		    _tmp_charger_element.icone = _tmp_charger_element.icone.replace('/', File.separatorChar);
+		    _tmp_charger_element.icone = _tmp_charger_element.icone.replace('\\', File.separatorChar);
+			if (this.lnkProcessComponent != null) {
+				ModelElement mm = Apes.getElementByID(Integer.parseInt(_tmp_charger_element.identificateur_externe));
+				if ((mm != null) && (DEJASYNCHRO == null))
+					_chargement_element = new PresentationElementModele(_tmp_charger_element.identificateur_interne, Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone), mm);
+				else {
+					if (DEJASYNCHRO == null) {
+						DEJASYNCHRO = new HashMap();
+						FenetrePrincipale.INSTANCE.getLnkSysteme().getLnkControleurPresenter().synchroniserApes(true);
+						Object[] tpog = listeElementPresentation();
+						for (int i = 0; i < tpog.length; i++) {
+							if (tpog[i] instanceof PresentationElementModele) {
+								PresentationElementModele tt = (PresentationElementModele) tpog[i];
+								DEJASYNCHRO.put(tt.get_nominmodel() + tt.get_placearbre(), tt);
+							}
+						}
+					}
+					_chargement_element = (ElementPresentation) DEJASYNCHRO.get(_tmp_charger_element.nominmodel + _tmp_charger_element.placearbre);
+					_chargement_element.set_id(_tmp_charger_element.identificateur_interne);
+					_chargement_element.set_icone(Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone));
+				}
+			}
+			else
+				_chargement_element = new ElementPresentation(_tmp_charger_element.identificateur_interne, Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone));
+		
+			if (_chargement_element == null)
+				return;
+			ajouterElementPresentation(_chargement_element);
+		}
       _chargement_element.set_nomPresentation(_tmp_charger_element.nom_presentation);
       if (!_tmp_charger_element.contenu.equals("")) {
       	File toto = new File(_tmp_charger_element.contenu);
       	if (!toto.exists())
       		toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
-		if (!toto.exists())
+		if (!toto.exists() && !DEJADEMANDE) {
 			if (PogToolkit.askYesNoQuestion(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("deplbiblio"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
 				File nbib = PogToolkit.chooseDirectory(FenetrePrincipale.INSTANCE, lnkBibliotheque.getAbsolutePath());
 				FenetrePrincipale.INSTANCE.getLnkSysteme().changerBibliotheque(nbib);
 				toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
 			}
+			DEJADEMANDE = true;
+		}
 		if (!toto.exists())
 			FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("attachefich").replaceFirst("ARG0", _tmp_charger_element.contenu).replaceFirst("ARG1", _tmp_charger_element.nom_presentation));
 		else
         	_chargement_element.setContenu(new Contenu(toto, this.lnkBibliotheque.getAbsolutePath()));
 	  }
       _chargement_element.set_description(_tmp_charger_element.description);
-
+		if (_chargement_element instanceof PresentationElementModele) {
+			((PresentationElementModele)_chargement_element).set_typeProduit(_tmp_charger_element.typeproduit);
+			if (DEJASYNCHRO == null) {
+				PresentationElementModele toto = (PresentationElementModele)_chargement_element;
+				toto.set_nominmodel(_tmp_charger_element.nominmodel);
+				toto.set_placearbre(_tmp_charger_element.placearbre);
+			}
+		}
       _tmp_charger_element = new tmp_charger_element();
-
     }
   }
 

@@ -138,23 +138,23 @@ public class ArbreExplorateur extends Arbre implements DragSourceListener, DragG
     int i;
     File[] liste;
     /* listFiles retourne tous les nom de fichiers et de sous-r?pertoires contenu dans un r?pertoire*/
-    liste = lecteur.listFiles();
-    Arrays.sort(liste);
-    try {
-      for (i = 0; i < liste.length; i++) {
-        /* on teste si c'est un r?pertoire */
-        if ( (liste[i].isDirectory() == true) && (liste[i].isHidden() == false)) {
-          /* sitel est le cas on cr?e un nouveau noeud */
-          DefaultMutableTreeNode sous_rep = new DefaultMutableTreeNode(liste[i].getName());
-          /*que l'on ajoute au noeud pr?c?dent */
-          noeud.add(sous_rep);
-          /* et on regarde le contenu de ce nouveau r?pertoire */
-          ajout_dossier(liste[i], sous_rep);
-        }
-        else if ( (liste[i].isFile() == true) && (liste[i].isHidden() == false)) {
-          noeud.add(new DefaultMutableTreeNode(liste[i].getName()));
-        }
-      }
+	try {
+	    liste = lecteur.listFiles();
+	    Arrays.sort(liste);
+	      for (i = 0; i < liste.length; i++) {
+	        /* on teste si c'est un r?pertoire */
+	        if ( (liste[i].isDirectory() == true) && (liste[i].isHidden() == false)) {
+	          /* sitel est le cas on cr?e un nouveau noeud */
+	          DefaultMutableTreeNode sous_rep = new DefaultMutableTreeNode(liste[i].getName());
+	          /*que l'on ajoute au noeud pr?c?dent */
+	          noeud.add(sous_rep);
+	          /* et on regarde le contenu de ce nouveau r?pertoire */
+	          ajout_dossier(liste[i], sous_rep);
+	        }
+	        else if ( (liste[i].isFile() == true) && (liste[i].isHidden() == false)) {
+	          noeud.add(new DefaultMutableTreeNode(liste[i].getName()));
+	        }
+	      }
     }
     catch (NullPointerException e) {
       //exception que l'on obtient lorsqu'il n'y a plus de r?pertoire ou de fichier
@@ -180,6 +180,7 @@ public class ArbreExplorateur extends Arbre implements DragSourceListener, DragG
     // Generation du chemin dans l'arbre
     this.lnkSysteme.majLiensFichiers(this.getFichier(n), this.getChemin(n) + nom);
     n.setUserObject(nom);
+    lnkSysteme.lnkFenetrePrincipale.getLnkControleurPanneaux().reload();
   }
 
   /**
@@ -195,9 +196,13 @@ public class ArbreExplorateur extends Arbre implements DragSourceListener, DragG
    * Lance le processus de suppression de l'objet selectionne
    * @param n Element a supprimer
    */
-  public void supprimer (DefaultMutableTreeNode n)
-  {
-  	if (PogToolkit.askYesNoQuestion(lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("questsuppfich").replaceFirst("ARG0", n.toString()), false, lnkSysteme.lnkFenetrePrincipale) == PogToolkit._YES) {
+  public void supprimer (DefaultMutableTreeNode n) {
+  	boolean detruire = true;
+  	if (lnkSysteme.estFichierAffecte(this.getFichier(n)))
+  		detruire = PogToolkit.askYesNoQuestion(lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("questsuppfichassocie").replaceFirst("ARG0", n.toString()), false, lnkSysteme.lnkFenetrePrincipale) == PogToolkit._YES;
+  	else
+  		detruire = PogToolkit.askYesNoQuestion(lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("questsuppfich").replaceFirst("ARG0", n.toString()), false, lnkSysteme.lnkFenetrePrincipale) == PogToolkit._YES;
+  	if (detruire) {
 		(new File(this.getFichier(n))).delete();
 		this.load();
   	}

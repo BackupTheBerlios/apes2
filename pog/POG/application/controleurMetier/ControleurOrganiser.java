@@ -61,8 +61,7 @@ public class ControleurOrganiser
    */
   public ElementPresentation ajouterElementPre(String nom) {
     String id = this.lnkControleurPresentation.getlnkPresentation().makeId("1");
-    ImageIcon icone = lnkControleurPresentation.lnkPreferences.getIconeDefaut(
-        "defaut_icon");
+    ImageIcon icone = lnkControleurPresentation.lnkPreferences.getIconeDefaut(lnkControleurPresentation.lnkPreferences.get_defIcoElem());
     ElementPresentation elmt = new ElementPresentation(id, icone);
     elmt.set_nomPresentation(nom);
     this.lnkControleurPresentation.getlnkPresentation().

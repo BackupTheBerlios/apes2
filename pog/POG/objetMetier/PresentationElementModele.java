@@ -1,4 +1,4 @@
-/*
+	/*
  * POG
  * Copyright (C) 2004 Team POG
   *
@@ -24,12 +24,15 @@
 
 package POG.objetMetier;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.utile.trace.Debug;
@@ -41,7 +44,9 @@ public class PresentationElementModele extends ElementPresentation {
 
 
   private boolean _modifiable;
-  private String _stringType;
+  private String _typeProduit = "";
+  private String _nominmodel;
+  private String _placearbre;
 
   /**
    * @supplierCardinality 1
@@ -62,14 +67,19 @@ public class PresentationElementModele extends ElementPresentation {
 
    */
 
+	private void askChangeNom() {
+		String quest = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("questouinonchangernommodele");
+		quest = quest.replaceFirst("ARG0", _nomPresentation);
+		quest = quest.replaceFirst("ARG1", _nominmodel);
+		if (PogToolkit.askYesNoQuestion(quest, false, FenetrePrincipale.INSTANCE) == PogToolkit._YES)
+			_nomPresentation = _nominmodel;		
+	}
+
   public void setModelElement(ModelElement el)
   {
+  	_nominmodel = el.getName();
   	if (!lnkModelElement.getName().equals(el.getName())) {
-    	String quest = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("questouinonchangernommodele");
-    	quest = quest.replaceFirst("ARG0", _nomPresentation);
-    	int rep = PogToolkit.askYesNoQuestion(quest, false, FenetrePrincipale.INSTANCE);
-    	if (rep == PogToolkit._NO)
-    		_nomPresentation = el.getName();
+		askChangeNom();
     }
 	this.lnkModelElement = el;
   }
@@ -77,7 +87,6 @@ public class PresentationElementModele extends ElementPresentation {
   public ModelElement getLnkModelElement() {
     return lnkModelElement;
   }
-
 
   public PresentationElementModele(String id, ImageIcon ico, ModelElement element) {
     super(id, ico);
@@ -89,7 +98,8 @@ public class PresentationElementModele extends ElementPresentation {
     this._nomPresentation = element.getName();
     if (element instanceof SpemDiagram)
         _modifiable = false;
-
+	_nominmodel = element.getName();
+	_placearbre = id;
   }
 
   public boolean estValide(Debug lnkDebug){
@@ -112,7 +122,42 @@ public class PresentationElementModele extends ElementPresentation {
 /*    else
       return Integer.toString(lnkProcessComponent.getID());*/
   }
+	
+	public String get_nominmodel() {
+		return _nominmodel;
+	}
+	public String get_placearbre() {
+		return _placearbre;
+	}
 
+	public void set_nominmodel(String nominmodel) {
+		if (_nominmodel.equals(nominmodel) || nominmodel.equals(""))
+			return;
+		askChangeNom();
+	}
+	
+	public void set_placearbre(String _placearbre) {
+		this._placearbre = _placearbre;
+	}
 
+	public String get_typeProduit() {
+		return _typeProduit;
+	}
+	
+	public void set_typeProduit(String produit) {
+		if (lnkModelElement instanceof WorkProduct)
+			_typeProduit = produit;
+	}
+	public void sauver(OutputStreamWriter out, boolean FlagExporter) {
+		super.sauver(out, FlagExporter);
+		try {
+			out.write("<typeproduit>");
+			out.write(_typeProduit);
+			out.write("</typeproduit>\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
 

@@ -172,6 +172,16 @@ public class ElementPresentation implements Sauvegarde {
       out.write(_description);
       out.write("</description>\n");
 
+	  if ((this instanceof PresentationElementModele) && !FlagExporter) {
+		PresentationElementModele toto = (PresentationElementModele)this;
+		out.write("<nominmodele>");
+		out.write(toto.get_nominmodel());
+		out.write("</nominmodele>\n");
+		out.write("<placearbre>");
+		out.write(toto.get_placearbre());
+		out.write("</placearbre>\n");
+	  }
+
       if (lnkGuide.size() != 0) {
         Enumeration enum = this.lnkGuide.elements();
         while (enum.hasMoreElements()) {

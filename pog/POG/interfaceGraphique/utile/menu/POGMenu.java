@@ -61,6 +61,8 @@ public class POGMenu extends JMenuBar {
   private JMenuItem jMenuAjouterElementPre = new JMenuItem();
   private JMenuItem jMenuSynchroniser = new JMenuItem();
   private JMenuItem jMenuExtraire = new JMenuItem();
+  private JMenuItem jMenuLien = new JMenuItem();
+  private JMenuItem jMenuchangeico = new JMenuItem();
   private JMenuItem jMenuExporter = new JMenuItem();
   private JMenuItem jMenuExporterIEPP = new JMenuItem();
   private JMenuItem jMenuVerifCoherence = new JMenuItem();
@@ -132,6 +134,12 @@ public class POGMenu extends JMenuBar {
     jMenuAjouterElementPre.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterElementPresentation"));
     jMenuAjouterElementPre.addActionListener(lnkMenuListener);
     jMenuAjouterElementPre.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("menu_item_add_artefact"));
+
+	jMenuLien.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("lienfic"));
+	jMenuLien.addActionListener(lnkMenuListener);
+
+	jMenuchangeico.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("changertoutesicones"));
+	jMenuchangeico.addActionListener(lnkMenuListener);
 
     jMenuSynchroniser.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("synchroniser"));
     jMenuSynchroniser.addActionListener(lnkMenuListener);
@@ -213,6 +221,8 @@ public class POGMenu extends JMenuBar {
     jMenu2.add(jMenuAjouterElementPre);
     jMenu2.add(jMenuSynchroniser);
     jMenu2.add(jMenuExtraire);
+	jMenu2.add(jMenuLien);
+	jMenu2.add(jMenuchangeico);
     jMenu2.addSeparator();
     jMenu2.add(jMenuViderLog);
     jMenu2.addSeparator();

@@ -58,32 +58,57 @@ import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.utils.IconManager;
 
+import POG.application.controleurMetier.ControleurExporter;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.utile.MyMultiFileFilter;
 import POG.utile.PogToolkit;
+import POG.utile.ZIP;
 
 public class Preferences {
 
-  public static Preferences MyInstance;
-
-  private String _langue = Langues.LANGUEDEFAUT;
-  private String _pathApes = System.getProperty("user.dir") + File.separator + "apes2.jar";
-  private String _pathIconeDefaut = System.getProperty("user.dir");
-  private HashMap _associationDocExe = new HashMap();
-  public static final String REPPREF = System.getProperty("user.home") + File.separatorChar + ".apes2" + File.separatorChar;
-  private IconManager _im;
-  private HashMap _icoFile = new HashMap();
-  private String _pathBiblio = System.getProperty("user.dir");
-  private String _laf = UIManager.getLookAndFeel().toString() ;
-  private FenetrePrincipale _lnkFenetrePrincipale ;
-  private static java.util.prefs.Preferences prefUser = java.util.prefs.Preferences.userNodeForPackage(Preferences.class);
-  private static java.util.prefs.Preferences prefExt = java.util.prefs.Preferences.userNodeForPackage(java.util.HashMap.class);
+	public static Preferences MyInstance;
+	public static final String REPPREF = System.getProperty("user.home") + File.separatorChar + ".apes2" + File.separatorChar;
 	
-	private String _editeurPerso = "PIKA";
+	
+	// ATTENTION : C'est le path de la classe qui permet de retrouver les préférences
+	private static java.util.prefs.Preferences prefUser = java.util.prefs.Preferences.userNodeForPackage(Preferences.class);
+	private static java.util.prefs.Preferences prefExt = java.util.prefs.Preferences.userNodeForPackage(java.util.HashMap.class);
+	private static java.util.prefs.Preferences prefGuide = java.util.prefs.Preferences.userNodeForPackage(ZIP.class);
+	private static java.util.prefs.Preferences prefProduit = java.util.prefs.Preferences.userNodeForPackage(ControleurExporter.class);
+	
+	private HashMap _preferences = new HashMap();
+
+	private HashMap _associationDocExe = new HashMap();
+	private HashMap _associationGuide = new HashMap();
+	private HashMap _associationProduit = new HashMap();
+	private HashMap _icoFile = new HashMap();
+
+	private FenetrePrincipale _lnkFenetrePrincipale ;
+	private IconManager _im;
+	
+//private String _editeurPerso = "PIKA";
 
   public Preferences(FenetrePrincipale fp) throws ClassNotFoundException {
     this._lnkFenetrePrincipale = fp ;
     MyInstance = this;
+    
+    
+    
+    // Mise des préférences par défaut :
+	set_langue(Langues.LANGUEDEFAUT);
+	set_pathApes(System.getProperty("user.dir") + File.separator + "apes2.jar");
+	set_pathIconeDefaut(System.getProperty("user.dir"));
+	set_pathPre(System.getProperty("user.dir"));
+	set_pathPog(System.getProperty("user.dir"));
+	set_pathModeleApes(System.getProperty("user.dir"));
+	set_pathBiblio(System.getProperty("user.dir"));
+	set_laf(UIManager.getLookAndFeel().toString());
+	set_utiliseCheminModele(new String("oui"));
+	set_defIcoElem("defaut_icon");
+	set_defIcoPack("TreeComponent");
+    
+    
+    
     // Creation du repertoire de preferences si inexistant
     if (!PogToolkit.folderExists(REPPREF))
       if (PogToolkit.createFolder(REPPREF) == null)
@@ -111,8 +136,8 @@ public class Preferences {
       ClassLoader.getSystemClassLoader().loadClass("org.ipsquad.utils.IconManager");
     }
     catch (Exception e) {
-      if ((new File(_pathApes)).exists()) {
-        System.setProperty("java.class.path",  _pathApes + File.pathSeparator + System.getProperty("java.class.path"));
+      if ((new File(get_pathApes())).exists()) {
+        System.setProperty("java.class.path",  get_pathApes() + File.pathSeparator + System.getProperty("java.class.path"));
         System.out.println("ClassPATH: " + System.getProperty("java.class.path"));
         throw new ClassNotFoundException();
       }
@@ -122,10 +147,10 @@ public class Preferences {
       MyMultiFileFilter fileFilter = new MyMultiFileFilter(".jar");
       jf.addChoosableFileFilter((FileFilter)fileFilter);
       if (jf.showOpenDialog(null)== JFileChooser.APPROVE_OPTION) {
-        _pathApes = jf.getSelectedFile().getAbsolutePath();
-        System.out.println("PATHAPES: " + _pathApes);
+		set_pathApes(jf.getSelectedFile().getAbsolutePath());
+        System.out.println("PATHAPES: " + get_pathApes());
         sauverPrefs();
-        System.setProperty("java.class.path", _pathApes + File.pathSeparator + System.getProperty("java.class.path"));
+        System.setProperty("java.class.path", get_pathApes() + File.pathSeparator + System.getProperty("java.class.path"));
         System.out.println("ClassPATH: " + System.getProperty("java.class.path"));
         throw new ClassNotFoundException();
       }
@@ -208,34 +233,22 @@ public class Preferences {
     return prefs;
   }
 
-  public String get_langue() {
-    return _langue;
+  public HashMap get_guide() {
+    return _associationGuide;
   }
-
-  public void set_langue(String l)
+  public void set_guide(HashMap m)
   {
-    this._langue = l ;
+	this._associationGuide = m ;
   }
 
-  public String get_guide() {
-    return "fichXMLGuide";
+  public HashMap get_produit() {
+	return _associationProduit;
   }
-
-  public String get_laf()
+  public void set_produit(HashMap m)
   {
-    return this._laf;
+	this._associationProduit = m ;
   }
 
-  public void set_laf(String laf)
-  {
-    try
-    {
-      UIManager.setLookAndFeel (laf) ;
-      SwingUtilities.updateComponentTreeUI(this._lnkFenetrePrincipale) ;
-      this._laf = laf;
-    }
-    catch (Exception ex) {}
-  }
 
 	public String get_editeur(String ext) {
 /*		if (ext.endsWith("html") || ext.endsWith("htm"))
@@ -292,15 +305,24 @@ public class Preferences {
     if (ii == null)
       ii = myGetIcon(nom);
 
+	if (ii == null) {
+		File tmp = new File(nom);
+		nom = tmp.getName();
+		if (nom.indexOf('.') != -1)
+			nom = nom.substring(0, nom.lastIndexOf('.'));
+	}
+
     // Cherche dans la bibliotheque d'icone
-    if ((this._pathIconeDefaut != null) && (ii == null)) {
-      thepath = _pathIconeDefaut + File.separator + nom + ".gif";
+    if ((get_pathIconeDefaut() != null) && (ii == null)) {
+      thepath = get_pathIconeDefaut() + File.separator + nom + ".gif";
       ii = myGetIcon(thepath);
+      if ((ii == null) && (PogToolkit.fileExists(thepath)))
+	  	ii = new ImageIcon(thepath);
     }
 
     // Cherche dans la bibliotheque
-    if ((_pathBiblio != null) && (ii == null)) {
-      thepath = _pathBiblio + File.separator + nom + ".gif";
+    if ((get_pathBiblio() != null) && (ii == null)) {
+      thepath = get_pathBiblio() + File.separator + nom + ".gif";
       ii = myGetIcon(thepath);
     }
 
@@ -349,14 +371,6 @@ public class Preferences {
     }
   }
 
-  public String get_pathBiblio() {
-    return _pathBiblio;
-  }
-
-  public void set_pathBiblio(String _pathBiblio){
-    this._pathBiblio = _pathBiblio;
-  }
-
   public String getCheminIcon(ImageIcon i) {
     return (String)_icoFile.get(i);
   }
@@ -365,23 +379,32 @@ public class Preferences {
   {
     InputStream isUser = null;
     InputStream isExt = null;
+	InputStream isGuide = null;
     try {
         isUser = new BufferedInputStream(new FileInputStream(REPPREF+"POGPreferencesUser.xml"));
         isExt = new BufferedInputStream(new FileInputStream(REPPREF+"POGPreferencesExt.xml"));
+		isGuide = new BufferedInputStream(new FileInputStream(REPPREF+"POGPreferencesGuide.xml"));
     } catch (FileNotFoundException e) {}
 
     // Importe les preferences
     try {
         java.util.prefs.Preferences.importPreferences(isUser);
         java.util.prefs.Preferences.importPreferences(isExt);
+		java.util.prefs.Preferences.importPreferences(isGuide);
     } catch (Exception e) {}
 
-    this._langue = Preferences.prefUser.get("langue", Langues.LANGUEDEFAUT);
-    this.set_laf(Preferences.prefUser.get("lookandfeel", UIManager.getLookAndFeel().toString()));
-    this.setPathApes(Preferences.prefUser.get("pathApes", System.getProperty("user.dir") + File.separator + "apes2-1.5-java1.4.jar"));
-    this.setPathIcones(Preferences.prefUser.get("pathCheminIconesDefaut", System.getProperty("user.dir")));
-    this.set_pathBiblio(Preferences.prefUser.get("pathCheminBiblio", System.getProperty("user.dir")));
-    String[] keys={};
+
+	String[] keys={};
+	try
+	{
+	  keys = prefUser.keys();
+	}
+	catch(BackingStoreException e){}
+	for (int i=0; i < keys.length; i++)
+	{
+		this._preferences.put( (String) keys[i], prefUser.get( (String) keys[i], "chemin de l'executable"));
+	}
+
     try
     {
       keys = Preferences.prefExt.keys();
@@ -391,6 +414,43 @@ public class Preferences {
     {
         this._associationDocExe.put( (String) keys[i], prefExt.get( (String) keys[i], "chemin de l'executable"));
     }
+    keys = new String[0];
+	try
+	{
+	  keys = Preferences.prefGuide.keys();
+	}
+	catch(BackingStoreException e){}
+	for (int i=0; i < keys.length; i++)
+	{
+		this._associationGuide.put( (String) keys[i], prefGuide.get( (String) keys[i], "type guide"));
+	}
+	if (_associationGuide.size() == 0) {
+		_associationGuide.put("Concept", "GuideConcept.gif");
+		_associationGuide.put("Article", "GuideArticle.gif");
+		_associationGuide.put("Technique", "GuideTechnique.gif");
+		_associationGuide.put("Guide de redaction", "GuideRedaction.gif");
+		_associationGuide.put("Liste de controles", "GuideListeControle.gif");
+		_associationGuide.put("Plan Type", "GuidePlanType.gif");
+		_associationGuide.put("Exemple", "GuideExemple.gif");
+		_associationGuide.put("Guide Outil", "GuideOutil.gif");
+		_associationGuide.put("Quoi de neuf", "GuideNeuf.gif");
+	}
+	try
+	{
+	  keys = Preferences.prefProduit.keys();
+	}
+	catch(BackingStoreException e){}
+	for (int i=0; i < keys.length; i++)
+	{
+		this._associationProduit.put( (String) keys[i], prefProduit.get( (String) keys[i], "type produit"));
+	}
+	if (_associationProduit.size() == 0) {
+		_associationProduit.put("Document", "ProduitDocument.gif");
+		_associationProduit.put("Modèle", "ProduitModele.gif");
+		_associationProduit.put("Référentiel", "ProduitReferentiel.gif");
+		_associationProduit.put("Objet Métier", "ProduitObjetMetier.gif");
+		_associationProduit.put("Autre", "ProduitAutre.gif");
+	}
   }
 
   public void sauverPrefs()
@@ -399,39 +459,147 @@ public class Preferences {
     {
       Preferences.prefUser.clear();
       Preferences.prefExt.clear();
+	  Preferences.prefGuide.clear();
+	  Preferences.prefProduit.clear();
     }
     catch(Exception e){}
-    Preferences.prefUser.put("langue", _langue);
-    Preferences.prefUser.put("lookandfeel", _laf);
-    Preferences.prefUser.put("pathApes", this._pathApes);
-    Preferences.prefUser.put("pathCheminIconesDefaut", this._pathIconeDefaut);
-    Preferences.prefUser.put("pathCheminBiblio", this._pathBiblio);
+    
+	for(Iterator it = _preferences.entrySet().iterator(); it.hasNext();)
+	{
+	  Map.Entry entry = (Map.Entry)it.next();
+	  Preferences.prefUser.put((String)entry.getKey(), (String)entry.getValue());
+	}
+    
     for(Iterator it = _associationDocExe.entrySet().iterator(); it.hasNext();)
     {
       Map.Entry entry = (Map.Entry)it.next();
       Preferences.prefExt.put((String)entry.getKey(), (String)entry.getValue());
     }
+	for(Iterator it = _associationGuide.entrySet().iterator(); it.hasNext();)
+	{
+	  Map.Entry entry = (Map.Entry)it.next();
+	  Preferences.prefGuide.put((String)entry.getKey(), (String)entry.getValue());
+	}
+	for(Iterator it = _associationProduit.entrySet().iterator(); it.hasNext();)
+	{
+	  Map.Entry entry = (Map.Entry)it.next();
+	  Preferences.prefProduit.put((String)entry.getKey(), (String)entry.getValue());
+	}
     try {
         // Exporte le node dans un fichier
         prefUser.exportNode(new FileOutputStream(REPPREF+"POGPreferencesUser.xml"));
         prefExt.exportNode(new FileOutputStream(REPPREF+"POGPreferencesExt.xml"));
+		prefGuide.exportNode(new FileOutputStream(REPPREF+"POGPreferencesGuide.xml"));
+		prefProduit.exportNode(new FileOutputStream(REPPREF+"POGPreferencesProduit.xml"));
     } catch (Exception e) {}
   }
 
-  public void setPathIcones(String path){
-    this._pathIconeDefaut = path;
-  }
+	public String get_pathPre() {
+		return (String) _preferences.get("_pathPre");
+	}
+	
+	public void set_pathPre(String pre) {
+		_preferences.put("_pathPre", pre);
+	}
 
-  public String getPathIcones() {
-    return this._pathIconeDefaut;
-  }
+	public String get_pathPog() {
+		return (String) _preferences.get("_pathPog");
+	}
+	
+	public void set_pathPog(String pog) {
+		_preferences.put("_pathPog", pog);
+	}
 
-  public String getPathApes() {
-    return this._pathApes;
-  }
+	public String get_pathModeleApes() {
+		return (String) _preferences.get("_pathModeleApes");
+	}
+	
+	public void set_pathModeleApes(String modeleApes) {
+		_preferences.put("_pathModeleApes", modeleApes);
+	}
 
-  public void setPathApes(String path)
-  {
-    this._pathApes = path;
-  }
+	public boolean get_utiliseCheminModele() {
+		return _preferences.get("_utiliseCheminModele").equals("oui");
+	}
+
+	public void set_utiliseCheminModele(boolean cheminModele) {
+		if (cheminModele)
+			_preferences.put("_utiliseCheminModele", "oui");
+		else
+			_preferences.put("_utiliseCheminModele", "non");
+	}
+
+	public String get_pathApes() {
+		return (String) _preferences.get("_pathApes");
+	}
+
+	public void set_pathApes(String apes) {
+		_preferences.put("_pathApes", apes);
+	}
+
+	public String get_pathIconeDefaut() {
+		return (String) _preferences.get("_pathIconeDefaut");
+	}
+
+	public void set_pathIconeDefaut(String iconeDefaut) {
+		_preferences.put("_pathIconeDefaut", iconeDefaut);
+	}
+
+	public void set_utiliseCheminModele(String cheminModele) {
+		_preferences.put("_utiliseCheminModele", cheminModele);
+	}
+
+	public String get_langue() {
+	  return (String) _preferences.get("_langue");
+	}
+
+	public void set_langue(String l) {
+		_preferences.put("_langue", l);
+	}
+
+	public String get_laf()	{
+	  return (String) _preferences.get("_laf");
+	}
+
+	public void set_laf(String laf)	{
+	  try  {
+		UIManager.setLookAndFeel (laf) ;
+		SwingUtilities.updateComponentTreeUI(this._lnkFenetrePrincipale) ;
+		_preferences.put("_laf", laf);
+	  }
+	  catch (Exception ex) {}
+	}
+
+	public String get_pathBiblio() {
+	  return  (String) _preferences.get("_pathBiblio");
+	}
+
+	public void set_pathBiblio(String pathBiblio){
+		_preferences.put("_pathBiblio", pathBiblio);
+	}
+
+	public ImageIcon getIconeTypeProduit(String typeprod) {
+		if (typeprod.equals(""))
+			return null;
+		return getIconeDefaut(_associationProduit.get(typeprod));
+	}
+
+	public String get_defIcoElem() {
+		return (String) _preferences.get("_defIcoElem");
+	}
+
+	public String get_defIcoPack() {
+		return (String) _preferences.get("_defIcoPack");
+	}
+
+	public void set_defIcoElem(String iconeDefaut) {
+		_preferences.put("_defIcoElem", iconeDefaut);
+	}
+
+	public void set_defIcoPack(String iconeDefaut) {
+		_preferences.put("_defIcoPack", iconeDefaut);
+	}
+
+
+
 }

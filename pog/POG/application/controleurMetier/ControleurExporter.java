@@ -86,7 +86,7 @@ public class ControleurExporter extends ControleurSemantique {
 				lnkDebug.patienter("duplimg", i, sousf.length);
 				if (sousf[i].isFile()) {
 					PogToolkit.copyFile(sousf[i].getAbsolutePath(), ff.getAbsolutePath() + File.separator + "images" + File.separator + sousf[i].getName());
-					archive.ajouteFichier(new File(ff.getAbsolutePath() + File.separator + "images" + File.separator + sousf[i].getName()), new String("images" + File.separator + sousf[i].getName()), "Fichier images");
+					archive.ajouteFichier(new String("images" + File.separator + sousf[i].getName()), "Fichier images");
 				}
 			}
 		}
@@ -105,18 +105,18 @@ public class ControleurExporter extends ControleurSemantique {
           for (int k = 0; k < vv.size(); k++) {
             File f = new File( (String) ( (Vector) vv.get(k)).get(0));
             if (f.getName().indexOf(".") != -1)
-              archive.ajouteFichier(f, (String)((Vector)vv.get(k)).get(0), "Fichier apes");
+              archive.ajouteFichier((String)((Vector)vv.get(k)).get(0), "Fichier apes");
           }
         }
 
         //Ajout des fichiers de la presentation dans l'archive
-        archive.ajouteFichier(sauvegarde, sauvegarde.getName(), "Fichier xml de sauvegarde de la presentation");
+        archive.ajouteFichier(sauvegarde.getName(), "Fichier xml de sauvegarde de la presentation");
 
         int index;
         String fileTest;
         if (listFichiers != null)
         for (int i = 0; i < listFichiers.length; i++){
-            archive.ajouteFichier(new File(ff.getAbsolutePath() + File.separator + listFichiers[i]),  (String)listFichiers[i], "Fichier de la presentation");
+            archive.ajouteFichier((String)listFichiers[i], "Fichier de la presentation");
         }
         // et compression
         lnkDebug.patienter("compression", 0, 0);

@@ -21,15 +21,19 @@
 package POG.application.importExport;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
@@ -41,18 +45,22 @@ import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.WorkDefinition;
 
 import JSX.ObjIn;
+import JSX.ObjOut;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
+import POG.utile.PogToolkit;
 
 public class Apes {
 
   private static File mFile;
   private static Vector _lstElement;
   private static HashMap _hdiag;
+	private static Vector _vectorLut;
+	public static ApesProcess AP;
 
   public static ProcessComponent loadModel(File nomfich) {
 	FenetrePrincipale.INSTANCE.getLnkDebug().patienter("chargeapes", 0, 0);
     mFile = nomfich;
-    ApesProcess ap = new ApesProcess("Project");
+    final ApesProcess ap = new ApesProcess("Project");
     try {
     	FileInputStream fis = new FileInputStream(mFile);
       ZipInputStream zipFile = new ZipInputStream(fis);
@@ -63,8 +71,44 @@ public class Apes {
     catch (Throwable t) {
       t.printStackTrace();
     }
+    return chargeProcessComponent(ap);
+  }
+  
+  public static ProcessComponent chargeProcessComponent(final ApesProcess ap) {    
     ProcessComponent pp = ap.getComponent();
-    _lstElement = new Vector();
+    _lstElement = new Vector() {
+    	private HashMap _allId = new HashMap();
+    	
+		public synchronized boolean add(Object obj) {
+			if (obj instanceof ModelElement) {
+				ModelElement mo = (ModelElement) obj;
+				if (_allId.get(new Integer(mo.getID())) != null) {
+					if (PogToolkit.askYesNoQuestion(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("archivedeteriore"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
+						mo.getParent().removeModelElement(mo);
+						try {
+							File nouv = new File(mFile.getAbsolutePath() + ".restore");
+							nouv.createNewFile();
+							save(nouv, ap);
+							super.remove(_allId.get(new Integer(mo.getID())));
+							ModelElement mo2 = (ModelElement) _allId.get(new Integer(mo.getID()));
+							mo2.getParent().removeModelElement(mo2);
+//							_allId.remove(new Integer(mo.getID()));
+							return true;
+						}
+						catch(Throwable t) {
+							t.printStackTrace();
+							PogToolkit.showErrorMsg("Une erreur c'est produite, restauration inachevé... (ERREUR: " + t.getMessage() + ")", FenetrePrincipale.INSTANCE);
+						}
+					}
+				}
+				else {
+					_allId.put(new Integer(mo.getID()), obj);
+					return super.add(obj);
+				}
+			}
+			return false;
+		}
+    };
     _lstElement.add(pp);
     Stack st = new Stack();
     for (int i = 0; i < pp.modelElementCount(); i++) {
@@ -112,9 +156,9 @@ public class Apes {
 
     if (data != null) {
       ObjIn in = new ObjIn(data);
-      Vector v = (Vector) in.readObject();
-      ap.addModelElement( (ProcessComponent) v.get(0));
-	  _hdiag = (HashMap)v.get(1);
+      _vectorLut = (Vector) in.readObject();
+      ap.addModelElement( (ProcessComponent) _vectorLut.get(0));
+	  _hdiag = (HashMap)_vectorLut.get(1);
       projectZip.close();
 
       return true;
@@ -172,5 +216,43 @@ public class Apes {
 	public static SpemGraphAdapter getDiagramme(SpemDiagram sp) {
 		return (SpemGraphAdapter)_hdiag.get(sp);
 	}
+
+
+	public static void save(File nouv, ApesProcess ap) throws IOException
+	{
+		FileOutputStream outstream = new FileOutputStream(nouv);
+		ZipOutputStream zipFile = new ZipOutputStream( outstream );
+		saveComponent(zipFile);
+		saveInterfaces(zipFile, ap);
+		zipFile.close();
+	}
+
+
+	private static void saveComponent(ZipOutputStream mZipFile) throws IOException
+	{
+		ZipEntry entryZip = new ZipEntry("Component.xml");
+		mZipFile.putNextEntry(entryZip);
+		DataOutputStream data = new DataOutputStream( new BufferedOutputStream(mZipFile) );
+		ObjOut out = new ObjOut( data );
+		out.writeObject(_vectorLut);
+		mZipFile.closeEntry();
+	}
+
+	private static void saveInterfaces(ZipOutputStream mZipFile, ApesProcess ap) throws IOException
+	{
+		ZipEntry entryZip;
+		entryZip = new ZipEntry( "Interfaces.xml" );
+		mZipFile.putNextEntry( entryZip );	
+		DataOutputStream dataout = new DataOutputStream(mZipFile);
+		
+		DataInputStream datain = findData("Interfaces.xml");
+		int c;
+		while ((c = datain.read()) != -1)
+			dataout.write(c);
+		
+		mZipFile.closeEntry();
+	}
+
+
 
 }

@@ -62,7 +62,7 @@ import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 public class PogToolkit
 {
   /** Nom de l'application */
-  public static final String _APP_NAME = "POG v";
+  public static final String _APP_NAME = "POG";
 
   /**Chemin de l'application*/
   public static String _PATH_APPLI;
@@ -111,11 +111,10 @@ public class PogToolkit
     return null;
   }
 
-  static public File chooseFileWithFilter(Component fenetre, MyMultiFileFilter filters){
-    _FILE_CHOOSER = new JFileChooser(new File(System.getProperty("user.dir")));
+  static public File chooseFileWithFilter(Component fenetre, MyMultiFileFilter filters, String chemin){
+  	creerFileChooser(chemin);
     _FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
     _FILE_CHOOSER.addChoosableFileFilter((FileFilter)filters);
-    _FILE_CHOOSER.setCurrentDirectory(new File(FenetrePrincipale.INSTANCE.getLnkSysteme().getLnkPreferences().get_pathBiblio()));
     if (_FILE_CHOOSER.showOpenDialog(fenetre)== JFileChooser.APPROVE_OPTION) {
       return (_FILE_CHOOSER.getSelectedFile());
     }
@@ -123,17 +122,18 @@ public class PogToolkit
     return null;
   }
 
-  static public File chooseFile(Component fenetre) {
-    _FILE_CHOOSER = new JFileChooser(new File(System.getProperty("user.dir")));
+  static public File [] chooseMultipleFile(Component fenetre, String oldPath) {
+    _FILE_CHOOSER = new JFileChooser(new File(oldPath));
     _FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    _FILE_CHOOSER.setMultiSelectionEnabled(true);
     if (_FILE_CHOOSER.showOpenDialog(fenetre)== JFileChooser.APPROVE_OPTION) {
-      return (_FILE_CHOOSER.getSelectedFile());
+      return (_FILE_CHOOSER.getSelectedFiles());
     }
     return null;
   }
 
-  static public File chooseFileAPES(Component fenetre) {
-    _FILE_CHOOSER = new JFileChooser(new File(System.getProperty("user.dir")));
+  static public File chooseFileAPES(Component fenetre, String dossier) {
+	creerFileChooser(dossier);
     MyFileFilter fileFilter = new MyFileFilter(PogToolkit._APP_EXT);
     _FILE_CHOOSER.addChoosableFileFilter((FileFilter)fileFilter);
     _FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -145,13 +145,10 @@ public class PogToolkit
   }
 
   static public File chooseFileToSave(Component fenetre, MyMultiFileFilter filters, String nomFile) {
-  	File dfic = new File(nomFile);
-	if (!dfic.getParentFile().exists())
-		dfic = new File(System.getProperty("user.dir") + File.separator + dfic.getName());
-    _FILE_CHOOSER = new JFileChooser(dfic.getParentFile());
+	creerFileChooser(nomFile);
     _FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
     _FILE_CHOOSER.addChoosableFileFilter( (FileFilter) filters);
-	_FILE_CHOOSER.setSelectedFile(dfic);
+	_FILE_CHOOSER.setSelectedFile(new File(nomFile));
     if (_FILE_CHOOSER.showSaveDialog(fenetre) == JFileChooser.APPROVE_OPTION) {
       return (_FILE_CHOOSER.getSelectedFile());
     }
@@ -160,10 +157,7 @@ public class PogToolkit
 }
 
   static public File chooseDirectory(Component fenetre, String prevDir) {
-  	File dopen = new File(prevDir);
-  	if (!dopen.exists())
-  		dopen = new File(System.getProperty("user.dir"));
-    _FILE_CHOOSER = new JFileChooser(dopen);
+	creerFileChooser(prevDir);
     _FILE_CHOOSER.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     if (_FILE_CHOOSER.showOpenDialog(fenetre)== JFileChooser.APPROVE_OPTION) {
       return (_FILE_CHOOSER.getSelectedFile());
@@ -171,7 +165,18 @@ public class PogToolkit
     return null;
   }
 
-
+	private static void creerFileChooser(String fichier) {
+		File dopen = new File(fichier);
+		boolean ok = dopen.exists();
+		if (!ok)
+			if (dopen.getParentFile() != null) {
+				dopen = dopen.getParentFile();
+				ok = dopen.exists();
+			}
+		if (!ok)
+			dopen = new File(System.getProperty("user.dir"));
+		_FILE_CHOOSER = new JFileChooser(dopen);
+	}
 
   /** Retourne la largeur de l'\uFFFDcran, en pixel
    *  @return  Largeur de l'\uFFFDcran, en pixel
@@ -463,7 +468,7 @@ public class PogToolkit
    */
   public static boolean ensureFolderExist(String folder)
   {
-    if (fileExists(folder)) return true;
+    if (folderExists(folder)) return true;
 
     if (createFolder(folder) == null)
       return false;
@@ -520,7 +525,8 @@ public class PogToolkit
    */
   public static boolean fileExists(String fileName)
   {
-    return ((new File(fileName)).exists());
+  	File f = new File(fileName);
+    return (f.exists() && f.isFile());
   }
 
   public static void delFile(String fileName){

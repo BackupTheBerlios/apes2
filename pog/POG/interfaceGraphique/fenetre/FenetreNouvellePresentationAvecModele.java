@@ -104,7 +104,7 @@ public class FenetreNouvellePresentationAvecModele extends FenetrePOG {
 
     jTextFieldBiblio.setPreferredSize(new Dimension(200, 20));
     jTextFieldBiblio.setText(this.lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathBiblio());
-
+	jTextFieldNomModele.setText(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathModeleApes());
     jTextFieldNomModele.setPreferredSize(new Dimension(200, 20));
 
     jButtonP.setText("...");
@@ -122,7 +122,7 @@ public class FenetreNouvellePresentationAvecModele extends FenetrePOG {
     jButtonP2.addActionListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent evt) {
-        File mod = PogToolkit.chooseFileAPES(lnkFenetrePrincipale);
+        File mod = PogToolkit.chooseFileAPES(lnkFenetrePrincipale, jTextFieldNomModele.getText());
         if (mod != null) {
           jTextFieldNomModele.setText(mod.getAbsolutePath());
         }

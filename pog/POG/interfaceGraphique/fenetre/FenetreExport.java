@@ -112,8 +112,10 @@ public class FenetreExport extends FenetrePOG  {
     if (PogToolkit.fileExists(jTextField1.getText()))
       //On pose la question si oui ou non on ecras l'ancienne archive
       rep = PogToolkit.askYesNoQuestion(this.lnkFenetrePrincipale.getLnkLangues().valeurDe("QuestOuiNonEcraseAncienneArch"), false, this);
-
-	this.setVisible(false);
+	if (rep == PogToolkit._NO)
+		return;
+	super.setVisible(false);
+	lnkFenetrePrincipale.set_pathExport(jTextField1.getText());
 	lnkFenetrePrincipale.getLnkSysteme().exporterPresentation(jTextField1.getText());	
   }
 
@@ -122,9 +124,16 @@ public class FenetreExport extends FenetrePOG  {
   }
 
 	public void setVisible(boolean arg0) {
-		String nomficpog = lnkFenetrePrincipale.get_pathSave();
-		nomficpog = nomficpog.substring(0, nomficpog.lastIndexOf('.')) + ".pre";
-		jTextField1.setText(nomficpog);
+		String pathexp = lnkFenetrePrincipale.get_pathExport();
+		if (pathexp.equals("")) {
+			File fmo = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele();
+			if (fmo == null)
+				jTextField1.setText(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathPre() + File.separator + lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_nomPresentation() + ".pre");
+			else
+				jTextField1.setText(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathPre() + File.separator + fmo.getName().substring(0, fmo.getName().lastIndexOf(".")) + ".pre");
+		}
+		else
+			jTextField1.setText(pathexp);
 		super.setVisible(arg0);
 	}
 

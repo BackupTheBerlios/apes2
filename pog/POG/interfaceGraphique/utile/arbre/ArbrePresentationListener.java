@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
+import java.util.Iterator;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -184,10 +184,11 @@ public class ArbrePresentationListener
 	
 	private void rempliPopupGuide(String typeg) {
 		_mnuguide.removeAll();
-		Vector vTypes = lnkArbrePresentation.lnkSysteme.getLnkControleurGuide().type(typeg);
-		for (int i = 0; i < vTypes.size(); i++) {
-			JMenuItem choixEnPlus = new JMenuItem((String)vTypes.get(i));
-			choixEnPlus.addActionListener(new listenerSousMenusGuides((String)vTypes.get(i)));
+		Iterator vTypes =  lnkArbrePresentation.lnkSysteme.getLnkControleurGuide().types();
+		while (vTypes.hasNext()) {
+		  String value = (String) vTypes.next();
+			JMenuItem choixEnPlus = new JMenuItem(value);
+			choixEnPlus.addActionListener(new listenerSousMenusGuides(value));
 			_mnuguide.add(choixEnPlus);
 		}
 	}
@@ -204,8 +205,8 @@ public class ArbrePresentationListener
 		if (((ElementPresentation)_objetCourantSelectionne).getContenu() != null)
 			_mnucontenu.setText(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("changerdecontenu"));
 		if (((ElementPresentation)_objetCourantSelectionne).get_id().equals(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().getlnkPresentation().getIdRacine())) {
-			_mnusupprimer.setVisible(false); 
-			_mnuajouterelem.setVisible(true);
+			_mnusupprimer.setVisible(false);
+			_mnuajouterelem.setVisible(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().get_pathModele() == null);
 			rempliPopupGuide("ALL");
 		}
 		else if (_objetCourantSelectionne instanceof Guide)

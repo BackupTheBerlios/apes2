@@ -61,10 +61,8 @@ public class Importer{
                                 "Component.xml")) {
 //      	ZipFile tmpf = new ZipFile(fichA);
         ZIP arch2 = new ZIP(fichA);
-        arch2.ajouteFichier(new File(fichP.getAbsolutePath() + File.separator +
-                                     "Interfaces.xml"), "", "");
-        arch2.ajouteFichier(new File(fichP.getAbsolutePath() + File.separator +
-                                     "Component.xml"), "", "");
+        arch2.ajouteFichier(doss.getAbsolutePath() + File.separator + "Interfaces.xml", "Fichier apes");
+        arch2.ajouteFichier(doss.getAbsolutePath() + File.separator + "Component.xml", "Fichier apes");
         arch2.ziper();
         _tmp_charger_presentation.chemin_icones = "M=> " + fichA;
       }
@@ -143,7 +141,7 @@ public class Importer{
             	String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("moddepl");
             	mess = mess.replaceFirst("ARG0", pathmo);
             	FenetrePrincipale.INSTANCE.getLnkDebug().debogage(mess);
-				File rep = PogToolkit.chooseFileAPES(FenetrePrincipale.INSTANCE);
+				File rep = PogToolkit.chooseFileAPES(FenetrePrincipale.INSTANCE, pathmo);
             	if (rep == null)
             		return;
             	pathmo = rep.getAbsolutePath();
@@ -155,6 +153,8 @@ public class Importer{
         else
           _ctr.nouvellePresentation(new File(_tmp_charger_presentation.chemin_contenus), _tmp_charger_presentation.nom_presentation);
         _chargement_presentation = _ctr.getlnkPresentation();
+        _chargement_presentation.DEJADEMANDE = false;
+		_chargement_presentation.DEJASYNCHRO = null;
       }
       else if (_curnom.startsWith(".exportation_presentation.element")) {
         //on passe la main a Presentation
@@ -190,7 +190,9 @@ public class Importer{
       }
 
       private void inittmpstruct(String content) {
-
+		content = content.replaceAll("\n", "");
+		content = content.replaceAll("\r", "");
+		content = content.replaceAll("\t", "");
 //        System.out.println("CHARGE: " + _curnom + " -> " + content);
         if (_curnom == null)
           _curnom = new String(content);

@@ -67,7 +67,7 @@ public class ControleurPresentation {
     _pathModele = null;
     lnkPresentation = new Presentation(nomPres, pathBibli.getAbsolutePath(),
                                        lnkPreferences.
-                                       getIconeDefaut("TreeComponent"));
+                                       getIconeDefaut(lnkPreferences.get_defIcoPack()));
     lnkPresentation._pathModele = null;
   }
 
@@ -76,7 +76,7 @@ public class ControleurPresentation {
     //pour AvecModele
     _pathModele = pathModele;
     lnkPresentation = new Presentation(monproc.getName(), pathBibli,
-                                       lnkPreferences.getIconeDefaut("TreeComponent"), monproc);
+                                       lnkPreferences.getIconeDefaut(lnkPreferences.get_defIcoPack()), monproc);
     lnkPresentation._pathModele = this._pathModele.getAbsolutePath();
   }
 

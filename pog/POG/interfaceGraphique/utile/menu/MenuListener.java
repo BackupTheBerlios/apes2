@@ -47,7 +47,7 @@ public class MenuListener implements ActionListener {
    if (evt.getActionCommand().equals(getLangue("Ouvrir"))) {
      MyMultiFileFilter fd = new MyMultiFileFilter(".pog");
      fd.addExt(".pre");
-     File pres = PogToolkit.chooseFileWithFilter(pgm.lnkFenetrePrincipale, fd);
+     File pres = PogToolkit.chooseFileWithFilter(pgm.lnkFenetrePrincipale, fd, pgm.lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathPog());
      if (pres == null || !(pres.getName().endsWith(".pog") || pres.getName().endsWith(".pre")))
      {
        if (pres == null)
@@ -59,7 +59,6 @@ public class MenuListener implements ActionListener {
      }
 
      pgm.lnkFenetrePrincipale.getLnkSysteme().ouvrirPresentation(pres.toString());
-//     pgm.lnkFenetrePrincipale.getLnkArbrePresentation().selectionnerRacine();
    }
    else if (evt.getActionCommand().equals(getLangue("Enregistrer"))){
      if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() != null){
@@ -82,7 +81,7 @@ public class MenuListener implements ActionListener {
 				if ((pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() != null)
 					&& (pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() != null))
 				argvApes = pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele().getPath();
-				String str = pgm.lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getPathApes();
+				String str = pgm.lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathApes();
 				str = "java -jar \"" + str + "\" \"" + argvApes + "\"";
 				System.out.println(str);
 				try {
@@ -150,6 +149,20 @@ public class MenuListener implements ActionListener {
      else
        pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
    }
+   else if (evt.getActionCommand().equals(getLangue("lienfic")))
+   {
+	 if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() !=null)
+	   pgm.lnkFenetrePrincipale.getLnkFenetreElementLien().setVisible(true);
+	 else
+	   pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
+   }
+   else if (evt.getActionCommand().equals(getLangue("changertoutesicones")))
+   {
+	 if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() !=null)
+	   pgm.lnkFenetrePrincipale.getLnkFenetreChangerIcone().setVisible(true);
+	 else
+	   pgm.lnkFenetrePrincipale.getLnkDebug().debogage("presvide");
+   }
    else if (evt.getActionCommand().equals(getLangue("syncapes")))
      {
        if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() == null)
@@ -157,7 +170,7 @@ public class MenuListener implements ActionListener {
          this.pgm.lnkFenetrePrincipale.getLnkDebug().afficher("presnonlier");
        }
        else {
-         pgm.lnkFenetrePrincipale.getLnkSysteme().synchroniserApes();
+         pgm.lnkFenetrePrincipale.getLnkSysteme().synchroniserApes(null);
        }
      }
   else if (evt.getActionCommand().equals(getLangue("VerifierCoherence")))

@@ -21,11 +21,13 @@
 package POG.interfaceGraphique.utile.icone;
 
 import java.io.File;
-import javax.swing.*;
-import javax.swing.filechooser.*;
 
-import POG.utile.PogToolkit;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.filechooser.FileView;
+
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
+import POG.utile.PogToolkit;
 
 /* ImageFileView.java is a 1.4 example used by FileChooserDemo2.java. */
 public class ImageFileView extends FileView {

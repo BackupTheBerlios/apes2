@@ -23,16 +23,19 @@ package POG.interfaceGraphique.fenetre.PanneauxDetails;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -64,9 +67,19 @@ public class PanneauProduit extends PanneauDetail {
   JList list_outactivite = new JList();
   JLabel jLabel7 = new JLabel();
   JTable list_guides = new JTable();
+  JComboBox typeProduit;
+  private String [] lestypes;
 
   public PanneauProduit(ControleurPanneaux control) {
     super(control);
+    HashMap types = lnkControleurPanneaux.getLnkSysteme().getLnkPreferences().get_produit();
+    lestypes = new String[types.size()];
+    int i = 0;
+	for(Iterator it = types.entrySet().iterator(); it.hasNext();)
+	{
+	  Map.Entry entry = (Map.Entry)it.next();
+	  lestypes[i++] = (String)entry.getKey();
+	}
     try {
       jbInit();
     }
@@ -78,16 +91,32 @@ public class PanneauProduit extends PanneauDetail {
   private void jbInit() throws Exception {
     list_guides.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+	typeProduit = new JComboBox(lestypes);
+	typeProduit.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			JComboBox cb = (JComboBox)e.getSource();
+			String type = (String)cb.getSelectedItem();
+			lnkControleurPanneaux.getLnkSysteme().changerTypeProduit(_elementCourant, type);
+		}
+	});
+	typeProduit.setBounds(new Rectangle(12, 262, 195, 55));
+	typeProduit.setBorder(
+			BorderFactory.createCompoundBorder(
+			BorderFactory.createCompoundBorder(
+			BorderFactory.createTitledBorder("Type Produit"),
+			BorderFactory.createEmptyBorder(5, 5, 5, 5)),
+			typeProduit.getBorder()));
+	
     jLabel5.setText("Produit");
-    jLabel5.setBounds(new Rectangle(155, 262, 125, 20));
+    jLabel5.setBounds(new Rectangle(155, 322, 125, 20));
     jLabel51.setText("en sortie des activites :");
-    jLabel51.setBounds(new Rectangle(12, 277, 195, 20));
+    jLabel51.setBounds(new Rectangle(12, 340, 195, 20));
     jLabel52.setText("en entree des activites :");
-    jLabel52.setBounds(new Rectangle(217, 277, 195, 20));
+    jLabel52.setBounds(new Rectangle(217, 340, 195, 20));
     jScrollPane51 = new JScrollPane();
-    jScrollPane51.setBounds(new Rectangle(12, 298, 195, 55));
+    jScrollPane51.setBounds(new Rectangle(12, 360, 195, 55));
     jScrollPane52 = new JScrollPane();
-    jScrollPane52.setBounds(new Rectangle(217, 298, 195, 55));
+    jScrollPane52.setBounds(new Rectangle(217, 360, 195, 55));
 
     list_inactivite.setCellRenderer(new ModelElementListCellRenderer());
     list_inactivite.addMouseListener(this.navigationMouseListener);
@@ -95,7 +124,7 @@ public class PanneauProduit extends PanneauDetail {
     list_outactivite.addMouseListener(this.navigationMouseListener);
 
     JPanel jPanel = new JPanel(new BorderLayout());
-    jPanel.setBounds(new Rectangle(11, 370, 400, 118));
+    jPanel.setBounds(new Rectangle(11, 430, 400, 118));
     list_guides.setModel(new TableGuideModel ());
     list_guides.addMouseListener(this.navigationMouseListener);
     list_guides.getColumnModel().getColumn(0).setPreferredWidth(10);
@@ -103,7 +132,7 @@ public class PanneauProduit extends PanneauDetail {
     jPanel.add(list_guides.getTableHeader(), BorderLayout.NORTH);
     scrollpaneGuides = new JScrollPane(list_guides);
     jPanel.add(scrollpaneGuides, BorderLayout.CENTER);
-    scrollpaneGuides.setBounds(new Rectangle(11, 370, 400, 250));
+    scrollpaneGuides.setBounds(new Rectangle(11, 430, 400, 250));
     scrollpaneGuides.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
@@ -111,19 +140,25 @@ public class PanneauProduit extends PanneauDetail {
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         scrollpaneGuides.getBorder()));
 
-    KeyListener listenerJtableGuides = new KeyAdapter() {
-    public void keyPressed(KeyEvent e) {
-      e.consume();
-        if (e.getKeyCode() == KeyEvent.VK_DELETE){
-          Guide g = getGuideSelectionne();
-          if (g != null)
-            lnkControleurPanneaux.getLnkSysteme().supprimerElement(g);
-        }
-    }
-};
-list_guides.addKeyListener(listenerJtableGuides);
+	KeyListener listenerJtableGuides = new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+			e.consume();
+			if (e.getKeyCode() == KeyEvent.VK_DELETE){
+				Guide g = getGuideSelectionne();
+				if (g != null)
+					lnkControleurPanneaux.getLnkSysteme().supprimerElement(g);
+			}
+		}
+	};
+	list_guides.addKeyListener(listenerJtableGuides);
+
+	// redef
+	btnajouterguide.setBounds(new Rectangle(130, 550, 184, 22));
+	this.setPreferredSize(new Dimension(425, 580));
+	this.setMinimumSize(new Dimension(425, 580));
 
 
+	this.add(typeProduit, null);
     this.add(jLabel5, null);
     this.add(jLabel51, null);
     this.add(jLabel52, null);
@@ -142,11 +177,9 @@ list_guides.addKeyListener(listenerJtableGuides);
   public void afficherMenuGuides(Component compo, int x, int y) {
     JPopupMenu popup = new JPopupMenu();
     popup.setBackground(java.awt.Color.CYAN);
-    Vector vTypes = lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().
-        type("WorkProduct");
-    Enumeration enum = vTypes.elements();
-    while (enum.hasMoreElements()) {
-      String value = (String) enum.nextElement();
+	Iterator vTypes = this.lnkControleurPanneaux.getLnkSysteme().getLnkControleurGuide().types();
+	while (vTypes.hasNext()) {
+	  String value = (String) vTypes.next();
       JMenuItem choixEnPlus = new JMenuItem(value);
       listenerSousMenusGuides lis = new listenerSousMenusGuides(value, this, this.lnkControleurPanneaux);
       choixEnPlus.addActionListener(lis);
@@ -170,6 +203,7 @@ list_guides.addKeyListener(listenerJtableGuides);
         ProcessComponent procComp = (ProcessComponent)presElemMod.getLnkModelElement();
         this.setNom_modele(procComp.getName());
       }
+	  typeProduit.setSelectedItem(presElemMod.get_typeProduit());
     }
     else{
       this.setNom_modele("");
