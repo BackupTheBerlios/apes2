@@ -99,7 +99,9 @@ public class ColorAssociater implements ModelVisitor
 
 	public void visitWorkDefinition(WorkDefinition work)
 	{	
-		
+		mForeground = ColorFontPanel.getColor(ColorFontPanel.WORK_DEF_KEY+"foreground") ;
+		mBackground = ColorFontPanel.getColor(ColorFontPanel.WORK_DEF_KEY+"background") ;
+		mFont = ColorFontPanel.getStyle(ColorFontPanel.WORK_DEF_KEY);
 	}
 	
 	public void visitProcessPerformer(ProcessPerformer performer)

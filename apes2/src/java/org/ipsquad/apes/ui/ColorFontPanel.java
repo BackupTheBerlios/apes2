@@ -41,7 +41,7 @@ import javax.swing.border.TitledBorder;
 
 import org.ipsquad.utils.ConfigManager;
 /**
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ColorFontPanel extends OptionPanel
 {
@@ -58,6 +58,7 @@ public class ColorFontPanel extends OptionPanel
 	public static final String WORK_PRODUCT_KEY = "WorkproductTitle" ;
 	public static final String NOTES_KEY = "NotesTitle";
 	public static final String DIAGRAMS_KEY = "DiagramsTitle";
+	public static final String WORK_DEF_KEY = "WorkDefinitionTitle";
 	
 	public  ColorFontPanel(String name)
 	{		

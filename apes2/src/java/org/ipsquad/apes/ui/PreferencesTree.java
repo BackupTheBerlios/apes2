@@ -48,6 +48,8 @@ public class PreferencesTree extends JTree
 						(ColorFontPanel.STATE_KEY,resMan.getString(ColorFontPanel.STATE_KEY),PreferencesTreeItem.COLOR_PANEL)));	
 			appearanceTree.add(workProductTree);
 			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
+					(ColorFontPanel.WORK_DEF_KEY,resMan.getString(ColorFontPanel.WORK_DEF_KEY),PreferencesTreeItem.COLOR_PANEL)));
+			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 						(ColorFontPanel.NOTES_KEY,resMan.getString(ColorFontPanel.NOTES_KEY),PreferencesTreeItem.COLOR_PANEL)));
 			appearanceTree.add(new DefaultMutableTreeNode(new PreferencesTreeItem
 						(ColorFontPanel.GUARD_KEY,resMan.getString(ColorFontPanel.GUARD_KEY),PreferencesTreeItem.COLOR_PANEL)));
@@ -81,77 +83,80 @@ public class PreferencesTree extends JTree
 	{
 		public void valueChanged (TreeSelectionEvent e)
 		{
-			if (mPrefDiag.getWindowsPanel().isVisible())
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)getLastSelectedPathComponent();
+			if (node != null)
 			{
-				mPrefDiag.getWindowsPanel().save() ;
-			}
-			else
-			{
-				if (mPrefDiag.getColorFontPanel().isVisible())
+				if (mPrefDiag.getWindowsPanel().isVisible())
 				{
-					mPrefDiag.getColorFontPanel().save() ;
+					mPrefDiag.getWindowsPanel().save() ;
 				}
 				else
 				{
-					if (mPrefDiag.getDefaultPathPanel().isVisible())
+					if (mPrefDiag.getColorFontPanel().isVisible())
 					{
-						mPrefDiag.getDefaultPathPanel().save() ;
+						mPrefDiag.getColorFontPanel().save() ;
 					}
 					else
 					{
-						if(mPrefDiag.getLanguagePanel().isVisible())
+						if (mPrefDiag.getDefaultPathPanel().isVisible())
 						{
-							mPrefDiag.getLanguagePanel().save();
+							mPrefDiag.getDefaultPathPanel().save() ;
+						}
+						else
+						{
+							if(mPrefDiag.getLanguagePanel().isVisible())
+							{
+								mPrefDiag.getLanguagePanel().save();
+							}
 						}
 					}
 				}
+				Object o = e.getSource () ;
+				int panel = ((PreferencesTreeItem)node.getUserObject()).getPanel();		
+				String key = ((PreferencesTreeItem)node.getUserObject()).getKey();
+				if (panel == PreferencesTreeItem.COLOR_PANEL)
+				{
+					mPrefDiag.getColorFontPanel().setVisible(true);
+					mPrefDiag.getDefaultPathPanel().setVisible(false);
+					mPrefDiag.getWindowsPanel().setVisible(false);
+					mPrefDiag.getDescriptionPanel().setVisible(false);
+					mPrefDiag.getLanguagePanel().setVisible(false);
+				}
+				if(panel == PreferencesTreeItem.PATH_PANEL)
+				{
+					mPrefDiag.getColorFontPanel().setVisible(false);
+					mPrefDiag.getDefaultPathPanel().setVisible(true);
+					mPrefDiag.getWindowsPanel().setVisible(false);
+					mPrefDiag.getDescriptionPanel().setVisible(false);
+					mPrefDiag.getLanguagePanel().setVisible(false);
+				}
+				if(panel == PreferencesTreeItem.ERROR_PANEL)
+				{
+					mPrefDiag.getColorFontPanel().setVisible(false);
+					mPrefDiag.getDefaultPathPanel().setVisible(false);
+					mPrefDiag.getWindowsPanel().setVisible(true);
+					mPrefDiag.getDescriptionPanel().setVisible(false);
+					mPrefDiag.getLanguagePanel().setVisible(false);
+				}
+				if(panel == PreferencesTreeItem.DESC_PANEL)
+				{
+					mPrefDiag.getColorFontPanel().setVisible(false);
+					mPrefDiag.getDefaultPathPanel().setVisible(false);
+					mPrefDiag.getWindowsPanel().setVisible(false);
+					mPrefDiag.getDescriptionPanel().setVisible(true);
+					mPrefDiag.getLanguagePanel().setVisible(false);
+				}
+				if( panel == PreferencesTreeItem.LANGUAGE_PANEL)
+				{
+					mPrefDiag.getColorFontPanel().setVisible(false);
+					mPrefDiag.getDefaultPathPanel().setVisible(false);
+					mPrefDiag.getWindowsPanel().setVisible(false);
+					mPrefDiag.getDescriptionPanel().setVisible(false);
+					mPrefDiag.getLanguagePanel().setVisible(true);
+				}
+				mPrefDiag.setInnerPanel(panel,key);  
 			}
-			Object o = e.getSource () ;
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)getLastSelectedPathComponent();
-			int panel = ((PreferencesTreeItem)node.getUserObject()).getPanel();		
-			String key = ((PreferencesTreeItem)node.getUserObject()).getKey();
-			if (panel == PreferencesTreeItem.COLOR_PANEL)
-			{
-				mPrefDiag.getColorFontPanel().setVisible(true);
-				mPrefDiag.getDefaultPathPanel().setVisible(false);
-				mPrefDiag.getWindowsPanel().setVisible(false);
-				mPrefDiag.getDescriptionPanel().setVisible(false);
-				mPrefDiag.getLanguagePanel().setVisible(false);
-			}
-			if(panel == PreferencesTreeItem.PATH_PANEL)
-			{
-				mPrefDiag.getColorFontPanel().setVisible(false);
-				mPrefDiag.getDefaultPathPanel().setVisible(true);
-				mPrefDiag.getWindowsPanel().setVisible(false);
-				mPrefDiag.getDescriptionPanel().setVisible(false);
-				mPrefDiag.getLanguagePanel().setVisible(false);
-			}
-			if(panel == PreferencesTreeItem.ERROR_PANEL)
-			{
-				mPrefDiag.getColorFontPanel().setVisible(false);
-				mPrefDiag.getDefaultPathPanel().setVisible(false);
-				mPrefDiag.getWindowsPanel().setVisible(true);
-				mPrefDiag.getDescriptionPanel().setVisible(false);
-				mPrefDiag.getLanguagePanel().setVisible(false);
-			}
-			if(panel == PreferencesTreeItem.DESC_PANEL)
-			{
-				mPrefDiag.getColorFontPanel().setVisible(false);
-				mPrefDiag.getDefaultPathPanel().setVisible(false);
-				mPrefDiag.getWindowsPanel().setVisible(false);
-				mPrefDiag.getDescriptionPanel().setVisible(true);
-				mPrefDiag.getLanguagePanel().setVisible(false);
-			}
-			if( panel == PreferencesTreeItem.LANGUAGE_PANEL)
-			{
-				mPrefDiag.getColorFontPanel().setVisible(false);
-				mPrefDiag.getDefaultPathPanel().setVisible(false);
-				mPrefDiag.getWindowsPanel().setVisible(false);
-				mPrefDiag.getDescriptionPanel().setVisible(false);
-				mPrefDiag.getLanguagePanel().setVisible(true);
-			}
-			mPrefDiag.setInnerPanel(panel,key);  
-		}		
+		}
 	}
 	
 }

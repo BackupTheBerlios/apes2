@@ -45,11 +45,10 @@ import org.jgraph.graph.VertexView;
 
 /**
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ApesVertexView extends VertexView
 {
-	
 	public ApesVertexView(Object cell, JGraph graph, CellMapper cm)
 	{
 		super(cell, graph, cm);
@@ -117,7 +116,7 @@ public class ApesVertexView extends VertexView
 			rect.setSize(calculateSize());
 			return rect;
 		}
-		
+	
 		return null;
 	}
 

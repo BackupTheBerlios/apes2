@@ -29,11 +29,12 @@ import javax.swing.JOptionPane;
 import org.ipsquad.apes.Context;
 import org.ipsquad.apes.Project;
 import org.ipsquad.apes.ui.ApesFrame;
+import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 /**
  * Create a new project in the application
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class NewAction extends ProjectManagementAction
 {
@@ -46,9 +47,20 @@ public class NewAction extends ProjectManagementAction
 	{    
 		if(!context.getAction("Undo").isEnabled())
 		{
-			Project newProject = new Project();
+			/*Project newProject = new Project();
 			context.setProject(newProject);
-			context.setFilePath(null);
+			context.setFilePath(null);*/
+		
+			ApesFrame f = new ApesFrame();
+			context.setTopLevelFrame(f);
+			
+			Project project = new Project();
+			
+			context.setProject(project);
+			
+			ErrorManager.getInstance().setOwner(f.getContentPane());
+			
+			f.show();
 		}
 		else
 		{

@@ -54,13 +54,12 @@ import org.jgraph.graph.VertexView;
 /**
  * Display a note cell
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
  
 class NoteView extends VertexView 
 {
 		static final NoteRenderer renderer = new NoteRenderer();
-		private NoteEditor editor = new NoteEditor();
 
 		public NoteView(Object cell, JGraph graph, CellMapper cm) 
 		{
@@ -74,10 +73,10 @@ class NoteView extends VertexView
 
 		public GraphCellEditor getEditor() 
 		{
-			return editor;
+			return new NoteEditor();
 		}
 
-		class NoteEditor extends ApesGraphCellEditor 
+		class NoteEditor extends ApesGraphCellEditor
 		{
 			
 			class RealCellEditor extends AbstractCellEditor implements GraphCellEditor

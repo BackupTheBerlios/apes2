@@ -40,7 +40,7 @@ import org.jgraph.graph.GraphConstants;
  * This tool allows to create cells in the graph
  * It use the prototype design pattern to clone cells
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class CellTool extends Tool
 {
@@ -102,6 +102,7 @@ public class CellTool extends Tool
 				GraphConstants.setBounds(attr, new Rectangle(pt, GraphConstants.getSize(attr)));
 				view.put("Attributes", attr);
 			}
+			
 			
 			((SpemGraphAdapter)mGraph.getModel()).insertCell( vertex, view );
 		}

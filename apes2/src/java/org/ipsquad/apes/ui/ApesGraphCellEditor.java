@@ -66,12 +66,13 @@ public class ApesGraphCellEditor extends DefaultGraphCellEditor
 			mActionItalic.addChangeItalicListener(this);
 			mActionBold.addChangeBoldListener(this);
 
-			addCellEditorListener(this);
+			addCellEditorListener(this);this.
 			
 			mActionForeground.setEnabled(true);
 			mActionBackground.setEnabled(true);
 			mActionItalic.setEnabled(true);
 			mActionBold.setEnabled(true);
+			
 		}
 		
 		public Component getGraphCellEditorComponent(
@@ -96,7 +97,6 @@ public class ApesGraphCellEditor extends DefaultGraphCellEditor
 				((JTextComponent)editingComponent).setFont( font );
 				((JTextComponent)editingComponent).selectAll();
 			}
-			
 			return c;
 		}
 
@@ -152,7 +152,7 @@ public class ApesGraphCellEditor extends DefaultGraphCellEditor
 				editingComponent.setFont(font);
 			}
 		}
-		
+	
 		public void editingCanceled(ChangeEvent e)
 		{
 			mActionForeground.setEnabled(false);

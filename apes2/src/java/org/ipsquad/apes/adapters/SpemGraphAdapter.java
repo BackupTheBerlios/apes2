@@ -74,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -436,13 +436,16 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		DefaultPort sourcePort = (DefaultPort) edge.getSource();
 		DefaultPort targetPort = (DefaultPort) edge.getTarget();
 		
-		ApesGraphCell target = (ApesGraphCell) targetPort.getParent();
-		ApesGraphCell source = (ApesGraphCell) sourcePort.getParent();
-		
-		if( target != null && source != null )
-		{	
-			commands.add(
-				ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram,source.getUserObject(), target.getUserObject(), view) );
+		if(targetPort.getParent() instanceof ApesGraphCell && sourcePort.getParent() instanceof ApesGraphCell)
+		{
+			ApesGraphCell target = (ApesGraphCell) targetPort.getParent();
+			ApesGraphCell source = (ApesGraphCell) sourcePort.getParent();
+			
+			if( target != null && source != null )
+			{	
+				commands.add(
+					ApesMediator.getInstance().createInsertCommandToSpemDiagram(mDiagram,source.getUserObject(), target.getUserObject(), view) );
+			}
 		}
 	}
 	
