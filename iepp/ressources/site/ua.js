@@ -145,4 +145,3 @@ function xbDetectBrowser()
 
 xbDetectBrowser();
 
-

@@ -21,6 +21,8 @@ package iepp.domaine;
 
 import java.io.Serializable;
 
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+
 import iepp.Projet;
 
 /**
@@ -30,6 +32,8 @@ public class Produit implements Serializable
 {
 
 	private String nom ;
+	
+	//private WorkProduct produitApes;
 	
 	/**
 	 * @return

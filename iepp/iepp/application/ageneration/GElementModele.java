@@ -53,7 +53,7 @@ public class GElementModele extends GElement
 	public String getLienChemin(IdObjetModele id)
 	{
 		String res = id.getChemin();
-		if (res != null)
+		if (res != null && res.length()> 2)
 		{
 			res = res.substring(2);
 		}

@@ -108,6 +108,7 @@ public class DefinitionProcessus extends ObjetModele
 	{
 		if (listeComp != null)
 		{
+			this.maj("COMPOSANT_REMOVED");
 			this.listeComp.removeElement(compo);
 			this.listeAGenerer.removeElement(compo);
 		}

@@ -59,6 +59,7 @@ public class ArbreGeneration
 	public ArbreGeneration(GElement elem)
 	{
 		this.element = elem;
+		this.listeSousArbres = new Vector();
 	}
 	
 	
@@ -66,7 +67,10 @@ public class ArbreGeneration
 	/**
 	 * Constructeur
 	 */
-	public ArbreGeneration() {}
+	public ArbreGeneration() 
+	{
+		this.listeSousArbres = new Vector();
+	}
 
 
 	//-----------------------------------------------
@@ -100,7 +104,7 @@ public class ArbreGeneration
 	
 	public boolean isFeuille()
 	{
-		return (this.listeSousArbres == null);
+		return (this.listeSousArbres.isEmpty());
 	}
 
 
@@ -228,7 +232,7 @@ public class ArbreGeneration
 	{
 		if (this.isRacine())
 		{
-			if (this.listeSousArbres == null)
+			if (this.listeSousArbres.isEmpty())
 			{
 				return "Arbre Vide";
 			}

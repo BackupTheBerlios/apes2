@@ -10,6 +10,8 @@
  
 // Log of changes: 
 //
+//      08 Jun 04 - Very small change to one error message
+//      21 Mar 04 - Support for folder.addChildren allows for much bigger trees
 //      12 May 03 - Support for Safari Beta 3
 //      01 Mar 03 - VERSION 4.3 - Support for checkboxes
 //      21 Feb 03 - Added support for Opera 7
@@ -63,6 +65,7 @@ function Folder(folderDescription, hreference) //constructor
   this.initialize = initializeFolder 
   this.setState = setStateFolder 
   this.addChild = addChild 
+  this.addChildren = addChildren
   this.createIndex = createEntryIndex 
   this.escondeBlock = escondeBlock
   this.esconde = escondeFolder 
@@ -104,7 +107,22 @@ function initializeFolder(level, lastNode, leftSide)
   { 
     level = level + 1 
     for (i=0 ; i < this.nChildren; i++)  
-    { 
+    {
+      if (typeof this.children[i].initialize == 'undefined') //document node was specified using the addChildren function
+      {
+        if (typeof this.children[i][0] == 'undefined' || typeof this.children[i] == 'string')
+        {
+          this.children[i] = ["item incorrectly defined", ""];
+        }
+
+        //Basic initialization of the Item object
+        //These members or methods are needed even before the Item is rendered
+        this.children[i].initialize=initializeItem;
+        this.children[i].createIndex=createEntryIndex;
+        if (typeof this.children[i].maySelect == 'undefined')
+          this.children[i].maySelect=true
+        this.children[i].forceOpeningOfAncestorFolders = forceOpeningOfAncestorFolders
+      }
       if (i == this.nChildren-1) 
         this.children[i].initialize(level, 1, leftSide)
       else 
@@ -118,6 +136,9 @@ function drawFolder(insertAtObj)
   var nodeName = ""
   var auxEv = ""
   var docW = ""
+  var i=0
+
+  finalizeCreationOfChildDocs(this)
 
   var leftSide = leftSideHTML(this.leftSideCoded)
 
@@ -225,7 +246,7 @@ function setStateFolder(isOpen)
   }  
   this.isOpen = isOpen;
 
-  if (this.getID()!=foldersTree.getID() && PERSERVESTATE && !this.isOpen) //closing
+  if (this.getID()!=foldersTree.getID() && PRESERVESTATE && !this.isOpen) //closing
   {
      currentOpen = GetCookie("clickedFolder")
      if (currentOpen != null) {
@@ -255,11 +276,12 @@ function propagateChangesInState(folder)
     folder.iconImg.src = folder.iconImageSrc()
 
   //Propagate changes
-  for (i=folder.nChildren-1; i>=0; i--) 
+  for (i=folder.nChildren-1; i>=0; i--) {
     if (folder.isOpen) 
       folder.children[i].folderMstr(folder.navObj)
     else 
   	  folder.children[i].esconde() 
+  }
 } 
  
 function escondeFolder() 
@@ -302,7 +324,16 @@ function addChild(childNode)
   this.nChildren++ 
   return childNode 
 } 
- 
+
+//The list can contain either a Folder object or a sub list with the arguments for Item 
+function addChildren(listOfChildren) 
+{ 
+  this.children = listOfChildren 
+  this.nChildren = listOfChildren.length
+  for (i=0; i<this.nChildren; i++)
+    this.children[i].parentObj = this
+} 
+
 function folderSubEntries() 
 { 
   var i = 0 
@@ -352,39 +383,48 @@ function iconImageSrc() {
 // Definition of class Item (a document or link inside a Folder) 
 // ************************************************************* 
  
-function Item(itemDescription, itemLink, target) // Constructor 
+function Item(itemDescription) // Constructor 
 { 
   // constant data 
   this.desc = itemDescription 
-  this.link = itemLink    
-  this.id = -1 //initialized in initalize() 
-  this.navObj = 0 //initialized in render() 
-  this.iconImg = 0 //initialized in render() 
-  this.iconSrc = ICONPATH + "ftv2doc.gif" 
-  this.isRendered = 0
-  this.isLastNode = false
+
   this.level = 0
+  this.isLastNode = false
   this.leftSideCoded = ""
-  this.nChildren = 0
-  this.target = target
   this.parentObj = null
+
   this.maySelect=true
-  this.prependHTML = ""
+
+  this.initialize = initializeItem;
+  this.createIndex = createEntryIndex;
+  this.forceOpeningOfAncestorFolders = forceOpeningOfAncestorFolders;
+
+  finalizeCreationOfItem(this)
+} 
+
+//Assignments that can be delayed when the item is created with folder.addChildren
+//The assignments that cannot be delayed are done in addChildren and in initializeFolder
+//Additionaly, some assignments are also done in finalizeCreationOfChildDocs itself
+function finalizeCreationOfItem(itemArray)
+{
+  itemArray.navObj = 0 //initialized in render() 
+  itemArray.iconImg = 0 //initialized in render() 
+  itemArray.iconSrc = ICONPATH + "ftv2doc.gif" 
+  itemArray.isRendered = 0
+  itemArray.nChildren = 0
+  itemArray.prependHTML = ""
  
   // methods 
-  this.initialize = initializeItem 
-  this.createIndex = createEntryIndex 
-  this.escondeBlock = escondeBlock
-  this.esconde = escondeBlock
-  this.folderMstr = folderMstr 
-  this.renderOb = drawItem 
-  this.totalHeight = totalHeight 
-  this.blockStartHTML = blockStartHTML
-  this.blockEndHTML = blockEndHTML
-  this.getID = getID
-  this.forceOpeningOfAncestorFolders = forceOpeningOfAncestorFolders
-} 
- 
+  itemArray.escondeBlock = escondeBlock
+  itemArray.esconde = escondeBlock
+  itemArray.folderMstr = folderMstr 
+  itemArray.renderOb = drawItem 
+  itemArray.totalHeight = totalHeight 
+  itemArray.blockStartHTML = blockStartHTML
+  itemArray.blockEndHTML = blockEndHTML
+  itemArray.getID = getID
+}
+
 function initializeItem(level, lastNode, leftSide) 
 {  
   this.createIndex() 
@@ -415,7 +455,7 @@ function drawItem(insertAtObj)
 
   docW = docW + "<tr>" + leftSide + "<td valign=top>"
   if (USEICONS)
-      docW = docW + "<a " + fullLink  + " id=\"itemIconLink"+this.id+"\">" + "<img id='itemIcon"+this.id+"' " + "src='"+this.iconSrc+"' width=16 height=16 border=0>" + "</a>"
+      docW = docW + "<a " + fullLink  + " id=\"itemIconLink"+this.id+"\">" + "<img id='itemIcon"+this.id+"' " + "src='"+this.iconSrc+"' border=0 width=16 height=16>" + "</a>"
   else
 	  if (this.prependHTML == "")
         docW = docW + "<img src=" + ICONPATH + "ftv2blank.gif height=2 width=3>"
@@ -584,28 +624,41 @@ function getID()
  
 function clickOnFolder(folderId) 
 { 
-    var clicked = findObj(folderId)
+  var clicked = findObj(folderId)
 
-    if (!clicked.isOpen) {
-      clickOnNodeObj(clicked) 
-    }
+  if (typeof clicked=='undefined' || clicked==null)
+  {
+    alert("Treeview was not able to find the node object corresponding to ID=" + folderId + ". If the configuration file sets a.xID values, it must set them for ALL nodes, including the foldersTree root.")
+    return;
+  }
 
-    if (lastOpenedFolder != null && lastOpenedFolder != folderId)
-      clickOnNode(lastOpenedFolder); //sets lastOpenedFolder to null
+  if (!clicked.isOpen) {
+    clickOnNodeObj(clicked) 
+  }
 
-    if (clicked.nChildren==0) {
-      lastOpenedFolder = folderId;
-      clicked.isLastOpenedfolder = true
-    }
+  if (lastOpenedFolder != null && lastOpenedFolder != folderId)
+    clickOnNode(lastOpenedFolder); //sets lastOpenedFolder to null
 
-    if (isLinked(clicked.hreference)) {
-        highlightObjLink(clicked);
-    }
+  if (clicked.nChildren==0) {
+    lastOpenedFolder = folderId;
+    clicked.isLastOpenedfolder = true
+  }
+
+  if (isLinked(clicked.hreference)) {
+      highlightObjLink(clicked);
+  }
 } 
  
 function clickOnNode(folderId) 
 { 
-  clickOnNodeObj(findObj(folderId))
+  fOb = findObj(folderId);
+  if (typeof fOb=='undefined' || fOb==null)
+  {
+    alert("Treeview was not able to find the node object corresponding to ID=" + folderId + ". If the configuration file sets a.xID, it must set foldersTree.xID as well.")
+    return;
+  }
+
+  clickOnNodeObj(fOb);
 }
 
 function clickOnNodeObj(folderObj) 
@@ -616,7 +669,7 @@ function clickOnNodeObj(folderObj)
   state = folderObj.isOpen 
   folderObj.setState(!state) //open<->close  
 
-  if (folderObj.id!=foldersTree.id && PERSERVESTATE)
+  if (folderObj.id!=foldersTree.id && PRESERVESTATE)
   {
     currentOpen = GetCookie("clickedFolder")
     if (currentOpen == null)
@@ -632,7 +685,7 @@ function clickOnNodeObj(folderObj)
   }
 }
 
-function clickOnLink(clickedId, target, windowName) {  
+function clickOnLink(clickedId, target, windowName) {
     highlightObjLink(findObj(clickedId));
     if (isLinked(target)) {
         window.open(target,windowName);
@@ -647,11 +700,27 @@ function ld  ()
 
 // Auxiliary Functions 
 // *******************
- 
+
+function finalizeCreationOfChildDocs(folderObj) {
+  for(i=0; i < folderObj.nChildren; i++)  {
+    child = folderObj.children[i]
+    if (typeof child[0] != 'undefined')
+    {
+      // Amazingly, arrays can have members, so   a = ["a", "b"]; a.desc="asdas"   works
+      // If a doc was inserted as an array, we can transform it into an itemObj by adding 
+      // the missing members and functions
+      child.desc = child[0] 
+      setItemLink(child, GLOBALTARGET, child[1])   
+      finalizeCreationOfItem(child)
+    }
+  }
+}
+
 function findObj(id)
 {
   var i=0;
   var nodeObj;
+
   if (typeof foldersTree.xID != "undefined") {
     nodeObj = indexOfEntries[i];
     for(i=0;i<nEntries&&indexOfEntries[i].xID!=id;i++) //may need optimization
@@ -695,9 +764,19 @@ function highlightObjLink(nodeObj) {
     }
   }
   lastClicked = nodeObj;
-  if (PERSERVESTATE)
+  if (PRESERVESTATE)
     SetCookie('highlightedTreeviewLink', nodeObj.getID());
 }
+
+function insFld(parentFolder, childFolder) 
+{ 
+  return parentFolder.addChild(childFolder) 
+} 
+ 
+function insDoc(parentFolder, document) 
+{ 
+  return parentFolder.addChild(document) 
+} 
 
 function gFld(description, hreference) 
 { 
@@ -707,16 +786,22 @@ function gFld(description, hreference)
  
 function gLnk(optionFlags, description, linkData) 
 { 
-  var fullLink = "";
+  if (optionFlags>=0) { //is numeric (old style) or empty (error)
+    //Target changed from numeric to string in Aug 2002, and support for numeric style was entirely dropped in Mar 2004
+    alert("Change your Treeview configuration file to use the new style of target argument in gLnk");
+    return;
+  }
+
+  newItem = new Item(description);
+  setItemLink(newItem, optionFlags, linkData);
+  return newItem;
+} 
+
+function setItemLink(item, optionFlags, linkData) {
   var targetFlag = "";
   var target = "";
   var protocolFlag = "";
   var protocol = "";
-
-  if (optionFlags>=0) //is numeric (old style) or empty (error)
-  {
-    return oldGLnk(optionFlags, description, linkData)
-  }
 
   targetFlag = optionFlags.charAt(0)
   if (targetFlag=="B")
@@ -742,63 +827,16 @@ function gLnk(optionFlags, description, linkData)
       protocol = "mailto:"
   }
 
-  fullLink = "'" + protocol + linkData + "' target=" + target
+  item.link = protocol+linkData;    
+  item.target = target
+}
 
-  linkItem = new Item(description, protocol+linkData, target)
-  return linkItem 
-} 
-
-//Function created Aug 1, 2002 for backwards compatibility purposes
+//Function created  for backwards compatibility purposes
+//Function contents voided in March 2004
 function oldGLnk(target, description, linkData)
 {
-  var fullLink = "";
-  //Backwards compatibility code
-  if (USEFRAMES)
-  {
-	  if (target==0) 
-	  { 
-		fullLink = "'"+linkData+"' target=\"basefrm\"" 
-	  } 
-	  else 
-	  { 
-		if (target==1) 
-		   fullLink = "'http://"+linkData+"' target=_blank" 
-		else 
-		   if (target==2)
-			  fullLink = "'http://"+linkData+"' target=\"basefrm\"" 
-		   else
-			  fullLink = linkData+" target=\"_top\"" 
-	  } 
-  }
-  else
-  {
-	  if (target==0) 
-	  { 
-		fullLink = "'"+linkData+"' target=_top" 
-	  } 
-	  else 
-	  { 
-		if (target==1) 
-		   fullLink = "'http://"+linkData+"' target=_blank" 
-		else 
-		   fullLink = "'http://"+linkData+"' target=_top" 
-	  } 
-  }
-
-  linkItem = new Item(description, fullLink)   
-  return linkItem 
 }
  
-function insFld(parentFolder, childFolder) 
-{ 
-  return parentFolder.addChild(childFolder) 
-} 
- 
-function insDoc(parentFolder, document) 
-{ 
-  return parentFolder.addChild(document) 
-} 
-
 function preLoadIcons() {
 	var auxImg
 	auxImg = new Image();
@@ -820,7 +858,7 @@ function setInitialLayout() {
   if (browserVersion > 0 && !STARTALLOPEN)
     clickOnNodeObj(foldersTree);
   
-  if (!STARTALLOPEN && (browserVersion > 0) && PERSERVESTATE)
+  if (!STARTALLOPEN && (browserVersion > 0) && PRESERVESTATE)
 		PersistentFolderOpening();
 }
 
@@ -906,7 +944,7 @@ function getElById(idVal) {
 
 // Functions for cookies
 // Note: THESE FUNCTIONS ARE OPTIONAL. No cookies are used unless
-// the PERSERVESTATE variable is set to 1 (default 0)
+// the PRESERVESTATE variable is set to 1 (default 0)
 // The separator currently in use is ^ (chr 94)
 // *********************************************************** 
 
@@ -935,7 +973,7 @@ function PersistentFolderOpening()
             clickOnNodeObj(nodeObj);
           }
           else
-            alert("Internal id is not pointing to a folder anymore. Consider using external IDs")
+            alert("Internal id is not pointing to a folder anymore.\nConsider giving an ID to the tree and external IDs to the individual nodes.")
       }
     }
   }
@@ -1023,17 +1061,19 @@ function ExpireCookie (name)
 
 
 //To customize the tree, overwrite these variables in the configuration file (demoFramesetNode.js, etc.)
-var USETEXTLINKS = 0 
-var STARTALLOPEN = 0
-var USEFRAMES = 1
-var USEICONS = 1
-var WRAPTEXT = 0
-var PERSERVESTATE = 0
-var ICONPATH = ''
-var HIGHLIGHT = 0
+var USETEXTLINKS = 0;
+var STARTALLOPEN = 0;
+var USEFRAMES = 1;
+var USEICONS = 1;
+var WRAPTEXT = 0;
+var PERSERVESTATE = 0; //backward compatibility
+var PRESERVESTATE = 0;
+var ICONPATH = '';
+var HIGHLIGHT = 0;
 var HIGHLIGHT_COLOR = 'white';
 var HIGHLIGHT_BG    = 'blue';
-var BUILDALL = 0
+var BUILDALL = 0;
+var GLOBALTARGET = "R"; // variable only applicable for addChildren uses
 
 
 //Other variables
@@ -1082,26 +1122,32 @@ function initializeDocument()
       break;
   }
 
+  // backward compatibility
+  if (PERSERVESTATE)
+    PRESERVESTATE = 1;
+
   supportsDeferral = ((navigator.family=='ie4' && navigator.version >= 5 && navigator.OS != "mac") || browserVersion == 3);
   supportsDeferral = supportsDeferral & (!BUILDALL)
   if (!USEFRAMES && browserVersion == 2)
   	browserVersion = 0;
   eval(String.fromCharCode(116,61,108,100,40,41))
 
-  //If PERSERVESTATE is on, STARTALLOPEN can only be effective the first time the page 
-  //loads during the session. For subsequent (re)loads the PERSERVESTATE data stored 
+  //If PRESERVESTATE is on, STARTALLOPEN can only be effective the first time the page 
+  //loads during the session. For subsequent (re)loads the PRESERVESTATE data stored 
   //in cookies takes over the control of the initial expand/collapse
-  if (PERSERVESTATE && GetCookie("clickedFolder") != null)
+  if (PRESERVESTATE && GetCookie("clickedFolder") != null)
     STARTALLOPEN = 0
 
   //foldersTree (with the site's data) is created in an external .js (demoFramesetNode.js, for example)
   foldersTree.initialize(0, true, "") 
-  if (supportsDeferral && !STARTALLOPEN)
-	  foldersTree.renderOb(null) //delay construction of nodes
+  if (supportsDeferral && !STARTALLOPEN) {
+      foldersTree.renderOb(null) //delay construction of nodes
+  }
+
   else {
     renderAllTree(foldersTree, null);
 
-    if (PERSERVESTATE && STARTALLOPEN)
+    if (PRESERVESTATE && STARTALLOPEN)
       storeAllNodesInClickCookie(foldersTree)
 
     //To force the scrollable area to be big enough
@@ -1114,7 +1160,7 @@ function initializeDocument()
 
   setInitialLayout()
 
-  if (PERSERVESTATE && GetCookie('highlightedTreeviewLink')!=null  && GetCookie('highlightedTreeviewLink')!="") {
+  if (PRESERVESTATE && GetCookie('highlightedTreeviewLink')!=null  && GetCookie('highlightedTreeviewLink')!="") {
     var nodeObj = findObj(GetCookie('highlightedTreeviewLink'))
     if (nodeObj!=null){
       nodeObj.forceOpeningOfAncestorFolders()
