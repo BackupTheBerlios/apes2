@@ -322,13 +322,13 @@ propos_texte4=\n  either version 2 of the License, or any later version.  \n
 
 
 #Preferences
-GeneralTitleDesc=Les paramètres généraux
-GenerationTitleDesc=Paramètres de génération du site Web
-RepositoryTitleDesc=Paramètres concernant le référentiel
-DPTitleDesc=General properties of the courant process
+GeneralTitleDesc=General parameters
+GenerationTitleDesc=Web site generation parameters
+RepositoryTitleDesc=Repository parameters
+DPTitleDesc=General properties of the current process
 GeneralTitle=General
-GenerationTitle=Génération
-RepositoryTitle=Référentiel
+GenerationTitle=Generation
+RepositoryTitle=Repository
 LanguageTitle=Language
 CheminReferentiel=Default path :
 ReferentielDefaut=Loaded repository on startup :
@@ -338,7 +338,7 @@ DiagramTitle=Diagram
 PlaceContenu=In generated pages, content is placed 
 ContenuAvant=Before diagram
 ContenuApres=After diagram
-Propriete_DPTitle=Processus properties
+Propriete_DPTitle=Process properties
 Propriete_DP=Process
 Propriete_DP_Desc=Description
 ContenuDP=Associated content file
