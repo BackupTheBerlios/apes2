@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+import iepp.Application;
 import iepp.domaine.ElementPresentation;
 import iepp.domaine.IdObjetModele;
 
@@ -97,7 +98,7 @@ public class GElementModele extends GElement
 			}
 			else
 			{
-				fd.write("Lien : " + "<a href=\"../../contenu/" + this.element.getContenu() + "\">" + this.element.getContenu() + "</a>");
+				fd.write(Application.getApplication().getTraduction("WEB_LINK")+ " : " + "<a href=\"../../contenu/" + this.element.getContenu() + "\">" + this.element.getContenu() + "</a>");
 				fd.write("<hr></br>");
 				this.ajouterMail(fd);
 			}

@@ -218,6 +218,7 @@ public class GElement
 	 */
 	public void ajouterMail(FileWriter fd) throws IOException
 	{
+		fd.write("<br><hr>");
 		fd.write("<div align=\"center\" class=\"boutonemail\"><a href=\"mailto:" + Application.getApplication().getProjet().getDefProc().getEmailAuteur() + "?subject=" +  this.element.getNomPresentation() + "\">" + Application.getApplication().getTraduction("WEB_MAIL") + "</A></div>");
 	}
 	

@@ -197,7 +197,7 @@ public class CodeHTML
 		name=name.replace('ç','c');
 		name=name.replace('à','a');
 		name=name.replace('ô','o');
-
+		name=name.replace('+','_');
 		return name;
 	}
 }

@@ -257,9 +257,11 @@ public class TacheGeneration extends MonitoredTaskBase {
 					 FileOutputStream fout = null;
 					 if (ze.toString().startsWith(paquet.getChemin_icone()))
 					 {
+					 	/*
 						System.out.println(GenerationManager.getInstance().getCheminGeneration() 
-																	 + File.separator + CGenererSite.APPLET_PATH + File.separator + "images" + File.separator + fichier);
-																 
+																	+ File.separator + CGenererSite.APPLET_PATH + File.separator + "images" + File.separator + fichier);
+						*/
+					 	
 						 // Créer un flux de sortie pour le fichier de l'entrée courante
 						 fout = new FileOutputStream(GenerationManager.getInstance().getCheminGeneration() 
 												 + File.separator + CGenererSite.APPLET_PATH + File.separator + "images" + File.separator + fichier);

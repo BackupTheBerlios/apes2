@@ -124,11 +124,8 @@ public class GComposant extends GElementModele
 		//---------------------FIN OPTION-----------------//
 		
 		// voir pour les diagrammes
-		fd.write("<br><hr>");
-		fd.write("<div align=\"center\" class=\"boutonemail\"><a href=\"mailto:" + Application.getApplication().getProjet().getDefProc().getEmailAuteur() + "?subject=" + this.modele.toString() + "\">" + Application.getApplication().getTraduction("WEB_MAIL") + "</A></div>");
-		fd.write("<div align=\"center\" class=\"date\">"+ Application.getApplication().getTraduction("WEB_DATE_GEN") + " " + GenerationManager.getInstance().getDateGeneration() + "</div>");
-		fd.write("</BODY></HTML>") ;
-		fd.close();
+
+		this.ajouterContenu(fd);
 	}
 	
 }
