@@ -81,7 +81,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class ApesMain
 {
@@ -89,6 +89,17 @@ public class ApesMain
 	{
 		ResourceManager resManager = ResourceManager.getInstance();
 		Properties properties = new Properties();
+		properties.setProperty("Project","model");
+		properties.setProperty("Component","component");
+		properties.setProperty("ContextDiagram","component interfaces");
+		properties.setProperty("WorkDefinitionDiagram","flow diagram");
+		properties.setProperty("FlowDiagram","flow diagram");
+		properties.setProperty("ActivityDiagram","activity diagram");
+		properties.setProperty("ResponsabilityDiagram","product responsability");
+		properties.setProperty("Interface","interface::");
+		properties.setProperty("Provided","provided");
+		properties.setProperty("Required","required");
+		
 		properties.setProperty("DiagramsTitleforegroundred","0");
 		properties.setProperty("DiagramsTitleforegroundgreen","0");
 		properties.setProperty("DiagramsTitleforegroundblue","0");

@@ -12,13 +12,13 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ErrorManager;
-import org.ipsquad.utils.ResourceManager;
 
 /**
  * Base class for the responsability diagram
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ResponsabilityDiagram extends SpemDiagram {
 
@@ -28,7 +28,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	public ResponsabilityDiagram()
 	{
 		super();
-		setName(ResourceManager.getInstance().getString("responsabilityDiagram")+mId);
+		setName(ConfigManager.getInstance().getProperty("ResponsabilityDiagram")+mId);
 		mId++;
 	}
 
@@ -291,7 +291,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 	{
 		ResponsabilityDiagram d = (ResponsabilityDiagram) super.clone();
 		d.mElements = (Vector) mElements.clone();
-		d.setName(ResourceManager.getInstance().getString("responsabilityDiagram")+mId);
+		d.setName(ConfigManager.getInstance().getProperty("ResponsabilityDiagram")+mId);
 		mId++;
 		return d;
 	}

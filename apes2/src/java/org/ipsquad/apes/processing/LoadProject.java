@@ -54,7 +54,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -73,7 +73,8 @@ public class LoadProject extends MonitoredTaskBase
 		mTask = task;
 	}
 	
-	protected Object processingTask() {
+	protected Object processingTask() 
+	{
 		launch();
 		return null;
 	}

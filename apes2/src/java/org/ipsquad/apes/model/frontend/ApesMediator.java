@@ -49,18 +49,20 @@ import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
+import org.ipsquad.utils.ConfigManager;
 import org.ipsquad.utils.ErrorManager;
 import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
 	private static final ApesMediator mInstance = new ApesMediator();
 	
 	private ResourceManager mResource = ResourceManager.getInstance();
+	private ConfigManager mConfig = ConfigManager.getInstance();
 	
 	private Vector mListeners = new Vector();
 	private Vector mDiagrams = new Vector();
@@ -99,14 +101,16 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			// if there is no component, create the interfaces then create a new component
 			if(ap.getComponent() == null)
 			{
-				ModelElement me = new ProcessComponent(ResourceManager.getInstance().getString("component"));
-				
+				ModelElement me = new ProcessComponent(mConfig.getProperty("Component"));
 				ap.addModelElement(me);
 				fireModelUpdated(new InsertEvent(me,ap,null));
 
-				me = new ContextDiagram(mResource.getString("contextDiagram"));
-				Context.getInstance().getProject().getGraphModel((SpemDiagram)me);
+				me = new ContextDiagram(mConfig.getProperty("ContextDiagram"));
+				Context.getInstance().getProject().getGraphModel((SpemDiagram)me);				
+				ap.getComponent().addModelElement(me);
+				fireModelUpdated(new InsertEvent(me,ap.getComponent(),null));
 				
+				me = new WorkDefinitionDiagram(mConfig.getProperty("WorkDefinitionDiagram"));
 				ap.getComponent().addModelElement(me);
 				fireModelUpdated(new InsertEvent(me,ap.getComponent(),null));
 				
@@ -134,7 +138,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		if( ap.getProvidedInterface() == null )
 		{	
-			me = new ApesProcess.ProvidedInterface(mResource.getString("provided"));
+			me = new ApesProcess.ProvidedInterface(mConfig.getProperty("Provided"));
 			ap.addModelElement(me);
 			fireModelUpdated(new InsertEvent(me,ap,null));
 		}
@@ -169,7 +173,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		
 		if( ap.getRequiredInterface() == null )
 		{	
-			me = new ApesProcess.RequiredInterface(mResource.getString("required"));
+			me = new ApesProcess.RequiredInterface(mConfig.getProperty("Required"));
 			ap.addModelElement(me);
 			fireModelUpdated(new InsertEvent(me,ap,null));
 		}
@@ -200,19 +204,19 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	 */
 	private void initNewProcess( ApesProcess ap )
 	{
-		ModelElement me = new ProcessComponent(mResource.getString("component"));
+		ModelElement me = new ProcessComponent(mConfig.getProperty("Component"));
 		update(createInsertCommand(me,ap,null));
 		
-		me = new ContextDiagram(mResource.getString("contextDiagram"));
+		me = new ContextDiagram(mConfig.getProperty("ContextDiagram"));
 		update(createInsertCommand(me,ap.getComponent(),null));
 		
-		me = new WorkDefinitionDiagram(mResource.getString("workDefinitionDiagram"));
+		me = new WorkDefinitionDiagram(mConfig.getProperty("WorkDefinitionDiagram"));
 		update(createInsertCommand(me,ap.getComponent(),null));
 		
-		me = new ApesProcess.ProvidedInterface(mResource.getString("provided"));
+		me = new ApesProcess.ProvidedInterface(mConfig.getProperty("Provided"));
 		update(createInsertCommand(me,ap,null));
 		
-		me = new ApesProcess.RequiredInterface(mResource.getString("required"));
+		me = new ApesProcess.RequiredInterface(mConfig.getProperty("Required"));
 		update(createInsertCommand(me,ap,null));
 	}
 	
@@ -458,8 +462,8 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 			{	
 				if(me instanceof ApesWorkDefinition)
 				{
-					extraActions.add(createInsertCommand(new ActivityDiagram(ResourceManager.getInstance().getString("activityDiagram")),me,null));
-					extraActions.add(createInsertCommand(new FlowDiagram(ResourceManager.getInstance().getString("flowDiagram")),me,null));
+					extraActions.add(createInsertCommand(new ActivityDiagram(mConfig.getProperty("ActivityDiagram")),me,null));
+					extraActions.add(createInsertCommand(new FlowDiagram(mConfig.getProperty("FlowDiagram")),me,null));
 				}
 				extraActions.add( new InsertEvent( me, p, attr ) );
 			}
@@ -701,7 +705,7 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 				|| newParent instanceof ApesProcess
 				|| newParent instanceof ApesProcess.Interface )
 			{
-				ErrorManager.getInstance().println( ResourceManager.getInstance().getString("errorMoveElement"));
+				ErrorManager.getInstance().println( mResource.getString("errorMoveElement"));
 				return null;
 			}
 			

@@ -30,11 +30,11 @@ import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.modelmanagement.SPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
-import org.ipsquad.utils.ResourceManager;
+import org.ipsquad.utils.ConfigManager;
 
 /**
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ApesProcess extends ModelElement implements IPackage 
 {
@@ -272,13 +272,13 @@ public class ApesProcess extends ModelElement implements IPackage
 
 		public void setName( String name )
 		{
-			if( name.indexOf( ResourceManager.getInstance().getString("interface") ) == 0 )
+			if( name != null && name.indexOf( ConfigManager.getInstance().getProperty("Interface") ) == 0 )
 			{
 				super.setName( name );
 			}
 			else
 			{
-				super.setName(ResourceManager.getInstance().getString("interface")+name);
+				super.setName(ConfigManager.getInstance().getProperty("Interface")+name);
 			}
 		}
 
