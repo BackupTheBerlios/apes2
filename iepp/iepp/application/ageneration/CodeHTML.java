@@ -19,6 +19,7 @@
 
 package iepp.application.ageneration;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import iepp.Application;
 import iepp.domaine.*;
@@ -198,6 +199,8 @@ public class CodeHTML
 		name=name.replace('à','a');
 		name=name.replace('ô','o');
 		name=name.replace('+','_');
+		name=name.replace('(','_');
+		name=name.replace(')','_');
 		return name;
 	}
 }
