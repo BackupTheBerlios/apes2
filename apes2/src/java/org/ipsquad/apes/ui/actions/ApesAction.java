@@ -34,13 +34,18 @@ import org.ipsquad.utils.ResourceManager;
  * Base class for the action of the application
  * Provides convenient constructors and a pointer to the context
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ApesAction extends AbstractAction
 {
 	/// The context of the application is accessible here
 	protected Context context = Context.getInstance();
+	private String mName;
 	
+	public void refresh()
+	{
+		putValue(Action.SHORT_DESCRIPTION, ResourceManager.getInstance().getString(mName));
+	}
 	/**
 	 * @param label the resource key for the action label
 	 * @param icon the filename for the action icon
@@ -50,6 +55,7 @@ public abstract class ApesAction extends AbstractAction
 		super(ResourceManager.getInstance().getString(label),
 		     IconManager.getInstance().getIcon(icon)
 			);
+		mName = label;
 		putValue(Action.SHORT_DESCRIPTION, ResourceManager.getInstance().getString(label));
 	}
 

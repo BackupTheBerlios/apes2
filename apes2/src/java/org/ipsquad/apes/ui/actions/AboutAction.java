@@ -34,7 +34,7 @@ import org.ipsquad.utils.ResourceManager;
 /**
  * Displays the about box
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class AboutAction extends ApesAction
 {
@@ -52,6 +52,5 @@ public class AboutAction extends ApesAction
 					     ResourceManager.getInstance().getString("helpAbout"),
 					     JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE,
 					     null, new Object[] {"OK"}, null);
-
 	}
 }

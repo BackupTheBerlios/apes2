@@ -51,7 +51,7 @@ import org.jgraph.graph.GraphModel;
 /**
  * Main frame for the GUI 
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ApesFrame extends JFrame implements MainFrameInterface
 {
@@ -94,7 +94,6 @@ public class ApesFrame extends JFrame implements MainFrameInterface
 		if(ConfigManager.getInstance().getProperty("ErrorPanelTitleyes").equals("false"))
 		{
 			mErrorPane.setDividerLocation(r.height*5/6);
-
 		}
 	}
 

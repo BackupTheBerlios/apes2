@@ -23,13 +23,20 @@ package org.ipsquad.apes.adapters;
 import java.awt.Color;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
+import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.ContextDiagram;
 import org.ipsquad.apes.model.extension.FlowDiagram;
 import org.ipsquad.apes.model.extension.ResponsabilityDiagram;
+import org.ipsquad.apes.model.extension.WorkProductRef;
+import org.ipsquad.apes.model.extension.ActivityDiagram.Decision;
+import org.ipsquad.apes.model.extension.ActivityDiagram.FinalPoint;
+import org.ipsquad.apes.model.extension.ActivityDiagram.InitialPoint;
+import org.ipsquad.apes.model.extension.ActivityDiagram.Synchro;
+import org.ipsquad.apes.model.extension.ActivityDiagram.Transition;
 import org.ipsquad.apes.model.extension.ApesProcess.Interface;
 import org.ipsquad.apes.model.extension.ApesProcess.ProvidedInterface;
 import org.ipsquad.apes.model.extension.ApesProcess.RequiredInterface;
-import org.ipsquad.apes.model.spem.SpemVisitor;
+import org.ipsquad.apes.model.spem.ModelVisitor;
 import org.ipsquad.apes.model.spem.basic.ExternalDescription;
 import org.ipsquad.apes.model.spem.basic.Guidance;
 import org.ipsquad.apes.model.spem.basic.GuidanceKind;
@@ -44,7 +51,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.apes.model.spem.statemachine.StateMachine;
 import org.ipsquad.apes.ui.ColorFontPanel;
 
-public class ColorAssociater implements SpemVisitor
+public class ColorAssociater implements ModelVisitor
 {
 	private Color mForeground = Color.black;
 	private Color mBackground = Color.white;
@@ -153,5 +160,17 @@ public class ColorAssociater implements SpemVisitor
 		mForeground = ColorFontPanel.getColor("StateTitle") ;
 		mFont = ColorFontPanel.getStyle("StateTitle");
 	}
+
+	public void visitApesProcess(ApesProcess p){	}
+	public void visitDecision(Decision decision){ }
+	public void visitFinalPoint(FinalPoint finalpoint) {}
+	public void visitInitialPoint(InitialPoint initialPoint) { }
+	public void visitSynchro(Synchro synchro) { }
+	public void visitWorkProductRef(WorkProductRef ref) { }
 	
+	public void visitTransition(Transition transition)
+	{
+		mForeground = ColorFontPanel.getColor("GuardTitle") ;
+		mFont = ColorFontPanel.getStyle("GuardTitle");
+	}
 }

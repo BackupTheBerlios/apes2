@@ -22,7 +22,6 @@
 
 package org.ipsquad.apes.ui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -31,23 +30,13 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JTextField;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-
-import org.ipsquad.apes.Context;
 import org.ipsquad.apes.adapters.ApesGraphCell;
-import org.ipsquad.apes.ui.actions.ChangeBoldAction;
-import org.ipsquad.apes.ui.actions.ChangeColorAction;
-import org.ipsquad.apes.ui.actions.ChangeItalicAction;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellMapper;
 import org.jgraph.graph.CellView;
-import org.jgraph.graph.DefaultGraphCell;
-import org.jgraph.graph.DefaultGraphCellEditor;
+import org.jgraph.graph.GraphCell;
 import org.jgraph.graph.GraphCellEditor;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.VertexRenderer;
@@ -55,7 +44,7 @@ import org.jgraph.graph.VertexView;
 
 /**
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ApesVertexView extends VertexView
 {
@@ -123,7 +112,7 @@ public class ApesVertexView extends VertexView
 
 	public GraphCellEditor getEditor()
 	{
-		return new ApesGraphCellEditor();
+		return new ApesGraphCellEditor((GraphCell)cell);
 	}
 
 	protected static class ApesVertexRenderer extends VertexRenderer
@@ -153,185 +142,6 @@ public class ApesVertexView extends VertexView
 				g.fillRect((int)rect.getX()+b,(int)(rect.getY()+d.getHeight()-b),(int)d.getWidth()-b,(int)d.getHeight()-b);
 			}	
 			super.paint(g);
-		}
-
-}
-	
-	private class ApesGraphCellEditor extends DefaultGraphCellEditor 
-		implements ChangeColorAction.ColorChangeListener, 
-			ChangeItalicAction.ItalicChangeListener, 
-			ChangeBoldAction.BoldChangeListener, 
-			CellEditorListener
-	{
-		private Color mInitForeground = null;
-		private Color mCurrentForeground = null;
-		
-		private Color mInitBackground = null;
-		private Color mCurrentBackground = null;
-		
-		private Font mInitFont = null;
-		private Font mCurrentFont = null;
-		
-		private ChangeColorAction mActionForeground = (ChangeColorAction)Context.getInstance().getAction("ChangeForeground");
-		private ChangeColorAction mActionBackground = (ChangeColorAction)Context.getInstance().getAction("ChangeBackground");
-		private ChangeItalicAction mActionItalic = (ChangeItalicAction)Context.getInstance().getAction("ChangeItalic");
-		private ChangeBoldAction mActionBold = (ChangeBoldAction)Context.getInstance().getAction("ChangeBold");
-		
-		public ApesGraphCellEditor()
-		{
-			super();
-			mActionForeground.addChangeColorListener(this);	
-			mActionBackground.addChangeColorListener(this);	
-			mActionItalic.addChangeItalicListener(this);
-			mActionBold.addChangeBoldListener(this);
-
-			addCellEditorListener(this);
-			
-			mInitForeground = GraphConstants.getForeground(((DefaultGraphCell)cell).getAttributes());
-			mInitBackground = GraphConstants.getBackground(((DefaultGraphCell)cell).getAttributes());
-			mInitFont = mCurrentFont = GraphConstants.getFont(((DefaultGraphCell)cell).getAttributes());
-			
-			mActionForeground.setEnabled(true);
-			mActionBackground.setEnabled(true);
-			mActionItalic.setEnabled(true);
-			mActionBold.setEnabled(true);
-		}
-		
-		public Component getGraphCellEditorComponent(
-			JGraph graph,
-			Object value,
-			boolean isSelected)
-		{
-			Component c = super.getGraphCellEditorComponent(graph, cell, isSelected);
-			
-			if( editingComponent instanceof JTextField && value instanceof DefaultGraphCell )
-			{
-				Color fc = mCurrentForeground == null ? mInitForeground : mCurrentForeground;
-				Color bc = mCurrentBackground == null ? mInitBackground : mCurrentBackground;
-				Font font = mCurrentFont == null ? mInitFont : mCurrentFont;
-				
-				mActionForeground.setColor(fc);
-				mActionBackground.setColor(bc);
-				
-				((JTextField)editingComponent).setForeground(fc);
-				((JTextField)editingComponent).setSelectedTextColor(fc);
-				((JTextField)editingComponent).setBackground(bc);
-				((JTextField)editingComponent).setFont( font );
-				((JTextField)editingComponent).selectAll();
-			}
-			
-			return c;
-		}
-
-		public void colorChanged(Color c)
-		{
-			if(editingComponent instanceof JTextField)
-			{
-				if( c == mActionForeground.getColor() )
-				{	
-					mCurrentForeground = c;
-				}
-				else
-				{
-					mCurrentBackground = c;
-				}
-				
-				getGraphCellEditorComponent(graph,cell,true);
-			}
-		}
-		
-		public void italicChanged(boolean newValue) 
-		{
-			if(editingComponent instanceof JTextField && mCurrentFont != null)
-			{
-				int style = mCurrentFont.getStyle();
-				
-				if( newValue )
-				{
-					style += Font.ITALIC;
-				}
-				else
-				{
-					style -= Font.ITALIC;
-				}
-				
-				mCurrentFont = new Font(mCurrentFont.getName(),style,mCurrentFont.getSize());
-				
-				getGraphCellEditorComponent(graph,cell,true);
-			}
-		}
-		
-		public void boldChanged(boolean newValue) 
-		{
-			if(editingComponent instanceof JTextField && mCurrentFont != null)
-			{
-				int style = mCurrentFont.getStyle();
-				
-				if( newValue )
-				{
-					style += Font.BOLD;
-				}
-				else
-				{
-					style -= Font.BOLD;
-				}
-				
-				mCurrentFont = new Font(mCurrentFont.getName(),style,mCurrentFont.getSize());
-				
-				getGraphCellEditorComponent(graph,cell,true);
-			}
-		}
-		
-		public void editingCanceled(ChangeEvent e)
-		{
-			mCurrentForeground = null;
-			mCurrentBackground = null;
-			mCurrentFont = null;
-			
-			mActionForeground.setEnabled(false);
-			mActionBackground.setEnabled(false);
-			mActionItalic.setEnabled(false);
-			mActionBold.setEnabled(false);
-		}
-
-		public void editingStopped(ChangeEvent e)
-		{
-			DefaultGraphCell cell = (DefaultGraphCell)getCell();
-			Map map = GraphConstants.cloneMap(cell.getAttributes());
-			boolean hasChanged = false;
-			
-			if( mCurrentForeground != null && mInitForeground != mCurrentForeground )
-			{
-				GraphConstants.setForeground(map,mCurrentForeground);
-				hasChanged = true;
-			}
-			if( mCurrentBackground != null &&  mInitBackground != mCurrentBackground )
-			{
-				GraphConstants.setBackground(map,mCurrentBackground);
-				hasChanged = true;
-			}
-			if(  mCurrentFont != null && mInitFont.getStyle() != mCurrentFont.getStyle() )
-			{
-				GraphConstants.setFont(map,mCurrentFont);
-				hasChanged = true;
-			}
-			
-			if( hasChanged )
-			{	
-				Map edit = new HashMap();
-				edit.put(cell,map);
-				//getModel().edit(edit,null,null,null);
-				graph.getGraphLayoutCache().edit(edit,null,null,null);
-			}
-			
-			mCurrentForeground = null;
-			mCurrentBackground = null;
-			mCurrentFont = null;
-			
-			mActionForeground.setEnabled(false);
-			mActionBackground.setEnabled(false);
-			mActionItalic.setEnabled(false);
-			mActionBold.setEnabled(false);
 		}
 	}
 }

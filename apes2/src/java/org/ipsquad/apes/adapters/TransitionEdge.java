@@ -22,18 +22,17 @@
 
 package org.ipsquad.apes.adapters;
 
-import java.awt.Color;
+import java.awt.Font;
 import java.util.Map;
 
 import org.ipsquad.apes.model.extension.ActivityDiagram;
-import org.ipsquad.apes.ui.ColorFontPanel;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.GraphConstants;
 
 /**
  * This is a convenient class which correct problems in the clone method
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class TransitionEdge extends DefaultEdge
 {
@@ -55,8 +54,13 @@ public class TransitionEdge extends DefaultEdge
 		int arrow = GraphConstants.ARROW_CLASSIC;
 		GraphConstants.setLineEnd(map , arrow);
 		GraphConstants.setEndFill(map, true);
-		GraphConstants.setForeground(map, ColorFontPanel.getColor("GuardTitle"));
-		GraphConstants.setBackground(map, Color.GREEN);
+		
+		ColorAssociater ca = new ColorAssociater();
+		((ActivityDiagram.Transition)userObject).visit(ca);
+
+		GraphConstants.setForeground(map, ca.getForeground());
+		GraphConstants.setBackground(map, ca.getBackground());
+		GraphConstants.setFont(map,new Font((String)map.get(GraphConstants.EDITABLE),ca.getFont(),13));
 		
 		changeAttributes(map);	
 	}
