@@ -61,12 +61,26 @@ public class GRole extends GElementModele
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
 		
 		// affiche la liste des produits dans le role est responsable
-		Vector listeProduits = this.modele.getProduit();
-		for (int i = 0; i < listeProduits.size(); i++)
-		{
-			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
-		}
+        Vector listeProduits = this.modele.getProduit();
+        for (int i = 0; i < listeProduits.size(); i++)
+        {
+            IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
+            if (GenerationManager.estProduitExterieur(id) == 0)
+            {
+                if (GenerationManager.estProduitChange(id) == null)
+                {
+                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+                }
+                else
+                {
+                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(GenerationManager.estProduitChange(id)) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+                }
+            }
+            else
+            {
+                fd.write("<div class=\"elementliste\">" + id.toString() + "</div>\n");
+            }
+        }
 
 		this.ajouterDescription(fd);
 		this.ajouterContenu(fd);

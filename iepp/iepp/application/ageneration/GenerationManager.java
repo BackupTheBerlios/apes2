@@ -385,15 +385,14 @@ public class GenerationManager
 				 	}
 				 	else
 				 	{
-					 	for (int k = 0; k < listeLiens.size(); k++)
+				 	    boolean lie = false; 
+					 	for (int k = 0; k < listeLiens.size() && !lie ; k++)
 					 	{
 					 		LienProduits lien = (LienProduits)listeLiens.elementAt(k);
-					 		if (!lien.contient(idProduit))
+					 		
+					 		if (lien.contient(idProduit))
 					 		{
-					 			listeProduitsExterieurs.addElement(idProduit);
-					 		}
-					 		else
-					 		{
+					 		    lie = true;
 					 		    // Si le produit en entree est lie, on le note pour changer son lien vers le produit lie
 					 		    IdObjetModele produitCible;
 					 		    if (lien.getProduitEntree() == idProduit)
@@ -405,16 +404,23 @@ public class GenerationManager
 					 		        produitCible = lien.getProduitEntree();
 					 		    }
 					 		    listeProduitsChanges.put(idProduit.getRef().toString() +"::"+ idProduit.toString(),produitCible);
-					 		}
+					 		} 
 					 	}
+					 	if (!lie)
+				 		{
+				 			listeProduitsExterieurs.addElement(idProduit);
+				 		}
 				 	}
 				}
+				
+				// Il faudra peut etre une boucle supplementaire pour gerer correctement le cas des triples fusions et plus
+				// Il faudra dans ce cas verifier que le produit cible d'un produit change n'est pas en sortie
 			}
 		}
 		GenerationManager.setListeProduitsChanges(listeProduitsChanges);
 		GenerationManager.setListeProduitsExterieurs(listeProduitsExterieurs);
 		GenerationManager.setListeProduitsSortie(listeProduitsSortie);
-		//System.out.println("Produits exterieurs " + listeProduitsExterieurs);
+		System.out.println("Produits exterieurs " + listeProduitsExterieurs);
 	}
 	
 	/**
@@ -605,4 +611,41 @@ public class GenerationManager
 		}
 		return null;
 	}
+	
+	/**
+	 * Indique si l'ID passee en parametre est celle d'un produit exterieur
+	 * @param id IdObjectModele a controler
+	 * @return 0 si le produit n'est pas exterieur, 1 s'il s'agit d'un produit en entree, 2 s'il s'agit d'une produit en sortie
+	 */
+	public static int estProduitExterieur(IdObjetModele id) 
+	{
+	    for (int i = 0; i < listeProduitsExterieurs.size(); i++)
+		{
+		    if (listeProduitsExterieurs.elementAt(i).toString().equals(id.toString()) && (((IdObjetModele)listeProduitsExterieurs.elementAt(i)).getRef() == id.getRef()))
+		    {
+		        // Le produit est exterieur
+		        if (((IdObjetModele)listeProduitsExterieurs.elementAt(i)).estProduitSortie())
+		        {
+		            return 2;
+		        }
+		        return 1;
+		    }
+		}
+	    return 0;
+	}
+	
+	/**
+	 * Indique si l'ID passee en parametre en celle d'un produit lie a un autre qui doit etre affiche
+	 * @param id IdObjectModele a controler
+	 * @return l'ID du produit qu'il faut afficher si l'objet est trouve, null sinon
+	 */
+	public static IdObjetModele estProduitChange (IdObjetModele id)
+	{
+	    if (listeProduitsChanges.containsKey(id.getRef().toString() +"::"+ id.toString()))
+	    {
+	        return ((IdObjetModele)listeProduitsChanges.get(id.getRef().toString() + "::"+ id.toString()));
+	    }
+	    return null;
+	}
+	
 }

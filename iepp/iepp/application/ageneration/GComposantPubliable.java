@@ -20,6 +20,7 @@ package iepp.application.ageneration;
 
 
 import iepp.Application;
+import iepp.domaine.ComposantProcessus;
 import iepp.domaine.ElementPresentation;
 import iepp.domaine.Guide;
 import iepp.domaine.IdObjetModele;
@@ -131,7 +132,7 @@ public class GComposantPubliable  extends GElementModele
 		for (int i = 0; i < listeRole.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeRole.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 		fd.write("<br><br><div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PRODUITS") + " </div>\n");
 		Vector listeProduits = this.modele.getProduit();
@@ -148,39 +149,34 @@ public class GComposantPubliable  extends GElementModele
 		boolean trouve;
 		boolean in;
 		
-		// Recuperer la liste des produit exterieurs a ne pas lier
-		Vector externe = GenerationManager.getListeProduitsExterieurs();
-		
 		for (int i = 0; i < listeProduits.size(); i++)
 		{
+		    ajout = null;
 			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			// Construire les chaines
-			ajout = "<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
 			
 			trouve = false;
 			in = false;
 			
 			// Chercher les produits exterieurs (sans liens)
-			for (int j = 0; j < externe.size() && !trouve ; j++)
+			if (GenerationManager.estProduitExterieur(id) != 0)
 			{
-			    if (externe.elementAt(j).toString().equals(id.toString()) && (((IdObjetModele)externe.elementAt(j)).getRef() == id.getRef()))
-			    {
-			        // Le produit est exterieur, il ne faut pas mettre de lien
-			        trouve = true;
-			        ajout = "<div class=\"elementliste\"> " + id.toString() + "</div>\n";
-			        if (((IdObjetModele)externe.elementAt(j)).estProduitEntree())
-			        {
-			            in = true;
-			        }
-			    }
+		        // Le produit est exterieur, il ne faut pas mettre de lien
+		        trouve = true;
+		        ajout = "<div class=\"elementliste\"> " + id.toString() + "</div>\n";
+		        if (GenerationManager.estProduitExterieur(id) == 1)
+		        {
+		            in = true;
+		        }
 			}
+			
 			// S'ils ne sont pas exterieurs, ils n'ont peut etre pas de presentation mais sont des produits en entree lies
 			HashMap listeProduitsChanges = GenerationManager.getListeProduitsChanges();
-			if (listeProduitsChanges.containsKey(id.getRef().toString() +"::"+ id.toString()))
+			IdObjetModele nouveau = GenerationManager.estProduitChange(id);
+			if (nouveau != null)
 			{
 			    trouve = true;
 			    in = true;
-			    ajout = "<div class=\"elementliste\"><a href=\"../" + ((IdObjetModele)listeProduitsChanges.get(id.getRef().toString() + "::"+ id.toString())).getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
+			    ajout = "<div class=\"elementliste\"><a href=\"" + this.getLienChemin(nouveau) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
 			}
 			
 			// ou des produits en sortie qui ont une presentation
@@ -191,6 +187,12 @@ public class GComposantPubliable  extends GElementModele
 			    {
 			        trouve = true;
 			    }
+			}
+			
+			// Construire la chaine par defaut s'il n'y a pas eu de cas particulier
+			if (ajout == null)
+			{
+			    ajout = "<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n";
 			}
 			
 			if (trouve)
@@ -219,7 +221,7 @@ public class GComposantPubliable  extends GElementModele
 		for (int i = 0; i < listeDefinition.size(); i++)
 		{
 			IdObjetModele id = (IdObjetModele) listeDefinition.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"../" + id.getChemin() + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
 		}
 
 		// voir pour les diagrammes

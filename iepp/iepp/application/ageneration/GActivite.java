@@ -69,23 +69,51 @@ public class GActivite extends GElementModele
 		fd.write(getBarreNavigation() + "<br>");
 		
 		// affiche les produits en entrée / sortie
-		fd.write("<div class=\"titreliste\">"+ Application.getApplication().getTraduction("WEB_PROD_ENTREE") +"</div>\n");
-		// affiche la liste des produits entrée de l'activite
-		Vector listeProduits = this.modele.getProduitEntree();
-		for (int i = 0; i < listeProduits.size(); i++)
-		{
-			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
-		}
+        fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PROD_ENTREE") + "</div>\n");
+        // affiche la liste des produits entrée de l'activite
+        Vector listeProduits = this.modele.getProduitEntree();
+        for (int i = 0; i < listeProduits.size(); i++)
+        {
+            IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
+            if (GenerationManager.estProduitExterieur(id) == 0)
+            {
+                if (GenerationManager.estProduitChange(id) == null)
+                {
+                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+                }
+                else
+                {
+                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(GenerationManager.estProduitChange(id)) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+                }
+            }
+            else
+            {
+                fd.write("<div class=\"elementliste\">" + id.toString() + "</div>\n");
+            }
+        }
 
-		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PROD_SORTIE") + "</div>\n");
-		 // affiche la liste des produits entrée de l'activite
-		listeProduits = this.modele.getProduitSortie();
-		for (int i = 0; i < listeProduits.size(); i++)
-		{
-			IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
-			fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
-		}
+        fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_PROD_SORTIE") + "</div>\n");
+        // affiche la liste des produits sortie de l'activite
+        listeProduits = this.modele.getProduitSortie();
+        for (int i = 0; i < listeProduits.size(); i++)
+        {
+            IdObjetModele id = (IdObjetModele) listeProduits.elementAt(i);
+            if (GenerationManager.estProduitExterieur(id) == 0)
+            {
+                if (GenerationManager.estProduitChange(id) == null)
+                {
+                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(id) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+                }
+                else
+                {
+                    fd.write("<div class=\"elementliste\"><a href=\"" + this.getLienChemin(GenerationManager.estProduitChange(id)) + "\" target=\"_new\" >" + id.toString() + "</a></div>\n");
+                }
+            }
+            else
+            {
+                fd.write("<div class=\"elementliste\">" + id.toString() + "</div>\n");
+            }
+        }
 		
 		// affiche le rôle responsable de l'activité
 		fd.write("<div class=\"titreliste\">" + Application.getApplication().getTraduction("WEB_ROLE_RESP") + "</div>\n");
