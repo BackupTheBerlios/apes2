@@ -74,7 +74,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesMediator.Listener
 {
@@ -534,6 +534,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	public void remove( Object[] cells, Object[] sources, Object[] targets, Map attr )
 	{
 		//System.out.println("Graph::tryRemove");
+		
 		ApesMediator.getInstance().update( 
 				ApesMediator.getInstance().createRemoveCommand( mDiagram, cells, sources, targets, attr ) );
 	}

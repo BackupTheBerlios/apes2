@@ -36,7 +36,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -679,12 +679,16 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean areLinkableWorkProductWorkDefinition(WorkProduct wp, WorkDefinition wd)
 	{
-		if(!existsLinkModelElements(wp,wd))
-		{
-			return true;
+		if ((containsModelElement(wp)) && (containsModelElement(wd)))
+		{	
+			if(!existsLinkModelElements(wp,wd))
+			{
+				return true;
+			}
+			
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
 		}
-		
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 		return false;
 	}
 	
@@ -697,12 +701,16 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean areLinkableWorkDefinitionWorkProduct(WorkDefinition wd, WorkProduct wp)
 	{
-		if(!existsLinkModelElements(wd,wp))
+		if ((containsModelElement(wp)) && (containsModelElement(wd)))
 		{
-			return true;
+			if(!existsLinkModelElements(wd,wp))
+			{
+				return true;
+			}
+			
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
 		}
-		
-		ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 		return false;
 	}
 	
