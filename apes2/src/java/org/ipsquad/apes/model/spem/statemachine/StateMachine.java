@@ -26,11 +26,12 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 /**
  * An incomplete implementation of the StateMachine 
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class StateMachine extends ModelElement
 {
 	private ModelElement mContext = null;
+	
 	//private State mTop;
 	//private Vector mTransitions;
 	
@@ -54,42 +55,18 @@ public class StateMachine extends ModelElement
 		return mContext;
 	}
 	
-	/*public void setName(String name)
+	public void setName(String name)
 	{
-		if( mContext != null )
-		{	
-			int index = name.indexOf(mContext.getName()+"::");
-			if( index == 0 )
-			{
-				String newName = name.substring(mContext.getName().length()+2,name.length());
-				if( newName.trim().length() != 0 )
-				{	
-					super.setName(newName);
-				}	
-			}
-		}
-		else
+		if( name.length() > 2 && name.charAt(0) == '(' && name.charAt(name.length()-1)  == ')' )
 		{	
 			super.setName(name);
 		}
-	}
-	
-	public String getName()
-	{
-		if( mContext != null )
-		{	
-			return mContext.getName()+"::"+super.getName();
-		}
 		else
 		{
-			return super.getName();
+			name = '('+name+')';
+			super.setName(name);
 		}
 	}
-	
-	public String toString()
-	{
-		return getName();
-	}*/
 	
 	public void visit(SpemVisitor visitor)
 	{
