@@ -22,17 +22,36 @@
 
 package org.ipsquad.apes;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.JInternalFrame;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.tree.TreePath;
 
+import org.ipsquad.apes.adapters.ActivityGraphAdapter;
+import org.ipsquad.apes.adapters.ApesGraphCell;
+import org.ipsquad.apes.adapters.ApesTransferable;
 import org.ipsquad.apes.adapters.ApesTreeNode;
+import org.ipsquad.apes.adapters.ContextGraphAdapter;
+import org.ipsquad.apes.adapters.FlowGraphAdapter;
+import org.ipsquad.apes.adapters.ResponsabilityGraphAdapter;
+import org.ipsquad.apes.adapters.SpemGraphAdapter;
 import org.ipsquad.apes.adapters.SpemTreeAdapter;
+import org.ipsquad.apes.adapters.TransitionEdge;
 import org.ipsquad.apes.model.frontend.ApesMediator;
+import org.ipsquad.apes.ui.GraphFrame;
 import org.ipsquad.utils.ConfigManager;
+import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.DefaultPort;
+
 
 /**
  * Application Context
@@ -40,7 +59,7 @@ import org.ipsquad.utils.ConfigManager;
  * This class centralize the context of the running application.
  * It is implemented as a singleton.
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Context
 {
@@ -50,6 +69,87 @@ public class Context
 	private String mFilePath = "";
 	private String mWebSitePath = null;
 	private Project mProject;
+	private ArrayList graphCell ;
+	
+	public  static Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard(); 
+	
+	public void copier() 
+	{
+		Object [] a = (((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraph().getSelectionCells()) ; 
+		
+		ApesTransferable t = new ApesTransferable (a) ;
+		cb.setContents(t, null) ;
+	}
+	
+	
+	public void coller()
+	{
+		SpemGraphAdapter adapter ;
+		ApesGraphCell cell;
+		DefaultEdge transition ;
+		
+		Transferable t = cb.getContents(this);
+		// Make sure the clipboard is not empty.
+		if (t == null) {
+			System.out.println("The clipboard is empty.");
+			return;
+		}
+		try 
+		{
+			graphCell = (ArrayList)t.getTransferData(ApesTransferable.arrayFlavor);		
+			adapter = (SpemGraphAdapter)(((GraphFrame)Context.getInstance().getTopLevelFrame().getDesktop().getSelectedFrame()).getGraphModel());
+			if (adapter instanceof ActivityGraphAdapter)
+				adapter = (ActivityGraphAdapter) adapter ;
+			else
+			{
+				if (adapter instanceof FlowGraphAdapter)
+					adapter = (FlowGraphAdapter) adapter;
+				else
+				{
+					if (adapter instanceof ResponsabilityGraphAdapter)
+						adapter = (ResponsabilityGraphAdapter) adapter;
+					else
+						adapter = (ContextGraphAdapter) adapter;
+				}
+			}		
+			for(int i = 0 ; i < graphCell.size(); i++)
+			{
+				if (graphCell.get(i) instanceof ApesGraphCell)
+				{
+					cell = (ApesGraphCell) graphCell.get(i) ;
+					Map attr = cell.getAttributes();
+					Map view = new HashMap();
+					view.put("Attributes", attr);
+					adapter.insertCell(cell, view);
+				}
+				if (graphCell.get(i) instanceof TransitionEdge)
+				{				
+					transition = (DefaultEdge)graphCell.get(i) ;
+					Map attr = transition.getAttributes() ;
+					 Map view = new HashMap();
+					  view.put("Attributes", attr);
+					  //System.out.println(transition.getSource().getClass());
+					  DefaultPort sourcePort = (DefaultPort) transition.getSource() ;
+					  DefaultPort targetPort = (DefaultPort) transition.getTarget() ;
+					  ApesGraphCell target = (ApesGraphCell) targetPort.getParent() ;// .getParentView().getCell();
+					  ApesGraphCell source = (ApesGraphCell) sourcePort.getParent() ;
+					  //System.out.println(targetPort.getParent().getClass());
+					  //System.out.println(sourcePort.getParent().getClass());
+					  adapter.insertEdge(source, target, view);
+				}
+			}
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("errrer");
+			//afficher("Données non disponible");
+		} 
+		catch (UnsupportedFlavorException e) {
+			System.out.println("fff");
+			//afficher("DataFlower de mauvais type");
+		} 
+	}
+	
 	private ApesUndoManager mUndoManager = new ApesUndoManager()
 	{
 		public void undoableEditHappened(UndoableEditEvent e)

@@ -58,10 +58,11 @@ import org.jgraph.graph.GraphConstants;
 /**
  * Base class for the graph editing internal frames
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class GraphFrame extends JInternalFrame implements InternalFrameListener, GraphModelListener, DropTargetListener, ApesMediator.Listener
 {
+
 	protected JGraph mGraph;
 	protected ToolPalette mToolPalette;
 	

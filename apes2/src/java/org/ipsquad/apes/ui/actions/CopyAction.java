@@ -24,13 +24,17 @@ package org.ipsquad.apes.ui.actions;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 
+
+import org.ipsquad.apes.Context;
+
 /**
  * Copy the current selection to the clipboard
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class CopyAction extends ApesAction
 {
+	
 	public CopyAction()
 	{
 		super("editCopy", "icons/EditCopy.gif", 'C', Event.CTRL_MASK);
@@ -38,6 +42,9 @@ public class CopyAction extends ApesAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println("Copy Action Performed");
+		System.out.println("copy Action Performed");
+		((Context)Context.getInstance()).copier();
+		
 	}
+
 }

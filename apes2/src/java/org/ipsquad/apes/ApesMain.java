@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Properties;
 
+
 import org.ipsquad.apes.adapters.ApesTreeNode;
 import org.ipsquad.apes.model.extension.ActivityDiagram;
 import org.ipsquad.apes.model.extension.ApesProcess;
@@ -77,7 +78,7 @@ import org.ipsquad.utils.TaskMonitorDialog;
  *
  * This class contains the main method of the application.
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ApesMain
 {
@@ -127,7 +128,7 @@ public class ApesMain
 
 		return properties;
 	}
-	
+
 	public static void main(String[] args)
 	{
 		ConfigManager.init(createDefaultProperties());
