@@ -180,8 +180,13 @@ public class DefinitionProcessus extends ObjetModele
 	}
 	public void setListeAGenerer(Vector liste)
 	{
-		this.listeAGenerer = liste;
+		if (! this.listeAGenerer.equals(liste))
+		{
+			this.listeAGenerer = liste;
+			this.maj("CHANGED");
+		}
 	}
+	
 	public String getRepertoireGeneration()
 	{
 		if ( this.repertoireGeneration.equals(""))

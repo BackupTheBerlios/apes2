@@ -125,7 +125,7 @@ public class FenetrePreference extends JDialog
 		this.panneauLangue = new PanneauLangue(Application.getApplication().getTraduction(PanneauLangue.LANGUAGE_PANEL_KEY)); 
 		this.panneauLangue.setVisible(false);
 		
-		this.panneauGeneration = new PanneauGeneration(Application.getApplication().getTraduction(PanneauGeneration.GENERATION_PANEL_KEY)); 
+		this.panneauGeneration = new PanneauGeneration(Application.getApplication().getTraduction(PanneauGeneration.GENERATION_PANEL_KEY), this); 
 		this.panneauGeneration.setVisible(false);
 		
 		this.panneauReferentiel= new PanneauReferentiel(Application.getApplication().getTraduction(PanneauReferentiel.REPOSITORY_PANEL_KEY)); 
@@ -236,7 +236,7 @@ public class FenetrePreference extends JDialog
 	    return this.type_courant;
 	}
 	
-	private void save()
+	public void save()
 	{
 	    switch (this.type_courant)
 		{

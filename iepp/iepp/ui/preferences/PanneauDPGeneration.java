@@ -274,7 +274,7 @@ public class PanneauDPGeneration extends PanneauOption
 				  ComposantsListModel listeComp = (ComposantsListModel)LS_arbre.getModel();
 				  listeComp.ajouter(paq);
 				  this.LS_referentiel.setSelectedIndex(indexSelect-1);
-				  listeRef.enlever(indexSelect);
+				  //listeRef.enlever(indexSelect);
 			}
 		}
 	}
@@ -293,7 +293,7 @@ public class PanneauDPGeneration extends PanneauOption
 					String cheminFichier = ((PaquetagePresentation)a_retirer).getNomFichier();
 					a_retirer = (cheminFichier.substring(cheminFichier.lastIndexOf(File.separator) + 1, cheminFichier.lastIndexOf(".")));
 				}
-				listeRef.ajouter(a_retirer);
+				//listeRef.ajouter(a_retirer);
 				this.LS_arbre.setSelectedIndex(indexSelect-1);
 				listeComp.enlever(indexSelect);
 			}

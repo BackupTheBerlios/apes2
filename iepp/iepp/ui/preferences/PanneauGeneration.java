@@ -44,11 +44,13 @@ public class PanneauGeneration extends PanneauOption
 {
 	private DefinitionProcessus defProc;
 	private JButton bGenerer;
+	private FenetrePreference fenPref;
 	
 	public static final String GENERATION_PANEL_KEY = "Generation_GO_Desc";
 	
-	public PanneauGeneration(String name)
+	public PanneauGeneration(String name, FenetrePreference fenPref)
 	{
+		this.fenPref = fenPref;
 		Projet p = Application.getApplication().getProjet();
 	    if (p != null)
 	    {
@@ -121,9 +123,11 @@ public class PanneauGeneration extends PanneauOption
 			//récupérer l'objet source de l'évènement reçu
 			Object source = e.getSource();
 			
-			// sauver les paramètres
+			
 			if (source == PanneauGeneration.this.bGenerer)
 			{	
+				//sauver les paramètres
+				PanneauGeneration.this.fenPref.save();
 				CGenererSite c = new CGenererSite(PanneauGeneration.this.defProc) ;
 				if (c.executer())
 				{

@@ -61,7 +61,7 @@ public class GDefinitionTravail extends GElementModele
 					+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
 					+ "<p align=\"center\" class=\"entete\">\n"
 					+ "<b>" + this.element.getNomPresentation() + "</b>\n"
-					+ "</p></td></tr></table></center><BR><BR>\n");
+					+ "</p></td></tr></table></center><BR>\n");
 
 		this.ajouterLienRacine(fd);
 

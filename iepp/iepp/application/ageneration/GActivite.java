@@ -68,7 +68,7 @@ public class GActivite extends GElementModele
 								+ "<tr><td width=\"100%\" class=\"titrePage\">\n"
 								+ "<p align=\"center\" class=\"entete\">\n"
 								+ "<b>" + this.element.getNomPresentation() + "</b>\n"
-								+ "</p></td></tr></table></center><BR><BR>\n");
+								+ "</p></td></tr></table></center><BR>\n");
 
 		this.ajouterLienRacine(fd);
 		// lien vers la page de la définition de travail
@@ -77,7 +77,7 @@ public class GActivite extends GElementModele
 		if (def != null)
 		{
 			fd.write("<br>");
-			fd.write("<a href=\"../../" + def.getChemin() + "\" >" + " Page d'accueil de la définition de travail" + "</a>");
+			fd.write("<a href=\"../../" + def.getChemin() + "\" class=\"link_home\" >" + " Page d'accueil de la définition de travail" + "</a>");
 			fd.write("<br>");
 		}
 		
