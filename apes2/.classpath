@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/units"/>
 	<classpathentry sourcepath="/home/ptiyo/ipsquad/jgraph/src" kind="lib" path="src/lib/jgraph.jar"/>
-	<classpathentry kind="lib" path="/home/ptiyo/programmation/workspace/apes2/src/lib/JSX-java1.4.jar"/>
 	<classpathentry kind="lib" path="src/lib/junit.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="src/lib/JSX-java1.4.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
