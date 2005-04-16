@@ -30,7 +30,6 @@ import java.util.Iterator;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
@@ -66,9 +65,7 @@ public class ArbrePresentationListener
     if (lnkArbrePresentation.get_arbre().isSelectionEmpty()) {
       return null;
     }
-    DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)lnkArbrePresentation._arbre.getLastSelectedPathComponent();
-    Object objet = noeud.getUserObject();
-    return (ElementPresentation) objet;
+    return (ElementPresentation) lnkArbrePresentation._arbre.getLastSelectedPathComponent();
   }
 
   /**

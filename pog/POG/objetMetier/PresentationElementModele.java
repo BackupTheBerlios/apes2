@@ -100,6 +100,7 @@ public class PresentationElementModele extends ElementPresentation {
         _modifiable = false;
 	_nominmodel = element.getName();
 	_placearbre = id;
+	_typeProduit = " ";
   }
 
   public boolean estValide(Debug lnkDebug){

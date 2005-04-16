@@ -727,10 +727,10 @@ public class Systeme {
 		if (PogToolkit.askYesNoQuestion(lnkFenetrePrincipale.getLnkLangues().valeurDe("questionquitter"), false, lnkFenetrePrincipale) == PogToolkit._NO)
 			return;
 		if (lnkFenetrePrincipale.get_pathSave().equals("") && !_save) {
-			if (PogToolkit.askYesNoQuestion(lnkFenetrePrincipale.getLnkLangues().valeurDe("errquitterenregistrer"), false, lnkFenetrePrincipale) == PogToolkit._NO)
-				return;
+			if (PogToolkit.askYesNoQuestion(lnkFenetrePrincipale.getLnkLangues().valeurDe("questsauve"), false, lnkFenetrePrincipale) == PogToolkit._YES)
+				enregistrerPresentation();
 		}
-		else
+		else if (!_save)
 			_verifierSauve(true);
 		lnkFenetrePrincipale.dispose();
 		System.exit(0);

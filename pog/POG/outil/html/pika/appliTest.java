@@ -25,15 +25,25 @@
  */
 package POG.outil.html.pika;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.swing.JFileChooser;
+
+import org.ipsquad.apes.model.extension.ApesWorkDefinition;
+import org.ipsquad.apes.model.spem.process.structure.Activity;
+import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
+import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
+
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauDetail;
+import POG.objetMetier.PresentationElementModele;
 
 /**
  *
@@ -477,6 +487,27 @@ public class appliTest extends javax.swing.JFrame {
     this.setVisible(true);
     this.show();
     NouveauDocument();
+    if (panel.get_elementCourant() instanceof PresentationElementModele) {
+    	PresentationElementModele pel = (PresentationElementModele) panel.get_elementCourant();
+    	InputStream ips = null;
+    	
+    	if (pel.getLnkModelElement() instanceof Activity)
+    		ips = ClassLoader.getSystemResourceAsStream("POG/ac_type.html");
+		if (pel.getLnkModelElement() instanceof ApesWorkDefinition)
+			ips = ClassLoader.getSystemResourceAsStream("POG/dt_type.html");
+		if (pel.getLnkModelElement() instanceof WorkProduct)
+			ips = ClassLoader.getSystemResourceAsStream("POG/pr_type.html");
+		if (pel.getLnkModelElement() instanceof ProcessRole)
+			ips = ClassLoader.getSystemResourceAsStream("POG/ro_type.html");
+		int c;
+		if (ips != null)
+			try {
+				while ((c = ips.read()) != -1)
+					feuille.append((char)c + "");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    }
   }
 
   public void lancement(){

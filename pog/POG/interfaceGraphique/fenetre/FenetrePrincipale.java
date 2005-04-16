@@ -286,7 +286,7 @@ public class FenetrePrincipale
 
   public static void main(String[] args) {
     try {
-    	System.out.println("URL: " + ClassLoader.getSystemResource("JSX/Wheel.class"));
+//    	System.out.println("URL: " + ClassLoader.getSystemResource("JSX/Wheel.class"));
       // Ne pas enlever les println d'ici...
       DateFormat dt = DateFormat.getTimeInstance();
       System.out.println("Start POG at " + dt.format(new Date()));
@@ -481,6 +481,7 @@ public class FenetrePrincipale
           return;
         }
         lnkSysteme.descendre(e);
+		lnkArbrePresentation.selectNodeContaining(e);
       }
     });
 
@@ -492,7 +493,7 @@ public class FenetrePrincipale
           return;
         }
         lnkSysteme.monter(e);
-
+		lnkArbrePresentation.selectNodeContaining(e);
       }
     });
 

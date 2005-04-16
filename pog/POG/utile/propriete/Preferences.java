@@ -450,6 +450,7 @@ public class Preferences {
 		_associationProduit.put("Référentiel", "ProduitReferentiel.gif");
 		_associationProduit.put("Objet Métier", "ProduitObjetMetier.gif");
 		_associationProduit.put("Autre", "ProduitAutre.gif");
+		_associationProduit.put(" ", "TreeWorkProduct.gif");
 	}
   }
 

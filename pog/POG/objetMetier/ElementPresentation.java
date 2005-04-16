@@ -24,7 +24,6 @@ package POG.objetMetier;
 import java.io.File;
 import java.io.OutputStreamWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -260,8 +259,10 @@ public class ElementPresentation implements Sauvegarde {
 	  if (!_tmp_charger_guide.contenu.equals("")) {
 		try {
 			URI urr = new URI(_tmp_charger_guide.contenu.replaceAll("\\\\", "/"));
+			if (urr.getScheme() == null)
+				throw new Exception();
 			_chargement_guide.setContenu(new Contenu(urr, lnkBibliotheque.getAbsolutePath()));
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			File toto = new File(_tmp_charger_guide.contenu);
 			if (!toto.exists())
 				toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_guide.contenu);

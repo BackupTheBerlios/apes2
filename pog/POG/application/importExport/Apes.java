@@ -51,6 +51,7 @@ import POG.utile.PogToolkit;
 
 public class Apes {
 
+
   private static File mFile;
   private static Vector _lstElement;
   private static HashMap _hdiag;
@@ -117,9 +118,11 @@ public class Apes {
     }
     while (!st.isEmpty()) {
       ModelElement mm = (ModelElement)st.pop();
+	  if (!_lstElement.contains(mm))
+		_lstElement.add(mm);
       if (mm instanceof SPackage) {
         SPackage sp = (SPackage)mm;
-        for (int i = 0; i < sp.modelElementCount(); i++)
+        for (int i = sp.modelElementCount() - 1; i >= 0; i--)
           st.push(sp.getModelElement(i));
       }
       else if (mm instanceof WorkDefinition) {
@@ -131,8 +134,6 @@ public class Apes {
         for (int j = 0; j < wd.subWorkCount(); j++)
           _lstElement.add(wd.getSubWork(j));
       }
-      else if (!_lstElement.contains(mm))
-        _lstElement.add(mm);
 //      else
   //    	System.out.println("toBreak: " + mm.getName() + " " + mm.getID());
     }
