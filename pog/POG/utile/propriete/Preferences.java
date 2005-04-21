@@ -27,16 +27,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.prefs.BackingStoreException;
 
 import javax.swing.ImageIcon;
@@ -115,13 +109,6 @@ public class Preferences {
       	System.out.println("Erreur création préférences.");
         //PogToolkit.showErrorMsg(fp.getLnkLangues().valeurDe("errcreationreppref"), fp);
 
-// Mise en téléchargement de l'aide
-//    extractHelp();
-
-	File ff = new File(REPPREF + File.separatorChar + "AidePOG");
-	if (!ff.exists())
-		fp.getLnkDebug().debogage("Vous n'avez pas d'aide installée. Il faut la télécharger à partir du site Internet de POG.");
-
     String fichierLangueDefaut = REPPREF + File.separatorChar + Langues.NOMBASE + "_" + Langues.LANGUEDEFAUT + ".properties";
     if (!PogToolkit.fileExists(fichierLangueDefaut))
       extractLangue(fichierLangueDefaut);
@@ -161,48 +148,6 @@ public class Preferences {
     _im = IconManager.getInstance();
   }
 
-  private void extractHelp(){
-    // Extraction de l'aide
-    if (!PogToolkit.folderExists(REPPREF + File.separatorChar + "AidePog")) {
-      System.out.println("Veuillez patienter pendant la copie de l'aide, cette operation peut prendre plusieurs secondes et ne sera plus effectue a l'avenir ...");
-      File ff = new File(REPPREF + File.separatorChar + "AidePOG");
-      try {
-        URL ip = ClassLoader.getSystemResource("AidePog");
-        String sip = URLDecoder.decode(ip.getFile());
-        File fi = new File(sip.substring(5, sip.lastIndexOf("!")));
-        if (!fi.exists())
-          System.out.println("ERREUR AIDE");
-//fi = fi.substring(fi.lastIndexOf(File.separator) + 1);
-        JarFile jf = new JarFile(fi);
-        Enumeration en = jf.entries();
-        while (en.hasMoreElements()) {
-          JarEntry ob = (JarEntry)en.nextElement();
-          if (!ob.isDirectory() && ob.getName().startsWith("AidePog")) {
-            InputStream is = jf.getInputStream(ob);
-            String strf =  ob.getName();
-            File fis = new File(REPPREF + strf);
-            fis.getParentFile().mkdirs();
-            if (fis.createNewFile()) {
-              FileOutputStream fos = new FileOutputStream(fis);
-              PogToolkit.extractStream(is, fos);
-            }
-          }
-        }
-                System.out.println("Extraction termine.");
-      }
-      catch (NullPointerException e) {
-        System.out.println("...Aide introuvable dans le jar");
-      } catch (IOException e) {
-                e.printStackTrace();
-      }
-    }
-
-  }
-
-
-  /**
-   *
-   */
   private void extractLangue(String fichierLangueDefaut) {
     System.out.println("Extraction des langues (Mise à jour)");
     try
@@ -450,8 +395,9 @@ public class Preferences {
 		_associationProduit.put("Référentiel", "ProduitReferentiel.gif");
 		_associationProduit.put("Objet Métier", "ProduitObjetMetier.gif");
 		_associationProduit.put("Autre", "ProduitAutre.gif");
-		_associationProduit.put(" ", "TreeWorkProduct.gif");
 	}
+	// Pour remettre un produit à type vide
+	_associationProduit.put(" ", "TreeWorkProduct.gif");
   }
 
   public void sauverPrefs()

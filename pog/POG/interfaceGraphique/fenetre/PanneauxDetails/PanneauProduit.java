@@ -94,6 +94,8 @@ public class PanneauProduit extends PanneauDetail {
 	typeProduit = new JComboBox(lestypes);
 	typeProduit.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
+			if (onLoad)
+				return;
 			JComboBox cb = (JComboBox)e.getSource();
 			String type = (String)cb.getSelectedItem();
 			if (!type.equals(((PresentationElementModele)_elementCourant).get_typeProduit()))
@@ -104,15 +106,15 @@ public class PanneauProduit extends PanneauDetail {
 	typeProduit.setBorder(
 			BorderFactory.createCompoundBorder(
 			BorderFactory.createCompoundBorder(
-			BorderFactory.createTitledBorder("Type Produit"),
+			BorderFactory.createTitledBorder(FenetrePrincipale.langue("typeproduit")),
 			BorderFactory.createEmptyBorder(5, 5, 5, 5)),
 			typeProduit.getBorder()));
 	
-    jLabel5.setText("Produit");
+    jLabel5.setText(FenetrePrincipale.langue("dproduit"));
     jLabel5.setBounds(new Rectangle(155, 322, 125, 20));
-    jLabel51.setText("en sortie des activites :");
+    jLabel51.setText(FenetrePrincipale.langue("ensortieact"));
     jLabel51.setBounds(new Rectangle(12, 340, 195, 20));
-    jLabel52.setText("en entree des activites :");
+    jLabel52.setText(FenetrePrincipale.langue("enentreact"));
     jLabel52.setBounds(new Rectangle(217, 340, 195, 20));
     jScrollPane51 = new JScrollPane();
     jScrollPane51.setBounds(new Rectangle(12, 360, 195, 55));
@@ -137,7 +139,7 @@ public class PanneauProduit extends PanneauDetail {
     scrollpaneGuides.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder("Guides associes"),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("guideassocies")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         scrollpaneGuides.getBorder()));
 
@@ -189,11 +191,15 @@ public class PanneauProduit extends PanneauDetail {
     popup.show(compo, x, x);
   }
 
+  private boolean onLoad;
+  
   public void loadElement(ElementPresentation elem) {
+  	onLoad = true;
     _elementCourant = elem;
     setNom_Pres(elem.get_nomPresentation());
-    setLabelNomPres(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nomProduit"));
+    setLabelNomPres(FenetrePrincipale.langue("nomproduit"));
     setDesc(elem.get_description());
+//    typeProduit.setSelectedItem(" ");
     if(elem instanceof PresentationElementModele){
       PresentationElementModele presElemMod = (PresentationElementModele) elem;
       if (presElemMod.getLnkModelElement()instanceof ModelElement){
@@ -218,6 +224,7 @@ public class PanneauProduit extends PanneauDetail {
     setTable_guide(lnkControleurPanneaux.getLnkSysteme().getGuides(_elementCourant));
     setIcon(elem.get_icone());
     this.updateUI();
+    onLoad = false;
   }
 
 

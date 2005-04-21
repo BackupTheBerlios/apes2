@@ -68,7 +68,7 @@ public class PresentationElementModele extends ElementPresentation {
    */
 
 	private void askChangeNom() {
-		String quest = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("questouinonchangernommodele");
+		String quest = FenetrePrincipale.langue("questouinonchangernommodele");
 		quest = quest.replaceFirst("ARG0", _nomPresentation);
 		quest = quest.replaceFirst("ARG1", _nominmodel);
 		if (PogToolkit.askYesNoQuestion(quest, false, FenetrePrincipale.INSTANCE) == PogToolkit._YES)
@@ -147,7 +147,10 @@ public class PresentationElementModele extends ElementPresentation {
 	
 	public void set_typeProduit(String produit) {
 		if (lnkModelElement instanceof WorkProduct)
-			_typeProduit = produit;
+			if (produit.equals(""))
+				_typeProduit = " ";
+			else
+				_typeProduit = produit;
 	}
 	public void sauver(OutputStreamWriter out, boolean FlagExporter) {
 		super.sauver(out, FlagExporter);

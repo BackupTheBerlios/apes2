@@ -207,7 +207,13 @@ public class FenetrePrincipale
 	private FenetreElementLien lnkFenetreElementLien = null;
 	private FenetreChangerIcone lnkFenetreChangerIcone = null;
   
-  public JLabel jLabelPathBib = new JLabel();
+  public JLabel jLabelPathBib = new JLabel() {
+  	public void setText(String arg0) {
+  		if (arg0.length() > 30)
+  			arg0 = arg0.substring(arg0.length() - 30);
+  		super.setText(arg0);
+	}
+  };
   
   private MainToolBar lnkMainToolBar = null;
 
@@ -672,13 +678,16 @@ public class FenetrePrincipale
 		_pathExport = export;
 	}
 	
-
-public JPanel get_panelArbrePresentation() {
-	return _panelArbrePresentation;
-}
-
-public JPanel get_panelExploBiblio() {
-	return _panelExploBiblio;
-}
+	public JPanel get_panelArbrePresentation() {
+		return _panelArbrePresentation;
+	}
+	
+	public JPanel get_panelExploBiblio() {
+		return _panelExploBiblio;
+	}
+	
+	public static String langue(String cle) {
+		return INSTANCE.getLnkLangues().valeurDe(cle);
+	}
 
 }

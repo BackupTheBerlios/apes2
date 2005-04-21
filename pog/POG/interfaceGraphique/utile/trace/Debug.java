@@ -105,7 +105,7 @@ public class Debug {
 	 */
 	private String traiteMessage(String message) {
 		if (message.indexOf(" ") == -1)
-			message = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe(message);
+			message = FenetrePrincipale.langue(message);
 		return message;
 	}
 
@@ -115,7 +115,7 @@ public class Debug {
 		int i = -1;
 		if (denum != 0)
 			i = Math.abs((int)((num / denum) * 100.0));
-		message = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe(message);
+		message = FenetrePrincipale.langue(message);
 		if ((i >= 0) && (i <= 100))
 			message = message + " " + i + "%";
 		try {

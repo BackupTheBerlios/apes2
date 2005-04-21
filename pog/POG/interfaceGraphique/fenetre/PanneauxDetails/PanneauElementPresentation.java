@@ -74,7 +74,7 @@ public class PanneauElementPresentation extends PanneauDetail {
     scrollpaneGuides.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder("Guides associes"),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("guideassocies")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         scrollpaneGuides.getBorder()));
     scrollpaneGuides.setViewportView(list_guides);
@@ -119,7 +119,7 @@ public class PanneauElementPresentation extends PanneauDetail {
     // Cas des paquetage :
     if (elem instanceof PresentationElementModele) 
     	setNom_modele(((PresentationElementModele)elem).getLnkModelElement().getName());
-    setLabelNomPres(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nomElemPres"));
+    setLabelNomPres(FenetrePrincipale.langue("nomElemPres"));
     setNom_Pres(elem.get_nomPresentation());
     setDesc(elem.get_description());
     if (elem.getContenu() != null)

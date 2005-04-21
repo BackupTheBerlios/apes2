@@ -84,7 +84,7 @@ public class Apes {
 			if (obj instanceof ModelElement) {
 				ModelElement mo = (ModelElement) obj;
 				if (_allId.get(new Integer(mo.getID())) != null) {
-					if (PogToolkit.askYesNoQuestion(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("archivedeteriore"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
+					if (PogToolkit.askYesNoQuestion(FenetrePrincipale.langue("archivedeteriore"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
 						mo.getParent().removeModelElement(mo);
 						try {
 							File nouv = new File(mFile.getAbsolutePath() + ".restore");

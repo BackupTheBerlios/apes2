@@ -56,7 +56,7 @@ public class PanneauGuide extends PanneauDetail {
     jScrollPane1.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder("Type du guide"),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("typeguide")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         jScrollPane1.getBorder()));
     this.add(list_type);
@@ -69,7 +69,7 @@ public class PanneauGuide extends PanneauDetail {
   public void loadElement(ElementPresentation elem) {
     _elementCourant = elem;
     setNom_Pres(elem.get_nomPresentation());
-    setLabelNomPres(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nomGuide"));
+    setLabelNomPres(FenetrePrincipale.langue("nomGuide"));
     setDesc(elem.get_description());
     setIcon(elem.get_icone());
     if (elem.getContenu() != null)

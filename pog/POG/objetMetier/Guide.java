@@ -51,7 +51,7 @@ public class Guide extends ElementPresentation implements Sauvegarde {
   public boolean estValide(Debug lnkDebug) {
   	boolean ok = true;
     if (this.getContenu() == null) {
-		String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifcont");
+		String mess = FenetrePrincipale.langue("messverifcont");
 		mess = mess.replaceFirst("ARG0", _nomPresentation);
 		mess = mess.replaceFirst("ARG1", _type);
       lnkDebug.verificationMessage(mess);
@@ -59,7 +59,7 @@ public class Guide extends ElementPresentation implements Sauvegarde {
     }
     else if (this.getContenu().isFile()) {
     	if (!new File(this.getContenu().getAbsolutePath()).exists()) {
-			String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifcontval");
+			String mess = FenetrePrincipale.langue("messverifcontval");
 			mess = mess.replaceFirst("ARG0", _nomPresentation);
 			mess = mess.replaceFirst("ARG1", _type);
 			mess = mess.replaceFirst("ARG2", this.getContenu().getRelativeToBiblioPath());

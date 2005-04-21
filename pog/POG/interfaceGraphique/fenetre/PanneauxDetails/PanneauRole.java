@@ -79,7 +79,7 @@ public class PanneauRole extends PanneauDetail {
     jScrollPane1.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder("Activites associees"),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("activitesassocies")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         jScrollPane1.getBorder()));
 
@@ -99,7 +99,7 @@ public class PanneauRole extends PanneauDetail {
     scrollpaneGuides.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder("Guides associes"),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("guideassocies")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         scrollpaneGuides.getBorder()));
 
@@ -142,7 +142,7 @@ public class PanneauRole extends PanneauDetail {
 
   public void loadElement(ElementPresentation elem) {
     _elementCourant = elem;
-    setLabelNomPres(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nomRole"));
+    setLabelNomPres(FenetrePrincipale.langue("nomrole"));
     setNom_Pres(elem.get_nomPresentation());
     setDesc(elem.get_description());
     if(elem instanceof PresentationElementModele){

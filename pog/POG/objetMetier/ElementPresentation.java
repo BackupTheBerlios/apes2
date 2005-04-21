@@ -269,7 +269,7 @@ public class ElementPresentation implements Sauvegarde {
 			if (toto.exists())
 				_chargement_guide.setContenu(new Contenu(toto.toURI(), lnkBibliotheque.getAbsolutePath()));
 			else
-				FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("attachefich").replaceFirst("ARG0", _tmp_charger_guide.contenu).replaceFirst("ARG1", _tmp_charger_guide.nom_presentation));
+				FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.langue("attachefich").replaceFirst("ARG0", _tmp_charger_guide.contenu).replaceFirst("ARG1", _tmp_charger_guide.nom_presentation));
 		}
 	  }
 
@@ -289,7 +289,7 @@ public class ElementPresentation implements Sauvegarde {
     if (this.get_description().equals("")) {
       //verifier que cet element a un fichier associe
       if (this.getContenu() == null){
-      	String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifdesc");
+      	String mess = FenetrePrincipale.langue("messverifdesc");
       	mess = mess.replaceFirst("ARG0", this.get_nomPresentation());
         lnkDebug.verificationMessage(mess);
         ok = false;
@@ -298,7 +298,7 @@ public class ElementPresentation implements Sauvegarde {
         //s'il a un fichier associe, verifier que le lien existe
 		if (this.getContenu().isFile()) {
 			if (!new File(this.getContenu().getAbsolutePath()).exists()) {
-				String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifrep");
+				String mess = FenetrePrincipale.langue("messverifrep");
 				mess = mess.replaceFirst("ARG0", this.get_nomPresentation());
 				mess = mess.replaceFirst("ARG1", this.lnkContenu.getAbsolutePath());
 				lnkDebug.verificationMessage(mess);

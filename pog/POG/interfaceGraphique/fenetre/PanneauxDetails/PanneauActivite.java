@@ -80,11 +80,11 @@ public class PanneauActivite
   private void jbInit() throws Exception {
     list_guides.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-    jLabel5.setText("Produits");
+    jLabel5.setText(FenetrePrincipale.langue("dproduit"));
     jLabel5.setBounds(new Rectangle(155, 262, 125, 20));
-    jLabel51.setText("en entree :");
+    jLabel51.setText(FenetrePrincipale.langue("enentree"));
     jLabel51.setBounds(new Rectangle(12, 277, 195, 20));
-    jLabel52.setText("en sortie :");
+    jLabel52.setText(FenetrePrincipale.langue("ensortie"));
     jLabel52.setBounds(new Rectangle(217, 277, 195, 20));
     jScrollPane51 = new JScrollPane();
     jScrollPane51.setBounds(new Rectangle(12, 298, 195, 55));
@@ -109,7 +109,7 @@ public class PanneauActivite
     scrollpaneGuides.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder("Guides associes"),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("guideassocies")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         scrollpaneGuides.getBorder()));
     scrollpaneGuides.setViewportView(list_guides);
@@ -161,7 +161,7 @@ public class PanneauActivite
     if (elem == null)
       return;
     setNom_Pres(elem.get_nomPresentation());
-    setLabelNomPres(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nomActivite"));
+    setLabelNomPres(FenetrePrincipale.langue("nomactivite"));
     setDesc(elem.get_description());
     if(elem instanceof PresentationElementModele){
       PresentationElementModele presElemMod = (PresentationElementModele) elem;

@@ -549,7 +549,7 @@ public class Presentation
 				if (!toto.exists())
 					toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
 				if (!toto.exists() && !DEJADEMANDE) {
-					if (PogToolkit.askYesNoQuestion(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("deplbiblio"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
+					if (PogToolkit.askYesNoQuestion(FenetrePrincipale.langue("deplbiblio"), false, FenetrePrincipale.INSTANCE) == PogToolkit._YES) {
 						File nbib = PogToolkit.chooseDirectory(FenetrePrincipale.INSTANCE, lnkBibliotheque.getAbsolutePath());
 						FenetrePrincipale.INSTANCE.getLnkSysteme().changerBibliotheque(nbib);
 						toto = new File(lnkBibliotheque.getAbsolutePath() + File.separator + _tmp_charger_element.contenu);
@@ -557,7 +557,7 @@ public class Presentation
 					DEJADEMANDE = true;
 				}
 				if (!toto.exists())
-					FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("attachefich").replaceFirst("ARG0", _tmp_charger_element.contenu).replaceFirst("ARG1", _tmp_charger_element.nom_presentation));
+					FenetrePrincipale.INSTANCE.getLnkDebug().debogage(FenetrePrincipale.langue("attachefich").replaceFirst("ARG0", _tmp_charger_element.contenu).replaceFirst("ARG1", _tmp_charger_element.nom_presentation));
 				else
 					_chargement_element.setContenu(new Contenu(toto.toURI(), this.lnkBibliotheque.getAbsolutePath()));
 			}
@@ -583,7 +583,7 @@ public class Presentation
 //verifier si le chemin de la biliotheque existe
     File biblio_temp = new File(this.lnkBibliotheque.getAbsolutePath());
     if (!biblio_temp.exists()) {
-      lnkDebug.verificationMessage(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifbibli"));
+      lnkDebug.verificationMessage(FenetrePrincipale.langue("messverifbibli"));
       return false;
     }
 
@@ -595,7 +595,7 @@ public class Presentation
       if (lnkProcessComponent != null)
         if (!(lstelem[i] instanceof Guide))
           if (!(lstelem[i] instanceof PresentationElementModele)) {
-			String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("messverifmod");
+			String mess = FenetrePrincipale.langue("messverifmod");
 			mess = mess.replaceFirst("ARG0", this.get_nomPresentation());
 			lnkDebug.verificationMessage(mess);
         	ok = false;

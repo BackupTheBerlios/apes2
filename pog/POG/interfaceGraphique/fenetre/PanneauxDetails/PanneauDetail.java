@@ -149,7 +149,7 @@ abstract public class PanneauDetail
     nom_modele.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nomdsmodele")),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("nomdsmodele")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         nom_modele.getBorder()));
 
@@ -158,9 +158,9 @@ abstract public class PanneauDetail
     jLabel9.setBounds(new Rectangle(10, 10, 50, 50));
 
     //Label introduisant le nom de la presentation
-    jLabel2.setBounds(new Rectangle(70, 60, 110, 21));
+    jLabel2.setBounds(new Rectangle(70, 60, 130, 21));
 
-    nom_pres.setBounds(new Rectangle(190, 60, 229, 24));
+    nom_pres.setBounds(new Rectangle(210, 60, 220, 24));
     nom_pres.addKeyListener(new java.awt.event.KeyAdapter() {
       public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
@@ -170,7 +170,7 @@ abstract public class PanneauDetail
     });
 
 
-    jLabel3.setText("Fichier associe :");
+    jLabel3.setText(FenetrePrincipale.langue("fichierassocie"));
     jLabel3.setBounds(new Rectangle(11, 92, 130, 20));
 
     fichier_associe.setBounds(new Rectangle(110, 92, 180, 21));
@@ -186,7 +186,10 @@ abstract public class PanneauDetail
 	JButton butWeb = new JButton("", FenetrePrincipale.INSTANCE.getLnkSysteme().getLnkPreferences().getIconeDefaut("globe"));
 	butWeb.addActionListener(new ActionListener() {
 	  public void actionPerformed(ActionEvent evt) {
-	  	String urrl = PogToolkit.askForString("URL du contenu", "URLChooser");
+	  	String ancien = "";
+	  	if (_elementCourant.getContenu() != null)
+	  		ancien = _elementCourant.getContenu().get_uri();
+	  	String urrl = PogToolkit.askForString("URL du contenu", "URL Associée", ancien);
 		try {
 			lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant, new URI(urrl));
 		} catch (URISyntaxException e) {
@@ -216,7 +219,7 @@ abstract public class PanneauDetail
     JButton buttonCreate = new JButton("", FenetrePrincipale.INSTANCE.getLnkSysteme().getLnkPreferences().getIconeDefaut("menu_item_new"));
     buttonCreate.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
-        if(fichier_associe.getText().equals(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("aucunfichier")))
+        if(fichier_associe.getText().equals(FenetrePrincipale.langue("aucunfichier")))
           FenetrePrincipale.INSTANCE.getLnkappliTest().nouvelPage(_instance);
         else
           FenetrePrincipale.INSTANCE.getLnkappliTest().ouvrirFile(fichier_associe.getToolTipText());
@@ -231,7 +234,7 @@ abstract public class PanneauDetail
     areaScrollPane.setBorder(
         BorderFactory.createCompoundBorder(
         BorderFactory.createCompoundBorder(
-        BorderFactory.createTitledBorder(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("description")),
+        BorderFactory.createTitledBorder(FenetrePrincipale.langue("description")),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)),
         areaScrollPane.getBorder()));
 
@@ -254,7 +257,7 @@ abstract public class PanneauDetail
 
 
     btnajouterguide.setBounds(new Rectangle(130, 489, 184, 22));
-    btnajouterguide.setText(FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("ajouterguide"));
+    btnajouterguide.setText(FenetrePrincipale.langue("ajouterguide"));
     btnajouterguide.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt) {
         afficherMenuGuides(btnajouterguide, btnajouterguide.getParent().getX() + 15, btnajouterguide.getParent().getY());
@@ -346,7 +349,7 @@ abstract public class PanneauDetail
   public void actionMenu(ActionEvent evt) {
     if (evt.getActionCommand().equals(lnkControleurPanneaux.getLnkSysteme().
                                       lnkFenetrePrincipale.getLnkLangues().
-                                      valeurDe("Ajouter Guide"))) {
+                                      valeurDe("ajouterguide"))) {
       lnkControleurPanneaux.getLnkSysteme().ajouterGuide( (
           PresentationElementModele) _elementCourant, "montype");
     }
@@ -488,9 +491,9 @@ abstract public class PanneauDetail
     }
 
     private String[] columnNames = {
-        FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("type2"),
-        FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("nom"),
-        FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("fichier")
+        FenetrePrincipale.langue("type2"),
+        FenetrePrincipale.langue("nom"),
+        FenetrePrincipale.langue("fichier")
     };
 
     public String getColumnName(int columnIndex) {

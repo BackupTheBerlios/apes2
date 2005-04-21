@@ -138,7 +138,7 @@ public class Importer{
             
             // modele déplacé
             if (!new File(pathmo).exists()) {
-            	String mess = FenetrePrincipale.INSTANCE.getLnkLangues().valeurDe("moddepl");
+            	String mess = FenetrePrincipale.langue("moddepl");
             	mess = mess.replaceFirst("ARG0", pathmo);
             	FenetrePrincipale.INSTANCE.getLnkDebug().debogage(mess);
 				File rep = PogToolkit.chooseFileAPES(FenetrePrincipale.INSTANCE, pathmo);

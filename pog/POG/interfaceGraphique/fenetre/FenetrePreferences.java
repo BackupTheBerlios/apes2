@@ -688,7 +688,7 @@ public class FenetrePreferences
     if (i == -1)
     {
       titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter") ;
-      ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("extensionaajouter"), titre) ;
+      ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("extensionaajouter"), titre, "") ;
       if (ext == null)
         return;
       fc  = new JFileChooser() ;
@@ -720,7 +720,7 @@ public class FenetrePreferences
 	if (i == -1)
 	{
 	  titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter") ;
-	  ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("nomguide"), titre) ;
+	  ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("nomguide"), titre, "") ;
 	  if (ext == null)
 		return;
 		ico = null;
@@ -750,7 +750,7 @@ public class FenetrePreferences
 	if (i == -1)
 	{
 	  titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter") ;
-	  ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("nomproduit"), titre) ;
+	  ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("nomproduit"), titre, "") ;
 	  if (ext == null)
 		return;
 		ico = null;

@@ -26,8 +26,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -46,10 +49,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
@@ -715,19 +721,60 @@ public class PogToolkit
     return (str.substring(0, pos) + str.substring(pos + strToDel.length()));
   }
 
-
   /** Demande \uFFFD l'utilisateur de saisir une cha\uFFFDne de caract\uFFFDres (cha\uFFFDne vide non accept\uFFFDe)
    *@param question  Question ou pr\uFFFDcision \uFFFD afficher dans la bo\uFFFDte de JOptionPane
    *@param titre  Titre de la bo\uFFFDte de JOptionPane
    *@return  Cha\uFFFDne saisie ou <b>null</b> si l'utilisateur a annul\uFFFD la saisie
    */
-  public static String askForString(String question, String titre)
+  public static String askForString(String question, String titre, String ancienneValeur)
   {
     String str = "";
 
     while (str.compareTo("") == 0)
     {
-      str = JOptionPane.showInputDialog(null, question, titre, JOptionPane.QUESTION_MESSAGE);
+    	JTextField _text = new JTextField();
+    	final JTextField _textAnn = new JTextField();
+    	_textAnn.setText("true");
+    	JButton btn_ok = new JButton();
+    	JButton btn_annule = new JButton();
+    	JLabel lbl_quest = new JLabel(question);
+    	final JDialog dial = new JDialog();
+    	_text.setText(ancienneValeur);
+    	_text.setBounds(new Rectangle(22, 50, 316, 25));
+    	lbl_quest.setBounds(new Rectangle(22, 20, 316, 25));
+    	dial.setModal(true);
+    	dial.setTitle(titre);
+    	dial.setSize(new Dimension(352, 150));
+    	dial.getContentPane().setLayout(null);
+    	btn_ok.setText("Ok");
+		btn_ok.setDefaultCapable(true);
+		btn_ok.setMnemonic('O');
+		btn_annule.setMnemonic('A');
+    	btn_ok.setBounds(new Rectangle(109, 90, 54, 22));
+    	btn_annule.setText("Annuler");
+    	btn_annule.setBounds(new Rectangle(169, 90, 80, 22));
+    	dial.getContentPane().add(_text, null);
+		dial.getContentPane().add(lbl_quest, null);
+    	dial.getContentPane().add(btn_ok, null);
+    	dial.getContentPane().add(btn_annule, null);
+    	dial.setModal(true);
+    	btn_ok.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent arg0) {
+    			dial.dispose();
+    			_textAnn.setText("false");
+    		}
+    	});
+    	btn_annule.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent arg0) {
+    			dial.dispose();
+    		}
+    	});
+    	dial.show();
+    	
+    	
+      str = _text.getText();
+      if (_textAnn.getText().equals("true"))
+      	str = null;
       if (str == null) return null;
       if (str.compareTo("") == 0) JOptionPane.showMessageDialog(null, "Aucune valeur saisie.");
     }
