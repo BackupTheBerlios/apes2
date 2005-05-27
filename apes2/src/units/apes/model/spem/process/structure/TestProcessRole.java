@@ -31,6 +31,9 @@ public class TestProcessRole extends TestCase
 	ProcessRole proRole = new ProcessRole("process_role");
 	
 	public void testProcessRole() {
-		assertTrue(proRole.getName()=="process_role");	
+		assertTrue(proRole.getName()=="process_role");
+		assertEquals(0, proRole.behaviorCount());
+		assertEquals(0, proRole.getParticipationCount());
+		assertEquals(0, proRole.getResponsibilityCount());
 	}
 }

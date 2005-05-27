@@ -26,13 +26,14 @@ import java.io.Serializable;
 /**
  * Class for represent a link in a diagram
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class Link implements Serializable, Cloneable
 {
 	private Object mSource;
 	private Object mTarget;
 	private String mLabel = "";
+	private Object mExtras = null;
 	
 	public Link()
 	{   
@@ -50,6 +51,13 @@ public class Link implements Serializable, Cloneable
 		mLabel = label;
 	}
 	
+	public Link(Object source, Object target, String label, Object extras)
+	{
+		this(source, target);
+		mLabel = label;
+		mExtras = extras;
+	}
+	
 	public Object getSource()
 	{
 		return mSource;
@@ -63,6 +71,11 @@ public class Link implements Serializable, Cloneable
 	public String getLabel()
 	{
 	    return mLabel;
+	}
+	
+	public Object getExtras()
+	{
+		return mExtras;
 	}
 	
 	public void setSource(Object source)
@@ -80,21 +93,27 @@ public class Link implements Serializable, Cloneable
 	    mLabel = label;
 	}
 	
+	public void setExtras(Object extras)
+	{
+		mExtras = extras;
+	}
+	
 	public Object clone()
 	{
-	    return new Link( mSource, mTarget, mLabel );
+		return new Link( mSource, mTarget, mLabel, mExtras);
 	}
 	
 	public String toString()
 	{
-	    return "link("+mSource+" - "+mTarget+")";
+	    return "link("+mSource+" - "+mTarget+", "+mExtras+")";
 	}
 	
 	public boolean equals(Object o)
 	{
 		if(o != null && o instanceof Link)
 		{
-			return mSource == ((Link)o).getSource() && mTarget == ((Link)o).getTarget();
+			return mSource == ((Link)o).getSource() && mTarget == ((Link)o).getTarget()
+			&& ((mExtras != null && mExtras.equals(((Link)o).mExtras)) || (mExtras == null && ((Link)o).mExtras == null));
 		}
 		return false;
 	}

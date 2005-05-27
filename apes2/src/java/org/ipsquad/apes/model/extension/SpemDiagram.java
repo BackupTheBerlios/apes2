@@ -26,7 +26,7 @@ import org.ipsquad.apes.model.spem.core.ModelElement;
 /**
  * Base class for diagrams
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class SpemDiagram extends ModelElement
 {
@@ -53,11 +53,51 @@ public abstract class SpemDiagram extends ModelElement
 
 	public abstract int modelElementCount();
 
-	public abstract boolean createLinkModelElements(ModelElement source, ModelElement target);
+	/**
+	 * Creates a link beetween source and target.
+	 *  
+	 * @param source 
+	 * @param target 
+	 * @param extras can be used to specify extra informations 
+	 * 	such as the type of the link to create 
+	 * 	when there are multiple choices
+	 * @return true if the link is created, false otherwise
+	 */
+	public abstract boolean createLinkModelElements(ModelElement source, ModelElement target, Object extras);
 
-	public abstract boolean removeLinkModelElements(ModelElement source, ModelElement target);
+	/**
+	 * Removes a link beetween source and target.
+	 *  
+	 * @param source 
+	 * @param target 
+	 * @param extras can be used to specify extra informations
+	 * 	such as the type of the link to remove
+	 * 	when there are multiple choices
+	 * @return true if the link is created, false otherwise
+	 */
+	public abstract boolean removeLinkModelElements(ModelElement source, ModelElement target, Object extras);
 
-	public abstract boolean areLinkableModelElements(ModelElement source, ModelElement target);
+	/**
+	 * Tests if source and target can be linked
+	 * 
+	 * @param source 
+	 * @param target
+	 * @param extras can be used to specify extra informations 
+	 * 	such as the type of the link to create 
+	 * 	when there are multiple choices
+	 * @return true if source and target can be linked
+	 */
+	public abstract boolean areLinkableModelElements(ModelElement source, ModelElement target, Object extras);
 
-	public abstract boolean existsLinkModelElements(ModelElement source, ModelElement target);
+	/**
+	 * Tests if source and target are linked
+	 * 
+	 * @param source 
+	 * @param target
+	 * @param extras can be used to specify extra informations
+	 * 	such as the type of the link to search 
+	 * 	when there are multiple choices
+	 * @return true if source and target are linked
+	 */
+	public abstract boolean existsLinkModelElements(ModelElement source, ModelElement target, Object extras);
 }

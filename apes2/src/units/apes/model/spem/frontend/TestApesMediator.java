@@ -60,7 +60,7 @@ import org.jgraph.graph.GraphModel;
 
 /**
  * 
- * @version $Revision: 1.10 $ 
+ * @version $Revision: 1.11 $ 
  */
 public class TestApesMediator extends TestCase
 {
@@ -130,6 +130,11 @@ public class TestApesMediator extends TestCase
 		root = context.getProject().getProcess().getComponent();
 	
 		diagram = new WorkDefinitionDiagram("TestDiagram");
+		
+		required = new WorkProduct("required");
+		provided = new WorkProduct("provided");
+		role = new ProcessRole("role");
+		wd = new WorkDefinition("wd");
 	}
 		
 	protected void tearDown()
@@ -193,10 +198,10 @@ public class TestApesMediator extends TestCase
 		
 		mediator.insertInModel(new Object[]{diagram}, new Object[]{component}, null);
 		
-		WorkProduct required = new WorkProduct("required");
+		/*WorkProduct required = new WorkProduct("required");
 		WorkProduct provided = new WorkProduct("provided");
 		WorkDefinition wd = new WorkDefinition("wd");
-		ProcessRole role = new ProcessRole("role");
+		ProcessRole role = new ProcessRole("role");*/
 
 		mediator.insertIn(diagram, new Object[]{required, provided, wd, role}, null);
 		
@@ -265,10 +270,10 @@ public class TestApesMediator extends TestCase
 	{
 		mediator.insertInModel(new Object[]{diagram}, new Object[]{root}, null);
 		
-		required = new WorkProduct("required");
+		/*required = new WorkProduct("required");
 		provided = new WorkProduct("provided");
 		wd = new WorkDefinition("wd");
-		role = new ProcessRole("role");
+		role = new ProcessRole("role");*/
 
 		mediator.insertIn(diagram, new Object[]{required, provided, wd, role}, null);
 		Collection coll = mediator.getAllElements(diagram);
@@ -460,38 +465,40 @@ public class TestApesMediator extends TestCase
 		mediator.insertInModel(new Object[]{diagram}, new Object[]{component}, null);
 		
 		//elements
-		WorkProduct required = new WorkProduct("required");
+		/*WorkProduct required = new WorkProduct("required");
 		WorkProduct provided = new WorkProduct("provided");
 		ApesWorkDefinition wd = new ApesWorkDefinition("wd");
-		ProcessRole role = new ProcessRole("role");
+		ProcessRole role = new ProcessRole("role");*/
 
+		ApesWorkDefinition awd = new ApesWorkDefinition("awd");
+		
 		mediator.insertInModel(new Object[]{root}, new Object[]{diagram}, null);
 		
 		assertEquals(0, diagram.modelElementCount());
-		mediator.insertIn(diagram, new Object[]{required, provided, wd, role}, null);
+		mediator.insertIn(diagram, new Object[]{required, provided, awd, role}, null);
 		assertEquals(4, diagram.modelElementCount());
 		assertTrue(diagram.containsModelElement(required));
 		assertTrue(diagram.containsModelElement(provided));
-		assertTrue(diagram.containsModelElement(wd));
+		assertTrue(diagram.containsModelElement(awd));
 		assertTrue(diagram.containsModelElement(role));
 		
 		//links
-		Link required_wd = new Link(required, wd);
-		Link wd_provided = new Link(wd, provided);
-		Link role_wd = new Link(role, wd);
+		Link required_wd = new Link(required, awd);
+		Link wd_provided = new Link(awd, provided);
+		Link role_wd = new Link(role, awd);
 		
 		mediator.insertIn(diagram, new Object[]{required_wd, wd_provided, role_wd}, null);
 		assertEquals(4, diagram.modelElementCount());
-		assertTrue(diagram.existsLinkModelElements(required, wd));
-		assertTrue(diagram.existsLinkModelElements(wd, provided));
-		assertTrue(diagram.existsLinkModelElements(role, wd));
+		assertTrue(diagram.existsLinkModelElements(required, awd,null));
+		assertTrue(diagram.existsLinkModelElements(awd, provided,null));
+		assertTrue(diagram.existsLinkModelElements(role, awd,null));
 		
 		/*
 		 * WorkProductRef tests 
 		 */
 		ContextDiagram cd = (ContextDiagram) root.getModelElement(0);
 		
-		mediator.insertIn(cd, new Object[]{required, provided, role, wd}, null);
+		mediator.insertIn(cd, new Object[]{required, provided, role, awd}, null);
 		assertEquals(3, cd.modelElementCount());
 		assertTrue(cd.containsModelElement(required));
 		assertTrue(cd.containsModelElement(provided));
@@ -502,8 +509,8 @@ public class TestApesMediator extends TestCase
 		assertEquals(0, Context.getInstance().getProject().getProcess().getProvidedInterface().modelElementCount());
 		assertEquals(0, Context.getInstance().getProject().getProcess().getRequiredInterface().modelElementCount());
 		mediator.insertIn(cd, new Object[]{required_component, component_provided}, null);
-		assertTrue(cd.existsLinkModelElements(required,root));
-		assertTrue(cd.existsLinkModelElements(root, provided));
+		assertTrue(cd.existsLinkModelElements(required,root,null));
+		assertTrue(cd.existsLinkModelElements(root, provided,null));
 		assertEquals(1, Context.getInstance().getProject().getProcess().getProvidedInterface().modelElementCount());
 		assertEquals(1, Context.getInstance().getProject().getProcess().getRequiredInterface().modelElementCount());
 		
@@ -514,29 +521,48 @@ public class TestApesMediator extends TestCase
 		Activity a2 = new Activity();
 		Activity a3 = new Activity();
 		
-		assertEquals(0, wd.getFlowDiagram().modelElementCount());
-		mediator.insertIn(wd.getFlowDiagram(), new Object[]{a1,a2,a3}, null);
-		assertEquals(3, wd.getFlowDiagram().modelElementCount());
+		assertEquals(0, awd.getFlowDiagram().modelElementCount());
+		mediator.insertIn(awd.getFlowDiagram(), new Object[]{a1,a2,a3}, null);
+		assertEquals(3, awd.getFlowDiagram().modelElementCount());
 		assertEquals(role, a1.getOwner());
 		assertEquals(role, a2.getOwner());
 		assertEquals(role, a3.getOwner());
 		
 		ProcessRole role1 = new ProcessRole("role1");
-		mediator.insertIn(wd.getFlowDiagram(), new Object[]{role, role1}, null);
-		assertEquals(5, wd.getFlowDiagram().modelElementCount());
-		assertTrue(wd.getFlowDiagram().containsModelElement(role));
-		assertTrue(wd.getFlowDiagram().containsModelElement(role1));
+		mediator.insertIn(awd.getFlowDiagram(), new Object[]{role, role1}, null);
+		assertEquals(5, awd.getFlowDiagram().modelElementCount());
+		assertTrue(awd.getFlowDiagram().containsModelElement(role));
+		assertTrue(awd.getFlowDiagram().containsModelElement(role1));
 		
-		Link role_a2 = new Link(role, a2);
-		Link role1_a1 = new Link(role1, a1);
-		mediator.insertIn(wd.getFlowDiagram(), new Object[]{role1_a1, role_a2}, null);
-		assertEquals(5, wd.getFlowDiagram().modelElementCount());
-		assertTrue(wd.getFlowDiagram().existsLinkModelElements(role,a2));
-		assertTrue(wd.getFlowDiagram().existsLinkModelElements(role1,a1));
+		Link role_a2 = new Link(role, a2,"",new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+		Link role1_a1 = new Link(role1, a1,"",new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+		mediator.insertIn(awd.getFlowDiagram(), new Object[]{role1_a1, role_a2}, null);
+		assertEquals(5, awd.getFlowDiagram().modelElementCount());
+		assertTrue(awd.getFlowDiagram().existsLinkModelElements(role,a2,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(awd.getFlowDiagram().existsLinkModelElements(role1,a1,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(awd.getFlowDiagram().existsLinkModelElements(role,a2,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(awd.getFlowDiagram().existsLinkModelElements(role1,a1,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
 		assertEquals(role1, a1.getOwner());
 		assertEquals(role, a2.getOwner());
 		assertEquals(role, a3.getOwner());
+		
+		Link role_a2_assistant = new Link(role, a2,"",new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
+		Link role_a1_assistant = new Link(role, a1,"",new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
+		mediator.insertIn(awd.getFlowDiagram(), new Object[]{role_a2_assistant, role_a1_assistant}, null);
+		assertEquals(5, awd.getFlowDiagram().modelElementCount());
+		assertTrue(awd.getFlowDiagram().existsLinkModelElements(role,a2,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(awd.getFlowDiagram().existsLinkModelElements(role,a2,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(awd.getFlowDiagram().existsLinkModelElements(role,a1,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(awd.getFlowDiagram().existsLinkModelElements(role,a1,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
 		/*
 		 * StateMachine tests
@@ -570,17 +596,17 @@ public class TestApesMediator extends TestCase
 		Link w1_wd1 = new Link(w1, wd1);
 		Link sm3_wd1 = new Link(sm3, wd1);
 		
-		assertFalse(diagram.existsLinkModelElements(w, wd1));
-		assertFalse(diagram.existsLinkModelElements(sm3, wd1));
-		assertFalse(diagram.existsLinkModelElements(w1,wd1));
+		assertFalse(diagram.existsLinkModelElements(w, wd1,null));
+		assertFalse(diagram.existsLinkModelElements(sm3, wd1,null));
+		assertFalse(diagram.existsLinkModelElements(w1,wd1,null));
 		mediator.insertIn(diagram, new Object[]{w_wd1, sm3_wd1},null);
-		assertTrue(diagram.existsLinkModelElements(w, wd1));
-		assertTrue(diagram.existsLinkModelElements(sm3, wd1));
-		assertTrue(diagram.existsLinkModelElements(w1,wd1));
+		assertTrue(diagram.existsLinkModelElements(w, wd1,null));
+		assertTrue(diagram.existsLinkModelElements(sm3, wd1,null));
+		assertTrue(diagram.existsLinkModelElements(w1,wd1,null));
 		
-		assertFalse(diagram.existsLinkModelElements(sm1,wd1));
+		assertFalse(diagram.existsLinkModelElements(sm1,wd1,null));
 		mediator.insertIn(diagram, new Object[]{sm1_wd1}, null);
-		assertFalse(diagram.existsLinkModelElements(sm1,wd1));
+		assertFalse(diagram.existsLinkModelElements(sm1,wd1,null));
 		
 		SpemGraphAdapter adapter = Context.getInstance().getProject().getGraphModel(diagram);
 		
@@ -633,7 +659,7 @@ public class TestApesMediator extends TestCase
 		assertTrue(root.containsModelElement(required));
 		mediator.removeFromModel(new Object[]{required},null);
 		assertFalse(root.containsModelElement(required));
-		assertFalse(cd.existsLinkModelElements(required, root));
+		assertFalse(cd.existsLinkModelElements(required, root,null));
 		
 		/*
 		 * undirect removed tests
@@ -693,9 +719,9 @@ public class TestApesMediator extends TestCase
 
 		mediator.removeFrom(diagram, new Object[]{wd}, null);
 		assertFalse(diagram.containsModelElement(wd));
-		assertFalse(diagram.existsLinkModelElements(required, wd));
-		assertFalse(diagram.existsLinkModelElements(wd, provided));
-		assertFalse(diagram.existsLinkModelElements(role, wd));
+		assertFalse(diagram.existsLinkModelElements(required, wd,null));
+		assertFalse(diagram.existsLinkModelElements(wd, provided,null));
+		assertFalse(diagram.existsLinkModelElements(role, wd,null));
 	
 		/*
 		 * WorkProductRef tests 
@@ -708,8 +734,8 @@ public class TestApesMediator extends TestCase
 
 		mediator.removeFrom(cd, new Object[]{required, component_provided}, null);
 		assertFalse(cd.containsModelElement(required));
-		assertFalse(cd.existsLinkModelElements(required,root));
-		assertFalse(cd.existsLinkModelElements(root,provided));
+		assertFalse(cd.existsLinkModelElements(required,root,null));
+		assertFalse(cd.existsLinkModelElements(root,provided,null));
 		
 		/*
 		 * ProcessRole tests
@@ -726,7 +752,7 @@ public class TestApesMediator extends TestCase
 		mediator.insertIn(wd.getFlowDiagram(), new Object[]{a1,a2,a3}, null);		
 		ProcessRole role1 = new ProcessRole("role1");
 		mediator.insertIn(wd.getFlowDiagram(), new Object[]{role, role1}, null);
-		Link role1_a1 = new Link(role1, a1);
+		Link role1_a1 = new Link(role1, a1,"",new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
 		mediator.insertIn(wd.getFlowDiagram(), new Object[]{role1_a1}, null);
 		assertEquals(6, flow_adapter.getRootCount());
 		
@@ -734,7 +760,7 @@ public class TestApesMediator extends TestCase
 		mediator.removeFrom(diagram, new Object[]{role},null);
 		assertEquals(5, diagram_adapter.getRootCount());
 		assertFalse(diagram.containsModelElement(role));
-		assertFalse(diagram.existsLinkModelElements(role, wd));
+		assertFalse(diagram.existsLinkModelElements(role, wd,null));
 		assertNull(wd.getOwner());
 		assertNull(a3.getOwner());
 		assertEquals(role1, a1.getOwner());
@@ -763,12 +789,12 @@ public class TestApesMediator extends TestCase
 		mediator.insertIn(diagram, new Object[]{w_wd1, sm3_wd1},null);
 
 		assertTrue(diagram.containsModelElement(sm3));
-		assertTrue(diagram.existsLinkModelElements(w1, wd1));
-		assertTrue(diagram.existsLinkModelElements(sm3, wd1));
+		assertTrue(diagram.existsLinkModelElements(w1, wd1,null));
+		assertTrue(diagram.existsLinkModelElements(sm3, wd1,null));
 		mediator.removeFrom(diagram, new Object[]{sm3}, null);
 		assertFalse(diagram.containsModelElement(sm3));
-		assertFalse(diagram.existsLinkModelElements(w1, wd1));
-		assertFalse(diagram.existsLinkModelElements(sm3, wd1));		
+		assertFalse(diagram.existsLinkModelElements(w1, wd1,null));
+		assertFalse(diagram.existsLinkModelElements(sm3, wd1,null));		
 	}
 	
 	public void testMove()
@@ -807,9 +833,9 @@ public class TestApesMediator extends TestCase
 		assertTrue(wd1.getFlowDiagram().containsModelElement(wp));
 		assertTrue(wd1.getFlowDiagram().containsModelElement(r));
 		
-		Link r_a2 = new Link(r,a2);
+		Link r_a2 = new Link(r,a2,"",new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
 		Link wp_a2 = new Link(wp,a2);
-		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{r_a2, wp_a2},null);
+		mediator.insertIn(wd1.getFlowDiagram(), new Object[]{r_a2, wp_a2}, null);
 		assertEquals(a2.getOwner(), r);
 		assertEquals(a2.getInputCount(), 1);
 		assertEquals(a2.getInput(0), wp);
@@ -894,6 +920,7 @@ public class TestApesMediator extends TestCase
 		ContextDiagram cd = (ContextDiagram) root.getModelElement(0);
 		
 		mediator.insertIn(cd, new Object[]{required, provided, role, wd}, null);
+		
 		assertEquals(3, cd.modelElementCount());
 		assertTrue(cd.containsModelElement(required));
 		assertTrue(cd.containsModelElement(provided));
@@ -904,8 +931,8 @@ public class TestApesMediator extends TestCase
 		assertEquals(0, Context.getInstance().getProject().getProcess().getProvidedInterface().modelElementCount());
 		assertEquals(0, Context.getInstance().getProject().getProcess().getRequiredInterface().modelElementCount());
 		mediator.insertIn(cd, new Object[]{required_component, component_provided}, null);
-		assertTrue(cd.existsLinkModelElements(required,root));
-		assertTrue(cd.existsLinkModelElements(root, provided));
+		assertTrue(cd.existsLinkModelElements(required,root,null));
+		assertTrue(cd.existsLinkModelElements(root, provided,null));
 		assertEquals(1, Context.getInstance().getProject().getProcess().getProvidedInterface().modelElementCount());
 		assertEquals(1, Context.getInstance().getProject().getProcess().getRequiredInterface().modelElementCount());
 		
@@ -937,8 +964,11 @@ public class TestApesMediator extends TestCase
 
 		Link required_a = new Link(required, a);
 		Link a_provided = new Link(a, provided);
-		Link role_a = new Link(role, a);
+		Link role_a = new Link(role, a, "", new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
 		mediator.insertIn(fd, new Object[]{required_a, a_provided, role_a}, null);
+		assertTrue(fd.existsLinkModelElements(role, a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertEquals(role, a.getOwner());
 		
 		mediator.removeFromModel(new Object[]{p}, null);
 		assertFalse(root.containsModelElement(p));
@@ -954,9 +984,10 @@ public class TestApesMediator extends TestCase
 		assertEquals(0, required.getOutputCount());
 		assertEquals(0, provided.getInputCount());
 		assertEquals(0, provided.getOutputCount());
-		assertFalse(fd.existsLinkModelElements(required, a));
-		assertFalse(fd.existsLinkModelElements(a, provided));
-		assertFalse(fd.existsLinkModelElements(role, a));
+		assertFalse(fd.existsLinkModelElements(required, a,null));
+		assertFalse(fd.existsLinkModelElements(a, provided,null));
+		assertFalse(fd.existsLinkModelElements(role, a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		
 		context.getUndoManager().undo(null);
 		assertTrue(root.containsModelElement(p));
@@ -980,9 +1011,10 @@ public class TestApesMediator extends TestCase
 		assertEquals(1, provided.getInputCount());
 		assertEquals(a, provided.getInput(0));
 		assertEquals(0, provided.getOutputCount());
-		assertTrue(fd.existsLinkModelElements(required, a));
-		assertTrue(fd.existsLinkModelElements(a, provided));
-		assertTrue(fd.existsLinkModelElements(role, a));
+		assertTrue(fd.existsLinkModelElements(required, a,null));
+		assertTrue(fd.existsLinkModelElements(a, provided,null));
+		assertTrue(fd.existsLinkModelElements(role, a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		
 		context.getUndoManager().undo(null);
 		assertNull(a.getOwner());
@@ -993,8 +1025,9 @@ public class TestApesMediator extends TestCase
 		assertEquals(0, required.getOutputCount());
 		assertEquals(0, provided.getInputCount());
 		assertEquals(0, provided.getOutputCount());
-		assertFalse(fd.existsLinkModelElements(required, a));
-		assertFalse(fd.existsLinkModelElements(a, provided));
-		assertFalse(fd.existsLinkModelElements(role, a));			
+		assertFalse(fd.existsLinkModelElements(required, a,null));
+		assertFalse(fd.existsLinkModelElements(a, provided,null));
+		assertFalse(fd.existsLinkModelElements(role, a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));			
 	}
 }

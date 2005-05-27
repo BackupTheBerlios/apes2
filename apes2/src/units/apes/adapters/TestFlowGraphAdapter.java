@@ -75,7 +75,7 @@ public class TestFlowGraphAdapter extends TestCase
 			public void setToolPalette(ToolPalette toolPalette) { fail(); }
 			public ToolPalette getToolPalette() { fail(); return null; }
 			public void openDiagram(GraphModel model) { fail(); }
-			public void deleteDiagram(GraphModel model) { fail(); }
+			public void deleteDiagram(GraphModel model) { }
 			public void setDefaultToolPalette() { fail(); }
 			public void setFilePath(String filePath) { }
 			public GraphFrame getGraphFrame(GraphModel model) { fail(); return null; }

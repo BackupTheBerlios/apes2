@@ -33,7 +33,7 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
  * Specify an abstract method to allow visitors
  * See the visitor design pattern for more informations
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class Element implements Serializable, Cloneable, Identity
 {
@@ -172,4 +172,16 @@ public abstract class Element implements Serializable, Cloneable, Identity
 	{
 		mNoID = counter;
 	}
+	
+	/**
+	 * Warning : this method should only be used by the load project process
+	 *
+	 * Used when an older version of a component is loaded.
+	 * This allowed to initialize new attributes which are not present 
+	 * in the older version.
+	 * 
+	 * This allows to add new attributes in the model layer without breaking 
+	 * compatibility with older versions.
+	 */
+	public void updateToCurrentVersion() { }
 };

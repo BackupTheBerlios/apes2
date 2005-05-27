@@ -28,12 +28,13 @@ import org.ipsquad.apes.model.spem.SpemVisitor;
 import org.ipsquad.utils.Debug;
 
 /**
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class Activity extends WorkDefinition
 {
 	private Vector mInput = new Vector();
 	private Vector mOutput = new Vector();
+	private Vector mAssistant = new Vector();
 	
 	public Activity()
 	{
@@ -161,6 +162,7 @@ public class Activity extends WorkDefinition
 		
 		a.mInput = new Vector();
 		a.mOutput = new Vector();
+		a.mAssistant = new Vector();
 		
 		return a;
 	}
@@ -183,5 +185,72 @@ public class Activity extends WorkDefinition
 	public WorkProduct getOutput(int i)
 	{
 		return (WorkProduct)mOutput.get(i);
+	}
+	
+	/**
+	 * Adds an assistant
+	 *
+	 * @param r the assistant
+	 * @return true if the assistant can be added, false otherwise
+	 */
+	public boolean addAssistant(ProcessRole r)
+	{
+		if(!containsAssistant(r))
+		{
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> Activity("+getName()+")::addAssistant "+r);
+			mAssistant.add(r);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Removes an assistant
+	 *
+	 * @param r the assistant
+	 * @return true if the assistant can be removed, false otherwise
+	 */
+	public boolean removeAssistant(ProcessRole r)
+	{
+		if(containsAssistant(r))
+		{
+			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> Acivity("+getName()+")::removeAssistant "+r);
+			mAssistant.remove(r);
+			return true;
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Check if a role is an assistant of this activity
+	 *
+	 * @param r the role to test
+	 * @return true if the role is an assistant of this activity, false otherwise
+	 */
+	public boolean containsAssistant(ProcessRole r)
+	{
+		return mAssistant.contains(r);
+	}
+	
+	public int getAssistantCount()
+	{
+		return mAssistant.size();
+	}
+
+	public ProcessRole getAssistant(int i)
+	{
+		return (ProcessRole)mAssistant.get(i);
+	}
+	
+	public void updateToCurrentVersion()
+	{
+		super.updateToCurrentVersion();
+		
+		if(mAssistant == null)
+		{
+			mAssistant = new Vector();
+		}
 	}
 };

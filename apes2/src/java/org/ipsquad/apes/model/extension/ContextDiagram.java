@@ -19,7 +19,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the context diagram
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ContextDiagram extends SpemDiagram
 {
@@ -186,14 +186,14 @@ public class ContextDiagram extends SpemDiagram
 	 * @param target the model element to be linked in input
 	 * @return true if the link can be created, false otherwise
 	 */
-	public boolean createLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean createLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ContextDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
 		if( (source instanceof WorkProduct && target instanceof ProcessComponent) )
 		{
 			if(containsModelElement(source))
 			{
-				if(areLinkableModelElements(source,target))
+				if(areLinkableModelElements(source,target,null))
 				{
 					mRequiredWorkProduct.add(source);
 					mUnlinkElements.remove(source);
@@ -205,7 +205,7 @@ public class ContextDiagram extends SpemDiagram
 		{
 			if(containsModelElement(target))
 			{
-				if(areLinkableModelElements(source,target))
+				if(areLinkableModelElements(source,target,null))
 				{
 					mProvidedWorkProduct.add(target);
 					mUnlinkElements.remove(target);
@@ -217,10 +217,10 @@ public class ContextDiagram extends SpemDiagram
 	}
 	
 	
-	public boolean removeLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean removeLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> ContextDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
-		if(existsLinkModelElements(source, target))
+		if(existsLinkModelElements(source, target,null))
 		{
 			if( (source instanceof ProcessComponent && target instanceof WorkProduct) )
 			{
@@ -239,7 +239,7 @@ public class ContextDiagram extends SpemDiagram
 		return false;
 	}	
 	
-	public boolean areLinkableModelElements( ModelElement source, ModelElement target ) 
+	public boolean areLinkableModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if( source instanceof ProcessComponent && target instanceof WorkProduct )
 		{
@@ -279,7 +279,7 @@ public class ContextDiagram extends SpemDiagram
 		return false;
 	}
 	
-	public boolean existsLinkModelElements( ModelElement source, ModelElement target ) 
+	public boolean existsLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if( source instanceof ProcessComponent && target instanceof WorkProduct )
 		{

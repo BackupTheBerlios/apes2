@@ -68,6 +68,7 @@ import org.jgraph.graph.ConnectionSet;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.DefaultGraphModel;
+import org.jgraph.graph.GraphCell;
 import org.jgraph.graph.GraphConstants;
 import org.jgraph.graph.ParentMap;
 import org.jgraph.graph.Port;
@@ -75,7 +76,7 @@ import org.jgraph.graph.Port;
 /**
  * This adapter allows to display a spem diagram in a JGraph
  *
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 public abstract class SpemGraphAdapter extends DefaultGraphModel implements ApesModelListener
 {
@@ -181,6 +182,11 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return null;
 	}
 
+	/**
+	 * Gets all links from an user object
+	 * @param userObject the user object from which links started
+	 * @return a collection of links from an user object
+	 */
 	public Collection getLinksFrom(Object userObject)
 	{
 		Set result = new HashSet();
@@ -198,6 +204,11 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return result;
 	}
 	
+	/**
+	 * Gets all links to an user object
+	 * @param userObject the user object to which links ended
+	 * @return a collection of links to an user object
+	 */
 	public Collection getLinksTo(Object userObject)
 	{
 		Set result = new HashSet();
@@ -215,6 +226,12 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return result;
 	}
 
+	/**
+	 * Gets all links where an user object participate
+	 * 
+	 * @param userObject
+	 * @return all links where an user objects participate
+	 */
 	public Collection getLinks(Object userObject)
 	{
 		DefaultGraphCell cell = getCellByUserObject(userObject, null, false);
@@ -233,6 +250,19 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 		return null;
 	}
 
+	/**
+	 * Creates a link between source and target with some extra informations
+	 * 
+	 * @param source the source of the link
+	 * @param target the target of the link
+	 * @param extra additional information attaches to this link
+	 * @return the link from source to target
+	 */
+	protected Link createLink(ApesGraphCell source, ApesGraphCell target, Object extra)
+	{
+		return new Link(source.getUserObject(), target.getUserObject());
+	}
+	
 	public void insert( Object[] cells, Map attributes, ConnectionSet cs,
             ParentMap parentMap, UndoableEdit[] edits )
     {
@@ -247,49 +277,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	    
 	    for ( int i = 0; i < cells.length; i++ )
         {
-	    	if(cells[i] instanceof NoteCell || cells[i] instanceof ProcessComponentCell)
-	    	{
-	    		notes.add(cells[i]);
-	    	}
-	    	else if(cells[i] instanceof ApesGraphCell)
-	    	{
-	    		Object userObject = ((DefaultGraphCell)cells[i]).getUserObject();
-	    		if(userObject != null)
-	    		{
-	    			matching.put(userObject, cells[i]);
-	    			elements.add(userObject);
-	    		}
-	    	}
-	    	else if(cells[i] instanceof NoteEdge && cs != null)
-	    	{
-	    		NoteEdge edge = (NoteEdge)cells[i];
-	    		//to add a note edge in the diagram we doesn't pass through the ApesMediator
-	    		//thus we must check if added the note edge is allowed here 
-	    		int found = 0;
-	    		Iterator it = cs.connections();
-	    		while (it.hasNext()) 
-	    		{
-					ConnectionSet.Connection connection = (ConnectionSet.Connection) it.next();
-					if(connection.getEdge() == edge && contains(getParent(connection.getPort())))
-					{
-						++found;						
-					}
-				}
-	    		
-	    		if(found == 2)
-	    		{
-	    			noteEdges.add(edge);
-	    		}
-	    	}
-	    	else if(cells[i] instanceof DefaultEdge)
-	    	{
-	    		DefaultEdge edge = (DefaultEdge)cells[i];
-	    		ApesGraphCell source = (ApesGraphCell)getParent(edge.getSource());
-	    		ApesGraphCell target = (ApesGraphCell)getParent(edge.getTarget());
-	    		Link link = new Link(source.getUserObject(), target.getUserObject());
-        		matching.put(link, edge);
-	    		elements.add(link);
-	    	}
+	    	insertElement(cells[i], cs, notes, noteEdges, elements, matching);
         }
 	    
 	    Context.getInstance().getUndoManager().save();
@@ -306,6 +294,53 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			}
         }
     }
+
+	protected void insertElement(Object object, ConnectionSet cs, Vector notes, Vector noteEdges, Vector elements, Map matching) 
+	{
+		if(object instanceof NoteCell || object instanceof ProcessComponentCell)
+		{
+			notes.add(object);
+		}
+		else if(object instanceof ApesGraphCell)
+		{
+			Object userObject = ((DefaultGraphCell)object).getUserObject();
+			if(userObject != null)
+			{
+				matching.put(userObject, object);
+				elements.add(userObject);
+			}
+		}
+		else if(object instanceof NoteEdge && cs != null)
+		{
+			NoteEdge edge = (NoteEdge)object;
+			//to add a note edge in the diagram we doesn't pass through the ApesMediator
+			//thus we must check if added the note edge is allowed here 
+			int found = 0;
+			Iterator it = cs.connections();
+			while (it.hasNext()) 
+			{
+				ConnectionSet.Connection connection = (ConnectionSet.Connection) it.next();
+				if(connection.getEdge() == edge && contains(getParent(connection.getPort())))
+				{
+					++found;						
+				}
+			}
+			
+			if(found == 2)
+			{
+				noteEdges.add(edge);
+			}
+		}
+		else if(object instanceof DefaultEdge)
+		{
+			DefaultEdge edge = (DefaultEdge)object;
+			ApesGraphCell source = (ApesGraphCell)getParent(edge.getSource());
+			ApesGraphCell target = (ApesGraphCell)getParent(edge.getTarget());
+			Link link = createLink(source, target, null);
+			matching.put(link, edge);
+			elements.add(link);
+		}
+	}
 	
     protected void insertElements( Vector elements, Map matching, Map attributes )
 	{
@@ -338,32 +373,7 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
     	
         for ( int i = 0; i < cells.length; i++ )
         {
-        	if(cells[i] instanceof NoteCell)
-        	{
-        		notes.add(cells[i]);
-        	}
-        	else if(cells[i] instanceof ApesGraphCell)
-        	{
-        		Object userObject = ((DefaultGraphCell)cells[i]).getUserObject();
-        		if(userObject != null)
-        		{
-        			matching.put(userObject, cells[i]);
-        			elements.add(userObject);
-        		}
-        	}
-        	else if(cells[i] instanceof NoteEdge)
-        	{
-        		noteEdges.add(cells[i]);
-        	}
-        	else if(cells[i] instanceof DefaultEdge)
-        	{
-        		DefaultEdge edge = (DefaultEdge)cells[i];
-        		ApesGraphCell source = (ApesGraphCell)getParent(edge.getSource());
-	    		ApesGraphCell target = (ApesGraphCell)getParent(edge.getTarget());
-	    		Link link = new Link(source.getUserObject(), target.getUserObject());
-	    		matching.put(link, edge);
-	    		elements.add(link);
-        	}
+        	removeElement((GraphCell)cells[i], notes, noteEdges, elements, matching);
         }
         
         Context.getInstance().getUndoManager().save();
@@ -380,6 +390,36 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 			}
         }
     }
+
+	protected void removeElement(GraphCell cell, Vector notes, Vector noteEdges, Vector elements, Map matching) 
+	{
+		if(cell instanceof NoteCell)
+		{
+			notes.add(cell);
+		}
+		else if(cell instanceof ApesGraphCell)
+		{
+			Object userObject = ((DefaultGraphCell)cell).getUserObject();
+			if(userObject != null)
+			{
+				matching.put(userObject, cell);
+				elements.add(userObject);
+			}
+		}
+		else if(cell instanceof NoteEdge)
+		{
+			noteEdges.add(cell);
+		}
+		else if(cell instanceof DefaultEdge)
+		{
+			DefaultEdge edge = (DefaultEdge)cell;
+			ApesGraphCell source = (ApesGraphCell)getParent(edge.getSource());
+			ApesGraphCell target = (ApesGraphCell)getParent(edge.getTarget());
+			Link link = createLink(source, target, null);
+			matching.put(link, edge);
+			elements.add(link);
+		}
+	}
 
 	protected void removeElements( Vector elements, Map matching )
 	{
@@ -545,6 +585,13 @@ public abstract class SpemGraphAdapter extends DefaultGraphModel implements Apes
 	    return null;
 	}
 	
+	/**
+	 * Sorts links and user objects in an array.
+	 * 
+	 * @param elements the elements to sort
+	 * @param linkBefore if true, all links are placed before, else all links are placed after
+	 * @return an array of sorted elements
+	 */
 	public Object[] sortUserObjects(Object[] elements, boolean linkBefore)
 	{
 		if(elements == null) return null;

@@ -21,7 +21,9 @@
 
 package org.ipsquad.apes.processing;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +48,7 @@ import org.jgraph.JGraph;
 /**
  * Save a graph in a jpeg file
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SaveImage
 {
@@ -166,18 +168,25 @@ public class SaveImage
    		frame.getContentPane().add(mGraph);
     	frame.pack();
     	
-		int width = mGraph.getWidth();
-		int height = mGraph.getHeight();
-		
-		if(width!=0 && height!=0)
+		if(mGraph.getModel().getRootCount() > 0)
 		{
-			BufferedImage bimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			Object[] cells = mGraph.getRoots();
+	        Rectangle bounds = mGraph.getCellBounds(cells);
+	        mGraph.toScreen(bounds);
+            
+			BufferedImage bimg = new BufferedImage(bounds.width+10, bounds.height+10, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2 = bimg.createGraphics();
-			mGraph.paint(g2);
-			g2.dispose();
-			if(!ImageIO.write(bimg, format, out))
-				return false;
+			g2.setColor(Color.white);
+            g2.fillRect(0, 0, bimg.getWidth(), bimg.getHeight());
+			
+			mGraph.setDoubleBuffered(false);
+			g2.setClip(0,0,bimg.getWidth(),bimg.getHeight());
+			g2.translate(-bounds.x+5,-bounds.y+5);
+            mGraph.paint(g2);
+			
+			return ImageIO.write(bimg, format, out); 
 		}
+		
 		return true;
 	}
 };

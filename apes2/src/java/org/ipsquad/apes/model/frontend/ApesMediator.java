@@ -74,7 +74,7 @@ import org.ipsquad.utils.ResourceManager;
 
 /**
  * 
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 public class ApesMediator extends UndoableEditSupport implements Serializable
 {
@@ -1315,8 +1315,8 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		    
 		    	//tests if the old link has been removed from the diagram
 		    	//and tests if the new link can be created
-		    	if(!diagram.existsLinkModelElements((ModelElement)oldLink.getSource(), (ModelElement)oldLink.getTarget())
-		    			&& diagram.areLinkableModelElements((ModelElement)newLink.getSource(), (ModelElement)newLink.getTarget()))
+		    	if(!diagram.existsLinkModelElements((ModelElement)oldLink.getSource(), (ModelElement)oldLink.getTarget(), oldLink.getExtras())
+		    			&& diagram.areLinkableModelElements((ModelElement)newLink.getSource(), (ModelElement)newLink.getTarget(), newLink.getExtras()))
 			    {
 			    	insertIn(diagram, new Object[]{newLink}, extras);
 			    }
@@ -1681,12 +1681,12 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 	    	{
 	    		Link link = (Link) elements[i];
 	    		if(link.getSource() instanceof ModelElement
-	    			&& link.getTarget() instanceof ModelElement
-					&& source.areLinkableModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget()))
-	    		{
-	    			source.createLinkModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget());
-	    			inserted.add(0, link);	    		
-	    		}
+	    				&& link.getTarget() instanceof ModelElement
+	    				&& source.areLinkableModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget(), link.getExtras()))
+    			{
+    				source.createLinkModelElements((ModelElement)link.getSource(), (ModelElement)link.getTarget(), link.getExtras());
+    				inserted.add(0, link);	    		
+    			}
 	    	}		
 		}
 	    return inserted.isEmpty() ? null : inserted.toArray();
@@ -1728,11 +1728,35 @@ public class ApesMediator extends UndoableEditSupport implements Serializable
 		        {
 		        	Link link = (Link)elements[i];
 		        	if(link.getSource() instanceof ModelElement
-			    			&& link.getTarget() instanceof ModelElement
-							&& source.removeLinkModelElements((ModelElement)link.getSource(),(ModelElement)link.getTarget()))
-		        	{
-		        		removed.add(link);
-		        	}
+		    				&& link.getTarget() instanceof ModelElement)
+		    		{
+		        		//update the link status
+		        		if(source instanceof FlowDiagram
+		        			&& link.getSource() instanceof ProcessRole 
+		        			&& link.getTarget() instanceof Activity 
+		        			&& link.getExtras() == null)
+		        		{
+		        			if(source.existsLinkModelElements(
+		    						(ModelElement)link.getSource(), 
+		    						(ModelElement)link.getTarget(), 
+		    						new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)))
+		    				{
+		    					link.setExtras(new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));	
+		    				}
+		    				else if(source.existsLinkModelElements(
+		    						(ModelElement)link.getSource(), 
+		    						(ModelElement)link.getTarget(), 
+		    						new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)))
+		    				{
+		    					link.setExtras(new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
+		    				}
+		        		}
+		        		
+		    			if(source.removeLinkModelElements((ModelElement)link.getSource(),(ModelElement)link.getTarget(), link.getExtras()))
+		    			{
+		    				removed.add(link);
+		    			}
+		    		}
 		        }
 		    }
 		}

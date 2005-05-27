@@ -34,7 +34,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the activity diagram
  *
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ActivityDiagram extends SpemDiagram
 {
@@ -173,9 +173,9 @@ public class ActivityDiagram extends SpemDiagram
 	 * @param target the model element to be linked in input
 	 * @return true if the link can be created, false otherwise
 	 */
-	public boolean createLinkModelElements(ModelElement source, ModelElement target)
+	public boolean createLinkModelElements(ModelElement source, ModelElement target, Object extras)
 	{
-		if(areLinkableModelElements(source,target))
+		if(areLinkableModelElements(source,target,null))
 		{
 			mTransitions.add(new Transition(source,target,""));
 			return true;
@@ -190,9 +190,9 @@ public class ActivityDiagram extends SpemDiagram
 	 * @param target the model element to be unlinked in input
 	 * @return true if the link can be removed, false otherwise
 	 */
-	public boolean removeLinkModelElements(ModelElement source, ModelElement target)
+	public boolean removeLinkModelElements(ModelElement source, ModelElement target, Object extras)
 	{
-		if(existsLinkModelElements(source, target))
+		if(existsLinkModelElements(source, target, null))
 		{
 			mTransitions.remove(getTransition(source,target));
 			return true;
@@ -208,7 +208,7 @@ public class ActivityDiagram extends SpemDiagram
 	 * @param target the model element to be tested in input
 	 * @return true if the link can be created, false otherwise
 	 */
-	public boolean areLinkableModelElements(ModelElement source, ModelElement target)
+	public boolean areLinkableModelElements(ModelElement source, ModelElement target, Object extras)
 	{
 		if(!containsModelElement(source) || !containsModelElement(target))
 		{
@@ -291,7 +291,7 @@ public class ActivityDiagram extends SpemDiagram
 	{
 		for(int i=0;i<mTransitions.size();i++)
 		{
-			if(existsLinkModelElements(a1,((Transition) mTransitions.get(i)).getOutputModelElement()))
+			if(existsLinkModelElements(a1,((Transition) mTransitions.get(i)).getOutputModelElement(),null))
 			{
 				ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 				return false;
@@ -312,7 +312,7 @@ public class ActivityDiagram extends SpemDiagram
 	{
 		for(int i=0;i<mTransitions.size();i++)
 		{
-			if(existsLinkModelElements(a,((Transition) mTransitions.get(i)).getOutputModelElement()))
+			if(existsLinkModelElements(a,((Transition) mTransitions.get(i)).getOutputModelElement(),null))
 			{
 				ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
 				return false;
@@ -331,7 +331,7 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean areLinkableDecisionActivity(Decision d, Activity a)
 	{
-		if(!existsLinkModelElements(d,a))
+		if(!existsLinkModelElements(d,a,null))
 		{
 			return true;
 		}
@@ -349,7 +349,7 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean areLinkableDecisionDecision(Decision d1, Decision d2)
 	{
-		if(!existsLinkModelElements(d1,d2))
+		if(!existsLinkModelElements(d1,d2,null))
 		{
 			return true;
 		}
@@ -371,7 +371,7 @@ public class ActivityDiagram extends SpemDiagram
 		{
 			for(int i=0;i<mTransitions.size();i++)
 			{
-				if(existsLinkModelElements(e,((Transition) mTransitions.get(i)).getOutputModelElement()))
+				if(existsLinkModelElements(e,((Transition) mTransitions.get(i)).getOutputModelElement(),null))
 				{
 					ErrorManager.getInstance().printKey("errorNotLinkableElements");
 					return false;
@@ -381,7 +381,7 @@ public class ActivityDiagram extends SpemDiagram
 		}
 		else
 		{
-			if(!existsLinkModelElements(e,s))
+			if(!existsLinkModelElements(e,s,null))
 			{
 				return true;
 			}
@@ -401,7 +401,7 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean areLinkableSynchroModelElement(Synchro s,ModelElement e)
 	{
-		if(!existsLinkModelElements(s,e))
+		if(!existsLinkModelElements(s,e,null))
 		{
 			return true;
 		}
@@ -419,11 +419,11 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean areLinkableSynchroDecision(Synchro s,Decision d)
 	{
-		if(!existsLinkModelElements(s,d))
+		if(!existsLinkModelElements(s,d,null))
 		{
 			for(int i=0;i<mTransitions.size();i++)
 			{
-				if(existsLinkModelElements(((Transition) mTransitions.get(i)).getInputModelElement(),d))
+				if(existsLinkModelElements(((Transition) mTransitions.get(i)).getInputModelElement(),d,null))
 				{
 					ErrorManager.getInstance().printKey("errorNotLinkableElements");
 					return false;
@@ -446,11 +446,11 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean areLinkableInitialPointModelElement(InitialPoint ip, ModelElement me)
 	{
-		if(!existsLinkModelElements(ip,me))
+		if(!existsLinkModelElements(ip,me,null))
 		{
 			for(int i=0;i<mTransitions.size();i++)
 			{
-				if(existsLinkModelElements(ip,(((Transition) mTransitions.get(i)).getOutputModelElement())))
+				if(existsLinkModelElements(ip,((Transition) mTransitions.get(i)).getOutputModelElement(),null))
 				{
 					ErrorManager.getInstance().printKey("errorNotLinkableElements");
 					return false;
@@ -472,11 +472,11 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean areLinkableInitialPointDecision(InitialPoint ip,Decision d)
 	{
-		if(!existsLinkModelElements(ip,d))
+		if(!existsLinkModelElements(ip,d,null))
 		{
 			for(int i=0;i<mTransitions.size();i++)
 			{
-				if(existsLinkModelElements(ip,((Transition) mTransitions.get(i)).getOutputModelElement()) || existsLinkModelElements(((Transition) mTransitions.get(i)).getInputModelElement(),d))
+				if(existsLinkModelElements(ip,((Transition) mTransitions.get(i)).getOutputModelElement(),null) || existsLinkModelElements(((Transition) mTransitions.get(i)).getInputModelElement(),d,null))
 				{
 					ErrorManager.getInstance().printKey("errorNotLinkableElements");
 					return false;
@@ -495,6 +495,7 @@ public class ActivityDiagram extends SpemDiagram
 	 *
 	 * @param me the ModelElement to be tested in output
 	 * @param fp the FinalPoint to be tested in input
+	 * @param extras NOT USED
 	 * @return true if the link can be created, false otherwise
 	 */
 	public boolean areLinkableModelElementFinalPoint(ModelElement me, FinalPoint fp)
@@ -503,7 +504,7 @@ public class ActivityDiagram extends SpemDiagram
 		{
 			for(int i=0;i<mTransitions.size();i++)
 			{
-				if(existsLinkModelElements(me,((Transition) mTransitions.get(i)).getOutputModelElement()))
+				if(existsLinkModelElements(me,((Transition) mTransitions.get(i)).getOutputModelElement(),null))
 				{
 					ErrorManager.getInstance().printKey("errorNotLinkableElements");
 					return false;
@@ -513,7 +514,7 @@ public class ActivityDiagram extends SpemDiagram
 		}
 		else
 		{
-			if(!existsLinkModelElements(me,fp))
+			if(!existsLinkModelElements(me,fp,null))
 			{
 				return true;
 			}
@@ -529,9 +530,10 @@ public class ActivityDiagram extends SpemDiagram
 	 *
 	 * @param source the model element to be tested in output
 	 * @param target the model element to be tested in input
+	 * @param extras NOT USED
 	 * @return true if the link exists, false otherwise
 	 */
-	public boolean existsLinkModelElements(ModelElement source, ModelElement target)
+	public boolean existsLinkModelElements(ModelElement source, ModelElement target, Object extras)
 	{
 		if(getTransition(source,target)!=null)
 		{
@@ -598,7 +600,7 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public boolean setLinkLabel(ModelElement source, ModelElement target, String label)
 	{
-		if(existsLinkModelElements(source,target))
+		if(existsLinkModelElements(source,target,null))
 		{
 			getTransition(source, target).setLabel(label);
 			return true;
@@ -615,7 +617,7 @@ public class ActivityDiagram extends SpemDiagram
 	 */
 	public String getLinkLabel(ModelElement source, ModelElement target)
 	{
-		if(existsLinkModelElements(source,target))
+		if(existsLinkModelElements(source,target,null))
 		{
 			return getTransition(source, target).getLabel();
 		}

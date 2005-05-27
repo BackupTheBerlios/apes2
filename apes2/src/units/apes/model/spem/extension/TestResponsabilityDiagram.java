@@ -274,23 +274,23 @@ public class TestResponsabilityDiagram extends TestCase
 		WorkProduct wp = createWorkProduct();
 		WorkProduct wp2 = createWorkProduct();
 		
-		assertFalse(rd.createLinkModelElements(pr,wp));
-		assertFalse(rd.createLinkModelElements(wp,pr));
+		assertFalse(rd.createLinkModelElements(pr,wp,null));
+		assertFalse(rd.createLinkModelElements(wp,pr,null));
 		
 		rd.addModelElement(pr);
-		assertFalse(rd.createLinkModelElements(pr,wp));
-		assertFalse(rd.createLinkModelElements(wp,pr));
+		assertFalse(rd.createLinkModelElements(pr,wp,null));
+		assertFalse(rd.createLinkModelElements(wp,pr,null));
 		
 		rd.addModelElement(wp);
-		assertTrue(rd.createLinkModelElements(pr,wp));
-		assertFalse(rd.createLinkModelElements(wp,pr));
-		assertFalse(rd.createLinkModelElements(pr,wp));
+		assertTrue(rd.createLinkModelElements(pr,wp,null));
+		assertFalse(rd.createLinkModelElements(wp,pr,null));
+		assertFalse(rd.createLinkModelElements(pr,wp,null));
 		
-		assertFalse(rd.createLinkModelElements(pr,pr));
-		assertFalse(rd.createLinkModelElements(wp,wp));
+		assertFalse(rd.createLinkModelElements(pr,pr,null));
+		assertFalse(rd.createLinkModelElements(wp,wp,null));
 		
 		rd.addModelElement(pr2);
-		assertFalse(rd.createLinkModelElements(pr2,wp));
+		assertFalse(rd.createLinkModelElements(pr2,wp,null));
 	}
 	
 	public void testCreateLinkProcessRoleWorkProduct()
@@ -322,16 +322,16 @@ public class TestResponsabilityDiagram extends TestCase
 		ProcessRole pr = createProcessRole();
 		WorkProduct wp = createWorkProduct();
 		
-		assertFalse(rd.removeLinkModelElements(pr,wp));
-		assertFalse(rd.removeLinkModelElements(wp,pr));
+		assertFalse(rd.removeLinkModelElements(pr,wp,null));
+		assertFalse(rd.removeLinkModelElements(wp,pr,null));
 		
 		rd.addModelElement(pr);	
 		rd.addModelElement(wp);
 		
-		assertFalse(rd.removeLinkModelElements(pr,wp));	
-		rd.createLinkModelElements(pr,wp);
-		assertTrue(rd.removeLinkModelElements(pr,wp));
-		assertFalse(rd.removeLinkModelElements(pr,wp));
+		assertFalse(rd.removeLinkModelElements(pr,wp,null));	
+		rd.createLinkModelElements(pr,wp,null);
+		assertTrue(rd.removeLinkModelElements(pr,wp,null));
+		assertFalse(rd.removeLinkModelElements(pr,wp,null));
 	}	
 	
 	public void testRemoveLinkProcessRoleWorkProduct()
@@ -359,17 +359,17 @@ public class TestResponsabilityDiagram extends TestCase
 		ProcessRole pr = createProcessRole();
 		WorkProduct wp = createWorkProduct();
 		
-		assertFalse(rd.areLinkableModelElements(pr,wp));
-		assertFalse(rd.areLinkableModelElements(wp,pr));
+		assertFalse(rd.areLinkableModelElements(pr,wp,null));
+		assertFalse(rd.areLinkableModelElements(wp,pr,null));
 		
 		rd.addModelElement(pr);	
 		rd.addModelElement(wp);
 	
-		assertFalse(rd.areLinkableModelElements(wp,pr));
-		assertTrue(rd.areLinkableModelElements(pr,wp));
+		assertFalse(rd.areLinkableModelElements(wp,pr,null));
+		assertTrue(rd.areLinkableModelElements(pr,wp,null));
 	
-		rd.createLinkModelElements(pr,wp);
-		assertFalse(rd.areLinkableModelElements(pr,wp));
+		rd.createLinkModelElements(pr,wp,null);
+		assertFalse(rd.areLinkableModelElements(pr,wp,null));
 	}
 	
 	public void testAreLinkableProcessRoleWorkProduct()
@@ -408,13 +408,13 @@ public class TestResponsabilityDiagram extends TestCase
 		rd.addModelElement(pr);	
 		rd.addModelElement(wp);
 		
-		assertFalse(rd.existsLinkModelElements(pr,wp));
-		assertFalse(rd.existsLinkModelElements(wp,pr));
+		assertFalse(rd.existsLinkModelElements(pr,wp,null));
+		assertFalse(rd.existsLinkModelElements(wp,pr,null));
 	
-		assertFalse(rd.existsLinkModelElements(pr,pr));
-		assertFalse(rd.existsLinkModelElements(wp,wp));
-		rd.createLinkModelElements(pr,wp);
-		assertTrue(rd.existsLinkModelElements(pr,wp));
+		assertFalse(rd.existsLinkModelElements(pr,pr,null));
+		assertFalse(rd.existsLinkModelElements(wp,wp,null));
+		rd.createLinkModelElements(pr,wp,null);
+		assertTrue(rd.existsLinkModelElements(pr,wp,null));
 	}
 	
 	public void testExistsLinkProcessRoleWorkProduct()

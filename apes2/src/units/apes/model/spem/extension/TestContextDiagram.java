@@ -185,14 +185,14 @@ public class TestContextDiagram extends TestCase
 		ProcessComponent pc = new ProcessComponent();
 		ContextDiagram cd = new ContextDiagram();
 		
-		assertFalse(cd.createLinkModelElements(wp,pc));
+		assertFalse(cd.createLinkModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp);
-		assertTrue(cd.createLinkModelElements(wp,pc));
+		assertTrue(cd.createLinkModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp2);
-		assertFalse(cd.createLinkModelElements(wp,wp2));
-		assertTrue(cd.createLinkModelElements(pc,wp2));		
+		assertFalse(cd.createLinkModelElements(wp,wp2,null));
+		assertTrue(cd.createLinkModelElements(pc,wp2,null));		
 	}
 
 	
@@ -203,18 +203,18 @@ public class TestContextDiagram extends TestCase
 		ProcessComponent pc = new ProcessComponent();
 		ContextDiagram cd = new ContextDiagram();
 		
-		assertFalse(cd.removeLinkModelElements(wp,pc));
+		assertFalse(cd.removeLinkModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp);
-		assertFalse(cd.removeLinkModelElements(wp,pc));
+		assertFalse(cd.removeLinkModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp2);
-		cd.createLinkModelElements(wp,pc);
-		cd.createLinkModelElements(pc,wp2);
+		cd.createLinkModelElements(wp,pc,null);
+		cd.createLinkModelElements(pc,wp2,null);
 		
-		assertTrue(cd.removeLinkModelElements(wp,pc));
-		assertFalse(cd.removeLinkModelElements(pc,wp));
-		assertTrue(cd.removeLinkModelElements(pc,wp2));
+		assertTrue(cd.removeLinkModelElements(wp,pc,null));
+		assertFalse(cd.removeLinkModelElements(pc,wp,null));
+		assertTrue(cd.removeLinkModelElements(pc,wp2,null));
 	}
 	
 	
@@ -225,18 +225,18 @@ public class TestContextDiagram extends TestCase
 		ProcessComponent pc = new ProcessComponent();
 		ContextDiagram cd = new ContextDiagram();
 		
-		assertFalse(cd.areLinkableModelElements(wp,wp2));
-		assertFalse(cd.areLinkableModelElements(wp,pc));
+		assertFalse(cd.areLinkableModelElements(wp,wp2,null));
+		assertFalse(cd.areLinkableModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp);
-		assertTrue(cd.areLinkableModelElements(wp,pc));
+		assertTrue(cd.areLinkableModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp2);
-		assertTrue(cd.areLinkableModelElements(pc,wp2));
+		assertTrue(cd.areLinkableModelElements(pc,wp2,null));
 		
-		cd.createLinkModelElements(wp,pc);
-		assertFalse(cd.areLinkableModelElements(wp,pc));
-		assertFalse(cd.areLinkableModelElements(pc,wp));
+		cd.createLinkModelElements(wp,pc,null);
+		assertFalse(cd.areLinkableModelElements(wp,pc,null));
+		assertFalse(cd.areLinkableModelElements(pc,wp,null));
 	}
 	
 	public void testExistsLinkModelElements()
@@ -246,20 +246,20 @@ public class TestContextDiagram extends TestCase
 		ProcessComponent pc = new ProcessComponent();
 		ContextDiagram cd = new ContextDiagram();
 		
-		assertFalse(cd.existsLinkModelElements(wp,pc));
+		assertFalse(cd.existsLinkModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp);
-		assertFalse(cd.existsLinkModelElements(wp,pc));
+		assertFalse(cd.existsLinkModelElements(wp,pc,null));
 		
-		cd.createLinkModelElements(wp,pc);
-		assertTrue(cd.existsLinkModelElements(wp,pc));
+		cd.createLinkModelElements(wp,pc,null);
+		assertTrue(cd.existsLinkModelElements(wp,pc,null));
 		
 		cd.addWorkProduct(wp2);
-		assertFalse(cd.existsLinkModelElements(pc,wp2));
-		cd.createLinkModelElements(pc,wp2);
-		assertTrue(cd.existsLinkModelElements(pc,wp2));
+		assertFalse(cd.existsLinkModelElements(pc,wp2,null));
+		cd.createLinkModelElements(pc,wp2,null);
+		assertTrue(cd.existsLinkModelElements(pc,wp2,null));
 		
-		cd.removeLinkModelElements(wp,pc);
-		assertFalse(cd.existsLinkModelElements(wp,pc));
+		cd.removeLinkModelElements(wp,pc,null);
+		assertFalse(cd.existsLinkModelElements(wp,pc,null));
 	}
 }

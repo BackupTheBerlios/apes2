@@ -538,169 +538,169 @@ public class TestActivityDiagram extends TestCase
 		
 
 		
-		assertFalse(ad.createLinkModelElements(a,a2));
-		assertFalse(ad.createLinkModelElements(a,d));
-		assertFalse(ad.createLinkModelElements(a,d2));
+		assertFalse(ad.createLinkModelElements(a,a2,null));
+		assertFalse(ad.createLinkModelElements(a,d,null));
+		assertFalse(ad.createLinkModelElements(a,d2,null));
 
-		assertFalse(ad.createLinkModelElements(a,s));
-		assertFalse(ad.createLinkModelElements(a,s2));
+		assertFalse(ad.createLinkModelElements(a,s,null));
+		assertFalse(ad.createLinkModelElements(a,s2,null));
 
-		assertFalse(ad.createLinkModelElements(a,ip));
-		assertFalse(ad.createLinkModelElements(a,fp));
-		assertFalse(ad.createLinkModelElements(a,fp2));
+		assertFalse(ad.createLinkModelElements(a,ip,null));
+		assertFalse(ad.createLinkModelElements(a,fp,null));
+		assertFalse(ad.createLinkModelElements(a,fp2,null));
 
-		assertFalse(ad.createLinkModelElements(a2,a));
-		assertFalse(ad.createLinkModelElements(a2,d));
-		assertFalse(ad.createLinkModelElements(a2,d2));
+		assertFalse(ad.createLinkModelElements(a2,a,null));
+		assertFalse(ad.createLinkModelElements(a2,d,null));
+		assertFalse(ad.createLinkModelElements(a2,d2,null));
 
-		assertFalse(ad.createLinkModelElements(a2,s));
-		assertFalse(ad.createLinkModelElements(a2,s2));
+		assertFalse(ad.createLinkModelElements(a2,s,null));
+		assertFalse(ad.createLinkModelElements(a2,s2,null));
 
-		assertFalse(ad.createLinkModelElements(a2,ip));
-		assertFalse(ad.createLinkModelElements(a2,fp));
-		assertFalse(ad.createLinkModelElements(a2,fp2));
+		assertFalse(ad.createLinkModelElements(a2,ip,null));
+		assertFalse(ad.createLinkModelElements(a2,fp,null));
+		assertFalse(ad.createLinkModelElements(a2,fp2,null));
 
-		assertFalse(ad.createLinkModelElements(d,a));
-		assertFalse(ad.createLinkModelElements(d,a2));
-		assertFalse(ad.createLinkModelElements(d,d2));
+		assertFalse(ad.createLinkModelElements(d,a,null));
+		assertFalse(ad.createLinkModelElements(d,a2,null));
+		assertFalse(ad.createLinkModelElements(d,d2,null));
 
-		assertFalse(ad.createLinkModelElements(d,s));
-		assertFalse(ad.createLinkModelElements(d,s2));
+		assertFalse(ad.createLinkModelElements(d,s,null));
+		assertFalse(ad.createLinkModelElements(d,s2,null));
 
-		assertFalse(ad.createLinkModelElements(d,ip));
-		assertFalse(ad.createLinkModelElements(d,fp));
-		assertFalse(ad.createLinkModelElements(d,fp2));
+		assertFalse(ad.createLinkModelElements(d,ip,null));
+		assertFalse(ad.createLinkModelElements(d,fp,null));
+		assertFalse(ad.createLinkModelElements(d,fp2,null));
 
-		assertFalse(ad.createLinkModelElements(d2,a));
-		assertFalse(ad.createLinkModelElements(d2,d));
-		assertFalse(ad.createLinkModelElements(d2,a2));
+		assertFalse(ad.createLinkModelElements(d2,a,null));
+		assertFalse(ad.createLinkModelElements(d2,d,null));
+		assertFalse(ad.createLinkModelElements(d2,a2,null));
 
-		assertFalse(ad.createLinkModelElements(d2,s));
-		assertFalse(ad.createLinkModelElements(d2,s2));
-		assertFalse(ad.createLinkModelElements(s,a));
-		assertFalse(ad.createLinkModelElements(s,a2));
-		assertFalse(ad.createLinkModelElements(s,d));
-		assertFalse(ad.createLinkModelElements(s,d2));
-		assertFalse(ad.createLinkModelElements(s,s2));
-		assertFalse(ad.createLinkModelElements(s2,a));
-		assertFalse(ad.createLinkModelElements(s2,a2));
-		assertFalse(ad.createLinkModelElements(s2,d));
-		assertFalse(ad.createLinkModelElements(s2,d2));
-		assertFalse(ad.createLinkModelElements(s2,s));
+		assertFalse(ad.createLinkModelElements(d2,s,null));
+		assertFalse(ad.createLinkModelElements(d2,s2,null));
+		assertFalse(ad.createLinkModelElements(s,a,null));
+		assertFalse(ad.createLinkModelElements(s,a2,null));
+		assertFalse(ad.createLinkModelElements(s,d,null));
+		assertFalse(ad.createLinkModelElements(s,d2,null));
+		assertFalse(ad.createLinkModelElements(s,s2,null));
+		assertFalse(ad.createLinkModelElements(s2,a,null));
+		assertFalse(ad.createLinkModelElements(s2,a2,null));
+		assertFalse(ad.createLinkModelElements(s2,d,null));
+		assertFalse(ad.createLinkModelElements(s2,d2,null));
+		assertFalse(ad.createLinkModelElements(s2,s,null));
 		
 
-		assertFalse(ad.createLinkModelElements(d2,ip));
-		assertFalse(ad.createLinkModelElements(d2,fp));
-		assertFalse(ad.createLinkModelElements(d2,fp2));
-		assertFalse(ad.createLinkModelElements(ip,a));
-		assertFalse(ad.createLinkModelElements(ip,a2));
-		assertFalse(ad.createLinkModelElements(ip,d));
-		assertFalse(ad.createLinkModelElements(ip,d2));
-		assertFalse(ad.createLinkModelElements(ip,fp));
-		assertFalse(ad.createLinkModelElements(ip,fp2));
-		assertFalse(ad.createLinkModelElements(fp,a));
-		assertFalse(ad.createLinkModelElements(fp,a2));
-		assertFalse(ad.createLinkModelElements(fp,d));
-		assertFalse(ad.createLinkModelElements(fp,d2));
-		assertFalse(ad.createLinkModelElements(fp,ip));
-		assertFalse(ad.createLinkModelElements(fp,fp2));
-		assertFalse(ad.createLinkModelElements(fp2,a));
-		assertFalse(ad.createLinkModelElements(fp2,a2));
-		assertFalse(ad.createLinkModelElements(fp2,d));
-		assertFalse(ad.createLinkModelElements(fp2,d2));
-		assertFalse(ad.createLinkModelElements(fp2,fp));
-		assertFalse(ad.createLinkModelElements(fp2,ip));
+		assertFalse(ad.createLinkModelElements(d2,ip,null));
+		assertFalse(ad.createLinkModelElements(d2,fp,null));
+		assertFalse(ad.createLinkModelElements(d2,fp2,null));
+		assertFalse(ad.createLinkModelElements(ip,a,null));
+		assertFalse(ad.createLinkModelElements(ip,a2,null));
+		assertFalse(ad.createLinkModelElements(ip,d,null));
+		assertFalse(ad.createLinkModelElements(ip,d2,null));
+		assertFalse(ad.createLinkModelElements(ip,fp,null));
+		assertFalse(ad.createLinkModelElements(ip,fp2,null));
+		assertFalse(ad.createLinkModelElements(fp,a,null));
+		assertFalse(ad.createLinkModelElements(fp,a2,null));
+		assertFalse(ad.createLinkModelElements(fp,d,null));
+		assertFalse(ad.createLinkModelElements(fp,d2,null));
+		assertFalse(ad.createLinkModelElements(fp,ip,null));
+		assertFalse(ad.createLinkModelElements(fp,fp2,null));
+		assertFalse(ad.createLinkModelElements(fp2,a,null));
+		assertFalse(ad.createLinkModelElements(fp2,a2,null));
+		assertFalse(ad.createLinkModelElements(fp2,d,null));
+		assertFalse(ad.createLinkModelElements(fp2,d2,null));
+		assertFalse(ad.createLinkModelElements(fp2,fp,null));
+		assertFalse(ad.createLinkModelElements(fp2,ip,null));
 	
 		
 
 		ad.addModelElement(a);
-		assertFalse(ad.createLinkModelElements(a,a2));
-		assertFalse(ad.createLinkModelElements(a,d));
-		assertFalse(ad.createLinkModelElements(a,d2));
+		assertFalse(ad.createLinkModelElements(a,a2,null));
+		assertFalse(ad.createLinkModelElements(a,d,null));
+		assertFalse(ad.createLinkModelElements(a,d2,null));
 
-		assertFalse(ad.createLinkModelElements(a,s));
-		assertFalse(ad.createLinkModelElements(a,s2));
+		assertFalse(ad.createLinkModelElements(a,s,null));
+		assertFalse(ad.createLinkModelElements(a,s2,null));
 
-		assertFalse(ad.createLinkModelElements(a,ip));
-		assertFalse(ad.createLinkModelElements(a,fp));
-		assertFalse(ad.createLinkModelElements(a,fp2));
+		assertFalse(ad.createLinkModelElements(a,ip,null));
+		assertFalse(ad.createLinkModelElements(a,fp,null));
+		assertFalse(ad.createLinkModelElements(a,fp2,null));
 
-		assertFalse(ad.createLinkModelElements(a2,a));
-		assertFalse(ad.createLinkModelElements(d,a));
-		assertFalse(ad.createLinkModelElements(d2,a));
+		assertFalse(ad.createLinkModelElements(a2,a,null));
+		assertFalse(ad.createLinkModelElements(d,a,null));
+		assertFalse(ad.createLinkModelElements(d2,a,null));
 
-		assertFalse(ad.createLinkModelElements(s,a));
-		assertFalse(ad.createLinkModelElements(s2,a));
+		assertFalse(ad.createLinkModelElements(s,a,null));
+		assertFalse(ad.createLinkModelElements(s2,a,null));
 
-		assertFalse(ad.createLinkModelElements(ip,a));
-		assertFalse(ad.createLinkModelElements(fp,a));
-		assertFalse(ad.createLinkModelElements(fp2,a));
+		assertFalse(ad.createLinkModelElements(ip,a,null));
+		assertFalse(ad.createLinkModelElements(fp,a,null));
+		assertFalse(ad.createLinkModelElements(fp2,a,null));
 
 		
 		ad.addModelElement(a2);
-		assertTrue(ad.createLinkModelElements(a,a2));
-		assertTrue(ad.createLinkModelElements(a2,a));
+		assertTrue(ad.createLinkModelElements(a,a2,null));
+		assertTrue(ad.createLinkModelElements(a2,a,null));
 		
-		assertFalse(ad.createLinkModelElements(a,a2));
-		assertFalse(ad.createLinkModelElements(a2,a));
+		assertFalse(ad.createLinkModelElements(a,a2,null));
+		assertFalse(ad.createLinkModelElements(a2,a,null));
 	
 		ad.addModelElement(d);
 		ad.addModelElement(d2);
-		assertFalse(ad.createLinkModelElements(a,d));
-		assertFalse(ad.createLinkModelElements(a2,d));
-		assertFalse(ad.createLinkModelElements(a,d2));
-		assertFalse(ad.createLinkModelElements(a2,d2));
-		assertTrue(ad.createLinkModelElements(d,d2));
-		assertTrue(ad.createLinkModelElements(d2,d));
+		assertFalse(ad.createLinkModelElements(a,d,null));
+		assertFalse(ad.createLinkModelElements(a2,d,null));
+		assertFalse(ad.createLinkModelElements(a,d2,null));
+		assertFalse(ad.createLinkModelElements(a2,d2,null));
+		assertTrue(ad.createLinkModelElements(d,d2,null));
+		assertTrue(ad.createLinkModelElements(d2,d,null));
 		
 		ad.addModelElement(s);
 		ad.addModelElement(s2);
-		assertFalse(ad.createLinkModelElements(a,s));
-		assertFalse(ad.createLinkModelElements(a2,s));
-		assertFalse(ad.createLinkModelElements(a,s2));
-		assertFalse(ad.createLinkModelElements(a2,s2));
-		assertTrue(ad.createLinkModelElements(s,s2));
-		assertTrue(ad.createLinkModelElements(s2,s));
+		assertFalse(ad.createLinkModelElements(a,s,null));
+		assertFalse(ad.createLinkModelElements(a2,s,null));
+		assertFalse(ad.createLinkModelElements(a,s2,null));
+		assertFalse(ad.createLinkModelElements(a2,s2,null));
+		assertTrue(ad.createLinkModelElements(s,s2,null));
+		assertTrue(ad.createLinkModelElements(s2,s,null));
 			
 		ad.addModelElement(a3);
 		ad.addModelElement(a4);
 		ad.addModelElement(a5);
-		assertTrue(ad.createLinkModelElements(a3,d));
-		assertFalse(ad.createLinkModelElements(a3,d));			
-		assertFalse(ad.createLinkModelElements(a3,d2));
-		assertFalse(ad.createLinkModelElements(a3,s));
+		assertTrue(ad.createLinkModelElements(a3,d,null));
+		assertFalse(ad.createLinkModelElements(a3,d,null));			
+		assertFalse(ad.createLinkModelElements(a3,d2,null));
+		assertFalse(ad.createLinkModelElements(a3,s,null));
 //		assertFalse(ad.createLinkModelElements(a4,d));
-		assertTrue(ad.createLinkModelElements(a4,d));
-		assertFalse(ad.createLinkModelElements(a3,a4));
+		assertTrue(ad.createLinkModelElements(a4,d,null));
+		assertFalse(ad.createLinkModelElements(a3,a4,null));
 
-		assertTrue(ad.createLinkModelElements(d,a4));
-		assertTrue(ad.createLinkModelElements(d,a5));
-		assertFalse(ad.createLinkModelElements(d,a4));
-		assertFalse(ad.createLinkModelElements(d,a5));
+		assertTrue(ad.createLinkModelElements(d,a4,null));
+		assertTrue(ad.createLinkModelElements(d,a5,null));
+		assertFalse(ad.createLinkModelElements(d,a4,null));
+		assertFalse(ad.createLinkModelElements(d,a5,null));
 		
 		ad.addModelElement(ip);
-		assertTrue(ad.createLinkModelElements(ip,a));
-		assertFalse(ad.createLinkModelElements(ip,d));
-		assertFalse(ad.createLinkModelElements(ip,a2));
-		assertFalse(ad.createLinkModelElements(ip,fp));
-		assertFalse(ad.createLinkModelElements(a,ip));
-		assertFalse(ad.createLinkModelElements(d,ip));
-		assertFalse(ad.createLinkModelElements(fp,ip));
+		assertTrue(ad.createLinkModelElements(ip,a,null));
+		assertFalse(ad.createLinkModelElements(ip,d,null));
+		assertFalse(ad.createLinkModelElements(ip,a2,null));
+		assertFalse(ad.createLinkModelElements(ip,fp,null));
+		assertFalse(ad.createLinkModelElements(a,ip,null));
+		assertFalse(ad.createLinkModelElements(d,ip,null));
+		assertFalse(ad.createLinkModelElements(fp,ip,null));
 		
 		ad.addModelElement(fp);
 		ad.addModelElement(fp2);
-		assertFalse(ad.createLinkModelElements(fp,a));
-		assertFalse(ad.createLinkModelElements(fp,d));
-		assertFalse(ad.createLinkModelElements(fp,ip));
-		assertFalse(ad.createLinkModelElements(fp,fp2));
-		assertFalse(ad.createLinkModelElements(fp,a2));
-		assertFalse(ad.createLinkModelElements(fp,d2));
-		assertFalse(ad.createLinkModelElements(ip,fp));
-		assertFalse(ad.createLinkModelElements(a,fp));
-		assertTrue(ad.createLinkModelElements(d,fp));
-		assertFalse(ad.createLinkModelElements(a2,fp));
-		assertTrue(ad.createLinkModelElements(d2,fp));
-		assertFalse(ad.createLinkModelElements(fp2,fp));
+		assertFalse(ad.createLinkModelElements(fp,a,null));
+		assertFalse(ad.createLinkModelElements(fp,d,null));
+		assertFalse(ad.createLinkModelElements(fp,ip,null));
+		assertFalse(ad.createLinkModelElements(fp,fp2,null));
+		assertFalse(ad.createLinkModelElements(fp,a2,null));
+		assertFalse(ad.createLinkModelElements(fp,d2,null));
+		assertFalse(ad.createLinkModelElements(ip,fp,null));
+		assertFalse(ad.createLinkModelElements(a,fp,null));
+		assertTrue(ad.createLinkModelElements(d,fp,null));
+		assertFalse(ad.createLinkModelElements(a2,fp,null));
+		assertTrue(ad.createLinkModelElements(d2,fp,null));
+		assertFalse(ad.createLinkModelElements(fp2,fp,null));
 		
 }
 
@@ -720,46 +720,46 @@ public class TestActivityDiagram extends TestCase
 		ActivityDiagram.FinalPoint fp2 = createFinalPoint();
 
 		
-		assertFalse(ad.removeLinkModelElements(a,a2));
-		assertFalse(ad.removeLinkModelElements(a,a2));
-		assertFalse(ad.removeLinkModelElements(a,d));
-		assertFalse(ad.removeLinkModelElements(a,d2));
-		assertFalse(ad.removeLinkModelElements(a,s));
-		assertFalse(ad.removeLinkModelElements(a,s2));
-		assertFalse(ad.removeLinkModelElements(a2,a));
-		assertFalse(ad.removeLinkModelElements(a2,a2));
-		assertFalse(ad.removeLinkModelElements(a2,d));
-		assertFalse(ad.removeLinkModelElements(a2,d2));
-		assertFalse(ad.removeLinkModelElements(a2,s));
-		assertFalse(ad.removeLinkModelElements(a2,s2));
-		assertFalse(ad.removeLinkModelElements(d,a));
-		assertFalse(ad.removeLinkModelElements(d,a2));
-		assertFalse(ad.removeLinkModelElements(d,d));
-		assertFalse(ad.removeLinkModelElements(d,d2));
-		assertFalse(ad.removeLinkModelElements(d,s));
-		assertFalse(ad.removeLinkModelElements(d,s2));
-		assertFalse(ad.removeLinkModelElements(d2,a));
-		assertFalse(ad.removeLinkModelElements(d2,a2));
-		assertFalse(ad.removeLinkModelElements(d2,d));
-		assertFalse(ad.removeLinkModelElements(d2,d2));
+		assertFalse(ad.removeLinkModelElements(a,a2,null));
+		assertFalse(ad.removeLinkModelElements(a,a2,null));
+		assertFalse(ad.removeLinkModelElements(a,d,null));
+		assertFalse(ad.removeLinkModelElements(a,d2,null));
+		assertFalse(ad.removeLinkModelElements(a,s,null));
+		assertFalse(ad.removeLinkModelElements(a,s2,null));
+		assertFalse(ad.removeLinkModelElements(a2,a,null));
+		assertFalse(ad.removeLinkModelElements(a2,a2,null));
+		assertFalse(ad.removeLinkModelElements(a2,d,null));
+		assertFalse(ad.removeLinkModelElements(a2,d2,null));
+		assertFalse(ad.removeLinkModelElements(a2,s,null));
+		assertFalse(ad.removeLinkModelElements(a2,s2,null));
+		assertFalse(ad.removeLinkModelElements(d,a,null));
+		assertFalse(ad.removeLinkModelElements(d,a2,null));
+		assertFalse(ad.removeLinkModelElements(d,d,null));
+		assertFalse(ad.removeLinkModelElements(d,d2,null));
+		assertFalse(ad.removeLinkModelElements(d,s,null));
+		assertFalse(ad.removeLinkModelElements(d,s2,null));
+		assertFalse(ad.removeLinkModelElements(d2,a,null));
+		assertFalse(ad.removeLinkModelElements(d2,a2,null));
+		assertFalse(ad.removeLinkModelElements(d2,d,null));
+		assertFalse(ad.removeLinkModelElements(d2,d2,null));
 
-		assertFalse(ad.removeLinkModelElements(d2,s));
-		assertFalse(ad.removeLinkModelElements(d2,s2));
+		assertFalse(ad.removeLinkModelElements(d2,s,null));
+		assertFalse(ad.removeLinkModelElements(d2,s2,null));
 
-		assertFalse(ad.removeLinkModelElements(ip,a));
-		assertFalse(ad.removeLinkModelElements(ip,fp));
-		assertFalse(ad.removeLinkModelElements(ip,d));
-		assertFalse(ad.removeLinkModelElements(a,ip));
-		assertFalse(ad.removeLinkModelElements(fp,ip));
-		assertFalse(ad.removeLinkModelElements(d,ip));
-		assertFalse(ad.removeLinkModelElements(fp,a));
-		assertFalse(ad.removeLinkModelElements(fp,ip));
-		assertFalse(ad.removeLinkModelElements(fp,d));
-		assertFalse(ad.removeLinkModelElements(fp,fp2));
-		assertFalse(ad.removeLinkModelElements(fp2,fp));
-		assertFalse(ad.removeLinkModelElements(a,fp));
-		assertFalse(ad.removeLinkModelElements(d,fp));
-		assertFalse(ad.removeLinkModelElements(ip,fp));
+		assertFalse(ad.removeLinkModelElements(ip,a,null));
+		assertFalse(ad.removeLinkModelElements(ip,fp,null));
+		assertFalse(ad.removeLinkModelElements(ip,d,null));
+		assertFalse(ad.removeLinkModelElements(a,ip,null));
+		assertFalse(ad.removeLinkModelElements(fp,ip,null));
+		assertFalse(ad.removeLinkModelElements(d,ip,null));
+		assertFalse(ad.removeLinkModelElements(fp,a,null));
+		assertFalse(ad.removeLinkModelElements(fp,ip,null));
+		assertFalse(ad.removeLinkModelElements(fp,d,null));
+		assertFalse(ad.removeLinkModelElements(fp,fp2,null));
+		assertFalse(ad.removeLinkModelElements(fp2,fp,null));
+		assertFalse(ad.removeLinkModelElements(a,fp,null));
+		assertFalse(ad.removeLinkModelElements(d,fp,null));
+		assertFalse(ad.removeLinkModelElements(ip,fp,null));
 		
 
 
@@ -776,75 +776,75 @@ public class TestActivityDiagram extends TestCase
 		ad.addModelElement(fp2);
 		
 
-		ad.createLinkModelElements(a,a2);
-		assertFalse(ad.removeLinkModelElements(a2,a));
-		assertTrue(ad.removeLinkModelElements(a,a2));
+		ad.createLinkModelElements(a,a2,null);
+		assertFalse(ad.removeLinkModelElements(a2,a,null));
+		assertTrue(ad.removeLinkModelElements(a,a2,null));
 		
-		ad.createLinkModelElements(a2,a);
-		assertFalse(ad.removeLinkModelElements(a,a2));
-		assertTrue(ad.removeLinkModelElements(a2,a));
+		ad.createLinkModelElements(a2,a,null);
+		assertFalse(ad.removeLinkModelElements(a,a2,null));
+		assertTrue(ad.removeLinkModelElements(a2,a,null));
 
-		ad.createLinkModelElements(d,a);
-		assertFalse(ad.removeLinkModelElements(a,d));
-		assertTrue(ad.removeLinkModelElements(d,a));
+		ad.createLinkModelElements(d,a,null);
+		assertFalse(ad.removeLinkModelElements(a,d,null));
+		assertTrue(ad.removeLinkModelElements(d,a,null));
 
-		ad.createLinkModelElements(a2,d);
-		assertFalse(ad.removeLinkModelElements(d,a2));
-		assertTrue(ad.removeLinkModelElements(a2,d));
+		ad.createLinkModelElements(a2,d,null);
+		assertFalse(ad.removeLinkModelElements(d,a2,null));
+		assertTrue(ad.removeLinkModelElements(a2,d,null));
 		
-		ad.createLinkModelElements(d,d2);
-		assertFalse(ad.removeLinkModelElements(d2,d));
-		assertTrue(ad.removeLinkModelElements(d,d2));
-
-		
-		ad.createLinkModelElements(s,s2);
-		assertFalse(ad.removeLinkModelElements(s2,s));
-		assertTrue(ad.removeLinkModelElements(s,s2));
+		ad.createLinkModelElements(d,d2,null);
+		assertFalse(ad.removeLinkModelElements(d2,d,null));
+		assertTrue(ad.removeLinkModelElements(d,d2,null));
 
 		
-		ad.createLinkModelElements(a,ip);
-		assertFalse(ad.removeLinkModelElements(ip,a));
-		assertFalse(ad.removeLinkModelElements(a,ip));
+		ad.createLinkModelElements(s,s2,null);
+		assertFalse(ad.removeLinkModelElements(s2,s,null));
+		assertTrue(ad.removeLinkModelElements(s,s2,null));
+
 		
-		ad.createLinkModelElements(d,ip);
-		assertFalse(ad.removeLinkModelElements(ip,d));
-		assertFalse(ad.removeLinkModelElements(d,ip));
+		ad.createLinkModelElements(a,ip,null);
+		assertFalse(ad.removeLinkModelElements(ip,a,null));
+		assertFalse(ad.removeLinkModelElements(a,ip,null));
 		
-		ad.createLinkModelElements(ip,fp);
-		assertFalse(ad.removeLinkModelElements(ip,fp));
-		assertFalse(ad.removeLinkModelElements(fp,ip));
+		ad.createLinkModelElements(d,ip,null);
+		assertFalse(ad.removeLinkModelElements(ip,d,null));
+		assertFalse(ad.removeLinkModelElements(d,ip,null));
 		
-		ad.createLinkModelElements(ip,a);
-		assertFalse(ad.removeLinkModelElements(a,ip));
-		assertTrue(ad.removeLinkModelElements(ip,a));
+		ad.createLinkModelElements(ip,fp,null);
+		assertFalse(ad.removeLinkModelElements(ip,fp,null));
+		assertFalse(ad.removeLinkModelElements(fp,ip,null));
 		
-		ad.createLinkModelElements(ip,d);
-		assertFalse(ad.removeLinkModelElements(d,ip));
-		assertTrue(ad.removeLinkModelElements(ip,d));
+		ad.createLinkModelElements(ip,a,null);
+		assertFalse(ad.removeLinkModelElements(a,ip,null));
+		assertTrue(ad.removeLinkModelElements(ip,a,null));
 		
-		ad.createLinkModelElements(a,fp);
-		assertFalse(ad.removeLinkModelElements(fp,a));
-		assertTrue(ad.removeLinkModelElements(a,fp));
+		ad.createLinkModelElements(ip,d,null);
+		assertFalse(ad.removeLinkModelElements(d,ip,null));
+		assertTrue(ad.removeLinkModelElements(ip,d,null));
 		
-		ad.createLinkModelElements(d,fp);
-		assertFalse(ad.removeLinkModelElements(fp,d));
-		assertTrue(ad.removeLinkModelElements(d,fp));
+		ad.createLinkModelElements(a,fp,null);
+		assertFalse(ad.removeLinkModelElements(fp,a,null));
+		assertTrue(ad.removeLinkModelElements(a,fp,null));
 		
-		ad.createLinkModelElements(fp,a);
-		assertFalse(ad.removeLinkModelElements(fp,a));
-		assertFalse(ad.removeLinkModelElements(a,fp));
+		ad.createLinkModelElements(d,fp,null);
+		assertFalse(ad.removeLinkModelElements(fp,d,null));
+		assertTrue(ad.removeLinkModelElements(d,fp,null));
 		
-		ad.createLinkModelElements(fp,d);
-		assertFalse(ad.removeLinkModelElements(fp,d));
-		assertFalse(ad.removeLinkModelElements(d,fp));
+		ad.createLinkModelElements(fp,a,null);
+		assertFalse(ad.removeLinkModelElements(fp,a,null));
+		assertFalse(ad.removeLinkModelElements(a,fp,null));
 		
-		ad.createLinkModelElements(fp,ip);
-		assertFalse(ad.removeLinkModelElements(ip,fp));
-		assertFalse(ad.removeLinkModelElements(fp,ip));
+		ad.createLinkModelElements(fp,d,null);
+		assertFalse(ad.removeLinkModelElements(fp,d,null));
+		assertFalse(ad.removeLinkModelElements(d,fp,null));
 		
-		ad.createLinkModelElements(fp,fp2);
-		assertFalse(ad.removeLinkModelElements(fp,fp2));
-		assertFalse(ad.removeLinkModelElements(fp2,fp));
+		ad.createLinkModelElements(fp,ip,null);
+		assertFalse(ad.removeLinkModelElements(ip,fp,null));
+		assertFalse(ad.removeLinkModelElements(fp,ip,null));
+		
+		ad.createLinkModelElements(fp,fp2,null);
+		assertFalse(ad.removeLinkModelElements(fp,fp2,null));
+		assertFalse(ad.removeLinkModelElements(fp2,fp,null));
 		
 
 	}
@@ -858,31 +858,31 @@ public class TestActivityDiagram extends TestCase
 		ActivityDiagram.Decision d = createDecision();
 		ActivityDiagram.Synchro s= createSynchro();
 		
-		assertFalse(ad.areLinkableModelElements(a,a2));
-		assertFalse(ad.areLinkableModelElements(a2,a));
+		assertFalse(ad.areLinkableModelElements(a,a2,null));
+		assertFalse(ad.areLinkableModelElements(a2,a,null));
 		
 		ad.addModelElement(a);
 		
-		assertFalse(ad.areLinkableModelElements(a,a2));
-		assertFalse(ad.areLinkableModelElements(a2,a));
+		assertFalse(ad.areLinkableModelElements(a,a2,null));
+		assertFalse(ad.areLinkableModelElements(a2,a,null));
 		
 		ad.addModelElement(a2);	
 		
-		assertTrue(ad.areLinkableModelElements(a,a2));
-		assertTrue(ad.areLinkableModelElements(a2,a));
+		assertTrue(ad.areLinkableModelElements(a,a2,null));
+		assertTrue(ad.areLinkableModelElements(a2,a,null));
 		
-		ad.createLinkModelElements(a,a2);
-		assertFalse(ad.areLinkableModelElements(a,a2));
+		ad.createLinkModelElements(a,a2,null);
+		assertFalse(ad.areLinkableModelElements(a,a2,null));
 		
 		ad.addModelElement(a3);
 		assertFalse(ad.areLinkableActivityActivity(a,a3));
 		
 		ad.addModelElement(d);
-		ad.createLinkModelElements(a2,d);
+		ad.createLinkModelElements(a2,d,null);
 		assertFalse(ad.areLinkableActivityActivity(a2,a3));
 		
 		ad.addModelElement(s);
-		ad.createLinkModelElements(a2,s);
+		ad.createLinkModelElements(a2,s,null);
 		assertFalse(ad.areLinkableActivityActivity(a2,a3));
 	}
 	
@@ -903,7 +903,7 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.areLinkableActivityDecision(a,d));
 		assertTrue(ad.areLinkableActivityDecision(a,d2));
 		
-		ad.createLinkModelElements(a,d);
+		ad.createLinkModelElements(a,d,null);
 		assertFalse(ad.areLinkableActivityDecision(a,d));
 		assertTrue(ad.areLinkableActivityDecision(a2,d));
 		//assertFalse(ad.areLinkableActivityDecision(a2,d));
@@ -926,7 +926,7 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.areLinkableDecisionActivity(d,a));
 		assertTrue(ad.areLinkableDecisionActivity(d,a2));
 		
-		ad.createLinkModelElements(d,a);
+		ad.createLinkModelElements(d,a,null);
 		assertFalse(ad.areLinkableDecisionActivity(d,a));
 		assertTrue(ad.areLinkableDecisionActivity(d,a2));
 	}
@@ -942,7 +942,7 @@ public class TestActivityDiagram extends TestCase
 		
 		assertTrue(ad.areLinkableDecisionDecision(d,d2));
 		
-		ad.createLinkModelElements(d,d2);
+		ad.createLinkModelElements(d,d2,null);
 		assertFalse(ad.areLinkableDecisionDecision(d,d2));
 	}
 	
@@ -963,11 +963,11 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.areLinkableInitialPointModelElement(ip,a));
 		assertTrue(ad.areLinkableInitialPointModelElement(ip,d));
 		
-		ad.createLinkModelElements(ip,a);
+		ad.createLinkModelElements(ip,a,null);
 		assertFalse(ad.areLinkableInitialPointModelElement(ip,a));
 		assertFalse(ad.areLinkableInitialPointModelElement(ip,d));
 		
-		ad.createLinkModelElements(ip,fp);
+		ad.createLinkModelElements(ip,fp,null);
 		assertFalse(ad.areLinkableInitialPointModelElement(ip,fp));
 		
 	}
@@ -986,12 +986,12 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.areLinkableInitialPointModelElement(ip,a));
 		assertTrue(ad.areLinkableInitialPointDecision(ip,d));
 		
-		ad.createLinkModelElements(ip,d);
+		ad.createLinkModelElements(ip,d,null);
 		assertFalse(ad.areLinkableInitialPointDecision(ip,d));
 		assertFalse(ad.areLinkableInitialPointModelElement(ip,a));
 		
-		ad.removeLinkModelElements(ip,d);
-		ad.createLinkModelElements(a,d);
+		ad.removeLinkModelElements(ip,d,null);
+		ad.createLinkModelElements(a,d,null);
 		assertFalse(ad.areLinkableInitialPointDecision(ip,d));
 	}
 
@@ -1009,11 +1009,11 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.areLinkableSynchroModelElement(s,a));
 		assertTrue(ad.areLinkableSynchroDecision(s,d));
 		
-		ad.createLinkModelElements(s,d);
+		ad.createLinkModelElements(s,d,null);
 		assertFalse(ad.areLinkableSynchroDecision(s,d));
 		
-		ad.removeLinkModelElements(s,d);
-		ad.createLinkModelElements(a,d);
+		ad.removeLinkModelElements(s,d,null);
+		ad.createLinkModelElements(a,d,null);
 		assertFalse(ad.areLinkableSynchroDecision(s,d));
 	}
 	
@@ -1039,12 +1039,12 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.areLinkableModelElementFinalPoint(a,fp));
 		assertTrue(ad.areLinkableModelElementFinalPoint(d,fp));
 		
-		ad.createLinkModelElements(a,fp);
+		ad.createLinkModelElements(a,fp,null);
 		assertFalse(ad.areLinkableModelElementFinalPoint(a,fp));
 		assertTrue(ad.areLinkableModelElementFinalPoint(d,fp));
 		
 		
-		ad.createLinkModelElements(ip,fp);
+		ad.createLinkModelElements(ip,fp,null);
 		assertTrue(ad.areLinkableModelElementFinalPoint(ip,fp));
 		
 	}
@@ -1066,70 +1066,70 @@ public class TestActivityDiagram extends TestCase
 		ActivityDiagram.FinalPoint fp2 = createFinalPoint();
 		
 
-		assertFalse(ad.areLinkableModelElements(a,a2));
-		assertFalse(ad.areLinkableModelElements(a2,a));
+		assertFalse(ad.areLinkableModelElements(a,a2,null));
+		assertFalse(ad.areLinkableModelElements(a2,a,null));
 		
 		ad.addModelElement(a);
 		
-		assertFalse(ad.areLinkableModelElements(a,a2));
-		assertFalse(ad.areLinkableModelElements(a2,a));
+		assertFalse(ad.areLinkableModelElements(a,a2,null));
+		assertFalse(ad.areLinkableModelElements(a2,a,null));
 		
 		ad.addModelElement(a2);	
 		
-		assertTrue(ad.areLinkableModelElements(a,a2));
-		assertTrue(ad.areLinkableModelElements(a2,a));
+		assertTrue(ad.areLinkableModelElements(a,a2,null));
+		assertTrue(ad.areLinkableModelElements(a2,a,null));
 		
-		ad.createLinkModelElements(a,a2);
-		assertFalse(ad.areLinkableModelElements(a,a2));
+		ad.createLinkModelElements(a,a2,null);
+		assertFalse(ad.areLinkableModelElements(a,a2,null));
 		
 		ad.addModelElement(d);
 		ad.addModelElement(d2);
 		
-		assertTrue(ad.areLinkableModelElements(d,d2));
-		assertTrue(ad.areLinkableModelElements(d2,d));
-		assertFalse(ad.areLinkableModelElements(a,d));
-		assertTrue(ad.areLinkableModelElements(d,a));
+		assertTrue(ad.areLinkableModelElements(d,d2,null));
+		assertTrue(ad.areLinkableModelElements(d2,d,null));
+		assertFalse(ad.areLinkableModelElements(a,d,null));
+		assertTrue(ad.areLinkableModelElements(d,a,null));
 		
-		ad.createLinkModelElements(a2,d);
-		assertFalse(ad.areLinkableModelElements(a2,d));
-		assertFalse(ad.areLinkableModelElements(a3,d));
+		ad.createLinkModelElements(a2,d,null);
+		assertFalse(ad.areLinkableModelElements(a2,d,null));
+		assertFalse(ad.areLinkableModelElements(a3,d,null));
 		
 		ad.addModelElement(a3);
-		assertTrue(ad.areLinkableModelElements(d,a3));
+		assertTrue(ad.areLinkableModelElements(d,a3,null));
 		
-		ad.createLinkModelElements(d,a3);
-		assertTrue(ad.areLinkableModelElements(d,a));
+		ad.createLinkModelElements(d,a3,null);
+		assertTrue(ad.areLinkableModelElements(d,a,null));
 
 		
 		ad.addModelElement(s);
-		assertTrue(ad.areLinkableModelElements(s,a3));
-		assertTrue(ad.areLinkableModelElements(s,a));
+		assertTrue(ad.areLinkableModelElements(s,a3,null));
+		assertTrue(ad.areLinkableModelElements(s,a,null));
 
 		
 		ad.addModelElement(ip);
-		assertFalse(ad.areLinkableModelElements(a,ip));
-		assertFalse(ad.areLinkableModelElements(d,ip));
-		assertTrue(ad.areLinkableModelElements(ip,a));
-		ad.createLinkModelElements(ip,a);
-		assertFalse(ad.areLinkableModelElements(ip,a));
-		assertFalse(ad.areLinkableModelElements(ip,a2));
-		assertFalse(ad.areLinkableModelElements(ip,d));
+		assertFalse(ad.areLinkableModelElements(a,ip,null));
+		assertFalse(ad.areLinkableModelElements(d,ip,null));
+		assertTrue(ad.areLinkableModelElements(ip,a,null));
+		ad.createLinkModelElements(ip,a,null);
+		assertFalse(ad.areLinkableModelElements(ip,a,null));
+		assertFalse(ad.areLinkableModelElements(ip,a2,null));
+		assertFalse(ad.areLinkableModelElements(ip,d,null));
 		
 		ad.addModelElement(fp);
 		ad.addModelElement(fp2);
-		assertFalse(ad.areLinkableModelElements(fp,a));
-		assertFalse(ad.areLinkableModelElements(fp,d));
-		assertFalse(ad.areLinkableModelElements(fp,ip));
-		assertFalse(ad.areLinkableModelElements(fp,fp2));
-		assertFalse(ad.areLinkableModelElements(ip,fp));
-		assertFalse(ad.areLinkableModelElements(a,fp));
-		ad.createLinkModelElements(a,fp);
-		assertFalse(ad.areLinkableModelElements(a,fp));
-		assertFalse(ad.areLinkableModelElements(a2,fp));
-		assertTrue(ad.areLinkableModelElements(d,fp));
-		ad.createLinkModelElements(d,fp);
-		assertFalse(ad.areLinkableModelElements(d,fp));
-		assertTrue(ad.areLinkableModelElements(d2,fp));
+		assertFalse(ad.areLinkableModelElements(fp,a,null));
+		assertFalse(ad.areLinkableModelElements(fp,d,null));
+		assertFalse(ad.areLinkableModelElements(fp,ip,null));
+		assertFalse(ad.areLinkableModelElements(fp,fp2,null));
+		assertFalse(ad.areLinkableModelElements(ip,fp,null));
+		assertFalse(ad.areLinkableModelElements(a,fp,null));
+		ad.createLinkModelElements(a,fp,null);
+		assertFalse(ad.areLinkableModelElements(a,fp,null));
+		assertFalse(ad.areLinkableModelElements(a2,fp,null));
+		assertTrue(ad.areLinkableModelElements(d,fp,null));
+		ad.createLinkModelElements(d,fp,null);
+		assertFalse(ad.areLinkableModelElements(d,fp,null));
+		assertTrue(ad.areLinkableModelElements(d2,fp,null));
 
 	}
 	
@@ -1151,58 +1151,58 @@ public class TestActivityDiagram extends TestCase
 		ad.addModelElement(d);
 		ad.addModelElement(s);
 		
-		assertFalse(ad.existsLinkModelElements(a,a2));
-		assertFalse(ad.existsLinkModelElements(a2,a));
-		assertFalse(ad.existsLinkModelElements(d,a));
-		assertFalse(ad.existsLinkModelElements(a,d));
+		assertFalse(ad.existsLinkModelElements(a,a2,null));
+		assertFalse(ad.existsLinkModelElements(a2,a,null));
+		assertFalse(ad.existsLinkModelElements(d,a,null));
+		assertFalse(ad.existsLinkModelElements(a,d,null));
 
-		assertFalse(ad.existsLinkModelElements(a,s));
-		assertFalse(ad.existsLinkModelElements(s,a));
+		assertFalse(ad.existsLinkModelElements(a,s,null));
+		assertFalse(ad.existsLinkModelElements(s,a,null));
 
-		assertFalse(ad.existsLinkModelElements(ip,a));
-		assertFalse(ad.existsLinkModelElements(ip,d));
-		assertFalse(ad.existsLinkModelElements(a,fp));
-		assertFalse(ad.existsLinkModelElements(d,fp));
-
-		
-		ad.createLinkModelElements(a,a2);
-		assertTrue(ad.existsLinkModelElements(a,a2));
-		assertFalse(ad.existsLinkModelElements(a2,a));
-		
-		ad.removeLinkModelElements(a,a2);
-		assertFalse(ad.existsLinkModelElements(a,a2));
-		
-		ad.createLinkModelElements(a,d);
-		ad.createLinkModelElements(d,a2);
-		assertTrue(ad.existsLinkModelElements(a,d));
-		assertFalse(ad.existsLinkModelElements(d,a));
-		assertTrue(ad.existsLinkModelElements(d,a2));
-		assertFalse(ad.existsLinkModelElements(a2,d));
+		assertFalse(ad.existsLinkModelElements(ip,a,null));
+		assertFalse(ad.existsLinkModelElements(ip,d,null));
+		assertFalse(ad.existsLinkModelElements(a,fp,null));
+		assertFalse(ad.existsLinkModelElements(d,fp,null));
 
 		
-		ad.createLinkModelElements(a,s);
-		ad.createLinkModelElements(s,a2);
-		assertFalse(ad.existsLinkModelElements(a,s));
-		assertFalse(ad.existsLinkModelElements(s,a));
-		assertTrue(ad.existsLinkModelElements(s,a2));
-		assertFalse(ad.existsLinkModelElements(a2,s));
+		ad.createLinkModelElements(a,a2,null);
+		assertTrue(ad.existsLinkModelElements(a,a2,null));
+		assertFalse(ad.existsLinkModelElements(a2,a,null));
+		
+		ad.removeLinkModelElements(a,a2,null);
+		assertFalse(ad.existsLinkModelElements(a,a2,null));
+		
+		ad.createLinkModelElements(a,d,null);
+		ad.createLinkModelElements(d,a2,null);
+		assertTrue(ad.existsLinkModelElements(a,d,null));
+		assertFalse(ad.existsLinkModelElements(d,a,null));
+		assertTrue(ad.existsLinkModelElements(d,a2,null));
+		assertFalse(ad.existsLinkModelElements(a2,d,null));
 
 		
-		ad.createLinkModelElements(ip,a);
-		assertFalse(ad.existsLinkModelElements(ip,a));
-		assertFalse(ad.existsLinkModelElements(a,ip));
+		ad.createLinkModelElements(a,s,null);
+		ad.createLinkModelElements(s,a2,null);
+		assertFalse(ad.existsLinkModelElements(a,s,null));
+		assertFalse(ad.existsLinkModelElements(s,a,null));
+		assertTrue(ad.existsLinkModelElements(s,a2,null));
+		assertFalse(ad.existsLinkModelElements(a2,s,null));
+
 		
-		ad.createLinkModelElements(ip,d);
-		assertFalse(ad.existsLinkModelElements(ip,d));
-		assertFalse(ad.existsLinkModelElements(d,ip));
+		ad.createLinkModelElements(ip,a,null);
+		assertFalse(ad.existsLinkModelElements(ip,a,null));
+		assertFalse(ad.existsLinkModelElements(a,ip,null));
 		
-		ad.createLinkModelElements(a,fp);
-		assertFalse(ad.existsLinkModelElements(a,fp));
-		assertFalse(ad.existsLinkModelElements(fp,a));
+		ad.createLinkModelElements(ip,d,null);
+		assertFalse(ad.existsLinkModelElements(ip,d,null));
+		assertFalse(ad.existsLinkModelElements(d,ip,null));
 		
-		ad.createLinkModelElements(d,fp);
-		assertFalse(ad.existsLinkModelElements(d,fp));
-		assertFalse(ad.existsLinkModelElements(fp,d));	
+		ad.createLinkModelElements(a,fp,null);
+		assertFalse(ad.existsLinkModelElements(a,fp,null));
+		assertFalse(ad.existsLinkModelElements(fp,a,null));
+		
+		ad.createLinkModelElements(d,fp,null);
+		assertFalse(ad.existsLinkModelElements(d,fp,null));
+		assertFalse(ad.existsLinkModelElements(fp,d,null));	
 
 	}
 	
@@ -1218,16 +1218,16 @@ public class TestActivityDiagram extends TestCase
 		ad.addModelElement(a2);
 		ad.addModelElement(d);
 		ad.addModelElement(s);
-		assertTrue(ad.createLinkModelElements(a,a2));
+		assertTrue(ad.createLinkModelElements(a,a2,null));
 		
 		assertFalse(ad.setLinkLabel(a2,a,"false test"));
 		assertTrue(ad.setLinkLabel(a,a2,"true test"));
 		
-		ad.removeLinkModelElements(a,a2);
-		ad.createLinkModelElements(a,d);
-		ad.createLinkModelElements(d,a2);
-		ad.createLinkModelElements(a,s);
-		ad.createLinkModelElements(s,a2);
+		ad.removeLinkModelElements(a,a2,null);
+		ad.createLinkModelElements(a,d,null);
+		ad.createLinkModelElements(d,a2,null);
+		ad.createLinkModelElements(a,s,null);
+		ad.createLinkModelElements(s,a2,null);
 		
 		assertFalse(ad.setLinkLabel(d,a,"false test"));
 		assertTrue(ad.setLinkLabel(a,d,"true test"));
@@ -1249,7 +1249,7 @@ public class TestActivityDiagram extends TestCase
 		ad.addModelElement(a2);
 		ad.addModelElement(d);
 		ad.addModelElement(s);
-		ad.createLinkModelElements(a,a2);
+		ad.createLinkModelElements(a,a2,null);
 		
 		assertTrue(ad.getLinkLabel(a,a2)=="");
 		assertTrue(ad.getLinkLabel(a2,a)=="");
@@ -1258,10 +1258,10 @@ public class TestActivityDiagram extends TestCase
 		assertTrue(ad.getLinkLabel(a,a2)=="true test");
 		assertTrue(ad.getLinkLabel(a2,a)=="");
 		
-		ad.removeLinkModelElements(a,a2);
-		ad.createLinkModelElements(a,d);
-		ad.createLinkModelElements(d,a2);
-		ad.createLinkModelElements(s,a2);
+		ad.removeLinkModelElements(a,a2,null);
+		ad.createLinkModelElements(a,d,null);
+		ad.createLinkModelElements(d,a2,null);
+		ad.createLinkModelElements(s,a2,null);
 		
 		assertTrue(ad.getLinkLabel(a,d)=="");
 		assertTrue(ad.getLinkLabel(a,s)=="");

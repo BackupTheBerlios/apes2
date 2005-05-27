@@ -37,10 +37,14 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the flow diagram
  *
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class FlowDiagram extends SpemDiagram
 {
+	static public final int ROLE_ACTIVITY_UNDEFINED_LINK_TYPE =  0x00000000;
+	static public final int ROLE_ACTIVITY_PERFORMER_LINK_TYPE =  0x00000001;
+	static public final int ROLE_ACTIVITY_ASSISTANT_LINK_TYPE =  0x00000010;
+	
 	private Vector mElements = new Vector();
 
 	public FlowDiagram()
@@ -301,14 +305,14 @@ public class FlowDiagram extends SpemDiagram
 	
 	
 	
-	public boolean createLinkModelElements(ModelElement source,ModelElement target)
+	public boolean createLinkModelElements(ModelElement source,ModelElement target, Object extras)
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
 		if(source instanceof ProcessRole)
 		{
 			if(target instanceof Activity)
 			{
-				return createLinkProcessRoleActivity((ProcessRole)source,(Activity)target);
+				return createLinkProcessRoleActivity((ProcessRole)source,(Activity)target, extras);
 			}
 			else if(target instanceof WorkProduct)
 			{
@@ -353,21 +357,36 @@ public class FlowDiagram extends SpemDiagram
 	 *
 	 * @param r the Process Role to be linked
 	 * @param a the Activity to be linked
+	 * @param extras can be used to specify extra information s
+	 * 	such as the type of the link to create 
+	 * 	when there are multiple choices
 	 * @return true if the link can be created, false otherwise
 	 */
-	public boolean createLinkProcessRoleActivity(ProcessRole r, Activity a)
+	public boolean createLinkProcessRoleActivity(ProcessRole r, Activity a, Object extras)
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::createLinkProcessRoleActivity "+r+" "+a);
-		if(areLinkableProcessRoleActivity(r,a))
+		if(areLinkableProcessRoleActivity(r,a,extras))
 		{
-			if(a.getOwner() != null)
+			int val = ((Integer)extras).intValue();
+			if(val == ROLE_ACTIVITY_PERFORMER_LINK_TYPE)
 			{
-				a.getOwner().removeFeature(a);
-				a.setOwner(null);	
+				if(a.getOwner() != null)
+				{
+					a.getOwner().removeFeature(a);
+					a.setOwner(null);	
+				}
+				r.addFeature(a);
+				a.setOwner(r);
+				return true;	
 			}
-			r.addFeature(a);
-			a.setOwner(r);
-			return true;	
+			else if(val == ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)
+			{
+				if(r.addParticipation(a))
+				{
+					a.addAssistant(r);
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -377,6 +396,9 @@ public class FlowDiagram extends SpemDiagram
 	 *
 	 * @param w the work product to be linked
 	 * @param a the activity to be linked in input
+	 * @param extras can be used to specify extra informations 
+	 * 	such as the type of the link to create 
+	 * 	when there are multiple choices
 	 * @return true if the link can be created, false otherwise
 	 */
 	public boolean createLinkWorkProductActivityInput(WorkProduct w, Activity a)
@@ -438,7 +460,7 @@ public class FlowDiagram extends SpemDiagram
 		return false;
 	}
 	
-	public boolean removeLinkModelElements(ModelElement source,ModelElement target)
+	public boolean removeLinkModelElements(ModelElement source,ModelElement target, Object extras)
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
 		if(source instanceof ProcessRole)
@@ -485,13 +507,13 @@ public class FlowDiagram extends SpemDiagram
 	 */
 	public boolean removeLinkProcessRoleActivity(ProcessRole r, Activity a)
 	{
-		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkProcessRoleActivity "+r+" "+a);
+		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> FlowDiagram("+getName()+")::removeLinkProcessRoleActivity "+r+" "+a);	
 		if (containsModelElement(r) && containsModelElement(a))
 		{
 			if(r.removeFeature(a))
 			{
 				a.setOwner(null);
-				
+		
 				if( a.getParent() != null && a.getParent() instanceof WorkDefinition )
 				{
 					WorkDefinition w = (WorkDefinition)a.getParent();
@@ -502,6 +524,11 @@ public class FlowDiagram extends SpemDiagram
 					}
 				}
 				
+				return true;
+			}
+			else if(r.removeParticipation(a))
+			{
+				a.removeAssistant(r);
 				return true;
 			}
 		}
@@ -592,13 +619,13 @@ public class FlowDiagram extends SpemDiagram
 		return false;
 	}
 	
-	public boolean areLinkableModelElements(ModelElement source,ModelElement target)
+	public boolean areLinkableModelElements(ModelElement source,ModelElement target, Object extras)
 	{
 		if(source instanceof ProcessRole)
 		{
 			if(target instanceof Activity)
 			{
-				return areLinkableProcessRoleActivity((ProcessRole)source,(Activity)target);
+				return areLinkableProcessRoleActivity((ProcessRole)source,(Activity)target,extras);
 			}
 		}
 		else if(source instanceof WorkProduct)
@@ -638,47 +665,100 @@ public class FlowDiagram extends SpemDiagram
 	 * @param a the Activity to be tested
 	 * @return true if the link can be created, false otherwise
 	 */
-	public boolean areLinkableProcessRoleActivity(ProcessRole r, Activity a)
+	public boolean areLinkableProcessRoleActivity(ProcessRole r, Activity a, Object extras)
 	{
-		if (containsModelElement(r) && containsModelElement(a))
+		if (containsModelElement(r) && containsModelElement(a) && extras != null && extras instanceof Integer)
 		{
-			if( a.getParent() instanceof WorkDefinition )
-			{
-				WorkDefinition w = (WorkDefinition)a.getParent();
-				
-				if(r == w.getOwner() && a.getOwner() == w.getOwner())
-				{
-					ErrorManager.getInstance().printKey("errorRoleAlreadyLinkedWithParentWork");
-					return false;
-				}
-				else if(a.getOwner() != null && a.getOwner() != w.getOwner())
-				{
-					ErrorManager.getInstance().printKey("errorActivityAlreadyHaveARole");
-					return false;
-				}
-			}
-			else
-			{
-				if(a.getOwner() != null)
-				{
-					ErrorManager.getInstance().printKey("errorActivityAlreadyHaveARole");
-					return false;				
-				}
-			}
+			int val = ((Integer)extras).intValue();
 			
-			if (!r.containsFeature(a))
+			if(val == ROLE_ACTIVITY_PERFORMER_LINK_TYPE)
 			{
-				return true;
+				return canCreatePerformerLink(r, a);
 			}
-			
-			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
-			return false;
+			else if(val == ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)
+			{
+				return canCreateAssistantLink(r, a);
+			}
+			else if(val == (ROLE_ACTIVITY_ASSISTANT_LINK_TYPE | ROLE_ACTIVITY_PERFORMER_LINK_TYPE))
+			{
+				return canCreatePerformerLink(r,a) || canCreateAssistantLink(r,a);
+			}
 		}
-
+		
 		ErrorManager.getInstance().printKey("errorNotLinkableElements");
 		return false;
 	}
+
+	/**
+	 * @param r
+	 * @param a
+	 * @return
+	 */
+	protected boolean canCreatePerformerLink(ProcessRole r, Activity a) 
+	{
+		//if r is always paricipated to this activity, it can't be the performer
+		if(r.containsParticipation(a))
+		{
+			ErrorManager.getInstance().printKey("errorRolePerformerAndAssistant");
+			return false;
+		}
+		
+		//With our model, the parent of the activity must be a WorkDefinition
+		//but it's possible to have another behavior (for some unit tests for example)
+		if( a.getParent() instanceof WorkDefinition )
+		{
+			WorkDefinition w = (WorkDefinition)a.getParent();
+			
+			//the role is already the performer of the work definition
+			if(r == w.getOwner() && a.getOwner() == w.getOwner())
+			{
+				ErrorManager.getInstance().printKey("errorRoleAlreadyLinkedWithParentWork");
+				return false;
+			}
+			//this activity has already got a role
+			else if(a.getOwner() != null && a.getOwner() != w.getOwner())
+			{
+				ErrorManager.getInstance().printKey("errorActivityAlreadyHaveARole");
+				return false;
+			}
+		}
+		//in this case, we just test if the activity has already a performer
+		else
+		{
+			if(a.getOwner() != null)
+			{
+				ErrorManager.getInstance().printKey("errorActivityAlreadyHaveARole");
+				return false;				
+			}
+		}
+
+		// Already linked?
+		if (r.containsFeature(a))
+		{
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;
+		}
+		
+		return true;
+	}
 	
+	protected boolean canCreateAssistantLink(ProcessRole r, Activity a)
+	{
+		if(a.getOwner() == r)
+		{
+			ErrorManager.getInstance().printKey("errorRolePerformerAndAssistant");
+			return false;
+		}
+		
+		if(r.containsParticipation(a))
+		{
+			ErrorManager.getInstance().printKey("errorAlreadyLinkedElements");
+			return false;			
+		}
+		
+		return true;
+	}
+		
 	/**
 	 * Test if a link with a work product in input of an activity can be created
 	 *
@@ -764,13 +844,13 @@ public class FlowDiagram extends SpemDiagram
 		return false;
 	}
 	
-	public boolean existsLinkModelElements(ModelElement source,ModelElement target)
+	public boolean existsLinkModelElements(ModelElement source,ModelElement target, Object extras)
 	{
 		if(source instanceof ProcessRole)
 		{
 			if(target instanceof Activity)
 			{
-				return existsLinkProcessRoleActivity((ProcessRole)source,(Activity)target);
+				return existsLinkProcessRoleActivity((ProcessRole)source,(Activity)target, extras);
 			}
 		}
 		else if(source instanceof WorkProduct)
@@ -808,15 +888,26 @@ public class FlowDiagram extends SpemDiagram
 	 * @param a the Activity to be tested
 	 * @return true if the link exists, false otherwise
 	 */
-	public boolean existsLinkProcessRoleActivity(ProcessRole r, Activity a)
+	public boolean existsLinkProcessRoleActivity(ProcessRole r, Activity a, Object extras)
 	{
-		if (containsModelElement(r) && containsModelElement(a))
+		if (containsModelElement(r) && containsModelElement(a) && extras != null && extras instanceof Integer)
 		{
-			if (r.containsFeature(a))
+			int val = ((Integer)extras).intValue();
+			
+			if(val == ROLE_ACTIVITY_PERFORMER_LINK_TYPE)
 			{
-				return true;
+				return r.containsFeature(a);
+			}
+			else if(val == ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)
+			{
+				return r.containsParticipation(a);
+			}
+			else if (val == (ROLE_ACTIVITY_PERFORMER_LINK_TYPE | ROLE_ACTIVITY_ASSISTANT_LINK_TYPE))
+			{
+				return r.containsFeature(a) | r.containsParticipation(a);
 			}
 		}
+
 		return false;
 	}
 	

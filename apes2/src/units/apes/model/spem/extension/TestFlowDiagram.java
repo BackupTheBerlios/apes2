@@ -305,25 +305,46 @@ public class TestFlowDiagram extends TestCase
 	
 	public void testCreateLinkProcessRoleActivity()
 	{
-		ProcessRole pr = createProcessRole();
-		ProcessRole pr2 = createProcessRole();
+		ProcessRole pr_performer1 = createProcessRole();
+		ProcessRole pr_performer2 = createProcessRole();
+		ProcessRole pr_assistant1 = createProcessRole();
+		ProcessRole pr_assistant2 = createProcessRole();
+		
 		Activity a = createActivity();
 		Activity a2 = createActivity();
 		FlowDiagram cd = new FlowDiagram();
 		
-		assertFalse(cd.createLinkProcessRoleActivity(pr,a));
+		/* Try to link elements which are not in the diagram */
+		assertFalse(cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
-		cd.addProcessRole(pr);
-		assertFalse(cd.createLinkProcessRoleActivity(pr,a));
+		/* Add an assistant link : pr_assistant1 -> a */
+		cd.addProcessRole(pr_assistant1);
+		assertFalse(cd.createLinkProcessRoleActivity(pr_assistant2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
 		cd.addActivity(a);
-		assertFalse(cd.createLinkProcessRoleActivity(pr2,a));
-		assertTrue(cd.createLinkProcessRoleActivity(pr,a));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_assistant2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertTrue(cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		
+		cd.addProcessRole(pr_assistant2);
+		
+		/* Add a performer link : pr_performer1 -> a */
+		cd.addProcessRole(pr_performer1);
+		assertFalse(cd.createLinkProcessRoleActivity(pr_performer2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		
 		cd.addActivity(a2);
-		assertTrue(cd.createLinkProcessRoleActivity(pr,a2));
+		assertTrue(cd.createLinkProcessRoleActivity(pr_performer1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		
-		assertFalse(cd.createLinkProcessRoleActivity(pr,a));
+		cd.addProcessRole(pr_performer2);
+		assertFalse(cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_performer2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_assistant2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 	}
 	
 	public void testCreateLinkWorkProductActivityInput()
@@ -387,23 +408,31 @@ public class TestFlowDiagram extends TestCase
 	
 	public void testRemoveLinkProcessRoleActivity()
 	{
-		ProcessRole pr = createProcessRole();
-		ProcessRole pr2 = createProcessRole();
+		ProcessRole pr_performer1 = createProcessRole();
+		ProcessRole pr_performer2 = createProcessRole();
+		ProcessRole pr_assistant1 = createProcessRole();
+		ProcessRole pr_assistant2 = createProcessRole();
 		Activity a = createActivity();
 		FlowDiagram cd = new FlowDiagram();
 		
-		assertFalse(cd.removeLinkProcessRoleActivity(pr,a));
+		assertFalse(cd.removeLinkProcessRoleActivity(pr_performer1,a));
 		
-		cd.addProcessRole(pr);
-		assertFalse(cd.removeLinkProcessRoleActivity(pr,a));
+		cd.addProcessRole(pr_performer1);
+		cd.addProcessRole(pr_performer2);
+		cd.addProcessRole(pr_assistant1);
+		cd.addProcessRole(pr_assistant2);
+		assertFalse(cd.removeLinkProcessRoleActivity(pr_performer1,a));
 		cd.addActivity(a);
-		assertFalse(cd.removeLinkProcessRoleActivity(pr,a));
-		assertFalse(cd.removeLinkProcessRoleActivity(pr2,a));
+		assertFalse(cd.removeLinkProcessRoleActivity(pr_performer1,a));
+		assertFalse(cd.removeLinkProcessRoleActivity(pr_performer2,a));
 		
-		cd.createLinkProcessRoleActivity(pr,a);
+		cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
+		cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+		cd.createLinkProcessRoleActivity(pr_assistant2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
 		
-		assertTrue(cd.removeLinkProcessRoleActivity(pr,a));
-		assertFalse(cd.removeLinkProcessRoleActivity(pr,a));
+		assertTrue(cd.removeLinkProcessRoleActivity(pr_assistant1,a));
+		assertTrue(cd.removeLinkProcessRoleActivity(pr_performer1,a));
+		assertTrue(cd.removeLinkProcessRoleActivity(pr_assistant2,a));
 	}
 	
 	/*public void testRemoveLinkProcessRoleWorkProduct()
@@ -485,26 +514,53 @@ public class TestFlowDiagram extends TestCase
 	
 	public void testAreLinkableProcessRoleActivity()
 	{
-		ProcessRole pr = createProcessRole();
-		ProcessRole pr2 = createProcessRole();
+		ProcessRole pr_performer1 = createProcessRole();
+		ProcessRole pr_performer2 = createProcessRole();
+		ProcessRole pr_assistant1 = createProcessRole();
+		ProcessRole pr_assistant2 = createProcessRole();
 		Activity a = createActivity();
 		Activity a2 = createActivity();
 		FlowDiagram cd = new FlowDiagram();
 		
-		assertFalse(cd.areLinkableProcessRoleActivity(pr,a));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
-		cd.addProcessRole(pr);
-		assertFalse(cd.areLinkableProcessRoleActivity(pr,a));
+		cd.addProcessRole(pr_performer1);
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
 		cd.addActivity(a);
-		assertFalse(cd.areLinkableProcessRoleActivity(pr2,a));
-		assertTrue(cd.areLinkableProcessRoleActivity(pr,a));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer2,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
-		cd.createLinkProcessRoleActivity(pr,a);
-		assertFalse(cd.areLinkableProcessRoleActivity(pr,a));
+		
+		cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
 		cd.addActivity(a2);
-		assertTrue(cd.areLinkableProcessRoleActivity(pr,a2));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_performer1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_performer1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		
+		cd.addProcessRole(pr_assistant1);
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_assistant1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_assistant1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		
+		cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_assistant1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(cd.areLinkableProcessRoleActivity(pr_assistant1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		
+		cd.createLinkProcessRoleActivity(pr_assistant1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_assistant1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableProcessRoleActivity(pr_assistant1,a2,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 	}
 	
 	/*public void testAreLinkableProcessRoleWorkProduct()
@@ -573,25 +629,55 @@ public class TestFlowDiagram extends TestCase
 	
 	public void testExistsLinkProcessRoleActivity()
 	{
-		ProcessRole pr = createProcessRole();
-		ProcessRole pr2 = createProcessRole();
+		ProcessRole pr_performer1 = createProcessRole();
+		ProcessRole pr_assistant1 = createProcessRole();
+		
 		Activity a = createActivity();
 		FlowDiagram cd = new FlowDiagram();
 		
-		assertFalse(cd.existsLinkProcessRoleActivity(pr,a));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_performer1,a, 
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_assistant1,a, 
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
-		cd.addProcessRole(pr);
-		assertFalse(cd.existsLinkProcessRoleActivity(pr,a));
+		cd.addProcessRole(pr_performer1);
+		cd.addProcessRole(pr_assistant1);
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_performer1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_assistant1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
 		cd.addActivity(a);
-		assertFalse(cd.existsLinkProcessRoleActivity(pr,a));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_performer1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
-		cd.createLinkProcessRoleActivity(pr,a);
-		assertTrue(cd.existsLinkProcessRoleActivity(pr,a));
-		assertFalse(cd.existsLinkProcessRoleActivity(pr2,a));
+		cd.createLinkProcessRoleActivity(pr_assistant1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE));
+		assertTrue(cd.existsLinkProcessRoleActivity(pr_assistant1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_assistant1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_performer1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 		
-		cd.removeLinkProcessRoleActivity(pr,a);
-		assertFalse(cd.existsLinkProcessRoleActivity(pr,a));
+		cd.createLinkProcessRoleActivity(pr_performer1,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+		assertTrue(cd.existsLinkProcessRoleActivity(pr_performer1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_performer1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertTrue(cd.existsLinkProcessRoleActivity(pr_assistant1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertTrue(cd.existsLinkProcessRoleActivity(pr_assistant1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_assistant1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		
+		cd.removeLinkProcessRoleActivity(pr_performer1,a);
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_performer1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
+
+		cd.removeLinkProcessRoleActivity(pr_assistant1,a);
+		assertFalse(cd.existsLinkProcessRoleActivity(pr_assistant1,a,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE)));
 	}
 	
 	/*public void testExistsLinkProcessRoleWorkProduct()
@@ -695,34 +781,34 @@ public class TestFlowDiagram extends TestCase
 		Activity a = createActivity();
 		WorkProduct wp = createWorkProduct();
 		
-		assertFalse(cd.createLinkModelElements(pr,a));
-		assertFalse(cd.createLinkModelElements(pr,wp));
-		assertFalse(cd.createLinkModelElements(wp,a));
-		assertFalse(cd.createLinkModelElements(a,wp));
+		assertFalse(cd.createLinkModelElements(pr,a,null));
+		assertFalse(cd.createLinkModelElements(pr,wp,null));
+		assertFalse(cd.createLinkModelElements(wp,a,null));
+		assertFalse(cd.createLinkModelElements(a,wp,null));
 		
 		cd.addModelElement(a);
-		assertFalse(cd.createLinkModelElements(pr,a));
-		assertFalse(cd.createLinkModelElements(wp,a));
+		assertFalse(cd.createLinkModelElements(pr,a,null));
+		assertFalse(cd.createLinkModelElements(wp,a,null));
 		
 		cd.addModelElement(wp);
-		assertTrue(cd.createLinkModelElements(wp,a));
-		assertFalse(cd.createLinkModelElements(wp,a));
-		assertTrue(cd.createLinkModelElements(a,wp));
-		assertFalse(cd.createLinkModelElements(a,wp));
-		assertFalse(cd.createLinkModelElements(pr,a));
+		assertTrue(cd.createLinkModelElements(wp,a,null));
+		assertFalse(cd.createLinkModelElements(wp,a,null));
+		assertTrue(cd.createLinkModelElements(a,wp,null));
+		assertFalse(cd.createLinkModelElements(a,wp,null));
+		assertFalse(cd.createLinkModelElements(pr,a,null));
 		
 		cd.addModelElement(pr);
-		assertTrue(cd.createLinkModelElements(pr,a));
-		assertFalse(cd.createLinkModelElements(a,pr));
-		assertFalse(cd.createLinkModelElements(pr,wp));
-		assertFalse(cd.createLinkModelElements(wp,pr));
+		assertTrue(cd.createLinkModelElements(pr,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.createLinkModelElements(a,pr,null));
+		assertFalse(cd.createLinkModelElements(pr,wp,null));
+		assertFalse(cd.createLinkModelElements(wp,pr,null));
 		
-		assertFalse(cd.createLinkModelElements(a,a));
-		assertFalse(cd.createLinkModelElements(pr,pr));
-		assertFalse(cd.createLinkModelElements(wp,wp));
+		assertFalse(cd.createLinkModelElements(a,a,null));
+		assertFalse(cd.createLinkModelElements(pr,pr,null));
+		assertFalse(cd.createLinkModelElements(wp,wp,null));
 		
 		cd.addModelElement(pr2);
-		assertFalse(cd.createLinkModelElements(pr2,wp));
+		assertFalse(cd.createLinkModelElements(pr2,wp,null));
 	}
 		
 	public void testRemoveLinkModelElements()
@@ -733,32 +819,32 @@ public class TestFlowDiagram extends TestCase
 		Activity a = createActivity();
 		WorkProduct wp = createWorkProduct();
 		
-		assertFalse(cd.removeLinkModelElements(pr,a));
-		assertFalse(cd.removeLinkModelElements(pr,wp));
-		assertFalse(cd.removeLinkModelElements(wp,a));
-		assertFalse(cd.removeLinkModelElements(a,wp));
+		assertFalse(cd.removeLinkModelElements(pr,a,null));
+		assertFalse(cd.removeLinkModelElements(pr,wp,null));
+		assertFalse(cd.removeLinkModelElements(wp,a,null));
+		assertFalse(cd.removeLinkModelElements(a,wp,null));
 		
 		cd.addModelElement(a);	
 		cd.addModelElement(wp);
 		
-		assertFalse(cd.removeLinkModelElements(a,wp));	
-		cd.createLinkModelElements(a,wp);
-		assertTrue(cd.removeLinkModelElements(a,wp));
-		assertFalse(cd.removeLinkModelElements(a,wp));
+		assertFalse(cd.removeLinkModelElements(a,wp,null));	
+		cd.createLinkModelElements(a,wp,null);
+		assertTrue(cd.removeLinkModelElements(a,wp,null));
+		assertFalse(cd.removeLinkModelElements(a,wp,null));
 		
-		assertFalse(cd.removeLinkModelElements(wp,a));	
-		cd.createLinkModelElements(wp,a);
-		assertTrue(cd.removeLinkModelElements(wp,a));
-		assertFalse(cd.removeLinkModelElements(wp,a));	
+		assertFalse(cd.removeLinkModelElements(wp,a,null));	
+		cd.createLinkModelElements(wp,a,null);
+		assertTrue(cd.removeLinkModelElements(wp,a,null));
+		assertFalse(cd.removeLinkModelElements(wp,a,null));	
 		
 		cd.addModelElement(pr);
 		
-		assertFalse(cd.removeLinkModelElements(pr,a));
-		cd.createLinkModelElements(pr,a);
-		assertTrue(cd.removeLinkModelElements(pr,a));
-		assertFalse(cd.removeLinkModelElements(pr,a));
+		assertFalse(cd.removeLinkModelElements(pr,a,null));
+		cd.createLinkModelElements(pr,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+		assertTrue(cd.removeLinkModelElements(pr,a,null));
+		assertFalse(cd.removeLinkModelElements(pr,a,null));
 		
-		assertFalse(cd.removeLinkModelElements(pr,wp));
+		assertFalse(cd.removeLinkModelElements(pr,wp,null));
 		/*cd.createLinkModelElements(pr,wp);
 		assertTrue(cd.removeLinkModelElements(pr,wp));
 		assertFalse(cd.removeLinkModelElements(pr,wp));*/
@@ -771,28 +857,28 @@ public class TestFlowDiagram extends TestCase
 		Activity a = createActivity();
 		WorkProduct wp = createWorkProduct();
 		
-		assertFalse(cd.areLinkableModelElements(pr,a));
-		assertFalse(cd.areLinkableModelElements(pr,wp));
-		assertFalse(cd.areLinkableModelElements(wp,a));
-		assertFalse(cd.areLinkableModelElements(a,wp));
+		assertFalse(cd.areLinkableModelElements(pr,a,null));
+		assertFalse(cd.areLinkableModelElements(pr,wp,null));
+		assertFalse(cd.areLinkableModelElements(wp,a,null));
+		assertFalse(cd.areLinkableModelElements(a,wp,null));
 		
 		cd.addModelElement(a);	
 		cd.addModelElement(wp);
 		
-		assertFalse(cd.areLinkableModelElements(pr,a));
-		assertFalse(cd.areLinkableModelElements(pr,wp));
-		assertTrue(cd.areLinkableModelElements(wp,a));
-		assertTrue(cd.areLinkableModelElements(a,wp));
+		assertFalse(cd.areLinkableModelElements(pr,a,null));
+		assertFalse(cd.areLinkableModelElements(pr,wp,null));
+		assertTrue(cd.areLinkableModelElements(wp,a,null));
+		assertTrue(cd.areLinkableModelElements(a,wp,null));
 		
 		cd.addModelElement(pr);	
 		
-		assertTrue(cd.areLinkableModelElements(pr,a));
-		assertFalse(cd.areLinkableModelElements(pr,wp));
-		assertFalse(cd.areLinkableModelElements(a,pr));
-		assertFalse(cd.areLinkableModelElements(wp,pr));
+		assertTrue(cd.areLinkableModelElements(pr,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertFalse(cd.areLinkableModelElements(pr,wp,null));
+		assertFalse(cd.areLinkableModelElements(a,pr,null));
+		assertFalse(cd.areLinkableModelElements(wp,pr,null));
 		
-		cd.createLinkModelElements(pr,a);
-		assertFalse(cd.areLinkableModelElements(pr,a));
+		cd.createLinkModelElements(pr,a,null);
+		assertFalse(cd.areLinkableModelElements(pr,a,null));
 	}
 	
 	public void testExistsLinkModelElements()
@@ -806,33 +892,33 @@ public class TestFlowDiagram extends TestCase
 		cd.addModelElement(wp);
 		cd.addModelElement(pr);	
 		
-		assertFalse(cd.existsLinkModelElements(pr,a));
-		assertFalse(cd.existsLinkModelElements(pr,wp));
-		assertFalse(cd.existsLinkModelElements(wp,a));
-		assertFalse(cd.existsLinkModelElements(a,wp));
+		assertFalse(cd.existsLinkModelElements(pr,a,null));
+		assertFalse(cd.existsLinkModelElements(pr,wp,null));
+		assertFalse(cd.existsLinkModelElements(wp,a,null));
+		assertFalse(cd.existsLinkModelElements(a,wp,null));
 		
-		assertFalse(cd.existsLinkModelElements(pr,pr));
-		assertFalse(cd.existsLinkModelElements(a,a));
-		assertFalse(cd.existsLinkModelElements(wp,wp));
+		assertFalse(cd.existsLinkModelElements(pr,pr,null));
+		assertFalse(cd.existsLinkModelElements(a,a,null));
+		assertFalse(cd.existsLinkModelElements(wp,wp,null));
 		
-		cd.createLinkModelElements(pr,a);
-		assertTrue(cd.existsLinkModelElements(pr,a));
-		cd.removeLinkModelElements(pr,a);
-		assertFalse(cd.existsLinkModelElements(pr,a));
+		cd.createLinkModelElements(pr,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+		assertTrue(cd.existsLinkModelElements(pr,a,new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		cd.removeLinkModelElements(pr,a,null);
+		assertFalse(cd.existsLinkModelElements(pr,a,null));
 		
-		cd.createLinkModelElements(pr,wp);
-		assertFalse(cd.existsLinkModelElements(pr,wp));
+		cd.createLinkModelElements(pr,wp,null);
+		assertFalse(cd.existsLinkModelElements(pr,wp,null));
 		/*cd.removeLinkModelElements(pr,wp);
 		assertFalse(cd.existsLinkModelElements(pr,wp));*/
 		
-		cd.createLinkModelElements(wp,a);
-		assertTrue(cd.existsLinkModelElements(wp,a));
-		cd.removeLinkModelElements(wp,a);
-		assertFalse(cd.existsLinkModelElements(wp,a));
+		cd.createLinkModelElements(wp,a,null);
+		assertTrue(cd.existsLinkModelElements(wp,a,null));
+		cd.removeLinkModelElements(wp,a,null);
+		assertFalse(cd.existsLinkModelElements(wp,a,null));
 		
-		cd.createLinkModelElements(a,wp);
-		assertTrue(cd.existsLinkModelElements(a,wp));
-		cd.removeLinkModelElements(a,wp);
-		assertFalse(cd.existsLinkModelElements(a,wp));
+		cd.createLinkModelElements(a,wp,null);
+		assertTrue(cd.existsLinkModelElements(a,wp,null));
+		cd.removeLinkModelElements(a,wp,null);
+		assertFalse(cd.existsLinkModelElements(a,wp,null));
 	}
 }

@@ -45,14 +45,14 @@ import org.jgraph.graph.PortView;
  * This tool allows to create edges in the graph
  * It use the prototype design pattern to clone edges
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class EdgeTool extends Tool
 {
-	private JGraph mGraph;
-	private DefaultEdge mPrototype;
-	private EdgeHandler mHandler = new EdgeHandler();
-	private boolean mStable = true;
+	protected JGraph mGraph;
+	protected DefaultEdge mPrototype;
+	protected EdgeHandler mHandler = new EdgeHandler();
+	protected boolean mStable = true;
 	
 	/**
 	 * Build a new EdgeTool
@@ -92,10 +92,10 @@ public class EdgeTool extends Tool
 		return oldStable;
 	}
 
-	private class EdgeHandler extends BasicMarqueeHandler
+	protected class EdgeHandler extends BasicMarqueeHandler
 	{
-		private PortView mPort, mFirstPort;
-		private Point mStart, mCurrent;
+		protected PortView mPort, mFirstPort;
+		protected Point mStart, mCurrent;
 		
 		public boolean isForceMarqueeEvent(MouseEvent e)
 		{
@@ -146,9 +146,7 @@ public class EdgeTool extends Tool
 				Map attributes = ApesGraphConstants.createMap();
 				attributes.put(edge, attr);
 
-				Object[] arg = new Object[]{edge};
-
-				((SpemGraphAdapter)mGraph.getModel()).insert(arg, attributes, cs, null, null);
+				createEdge(edge, cs, attributes);
 
 				e.consume();
 				
@@ -163,6 +161,12 @@ public class EdgeTool extends Tool
 			mStart = mCurrent = null;
 
 			fireToolFinished();
+		}
+
+
+		protected void createEdge(DefaultEdge edge, ConnectionSet cs, Map attributes) 
+		{
+			((SpemGraphAdapter)mGraph.getModel()).insert(new Object[]{edge}, attributes, cs, null, null);
 		}
 
 		public void mouseDragged(MouseEvent e)

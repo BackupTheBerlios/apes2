@@ -402,7 +402,9 @@ public class TestWorkDefinitionDiagram extends TestCase
 		fd.addActivity(a3);
 		fd.addProcessRole(pr3);
 		fd.addProcessRole(pr4);
-		fd.createLinkModelElements(pr4,a2);
+		fd.createLinkModelElements(pr4,a2,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+
 		
 		/* wdd : pr  -> wd
 		 * wdd : pr  -> wd2
@@ -592,7 +594,9 @@ public class TestWorkDefinitionDiagram extends TestCase
 		fd.addActivity(a3);
 		fd.addProcessRole(pr3);
 		fd.addProcessRole(pr4);
-		fd.createLinkModelElements(pr4,a2);
+		fd.createLinkModelElements(pr4,a2,
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+
 		
 
 		wdd.addWorkDefinition(awd);
@@ -1001,58 +1005,58 @@ public class TestWorkDefinitionDiagram extends TestCase
 		StateMachine sm = createWorkProductState();
 		
 		sm.setContext(wp2);
-		assertFalse(wdd.createLinkModelElements(pr,wd));
-		assertFalse(wdd.createLinkModelElements(pr,wp));
-		assertFalse(wdd.createLinkModelElements(pr,sm));
-		assertFalse(wdd.createLinkModelElements(wp,wd));
-		assertFalse(wdd.createLinkModelElements(wp,sm));
-		assertFalse(wdd.createLinkModelElements(wd,wp));
-		assertFalse(wdd.createLinkModelElements(sm,wp));
-		assertFalse(wdd.createLinkModelElements(sm,wd));
-		assertFalse(wdd.createLinkModelElements(wd,sm));
+		assertFalse(wdd.createLinkModelElements(pr,wd,null));
+		assertFalse(wdd.createLinkModelElements(pr,wp,null));
+		assertFalse(wdd.createLinkModelElements(pr,sm,null));
+		assertFalse(wdd.createLinkModelElements(wp,wd,null));
+		assertFalse(wdd.createLinkModelElements(wp,sm,null));
+		assertFalse(wdd.createLinkModelElements(wd,wp,null));
+		assertFalse(wdd.createLinkModelElements(sm,wp,null));
+		assertFalse(wdd.createLinkModelElements(sm,wd,null));
+		assertFalse(wdd.createLinkModelElements(wd,sm,null));
 		
 		
 		wdd.addModelElement(wd);
-		assertFalse(wdd.createLinkModelElements(pr,wd));
-		assertFalse(wdd.createLinkModelElements(wp,wd));
-		assertFalse(wdd.createLinkModelElements(sm,wd));
-		assertFalse(wdd.createLinkModelElements(wd,pr));
-		assertFalse(wdd.createLinkModelElements(wd,wp));
-		assertFalse(wdd.createLinkModelElements(wd,sm));
+		assertFalse(wdd.createLinkModelElements(pr,wd,null));
+		assertFalse(wdd.createLinkModelElements(wp,wd,null));
+		assertFalse(wdd.createLinkModelElements(sm,wd,null));
+		assertFalse(wdd.createLinkModelElements(wd,pr,null));
+		assertFalse(wdd.createLinkModelElements(wd,wp,null));
+		assertFalse(wdd.createLinkModelElements(wd,sm,null));
 		
 		wdd.addModelElement(wp);
-		assertTrue(wdd.createLinkModelElements(wp,wd));
-		assertFalse(wdd.createLinkModelElements(wp,wd));
-		assertTrue(wdd.createLinkModelElements(wd,wp));
-		assertFalse(wdd.createLinkModelElements(wd,wp));
-		assertFalse(wdd.createLinkModelElements(pr,wd));
-		assertFalse(wdd.createLinkModelElements(sm,wd));
-		assertFalse(wdd.createLinkModelElements(wd,sm));
+		assertTrue(wdd.createLinkModelElements(wp,wd,null));
+		assertFalse(wdd.createLinkModelElements(wp,wd,null));
+		assertTrue(wdd.createLinkModelElements(wd,wp,null));
+		assertFalse(wdd.createLinkModelElements(wd,wp,null));
+		assertFalse(wdd.createLinkModelElements(pr,wd,null));
+		assertFalse(wdd.createLinkModelElements(sm,wd,null));
+		assertFalse(wdd.createLinkModelElements(wd,sm,null));
 		
 		wdd.addModelElement(pr);
-		assertTrue(wdd.createLinkModelElements(pr,wd));
-		assertFalse(wdd.createLinkModelElements(wd,pr));
-		assertFalse(wdd.createLinkModelElements(pr,wp));
-		assertFalse(wdd.createLinkModelElements(wp,pr));
-		assertFalse(wdd.createLinkModelElements(pr,sm));
-		assertFalse(wdd.createLinkModelElements(sm,pr));
+		assertTrue(wdd.createLinkModelElements(pr,wd,null));
+		assertFalse(wdd.createLinkModelElements(wd,pr,null));
+		assertFalse(wdd.createLinkModelElements(pr,wp,null));
+		assertFalse(wdd.createLinkModelElements(wp,pr,null));
+		assertFalse(wdd.createLinkModelElements(pr,sm,null));
+		assertFalse(wdd.createLinkModelElements(sm,pr,null));
 		
 		wdd.addModelElement(sm);
-		assertTrue(wdd.createLinkModelElements(sm,wd));
-		assertFalse(wdd.createLinkModelElements(wd,sm));
-		assertFalse(wdd.createLinkModelElements(sm,wd));
-		assertFalse(wdd.createLinkModelElements(sm,wp));
-		assertFalse(wdd.createLinkModelElements(wp,sm));
-		assertFalse(wdd.createLinkModelElements(sm,pr));	
-		assertFalse(wdd.createLinkModelElements(pr,sm));
+		assertTrue(wdd.createLinkModelElements(sm,wd,null));
+		assertFalse(wdd.createLinkModelElements(wd,sm,null));
+		assertFalse(wdd.createLinkModelElements(sm,wd,null));
+		assertFalse(wdd.createLinkModelElements(sm,wp,null));
+		assertFalse(wdd.createLinkModelElements(wp,sm,null));
+		assertFalse(wdd.createLinkModelElements(sm,pr,null));	
+		assertFalse(wdd.createLinkModelElements(pr,sm,null));
 		
-		assertFalse(wdd.createLinkModelElements(wd,wd));
-		assertFalse(wdd.createLinkModelElements(pr,pr));
-		assertFalse(wdd.createLinkModelElements(wp,wp));
-		assertFalse(wdd.createLinkModelElements(sm,sm));
+		assertFalse(wdd.createLinkModelElements(wd,wd,null));
+		assertFalse(wdd.createLinkModelElements(pr,pr,null));
+		assertFalse(wdd.createLinkModelElements(wp,wp,null));
+		assertFalse(wdd.createLinkModelElements(sm,sm,null));
 		
 		wdd.addModelElement(pr2);
-		assertFalse(wdd.createLinkModelElements(pr2,wp));
+		assertFalse(wdd.createLinkModelElements(pr2,wp,null));
 	}
 	
 	public void testRemoveLinkModelElements()
@@ -1066,48 +1070,48 @@ public class TestWorkDefinitionDiagram extends TestCase
 		StateMachine sm = createWorkProductState();
 		
 		sm.setContext(wp2);
-		assertFalse(wdd.removeLinkModelElements(pr,wd));
-		assertFalse(wdd.removeLinkModelElements(pr,wp));
-		assertFalse(wdd.removeLinkModelElements(pr,sm));
-		assertFalse(wdd.removeLinkModelElements(wp,wd));
-		assertFalse(wdd.removeLinkModelElements(sm,wd));
-		assertFalse(wdd.removeLinkModelElements(wd,wp));
-		assertFalse(wdd.removeLinkModelElements(wd,sm));
+		assertFalse(wdd.removeLinkModelElements(pr,wd,null));
+		assertFalse(wdd.removeLinkModelElements(pr,wp,null));
+		assertFalse(wdd.removeLinkModelElements(pr,sm,null));
+		assertFalse(wdd.removeLinkModelElements(wp,wd,null));
+		assertFalse(wdd.removeLinkModelElements(sm,wd,null));
+		assertFalse(wdd.removeLinkModelElements(wd,wp,null));
+		assertFalse(wdd.removeLinkModelElements(wd,sm,null));
 		
 		wdd.addModelElement(wd);	
 		wdd.addModelElement(wp);
 		
-		assertFalse(wdd.removeLinkModelElements(wd,wp));	
-		wdd.createLinkModelElements(wd,wp);
-		assertTrue(wdd.removeLinkModelElements(wd,wp));
-		assertFalse(wdd.removeLinkModelElements(wd,wp));
+		assertFalse(wdd.removeLinkModelElements(wd,wp,null));	
+		wdd.createLinkModelElements(wd,wp,null);
+		assertTrue(wdd.removeLinkModelElements(wd,wp,null));
+		assertFalse(wdd.removeLinkModelElements(wd,wp,null));
 		
-		assertFalse(wdd.removeLinkModelElements(wp,wd));	
-		wdd.createLinkModelElements(wp,wd);
-		assertTrue(wdd.removeLinkModelElements(wp,wd));
-		assertFalse(wdd.removeLinkModelElements(wp,wd));	
+		assertFalse(wdd.removeLinkModelElements(wp,wd,null));	
+		wdd.createLinkModelElements(wp,wd,null);
+		assertTrue(wdd.removeLinkModelElements(wp,wd,null));
+		assertFalse(wdd.removeLinkModelElements(wp,wd,null));	
 		
 		wdd.addModelElement(sm);
 		
-		assertFalse(wdd.removeLinkModelElements(wd,sm));	
-		wdd.createLinkModelElements(wd,sm);
-		assertTrue(wdd.removeLinkModelElements(wd,sm));
-		assertFalse(wdd.removeLinkModelElements(wd,sm));
+		assertFalse(wdd.removeLinkModelElements(wd,sm,null));	
+		wdd.createLinkModelElements(wd,sm,null);
+		assertTrue(wdd.removeLinkModelElements(wd,sm,null));
+		assertFalse(wdd.removeLinkModelElements(wd,sm,null));
 		
-		assertFalse(wdd.removeLinkModelElements(sm,wd));	
-		wdd.createLinkModelElements(sm,wd);
-		assertTrue(wdd.removeLinkModelElements(sm,wd));
-		assertFalse(wdd.removeLinkModelElements(sm,wd));
+		assertFalse(wdd.removeLinkModelElements(sm,wd,null));	
+		wdd.createLinkModelElements(sm,wd,null);
+		assertTrue(wdd.removeLinkModelElements(sm,wd,null));
+		assertFalse(wdd.removeLinkModelElements(sm,wd,null));
 		
 		wdd.addModelElement(pr);
 		
-		assertFalse(wdd.removeLinkModelElements(pr,wd));
-		wdd.createLinkModelElements(pr,wd);
-		assertTrue(wdd.removeLinkModelElements(pr,wd));
-		assertFalse(wdd.removeLinkModelElements(pr,wd));
+		assertFalse(wdd.removeLinkModelElements(pr,wd,null));
+		wdd.createLinkModelElements(pr,wd,null);
+		assertTrue(wdd.removeLinkModelElements(pr,wd,null));
+		assertFalse(wdd.removeLinkModelElements(pr,wd,null));
 		
-		assertFalse(wdd.removeLinkModelElements(pr,wp));
-		assertFalse(wdd.removeLinkModelElements(pr,sm));
+		assertFalse(wdd.removeLinkModelElements(pr,wp,null));
+		assertFalse(wdd.removeLinkModelElements(pr,sm,null));
 	}
 	
 	public void testAreLinkableModelElements()
@@ -1120,40 +1124,40 @@ public class TestWorkDefinitionDiagram extends TestCase
 		StateMachine sm = createWorkProductState();
 		
 		sm.setContext(wp2);
-		assertFalse(wdd.areLinkableModelElements(pr,wd));
-		assertFalse(wdd.areLinkableModelElements(pr,wp));
-		assertFalse(wdd.areLinkableModelElements(pr,sm));
-		assertFalse(wdd.areLinkableModelElements(wp,wd));
-		assertFalse(wdd.areLinkableModelElements(sm,wd));
-		assertFalse(wdd.areLinkableModelElements(wd,wp));
-		assertFalse(wdd.areLinkableModelElements(wd,sm));
+		assertFalse(wdd.areLinkableModelElements(pr,wd,null));
+		assertFalse(wdd.areLinkableModelElements(pr,wp,null));
+		assertFalse(wdd.areLinkableModelElements(pr,sm,null));
+		assertFalse(wdd.areLinkableModelElements(wp,wd,null));
+		assertFalse(wdd.areLinkableModelElements(sm,wd,null));
+		assertFalse(wdd.areLinkableModelElements(wd,wp,null));
+		assertFalse(wdd.areLinkableModelElements(wd,sm,null));
 		
 		wdd.addModelElement(wd);	
 		wdd.addModelElement(wp);
 		
-		assertFalse(wdd.areLinkableModelElements(pr,wd));
-		assertFalse(wdd.areLinkableModelElements(pr,wp));
-		assertTrue(wdd.areLinkableModelElements(wp,wd));
-		assertTrue(wdd.areLinkableModelElements(wd,wp));
+		assertFalse(wdd.areLinkableModelElements(pr,wd,null));
+		assertFalse(wdd.areLinkableModelElements(pr,wp,null));
+		assertTrue(wdd.areLinkableModelElements(wp,wd,null));
+		assertTrue(wdd.areLinkableModelElements(wd,wp,null));
 		
 		wdd.addModelElement(sm);
 		
-		assertFalse(wdd.areLinkableModelElements(pr,wd));
-		assertFalse(wdd.areLinkableModelElements(pr,sm));
-		assertTrue(wdd.areLinkableModelElements(sm,wd));
-		assertTrue(wdd.areLinkableModelElements(wd,sm));
+		assertFalse(wdd.areLinkableModelElements(pr,wd,null));
+		assertFalse(wdd.areLinkableModelElements(pr,sm,null));
+		assertTrue(wdd.areLinkableModelElements(sm,wd,null));
+		assertTrue(wdd.areLinkableModelElements(wd,sm,null));
 		
 		wdd.addModelElement(pr);	
 		
-		assertTrue(wdd.areLinkableModelElements(pr,wd));
-		assertFalse(wdd.areLinkableModelElements(pr,wp));
-		assertFalse(wdd.areLinkableModelElements(pr,sm));
-		assertFalse(wdd.areLinkableModelElements(wd,pr));
-		assertFalse(wdd.areLinkableModelElements(wp,pr));
-		assertFalse(wdd.areLinkableModelElements(sm,pr));
+		assertTrue(wdd.areLinkableModelElements(pr,wd,null));
+		assertFalse(wdd.areLinkableModelElements(pr,wp,null));
+		assertFalse(wdd.areLinkableModelElements(pr,sm,null));
+		assertFalse(wdd.areLinkableModelElements(wd,pr,null));
+		assertFalse(wdd.areLinkableModelElements(wp,pr,null));
+		assertFalse(wdd.areLinkableModelElements(sm,pr,null));
 		
-		wdd.createLinkModelElements(pr,wd);
-		assertFalse(wdd.areLinkableModelElements(pr,wd));
+		wdd.createLinkModelElements(pr,wd,null);
+		assertFalse(wdd.areLinkableModelElements(pr,wd,null));
 	}
 	
 	public void testExistsLinkModelElements()
@@ -1171,53 +1175,53 @@ public class TestWorkDefinitionDiagram extends TestCase
 		wdd.addModelElement(pr);
 		wdd.addModelElement(sm);
 		
-		assertFalse(wdd.existsLinkModelElements(pr,wd));
-		assertFalse(wdd.existsLinkModelElements(pr,wp));
-		assertFalse(wdd.existsLinkModelElements(pr,sm));
-		assertFalse(wdd.existsLinkModelElements(wp,wd));
-		assertFalse(wdd.existsLinkModelElements(wd,wp));
-		assertFalse(wdd.existsLinkModelElements(sm,wd));
-		assertFalse(wdd.existsLinkModelElements(wd,sm));
+		assertFalse(wdd.existsLinkModelElements(pr,wd,null));
+		assertFalse(wdd.existsLinkModelElements(pr,wp,null));
+		assertFalse(wdd.existsLinkModelElements(pr,sm,null));
+		assertFalse(wdd.existsLinkModelElements(wp,wd,null));
+		assertFalse(wdd.existsLinkModelElements(wd,wp,null));
+		assertFalse(wdd.existsLinkModelElements(sm,wd,null));
+		assertFalse(wdd.existsLinkModelElements(wd,sm,null));
 		
-		assertFalse(wdd.existsLinkModelElements(pr,pr));
-		assertFalse(wdd.existsLinkModelElements(wd,wd));
-		assertFalse(wdd.existsLinkModelElements(wp,wp));
-		assertFalse(wdd.existsLinkModelElements(sm,sm));
+		assertFalse(wdd.existsLinkModelElements(pr,pr,null));
+		assertFalse(wdd.existsLinkModelElements(wd,wd,null));
+		assertFalse(wdd.existsLinkModelElements(wp,wp,null));
+		assertFalse(wdd.existsLinkModelElements(sm,sm,null));
 		
-		wdd.createLinkModelElements(pr,wd);
-		assertTrue(wdd.existsLinkModelElements(pr,wd));
-		wdd.removeLinkModelElements(pr,wd);
-		assertFalse(wdd.existsLinkModelElements(pr,wd));
+		wdd.createLinkModelElements(pr,wd,null);
+		assertTrue(wdd.existsLinkModelElements(pr,wd,null));
+		wdd.removeLinkModelElements(pr,wd,null);
+		assertFalse(wdd.existsLinkModelElements(pr,wd,null));
 		
-		wdd.createLinkModelElements(pr,wp);
-		assertFalse(wdd.existsLinkModelElements(pr,wp));
+		wdd.createLinkModelElements(pr,wp,null);
+		assertFalse(wdd.existsLinkModelElements(pr,wp,null));
 		
-		wdd.createLinkModelElements(pr,sm);
-		assertFalse(wdd.existsLinkModelElements(pr,sm));
+		wdd.createLinkModelElements(pr,sm,null);
+		assertFalse(wdd.existsLinkModelElements(pr,sm,null));
 		
-		wdd.createLinkModelElements(wp,wd);
-		assertTrue(wdd.existsLinkModelElements(wp,wd));
-		wdd.removeLinkModelElements(wp,wd);
-		assertFalse(wdd.existsLinkModelElements(wp,wd));
+		wdd.createLinkModelElements(wp,wd,null);
+		assertTrue(wdd.existsLinkModelElements(wp,wd,null));
+		wdd.removeLinkModelElements(wp,wd,null);
+		assertFalse(wdd.existsLinkModelElements(wp,wd,null));
 		
-		wdd.createLinkModelElements(sm,wd);
-		assertTrue(wdd.existsLinkModelElements(sm,wd));
-		wdd.createLinkModelElements(wd,sm);
-		assertFalse(wdd.existsLinkModelElements(wd,sm));
-		wdd.removeLinkModelElements(sm,wd);
-		assertFalse(wdd.existsLinkModelElements(sm,wd));
+		wdd.createLinkModelElements(sm,wd,null);
+		assertTrue(wdd.existsLinkModelElements(sm,wd,null));
+		wdd.createLinkModelElements(wd,sm,null);
+		assertFalse(wdd.existsLinkModelElements(wd,sm,null));
+		wdd.removeLinkModelElements(sm,wd,null);
+		assertFalse(wdd.existsLinkModelElements(sm,wd,null));
 		
-		wdd.createLinkModelElements(wd,wp);
-		assertTrue(wdd.existsLinkModelElements(wd,wp));
-		wdd.removeLinkModelElements(wd,wp);
-		assertFalse(wdd.existsLinkModelElements(wd,wp));
+		wdd.createLinkModelElements(wd,wp,null);
+		assertTrue(wdd.existsLinkModelElements(wd,wp,null));
+		wdd.removeLinkModelElements(wd,wp,null);
+		assertFalse(wdd.existsLinkModelElements(wd,wp,null));
 		
-		wdd.createLinkModelElements(wd,sm);
-		assertTrue(wdd.existsLinkModelElements(wd,sm));
-		wdd.createLinkModelElements(wd,sm);
-		assertFalse(wdd.existsLinkModelElements(sm,wd));
-		wdd.removeLinkModelElements(wd,sm);
-		assertFalse(wdd.existsLinkModelElements(wd,sm));
+		wdd.createLinkModelElements(wd,sm,null);
+		assertTrue(wdd.existsLinkModelElements(wd,sm,null));
+		wdd.createLinkModelElements(wd,sm,null);
+		assertFalse(wdd.existsLinkModelElements(sm,wd,null));
+		wdd.removeLinkModelElements(wd,sm,null);
+		assertFalse(wdd.existsLinkModelElements(wd,sm,null));
 	}
 	
 }

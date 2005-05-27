@@ -222,16 +222,16 @@ public class TestActivityGraphAdapter extends TestCase
 		
 		adapter1.insert(new Object[]{t1, t2, t3, t4, t5, t6, t7, t8, t9, t10}, null, null, null, null);
 		
-		assertTrue(diagram1.existsLinkModelElements(initialPoint, firstSynchro));
-		assertTrue(diagram1.existsLinkModelElements(firstSynchro, activity1));
-		assertTrue(diagram1.existsLinkModelElements(firstSynchro, activity2));
-		assertTrue(diagram1.existsLinkModelElements(activity1, lastSynchro));
-		assertTrue(diagram1.existsLinkModelElements(activity2, lastSynchro));
-		assertTrue(diagram1.existsLinkModelElements(lastSynchro, decision));
-		assertTrue(diagram1.existsLinkModelElements(decision, activity3));
-		assertTrue(diagram1.existsLinkModelElements(decision, activity4));
-		assertTrue(diagram1.existsLinkModelElements(activity3, finalPoint));
-		assertTrue(diagram1.existsLinkModelElements(activity4, finalPoint));
+		assertTrue(diagram1.existsLinkModelElements(initialPoint, firstSynchro, null));
+		assertTrue(diagram1.existsLinkModelElements(firstSynchro, activity1, null));
+		assertTrue(diagram1.existsLinkModelElements(firstSynchro, activity2, null));
+		assertTrue(diagram1.existsLinkModelElements(activity1, lastSynchro, null));
+		assertTrue(diagram1.existsLinkModelElements(activity2, lastSynchro, null));
+		assertTrue(diagram1.existsLinkModelElements(lastSynchro, decision, null));
+		assertTrue(diagram1.existsLinkModelElements(decision, activity3, null));
+		assertTrue(diagram1.existsLinkModelElements(decision, activity4, null));
+		assertTrue(diagram1.existsLinkModelElements(activity3, finalPoint, null));
+		assertTrue(diagram1.existsLinkModelElements(activity4, finalPoint, null));
 		assertEquals(19, adapter1.getRootCount());
 		assertTrue(adapter1.contains(t1));
 		assertTrue(adapter1.contains(t2));
@@ -264,7 +264,7 @@ public class TestActivityGraphAdapter extends TestCase
 		t_falseTest.setTarget(cell2.getChildAt(0));
 		adapter1.insert(new Object[]{t_falseTest}, null, null, null, null);
 		
-		assertFalse(diagram1.existsLinkModelElements((ModelElement)cell1.getUserObject(), (ModelElement)cell2.getUserObject()));
+		assertFalse(diagram1.existsLinkModelElements((ModelElement)cell1.getUserObject(), (ModelElement)cell2.getUserObject(), null));
 		assertFalse(adapter1.contains(t_falseTest));		
 	}
 	
@@ -358,16 +358,16 @@ public class TestActivityGraphAdapter extends TestCase
 		assertTrue(diagram1.containsModelElement(activity2));
 		assertTrue(diagram1.containsModelElement(activity3));
 		assertTrue(diagram1.containsModelElement(activity4));
-		assertTrue(diagram1.existsLinkModelElements(initialPoint, firstSynchro));
-		assertFalse(diagram1.existsLinkModelElements(firstSynchro, activity1));
-		assertTrue(diagram1.existsLinkModelElements(firstSynchro, activity2));
-		assertFalse(diagram1.existsLinkModelElements(activity1, lastSynchro));
-		assertFalse(diagram1.existsLinkModelElements(activity2, lastSynchro));
-		assertFalse(diagram1.existsLinkModelElements(lastSynchro, decision));
-		assertTrue(diagram1.existsLinkModelElements(decision, activity3));
-		assertTrue(diagram1.existsLinkModelElements(decision, activity4));
-		assertFalse(diagram1.existsLinkModelElements(activity3, finalPoint));
-		assertFalse(diagram1.existsLinkModelElements(activity4, finalPoint));
+		assertTrue(diagram1.existsLinkModelElements(initialPoint, firstSynchro, null));
+		assertFalse(diagram1.existsLinkModelElements(firstSynchro, activity1, null));
+		assertTrue(diagram1.existsLinkModelElements(firstSynchro, activity2, null));
+		assertFalse(diagram1.existsLinkModelElements(activity1, lastSynchro, null));
+		assertFalse(diagram1.existsLinkModelElements(activity2, lastSynchro, null));
+		assertFalse(diagram1.existsLinkModelElements(lastSynchro, decision, null));
+		assertTrue(diagram1.existsLinkModelElements(decision, activity3, null));
+		assertTrue(diagram1.existsLinkModelElements(decision, activity4, null));
+		assertFalse(diagram1.existsLinkModelElements(activity3, finalPoint, null));
+		assertFalse(diagram1.existsLinkModelElements(activity4, finalPoint, null));
 		
 		assertEquals(10, adapter1.getRootCount());
 		assertTrue(adapter1.contains(initialPointCell));

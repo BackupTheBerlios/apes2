@@ -41,6 +41,7 @@ import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.model.extension.ApesProcess;
 import org.ipsquad.apes.model.extension.WorkProductRef;
 import org.ipsquad.apes.model.spem.core.Element;
+import org.ipsquad.apes.model.spem.modelmanagement.IPackage;
 import org.ipsquad.apes.model.spem.process.components.ProcessComponent;
 import org.ipsquad.apes.model.spem.process.structure.Activity;
 import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
@@ -57,7 +58,7 @@ import JSX.ObjIn;
 
 /**
  *
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class LoadProject extends MonitoredTaskBase 
 {
@@ -173,6 +174,7 @@ public class LoadProject extends MonitoredTaskBase
 
 	protected void checkVersion() 
 	{
+		boolean needUpdate = false;
 		ProcessComponent component = mProject.getProcess().getComponent();
 		
 		if(component.getVersion() != null)
@@ -191,6 +193,7 @@ public class LoadProject extends MonitoredTaskBase
 				mError.printKey("warningOlderVersion");
 				mError.println("\t"+mResource.getString("warningCurrentVersion")+" -> "+mResource.getString("Version"));
 				mError.println("\t"+mResource.getString("warningFoundVersion")+" -> "+component.getVersion());
+				needUpdate = true;
 			}
 		}
 		else
@@ -199,7 +202,15 @@ public class LoadProject extends MonitoredTaskBase
 			mError.printKey("warningOlderVersion");
 			mError.println("\t"+mResource.getString("warningCurrentVersion")+" -> "+mResource.getString("Version"));
 			mError.println("\t"+mResource.getString("warningFoundVersion")+" -> < 2.5.1");
+			needUpdate = true;
 		}
+
+		if(needUpdate)
+		{
+			mError.printKey("updatingToCurrentVersion");
+			updateToCurrentVersion(component);
+		}
+		//always update the component version
 		component.updateVersion();
 	}
 	
@@ -315,6 +326,25 @@ public class LoadProject extends MonitoredTaskBase
 		{
 			mTask.forceRefresh();
 		}
+	}
+	
+	/**
+	 * Recursives method to update all elements of a component
+	 * 
+	 * @param element the element to update
+	 */
+	protected void updateToCurrentVersion(Element element)
+	{
+		if(element instanceof IPackage)
+		{
+			IPackage p = (IPackage)element;
+		
+			for (int i = 0; i < p.modelElementCount(); i++) 
+			{
+				updateToCurrentVersion(p.getModelElement(i));
+			}
+		}
+		element.updateToCurrentVersion();
 	}
 	
 	protected class InterfacesHandler extends DefaultHandler

@@ -37,7 +37,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the work definition diagram
  *
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class WorkDefinitionDiagram extends SpemDiagram {
 
@@ -336,7 +336,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		return mElements.size();
 	}
 
-	public boolean createLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean createLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkModelElements "+source+" "+target);
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
@@ -420,7 +420,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			if(containsModelElement(wd))
 			{
-				if(areLinkableModelElements(wp,wd))
+				if(areLinkableModelElements(wp,wd,null))
 				{
 					if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkProductWorkDefinition "+wp+" "+wd);
 					mTransitions.add(new Transition(wp,wd));
@@ -444,7 +444,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			if(containsModelElement(wp))
 			{
-				if(areLinkableModelElements(wd,wp))
+				if(areLinkableModelElements(wd,wp, null))
 				{
 					if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::createLinkWorkDefinitionWorkProduct "+wd+" "+wp);
 					mTransitions.add(new Transition(wd,wp));
@@ -500,7 +500,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	
 	
 	
-	public boolean removeLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean removeLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkModelElements "+source+" "+target);
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
@@ -570,7 +570,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean removeLinkWorkProductWorkDefinition(WorkProduct wp, WorkDefinition wd)
 	{
-		if(existsLinkModelElements(wp, wd))
+		if(existsLinkModelElements(wp, wd, null))
 		{
 			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkProductWorkDefinition "+wp+" "+wd);
 			mTransitions.remove(getTransition(wp,wd));
@@ -589,7 +589,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	 */
 	public boolean removeLinkWorkDefinitionWorkProduct(WorkDefinition wd, WorkProduct wp)
 	{
-		if(existsLinkModelElements(wd, wp))
+		if(existsLinkModelElements(wd, wp, null))
 		{
 			if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkDefinitionWorkProduct "+wd+" "+wp);
 			mTransitions.remove(getTransition(wd,wp));
@@ -609,7 +609,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			WorkProduct w = (WorkProduct)sm.getContext();
 			
-			if(existsLinkModelElements(w, wd))
+			if(existsLinkModelElements(w, wd, null))
 			{
 				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkProductStateWorkDefinition "+sm+" "+wd);
 				mTransitions.remove(getTransition(w,wd));
@@ -629,7 +629,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			WorkProduct w = (WorkProduct)sm.getContext();
 			
-			if(existsLinkModelElements(wd, w))
+			if(existsLinkModelElements(wd, w, null))
 			{
 				if(Debug.enabled) Debug.print(Debug.MODEL, "(M) -> WorkDefinitionDiagram("+getName()+")::removeLinkWorkDefinitionWorkProductState "+wd+" "+sm);
 				mTransitions.remove(getTransition(wd,sm));
@@ -645,7 +645,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	
 
 
-	public boolean areLinkableModelElements( ModelElement source, ModelElement target) 
+	public boolean areLinkableModelElements( ModelElement source, ModelElement target, Object extras) 
 	{	
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
 		{
@@ -720,7 +720,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if ((containsModelElement(wp)) && (containsModelElement(wd)))
 		{	
-			if(!existsLinkModelElements(wp,wd))
+			if(!existsLinkModelElements(wp,wd,null))
 			{
 				return true;
 			}
@@ -742,7 +742,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	{
 		if ((containsModelElement(wp)) && (containsModelElement(wd)))
 		{
-			if(!existsLinkModelElements(wd,wp))
+			if(!existsLinkModelElements(wd,wp,null))
 			{
 				return true;
 			}
@@ -763,7 +763,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 		{
 			WorkProduct w = (WorkProduct)sm.getContext();
 			
-			if((!existsLinkModelElements(w,wd)) && (!existsLinkModelElements(wd,sm)))
+			if((!existsLinkModelElements(w,wd,null)) && (!existsLinkModelElements(wd,sm,null)))
 			{
 				return true;
 			}
@@ -780,7 +780,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 				&& containsModelElement(sm))
 		{
 			WorkProduct w = (WorkProduct)sm.getContext();
-			if((!existsLinkModelElements(wd,w)) && (!existsLinkModelElements(sm,wd)))
+			if((!existsLinkModelElements(wd,w,null)) && (!existsLinkModelElements(sm,wd,null)))
 			{
 				return true;
 			}
@@ -793,7 +793,7 @@ public class WorkDefinitionDiagram extends SpemDiagram {
 	
 	
 	
-	public boolean existsLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean existsLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkDefinition )
 		{

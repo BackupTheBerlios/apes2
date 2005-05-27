@@ -44,6 +44,7 @@ import org.ipsquad.apes.adapters.SpemTreeAdapter;
 import org.ipsquad.apes.adapters.WorkProductCell;
 import org.ipsquad.apes.model.extension.ApesWorkDefinition;
 import org.ipsquad.apes.model.extension.FlowDiagram;
+import org.ipsquad.apes.model.extension.Link;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.frontend.ApesMediator;
 import org.ipsquad.apes.model.spem.core.Element;
@@ -188,6 +189,11 @@ public class TestSpemGraphAdapter extends TestCase
 			{
 
 			}
+			
+			protected Link createLink(ApesGraphCell source, ApesGraphCell target)
+			{
+				return new Link(source.getUserObject(), target.getUserObject(), "", new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE));
+			}
 		};
 		
 		mediator.addApesModelListener( adapter );
@@ -234,7 +240,7 @@ public class TestSpemGraphAdapter extends TestCase
 		/*
 		 * insert a process role cell
 		 */
-		vertex2 = adapter.associateGraphCell(new ProcessRole());
+		vertex2 = adapter.associateGraphCell(new WorkProduct());
 		attr.clear();
 		attr.put(vertex2, vertex2.getAttributes());
 		
@@ -256,7 +262,7 @@ public class TestSpemGraphAdapter extends TestCase
 		assertTrue(adapter.contains(vertex3));
 		
 		/*
-		 * insert a link beetween vertex2 and vertex1
+		 * insert a link beetween vertex2 (work product) and vertex1 (Activity)
 		 */
 		ConnectionSet cs = new ConnectionSet();
 		DefaultEdge edge1 = new DefaultEdge();
@@ -280,7 +286,8 @@ public class TestSpemGraphAdapter extends TestCase
 		it = target1.edges();
 		assertEquals(edge1, it.next());
 		assertFalse(it.hasNext());
-		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
+		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject(),
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		
 		/*
 		 * insert a link beetween vertex1 and vertex3
@@ -310,7 +317,7 @@ public class TestSpemGraphAdapter extends TestCase
 		it = target1.edges();
 		assertEquals(edge2, it.next());
 		assertFalse(it.hasNext());
-		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex1.getUserObject(), (ModelElement) vertex3.getUserObject()));
+		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex1.getUserObject(), (ModelElement) vertex3.getUserObject(), null));
 	}
 
 	public void testRemove()
@@ -325,7 +332,7 @@ public class TestSpemGraphAdapter extends TestCase
 		Activity a = new Activity();
 		mediator.insertIn(adapter.getDiagram(), new Object[]{a}, null);
 		Object[] cells = SpemGraphAdapter.getRoots(adapter);
-		vertex2 = adapter.associateGraphCell(new ProcessRole());
+		vertex2 = adapter.associateGraphCell(new WorkProduct());
 		attr.clear();
 		attr.put(vertex2, vertex2.getAttributes());
 		adapter.insert( new Object[]{vertex2}, attr, null, null, null );
@@ -367,8 +374,10 @@ public class TestSpemGraphAdapter extends TestCase
 		it = target1.edges();
 		assertNotSame(edge1, it.next());
 		assertFalse(it.hasNext());
-		assertFalse( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
-		assertTrue( diagram.areLinkableModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
+		assertFalse( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject(), 
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue( diagram.areLinkableModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject(), 
+				new Integer(FlowDiagram.ROLE_ACTIVITY_ASSISTANT_LINK_TYPE | FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		
 		adapter.remove(new Object[]{vertex2});
 		assertFalse(adapter.contains(vertex2));
@@ -399,7 +408,7 @@ public class TestSpemGraphAdapter extends TestCase
 		Map edit = ApesGraphConstants.createMap();
 		edit.put(vertex1, newName);
 		adapter.edit(edit, null, null, null);
-		assertEquals(centerX, ApesGraphConstants.getBounds(vertex1.getAttributes()).getCenterX());
+		assertTrue(centerX == ApesGraphConstants.getBounds(vertex1.getAttributes()).getCenterX());
 		assertEquals("a name more longer than the width of the vertex...", vertex1.getUserObject().toString());
 	}
 	
@@ -420,7 +429,7 @@ public class TestSpemGraphAdapter extends TestCase
 		vertex1 = adapter.associateGraphCell(new Activity());
 		Map attr = ApesGraphConstants.createMap();
 		attr.put(vertex1, vertex1.getAttributes());	
-		vertex2 = adapter.associateGraphCell(new ProcessRole());
+		vertex2 = adapter.associateGraphCell(new WorkProduct());
 		attr.put(vertex2, vertex2.getAttributes());
 		
 		assertFalse(adapter.contains(vertex1));
@@ -467,7 +476,9 @@ public class TestSpemGraphAdapter extends TestCase
 		it = target1.edges();
 		assertEquals(edge1, it.next());
 		assertFalse(it.hasNext());
-		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
+		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject(), 
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+
 		
 		/*
 		 * insert a link beetween vertex1 and vertex3
@@ -497,7 +508,7 @@ public class TestSpemGraphAdapter extends TestCase
 		it = target2.edges();
 		assertEquals(edge2, it.next());
 		assertFalse(it.hasNext());
-		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex1.getUserObject(), (ModelElement) vertex3.getUserObject()));
+		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex1.getUserObject(), (ModelElement) vertex3.getUserObject(), null));
 		
 		/*
 		 * Remove elements
@@ -550,8 +561,10 @@ public class TestSpemGraphAdapter extends TestCase
 		assertTrue(adapter.contains(edge1));
 		assertTrue(adapter.contains(edge2));
 		assertTrue(diagram.containsModelElement((ModelElement)vertex1.getUserObject()));
-		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex2.getUserObject(),(ModelElement)vertex1.getUserObject()));
-		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex1.getUserObject(),(ModelElement)vertex3.getUserObject()));
+		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex2.getUserObject(),(ModelElement)vertex1.getUserObject(),
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex1.getUserObject(),(ModelElement)vertex3.getUserObject(),
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		assertEquals(source1, edge1.getSource());
 		it = source1.edges();
 		tmp = it.next();
@@ -576,7 +589,7 @@ public class TestSpemGraphAdapter extends TestCase
 		assertFalse(it.hasNext());
 		it = target2.edges();
 		assertFalse(it.hasNext());
-		assertFalse( diagram.existsLinkModelElements( (ModelElement) vertex1.getUserObject(), (ModelElement) vertex3.getUserObject()));
+		assertFalse( diagram.existsLinkModelElements( (ModelElement) vertex1.getUserObject(), (ModelElement) vertex3.getUserObject(), null));
 
 		undoManager.undo(null);
 		assertEquals(3, adapter.getRootCount());
@@ -585,7 +598,7 @@ public class TestSpemGraphAdapter extends TestCase
 		assertFalse(it.hasNext());
 		it = target1.edges();
 		assertFalse(it.hasNext());
-		assertFalse( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
+		assertFalse( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject(), null));
 
 		undoManager.undo(null);
 		assertEquals(2, adapter.getRootCount());
@@ -619,16 +632,18 @@ public class TestSpemGraphAdapter extends TestCase
 		it = target1.edges();
 		assertEquals(edge1, it.next());
 		assertFalse(it.hasNext());
-		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject()));
-		
+		assertTrue( diagram.existsLinkModelElements( (ModelElement) vertex2.getUserObject(), (ModelElement) vertex1.getUserObject(),
+				new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		undoManager.redo(null);
 		assertEquals(5, adapter.getRootCount());
 		assertTrue(adapter.contains(vertex1));
 		assertTrue(adapter.contains(edge1));
 		assertTrue(adapter.contains(edge2));
 		assertTrue(diagram.containsModelElement((ModelElement)vertex1.getUserObject()));
-		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex2.getUserObject(),(ModelElement)vertex1.getUserObject()));
-		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex1.getUserObject(),(ModelElement)vertex3.getUserObject()));
+		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex2.getUserObject(),(ModelElement)vertex1.getUserObject(),
+						new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
+		assertTrue(diagram.existsLinkModelElements((ModelElement)vertex1.getUserObject(),(ModelElement)vertex3.getUserObject(), 
+						new Integer(FlowDiagram.ROLE_ACTIVITY_PERFORMER_LINK_TYPE)));
 		assertEquals(source1, edge1.getSource());
 		it = source1.edges();
 		tmp = it.next();

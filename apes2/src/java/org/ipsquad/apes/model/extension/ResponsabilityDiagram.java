@@ -19,7 +19,7 @@ import org.ipsquad.utils.ErrorManager;
 /**
  * Base class for the responsability diagram
  *
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ResponsabilityDiagram extends SpemDiagram {
 
@@ -166,7 +166,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 		return mElements.size();
 	}
 
-	public boolean createLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean createLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkProduct )
 		{
@@ -198,7 +198,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 		return false;
 	}
 	
-	public boolean removeLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean removeLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkProduct )
 		{
@@ -231,7 +231,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 		return false;
 	}
 	
-	public boolean areLinkableModelElements( ModelElement source, ModelElement target) 
+	public boolean areLinkableModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkProduct )
 		{
@@ -269,7 +269,7 @@ public class ResponsabilityDiagram extends SpemDiagram {
 		return false;
 	}
 	
-	public boolean existsLinkModelElements( ModelElement source, ModelElement target) 
+	public boolean existsLinkModelElements( ModelElement source, ModelElement target, Object extras) 
 	{
 		if( source instanceof ProcessRole && target instanceof WorkProduct )
 		{
