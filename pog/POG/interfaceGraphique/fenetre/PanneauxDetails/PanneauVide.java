@@ -38,7 +38,7 @@ public class PanneauVide extends JPanel {
     jLabel1.setBounds(103, 113, 150, 70);
 
     this.setPreferredSize(new Dimension(425, 540));
-    this.setMinimumSize(new Dimension(200, 200));
+    this.setMinimumSize(new Dimension(425, 540));
     this.add(jLabel1);
     this.setVisible(false);
   }

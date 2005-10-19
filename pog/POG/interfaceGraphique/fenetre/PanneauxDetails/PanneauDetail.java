@@ -42,7 +42,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -113,7 +112,7 @@ abstract public class PanneauDetail
             stringFlavor);
         if (s.startsWith("CONT=> ") && ((DropTarget)event.getSource()).getComponent().equals(fichier_associe)){
           lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant, new File(s.substring(7)).toURI());
-          FenetrePrincipale.INSTANCE.getLnkArbreExplorateur().load();
+          FenetrePrincipale.INSTANCE.getLnkArbreExplorateur().load(new File(s.substring(7)));
         }
         else if (s.startsWith("IMG=> ") && ((DropTarget)event.getSource()).getComponent().equals(jLabel9)){
           File fichIcon = new File(s.substring(6));
@@ -189,12 +188,18 @@ abstract public class PanneauDetail
 	  	String ancien = "";
 	  	if (_elementCourant.getContenu() != null)
 	  		ancien = _elementCourant.getContenu().get_uri();
-	  	String urrl = PogToolkit.askForString("URL du contenu", "URL Associée", ancien);
-		try {
-			lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant, new URI(urrl));
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		String urrl = "";
+	  	while (urrl.equals("")) {
+	  		urrl = PogToolkit.askForString("URL du contenu", "URL Associée", ancien);
+	  		if (urrl == null)
+	  			return;
+			try {
+				lnkControleurPanneaux.getLnkSysteme().associerContenu(_elementCourant, new URI(urrl));
+			} catch (Exception e) {
+				lnkControleurPanneaux.getLnkSysteme().lnkFenetrePrincipale.getLnkDebug().debogage("urlincorrecte");
+				urrl = "";
+			}
+	  	}
 	  }
 	});
 	butWeb.setBounds(new Rectangle(300, 93, 30, 21));

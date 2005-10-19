@@ -75,6 +75,7 @@ public class FenetrePrincipale
   private JScrollPane jScrollPane1 = new JScrollPane();
   private JScrollPane jScrollPane2 = new JScrollPane();
   private JScrollPane jScrollPane3 = new JScrollPane();
+  private JScrollPane jScrollPane4 = new JScrollPane();
 
   private BorderLayout borderLayout1 = new BorderLayout();
   private BorderLayout borderLayout2 = new BorderLayout();
@@ -220,8 +221,6 @@ public class FenetrePrincipale
   private JFileChooser lnkJIconChooser = null;
 
   private String _pathSave = "";
-  private String _pathExport = "";
-  
 
   public static FenetrePrincipale INSTANCE;
 
@@ -277,7 +276,7 @@ public class FenetrePrincipale
       lnkMainToolBar = new MainToolBar(this);
       lnkMainToolBar.setButtonsState(false);
       lnkDebug.debogage("... Controleur ...");
-      lnkControleurPanneaux = new ControleurPanneaux(jSplitPane4, _menu.getMenuCentral(), lnkSysteme);
+      lnkControleurPanneaux = new ControleurPanneaux(jScrollPane4, _menu.getMenuCentral(), lnkSysteme);
       System.out.println("... Interface Graphique");
       try {
         jbInit();
@@ -290,75 +289,72 @@ public class FenetrePrincipale
   }
   static Process pp;
 
-  public static void main(String[] args) {
-    try {
+	public static void main(String[] args) {
+		try {
 //    	System.out.println("URL: " + ClassLoader.getSystemResource("JSX/Wheel.class"));
       // Ne pas enlever les println d'ici...
-      DateFormat dt = DateFormat.getTimeInstance();
-      System.out.println("Start POG at " + dt.format(new Date()));
-      FenetrePrincipale fp;
-      String argof = new String("");
-      for (int i = 0; i < args.length; i++) {
-        argof = argof + args[i] + " ";
-        if (args[i].startsWith("user.home="))
-          System.setProperty("user.home", args[i].substring(10));
-      }
-      try {
-        fp = new FenetrePrincipale();
-      }
-      catch (Exception e) {
-      	e.printStackTrace();
-        boolean yes = (args.length == 0);
-        if (!yes)
-          yes = !args[args.length - 1].equals("SEC");
-        if (yes) {
-          pp = Runtime.getRuntime().exec("java -classpath \"" + System.getProperty("java.class.path") + "\"  POG.interfaceGraphique.fenetre.FenetrePrincipale " + argof + " SEC");
-
-		new FenetrePrincipale.TheTraitement("Suivi") {
-			public void traitement() {
-				InputStream is = pp.getInputStream();
-			   OutputStream os = System.out;
-
-				   int c;
-				   try {
-					while ((c = is.read()) != -1) {
-						   os.write(c);
-					   }
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-			   }
-		};
-//		InputStream is = pp.getInputStream();
-
-		 InputStream is = pp.getErrorStream();
-		OutputStream os = System.out;
-
-		  Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-              pp.destroy();
-            }
-          });
-
-			int c;
-			while ((c = is.read()) != -1) {
-				os.write(c);
+			DateFormat dt = DateFormat.getTimeInstance();
+			System.out.println("Start POG at " + dt.format(new Date()));
+			FenetrePrincipale fp;
+			String argof = new String("");
+			for (int i = 0; i < args.length; i++) {
+				argof = argof + args[i] + " ";
+				if (args[i].startsWith("user.home="))
+					System.setProperty("user.home", args[i].substring(10));
 			}
-        }
-        else
-          System.out.println("Enable to run POG");
-        System.exit(0);
-      }
-      INSTANCE.show();
-      System.out.println("End of Launch at " + dt.format(new Date()));
-      System.out.println("Java version : " + System.getProperty("java.version"));
-
-       java.net.URL ip = ClassLoader.getSystemResource("org/ipsquad/apes");
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+			try {
+				fp = new FenetrePrincipale();
+			}
+			catch (Exception e) {
+				boolean yes = (args.length == 0);
+				if (!yes)
+					yes = !args[args.length - 1].equals("SEC");
+				if (yes) {
+					String gui = "";
+					if (File.pathSeparator.equals(";"))
+						gui = "\"";
+					String commande = "java - classpath " + gui + System.getProperty("java.class.path") + gui + "  POG.interfaceGraphique.fenetre.FenetrePrincipale " + argof + " SEC";
+					System.out.println(commande);
+					pp = Runtime.getRuntime().exec(commande);
+					new FenetrePrincipale.TheTraitement("Suivi") {
+						public void traitement() {
+							InputStream is = pp.getInputStream();
+							OutputStream os = System.out;
+							int c;
+							try {
+								while ((c = is.read()) != -1) {
+									os.write(c);
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					};
+					InputStream is = pp.getErrorStream();
+					OutputStream os = System.out;
+					Runtime.getRuntime().addShutdownHook(new Thread() {
+						public void run() {
+							pp.destroy();
+						}
+					});
+					int c;
+					while ((c = is.read()) != -1) {
+						os.write(c);
+					}
+				}
+		        else
+					System.out.println("Enable to run POG");
+				System.exit(0);
+			}
+			INSTANCE.setVisible(true);
+			System.out.println("End of Launch at " + dt.format(new Date()));
+			System.out.println("Java version : " + System.getProperty("java.version"));
+			java.net.URL ip = ClassLoader.getSystemResource("org/ipsquad/apes");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
   private void jbInit() throws Exception {
     this.setLocale(java.util.Locale.getDefault());
@@ -455,6 +451,7 @@ public class FenetrePrincipale
     jSplitPane3.add(lnkPanneauBibliotheque, JSplitPane.BOTTOM);
 
     jScrollPane3.getViewport().add(lnkDebug.get_texte(), null);
+    jSplitPane4.add(jScrollPane4, JSplitPane.TOP);
     jSplitPane4.add(jScrollPane3, JSplitPane.BOTTOM);
 
 	_panelArbrePresentation.setLayout(borderLayout6);
@@ -515,7 +512,7 @@ public class FenetrePrincipale
     jSplitPane2.add(jSplitPane3, JSplitPane.RIGHT);
 
     lnkControleurPanneaux.loadVide();
-    jSplitPane4.add(new JPanel(), JSplitPane.TOP);
+//    jSplitPane4.add(new JPanel(), JSplitPane.TOP);
 
     this.setSize(new Dimension(950, 750));
     this.getContentPane().setLayout(borderLayout1);
@@ -667,15 +664,6 @@ public class FenetrePrincipale
 	           this.setTitle(PogToolkit._APP_NAME);
 	        else
 	          this.setTitle(PogToolkit._APP_NAME+" : " + save);
-	}
-//*/
-
-	public String get_pathExport() {
-		return _pathExport;
-	}
-	
-	public void set_pathExport(String export) {
-		_pathExport = export;
 	}
 	
 	public JPanel get_panelArbrePresentation() {

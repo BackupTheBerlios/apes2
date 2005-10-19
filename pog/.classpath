@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="/apes2"/>
-	<classpathentry kind="lib" path="E:/Programme/eclipse/workspace/apes2/src/lib/jgraph.jar"/>
-	<classpathentry kind="lib" path="E:/Programme/eclipse/workspace/apes2/src/lib/JSX.jar"/>
-	<classpathentry kind="output" path="classes"/>
+    <classpathentry
+        excluding="lib/|.classpath|.cvsignore|manif.mf|.project"
+        kind="src" path=""/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="lib" path="lib/jgraph.jar"/>
+    <classpathentry kind="lib" path="lib/apes2-2.5.2.jar"/>
+    <classpathentry kind="output" path="classes"/>
 </classpath>

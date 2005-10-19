@@ -39,7 +39,7 @@ public class Bibliotheque {
 
    */
 
-  private Contenu lnkContenu = null;
+//  private Contenu lnkContenu = null;
 
 
 

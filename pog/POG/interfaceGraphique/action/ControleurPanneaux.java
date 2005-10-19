@@ -22,13 +22,14 @@
 
 package POG.interfaceGraphique.action;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JSplitPane;
+import javax.swing.JScrollPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -102,7 +103,7 @@ public class ControleurPanneaux {
    */
   private PanneauDefinitionTravail lnkPanneauDefinitionTravail = null;
 
-  private JSplitPane _jsplit;
+  private JScrollPane _jsplit;
 
   private MenuCentral _menu;
 
@@ -126,17 +127,17 @@ public class ControleurPanneaux {
     if (lnkPanneauDetail != null) {
       if (lnkPanneauDetail.isVisible()) {
         lnkPanneauDetail.setVisible(false);
-        _jsplit.remove(lnkPanneauDetail);
+        enlever(lnkPanneauDetail);
       }
     }
     if (!lnkPanneauVide.isVisible()) {
       lnkPanneauVide.setVisible(true);
-      _jsplit.add(lnkPanneauVide, JSplitPane.TOP);
+      ajouter(lnkPanneauVide);
     }
     _menu._mnu.setVisible(false);
   }
 
-  public ControleurPanneaux(JSplitPane jsp, JMenu mnu, Systeme sys){
+  public ControleurPanneaux(JScrollPane jsp, JMenu mnu, Systeme sys){
     _jsplit = jsp;
     lnkSysteme = sys;
     _menu = new MenuCentral(mnu, this);
@@ -198,11 +199,11 @@ public class ControleurPanneaux {
   private void loadCentre(String fenetre, ElementPresentation idelem){
     if (lnkPanneauVide.isVisible()) {
       lnkPanneauVide.setVisible(false);
-      _jsplit.remove(lnkPanneauVide);
+      enlever(lnkPanneauVide);
     }
     if (lnkPanneauDetail != null) {
       lnkPanneauDetail.setVisible(false);
-      _jsplit.remove(lnkPanneauDetail);
+      enlever(lnkPanneauDetail);
     }
 
     if (fenetre.equals("DActivite")) {
@@ -248,7 +249,7 @@ public class ControleurPanneaux {
     	loadVide();
     	return;
     }
-    _jsplit.add(lnkPanneauDetail, JSplitPane.TOP);
+    ajouter(lnkPanneauDetail);
     lnkPanneauDetail.loadElement(idelem);
     _menu.majMenu(fenetre);
     lnkPanneauDetail.setVisible(true);
@@ -371,10 +372,19 @@ public class ControleurPanneaux {
     lnkPanneauDetail.supprimerElement(elt);
   }
 
-
-
-public JSplitPane get_jsplit() {
-	return _jsplit;
-}
+	private void ajouter(Component param) {
+//		_jsplit.add(lnkPanneauDetail, JSplitPane.TOP);
+  		_jsplit.getViewport().add(param, null);
+	}
+	
+	private void enlever(Component param) {
+//		_jsplit.remove(param);
+		_jsplit.getViewport().remove(param);
+	}
+	
+	// Méthode utilisé pour EPA
+	public JScrollPane get_jsplit() {
+		return _jsplit;
+	}
 
 }

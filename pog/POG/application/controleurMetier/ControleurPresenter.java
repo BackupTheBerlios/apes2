@@ -72,30 +72,38 @@ public class ControleurPresenter extends ControleurSemantique {
     Object[] tpog = lnkControleurPresentation.getlnkPresentation().listeElementPresentation();
     
     // Etape 1 : SUPPRIMER on enlève de POG ceux qui ne sont plus dans le modèle APES
-    
-    for (int i = 0; i < tpog.length; i++) {
-      FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", i, tpog.length * 3);
-      if (tpog[i] instanceof PresentationElementModele)
-        if ( ( (PresentationElementModele) tpog[i]).getLnkModelElement() == null)
-          if (flag)
-            lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((PresentationElementModele)tpog[i]).get_id());
-          else
-            return false;
-        else {
-          ModelElement md = Apes.getElementByID(((PresentationElementModele)tpog[i]).getLnkModelElement().getID());
-          if ( (md == null) && !flag)
-            return false;
-          else if (md == null)
-            lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((PresentationElementModele)tpog[i]).get_id());
-          else if ((md != ((PresentationElementModele)tpog[i]).getLnkModelElement()) && flag)
-            ((PresentationElementModele)tpog[i]).setModelElement(md);
+    //           et les produits qui ont été mis en entrée
+	for (int i = 0; i < tpog.length; i++) {
+		FenetrePrincipale.INSTANCE.getLnkDebug().patienter("syncapes", i, tpog.length * 3);
+		if (tpog[i] instanceof PresentationElementModele)
+			if (((PresentationElementModele) tpog[i]).getLnkModelElement() == null)
+				if (flag)
+					lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((PresentationElementModele)tpog[i]).get_id());
+				else
+					return false;
+			else {
+				ModelElement md = Apes.getElementByID(((PresentationElementModele)tpog[i]).getLnkModelElement().getID());
+				if ((md == null) && !flag)
+					return false;
+				else if (md == null)
+					lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((PresentationElementModele)tpog[i]).get_id());
+				else if ((md != ((PresentationElementModele)tpog[i]).getLnkModelElement()) && flag)
+					((PresentationElementModele)tpog[i]).setModelElement(md);
+					
+				if (md instanceof WorkProduct)
+					if (((WorkProduct)md).getReferences() == WorkProduct.REFERENCES_BY_REQUIRED_INTERFACE)
+						if (flag)
+							lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((PresentationElementModele)tpog[i]).get_id());
+						else
+							return false;
 
-// Si ce sont des diagrammes, on corrige leur nom
-          if (md instanceof SpemDiagram)
-            ((PresentationElementModele)tpog[i]).set_nomPresentation(md.getName());
-          modelpog.put(md, tpog[i]);
-        }
-    }
+		// Si ce sont des diagrammes, on corrige leur nom
+				if (md instanceof SpemDiagram)
+					((PresentationElementModele)tpog[i]).set_nomPresentation(md.getName());
+					
+				modelpog.put(md, tpog[i]);
+			}
+	}
     
 	//	Etape 2 : NOUVEAU on ajoute ceux de APES qui ne sont pas dans POG
     
@@ -132,8 +140,13 @@ public class ControleurPresenter extends ControleurSemantique {
           String myid = ( (PresentationElementModele) tpog[i]).get_id();
           if (!myid.substring(0, myid.lastIndexOf("-")).equals(pere.get_id())) {
             if (flag) {
+            	///////////////////////////////
+            	// TODO remonter les fils (guide) de l'élément.
+            	// voir setPositions ???
+            	////////////////////////
               lnkControleurPresentation.getlnkPresentation().removeElementAndUp(((ElementPresentation)tpog[i]).get_id());
-              ((PresentationElementModele) tpog[i]).set_id(lnkControleurPresentation.getlnkPresentation().makeId(pere.get_id()));
+			  lnkControleurPresentation.getlnkPresentation().changeId((ElementPresentation) tpog[i], lnkControleurPresentation.getlnkPresentation().makeId(pere.get_id()));
+              //((PresentationElementModele) tpog[i]).set_id(lnkControleurPresentation.getlnkPresentation().makeId(pere.get_id()));
               lnkControleurPresentation.getlnkPresentation().ajouterElementPresentation((ElementPresentation)tpog[i]);
             }
             else

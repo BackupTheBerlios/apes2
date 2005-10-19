@@ -3,7 +3,6 @@
 	<name>pog</name>
 	<comment></comment>
 	<projects>
-		<project>apes2</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

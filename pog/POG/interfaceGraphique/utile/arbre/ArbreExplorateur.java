@@ -37,6 +37,7 @@ import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -97,10 +98,29 @@ public class ArbreExplorateur extends Arbre implements DragSourceListener, DragG
     this._arbre.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
   }
 
-
+	public void load(File ff){
+		load();
+		DefaultMutableTreeNode rr = (DefaultMutableTreeNode) model.getRoot();
+		Vector vect = new Vector();
+		File tmpff = ff;
+		while (tmpff != null) {
+			if (!tmpff.getName().equals(""))
+				vect.add(tmpff.getName());
+			tmpff = tmpff.getParentFile();
+		}
+		do {
+			int i = 0;
+			String toto = "";
+			for (; (i < rr.getChildCount()) && !vect.contains(toto); i++)
+				toto = (String) ((DefaultMutableTreeNode)rr.getChildAt(i)).getUserObject();
+			rr = (DefaultMutableTreeNode) rr.getChildAt(i - 1);
+		} while (!rr.getUserObject().equals(ff.getName()));
+	  	TreePath tp = new TreePath(rr.getPath());
+	  	this._arbre.scrollPathToVisible(tp);
+	  	this._arbre.setSelectionPath(tp);
+  	}
 
   public void load(){
-
     if (lnkSysteme.getlnkControleurPresentation().getlnkPresentation() != null)
       path = lnkSysteme.getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath();
     else
@@ -131,7 +151,6 @@ public class ArbreExplorateur extends Arbre implements DragSourceListener, DragG
         };
     this._arbre.setModel(model);
     this._arbre.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-    lnkSysteme.lnkFenetrePrincipale.getLnkPanneauBibliotheque().load();
   }
 
   public void ajout_dossier(File lecteur, DefaultMutableTreeNode noeud) {
@@ -247,13 +266,6 @@ public class ArbreExplorateur extends Arbre implements DragSourceListener, DragG
     return (new File (this.getFichier(n)).isFile()) ;
   }
 
-  public void majApparence(){
-    this._arbre.setModel(model);
-  }
-
-  /** Traitement de l'\uFFFDvenement "l'utilisateur tente de faire un drag"
-   * @param event  Evenement DragGestureEvent associ\uFFFD \uFFFD l'initialisation du Drag
-   */
   public void dragGestureRecognized(DragGestureEvent event)
   {
     DefaultMutableTreeNode noeud = (DefaultMutableTreeNode)_arbre.getLastSelectedPathComponent() ;

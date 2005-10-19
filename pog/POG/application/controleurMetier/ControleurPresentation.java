@@ -50,8 +50,6 @@ public class ControleurPresentation {
   private Presentation lnkPresentation = null;
   public Preferences lnkPreferences = null;
 
-  private File _pathModele;
-
   public ControleurPresentation(Preferences pref) {
     lnkPreferences = pref;
     //lnkPresentation = new Presentation("toto", System.getProperty("user.home"), new ImageIcon());
@@ -65,20 +63,18 @@ public class ControleurPresentation {
    */
   public void nouvellePresentation(File pathBibli, String nomPres) {
     //pour SansModele
-    _pathModele = null;
     lnkPresentation = new Presentation(nomPres, pathBibli.getAbsolutePath(),
                                        lnkPreferences.
                                        getIconeDefaut(lnkPreferences.get_defIcoPack()));
-    lnkPresentation._pathModele = null;
+    lnkPresentation.set_pathModele(null);
   }
 
   public void nouvellePresentation(ProcessComponent monproc, String pathBibli,
                                    File pathModele) {
     //pour AvecModele
-    _pathModele = pathModele;
     lnkPresentation = new Presentation(monproc.getName(), pathBibli,
                                        lnkPreferences.getIconeDefaut(lnkPreferences.get_defIcoPack()), monproc);
-    lnkPresentation._pathModele = this._pathModele.getAbsolutePath();
+    lnkPresentation.set_pathModele(pathModele);
   }
 
   public Presentation getlnkPresentation() {
@@ -140,7 +136,8 @@ public class ControleurPresentation {
     return elems;
   }
 
-  public File get_pathModele() {
-    return _pathModele;
+  public void changerProprietes(String auteur, String email, String version) {
+  	lnkPresentation.changerProprietes(auteur, email, version);
   }
+  
 }

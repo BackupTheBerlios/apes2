@@ -109,7 +109,7 @@ public class POGMenu extends JMenuBar {
 
     jMenuApes.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("apes"));
     jMenuApes.addActionListener(lnkMenuListener);
-    jMenuApes.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("Empty"));//*/
+    jMenuApes.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("java"));
 
 
     jMenusyncApes.setText(this.lnkFenetrePrincipale.getLnkLangues().valeurDe("syncapes"));
@@ -137,9 +137,11 @@ public class POGMenu extends JMenuBar {
 
 	jMenuLien.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("lienfic"));
 	jMenuLien.addActionListener(lnkMenuListener);
+	jMenuLien.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("deconnect"));
 
 	jMenuchangeico.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("changertoutesicones"));
 	jMenuchangeico.addActionListener(lnkMenuListener);
+	jMenuchangeico.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("image"));
 
     jMenuSynchroniser.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("synchroniser"));
     jMenuSynchroniser.addActionListener(lnkMenuListener);
@@ -152,7 +154,7 @@ public class POGMenu extends JMenuBar {
 
     jMenuViderLog.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("viderlog"));
     jMenuViderLog.addActionListener(lnkMenuListener);
-    jMenuViderLog.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("Empty"));
+    jMenuViderLog.setIcon(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().getIconeDefaut("icone_poubelle"));
 
 
     jMenuPrefs.setText(lnkFenetrePrincipale.getLnkLangues().valeurDe("Preferences"));

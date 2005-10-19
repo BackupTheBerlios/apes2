@@ -132,8 +132,8 @@ public class FenetreEnregistrerSous extends FenetrePOG   {
 		String nomficpog = lnkFenetrePrincipale.get_pathSave();
 		Preferences pref = lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences();
 		if (nomficpog.equals("")) {
-			if (pref.get_utiliseCheminModele() && (lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() != null)) {
-				nomficpog = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele().getAbsolutePath();
+			if (pref.get_utiliseCheminModele() && (lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathModele() != null)) {
+				nomficpog = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathModele().getAbsolutePath();
 				if (nomficpog.indexOf('.') != -1)
 					nomficpog = nomficpog.substring(0, nomficpog.lastIndexOf('.'));
 				nomficpog = nomficpog + ".pog";

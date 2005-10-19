@@ -103,6 +103,11 @@ public class Importer{
     public String nom_presentation = "";
     public String chemin_contenus = ""; // Chemin Biblio
     public String chemin_icones = ""; // Chemin Modele
+    public String auteur = "";
+    public String version = "";
+    public String email = "";
+    public String lastexport = "0";
+	public String export = "";
   }
 
   private tmp_charger_presentation _tmp_charger_presentation = new tmp_charger_presentation();
@@ -154,7 +159,15 @@ public class Importer{
           _ctr.nouvellePresentation(new File(_tmp_charger_presentation.chemin_contenus), _tmp_charger_presentation.nom_presentation);
         _chargement_presentation = _ctr.getlnkPresentation();
         _chargement_presentation.DEJADEMANDE = false;
-		_chargement_presentation.DEJASYNCHRO = null;
+        _chargement_presentation.changerProprietes(_tmp_charger_presentation.auteur, _tmp_charger_presentation.email, _tmp_charger_presentation.version);
+        if (_tmp_charger_presentation.lastexport.equals(""))
+			_tmp_charger_presentation.lastexport = "0";
+		if (!_tmp_charger_presentation.export.equals(""))
+			_chargement_presentation.set_pathExport(new File(_tmp_charger_presentation.export));
+		else
+			_chargement_presentation.set_pathExport(null);
+			
+//		_chargement_presentation.DEJASYNCHRO = null;
       }
       else if (_curnom.startsWith(".exportation_presentation.element")) {
         //on passe la main a Presentation
@@ -199,6 +212,16 @@ public class Importer{
         else if (_curnom.equals(
             ".exportation_presentation.proprietes.nom_presentation"))
           _tmp_charger_presentation.nom_presentation = new String(content);
+		else if (_curnom.equals(".exportation_presentation.proprietes.auteur"))
+			_tmp_charger_presentation.auteur = new String(content);
+		else if (_curnom.equals(".exportation_presentation.proprietes.version"))
+			_tmp_charger_presentation.version = new String(content);
+		else if (_curnom.equals(".exportation_presentation.proprietes.lastexport"))
+			_tmp_charger_presentation.lastexport = new String(content);
+		else if (_curnom.equals(".exportation_presentation.proprietes.email"))
+			_tmp_charger_presentation.email = new String(content);
+		else if (_curnom.equals(".exportation_presentation.proprietes.export"))
+			_tmp_charger_presentation.export = new String(content);
         else if (_curnom.equals(
             ".exportation_presentation.proprietes.chemin_contenus"))
           if (_tmp_charger_presentation.chemin_contenus.equals(""))

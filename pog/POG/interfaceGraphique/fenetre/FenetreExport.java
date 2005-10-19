@@ -114,9 +114,9 @@ public class FenetreExport extends FenetrePOG  {
       rep = PogToolkit.askYesNoQuestion(this.lnkFenetrePrincipale.getLnkLangues().valeurDe("QuestOuiNonEcraseAncienneArch"), false, this);
 	if (rep == PogToolkit._NO)
 		return;
+	lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().set_pathExport(new File(jTextField1.getText()));
 	super.setVisible(false);
-	lnkFenetrePrincipale.set_pathExport(jTextField1.getText());
-	lnkFenetrePrincipale.getLnkSysteme().exporterPresentation(jTextField1.getText());	
+	lnkFenetrePrincipale.getLnkSysteme().exporterPresentation();
   }
 
   public void actionAnnuler() {
@@ -124,16 +124,20 @@ public class FenetreExport extends FenetrePOG  {
   }
 
 	public void setVisible(boolean arg0) {
-		String pathexp = lnkFenetrePrincipale.get_pathExport();
-		if (pathexp.equals("")) {
-			File fmo = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele();
-			if (fmo == null)
-				jTextField1.setText(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathPre() + File.separator + lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_nomPresentation() + ".pre");
+		File pathexp = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathExport();
+		String chemaff = "";
+		if (pathexp == null) {
+			String nomficsave = lnkFenetrePrincipale.get_pathSave();
+			if (!nomficsave.equals(""))
+				nomficsave = nomficsave.substring(nomficsave.lastIndexOf(File.separator) + 1, nomficsave.lastIndexOf("."));
+			if (!nomficsave.equals(""))
+				chemaff = lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathPre() + File.separator + nomficsave + ".pre";
 			else
-				jTextField1.setText(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathPre() + File.separator + fmo.getName().substring(0, fmo.getName().lastIndexOf(".")) + ".pre");
+				chemaff = lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathPre() + File.separator + lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_nomPresentation() + ".pre";
 		}
 		else
-			jTextField1.setText(pathexp);
+			chemaff = pathexp.getAbsolutePath();
+		jTextField1.setText(chemaff);
 		super.setVisible(arg0);
 	}
 

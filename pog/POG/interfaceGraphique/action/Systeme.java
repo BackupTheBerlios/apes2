@@ -195,10 +195,10 @@ public class Systeme {
 
 	private void _verifcohe() {
 		if (!_coherent) {
-			if (lnkControleurPresentation.get_pathModele() == null)
+			if (lnkControleurPresentation.getlnkPresentation().get_pathModele() == null)
 				_coherent = true;
 			else
-				_coherent = (_modele == lnkControleurPresentation.get_pathModele().lastModified());
+				_coherent = (_modele == lnkControleurPresentation.getlnkPresentation().get_pathModele().lastModified());
 			if (!_coherent) {
 				lnkFenetrePrincipale.getLnkDebug().verificationMessage("messverifsync");
 				return;
@@ -216,15 +216,9 @@ public class Systeme {
     lnkFenetrePrincipale.jLabelPathBib.setText(pathBibli.getAbsolutePath());
 
     this._numeroNouvelElement = 1;
-    lnkFenetrePrincipale.set_pathSave("");
-    lnkFenetrePrincipale.set_pathExport("");
-    lnkControleurPresentation.nouvellePresentation(pathBibli, nomPres); //, ElementPresentation.POG_RACINE_PAQUETAGE);
-//    lnkFenetrePrincipale.getLnkArbrePresentation().load();
-    lnkFenetrePrincipale.getLnkArbreExplorateur().load();
-    lnkFenetrePrincipale.getLnkPanneauBibliotheque().load();
+    lnkControleurPresentation.nouvellePresentation(pathBibli, nomPres);
     System.setProperty("user.dir", pathBibli.getAbsolutePath());
-    fireEvenement(null, POGListener.INITIALISE);
-	_invaliderTAG();
+    loadSystemeEtAffichage("");
   }
 
   public void ouvrirPresentation(final String pathOuv) {
@@ -233,21 +227,26 @@ public class Systeme {
         new FenetrePrincipale.TheTraitement("ouverture") {
 		public void traitement() {
     		new Importer(new File(pathOuv), lnkControleurPresenter, lnkFenetrePrincipale.getLnkDebug());
-    		if (lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() != null)
-    			_modele = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele().lastModified();
-    		else
-    			_modele = 0;
-			lnkFenetrePrincipale.set_pathSave(pathOuv);
-			lnkFenetrePrincipale.set_pathExport("");
-    		lnkFenetrePrincipale.getLnkArbreExplorateur().load();
-//    		lnkFenetrePrincipale.getLnkArbrePresentation().load();
-            lnkFenetrePrincipale.jLabelPathBib.setText(lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
-			fireEvenement(null, POGListener.INITIALISE);
-            _invaliderTAG();
+    		loadSystemeEtAffichage(pathOuv);
 		}
 	};
   }
 
+  private void loadSystemeEtAffichage(String pathSave) {
+  	if (lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathModele() != null)
+  		_modele = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathModele().lastModified();
+  	else
+  		_modele = 0;
+  	lnkFenetrePrincipale.set_pathSave(pathSave);
+  	lnkFenetrePrincipale.getLnkPanneauBibliotheque().load();
+  	lnkFenetrePrincipale.jLabelPathBib.setText(lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
+  	lnkFenetrePrincipale.getLnkDebug().patienter("chargementarbre", 0, 0);
+  	lnkFenetrePrincipale.getLnkArbreExplorateur().load();
+  	fireEvenement(null, POGListener.INITIALISE);
+  	lnkFenetrePrincipale.getLnkDebug().afficher("presentationchargee");
+  	_invaliderTAG();
+  }
+  
   public void enregistrerPresentation() {
     if (!lnkFenetrePrincipale.get_pathSave().equalsIgnoreCase("")){
       try {
@@ -281,10 +280,10 @@ public class Systeme {
 	};
   }
 
-  public void exporterPresentation(final String cheminDest) {
+  public void exporterPresentation() {
 	new FenetrePrincipale.TheTraitement("Exportation") {
 	   public void traitement() {
-			File file = new File(cheminDest);
+			File file = lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathExport();
 			_verifcohe();
 			boolean ok = _coherent;
 			if (_coherent)
@@ -293,6 +292,7 @@ public class Systeme {
 			 PogToolkit.showMsg(lnkFenetrePrincipale.getLnkLangues().valeurDe("SuccesExportation"), lnkFenetrePrincipale);
 		   else
 			 PogToolkit.showErrorMsg(lnkFenetrePrincipale.getLnkLangues().valeurDe("ErreurExportation"), lnkFenetrePrincipale);
+			_invaliderTAG();
 	   }
    };
   }
@@ -417,7 +417,7 @@ public class Systeme {
    * Fonction accessible par l'utilisateur : ajout au noeud racine
    */
   public void ajouterElementPre() {
-  	if (lnkControleurPresentation.get_pathModele() != null) {
+  	if (lnkControleurPresentation.getlnkPresentation().get_pathModele() != null) {
   		PogToolkit.showErrorMsg(lnkFenetrePrincipale.getLnkLangues().valeurDe("errajouterelempres"), lnkFenetrePrincipale);
   		return;
   	}
@@ -506,42 +506,27 @@ public class Systeme {
     return this.lnkControleurPresenter;
   }
 
-  public void nouvellePresentationAvecModele(final String pathBibli,
-                                             final String pathModele) {
-    _verifierSauve(true);
-    lnkFenetrePrincipale.jLabelPathBib.setText(pathBibli);
-    new FenetrePrincipale.TheTraitement("NewModele") {
-      public void traitement() {
-        try {
-          _numeroNouvelElement = 1;
-          File f = new File(pathModele);
-          lnkFenetrePrincipale.set_pathSave("");
-		  lnkFenetrePrincipale.set_pathExport("");
-          String nomPres = f.getName().substring(0, f.getName().length() - 5);
-
-          if (lnkControleurPresenter.nouvellePresentationAvecModele(f, nomPres,
-              new File(pathBibli)) == false)
-            PogToolkit.showErrorMsg(lnkFenetrePrincipale.getLnkLangues().
-                                    valeurDe("errmsgmodeleinvalide"),
-                                    lnkFenetrePrincipale);
-          else {
-//            lnkFenetrePrincipale.getLnkArbrePresentation().load();
-            lnkFenetrePrincipale.getLnkArbreExplorateur().load();
-            lnkFenetrePrincipale.getLnkPanneauBibliotheque().load();
-            _modele = getlnkControleurPresentation().get_pathModele().
-                lastModified();
-            System.setProperty("user.dir", pathBibli);
-            _invaliderTAG();
-          }
-          fireEvenement(null, POGListener.INITIALISE);
-        }
-        catch (Exception e) {
-          e.printStackTrace();
-        }
-        
-      }
-    };
-  }
+	public void nouvellePresentationAvecModele(final String pathBibli, final String pathModele) {
+		_verifierSauve(true);
+    	lnkFenetrePrincipale.jLabelPathBib.setText(pathBibli);
+    	new FenetrePrincipale.TheTraitement("NewModele") {
+    		public void traitement() {
+    			try {
+    				_numeroNouvelElement = 1;
+    				File f = new File(pathModele);
+    				System.setProperty("user.dir", pathBibli);
+    				String nomPres = f.getName().substring(0, f.getName().length() - 5);
+    				if (lnkControleurPresenter.nouvellePresentationAvecModele(f, nomPres, new File(pathBibli)) == false)
+    					PogToolkit.showErrorMsg(lnkFenetrePrincipale.getLnkLangues().valeurDe("errmsgmodeleinvalide"), lnkFenetrePrincipale);
+    				else
+    					loadSystemeEtAffichage("");
+    			}
+    			catch (Exception e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	};
+	}
 
   public void majLiensFichiers(String orig, String dest) {
     if (!orig.equals(dest)) {
@@ -570,6 +555,11 @@ public class Systeme {
   }
 
   public void lancer_editeur(String p0) {
+  	if (p0.equals("")) {
+		lnkFenetrePrincipale.getLnkDebug().debogage("aucunfichierasso");
+		return;
+  	}
+  		
     int indexPt = p0.lastIndexOf('.');
 
     //Si extension inexistante dans p0
@@ -682,7 +672,7 @@ public class Systeme {
 
   public TheTraitement synchroniserApes(final ApesProcess ap)
   {
-  	if ((_modele == getlnkControleurPresentation().get_pathModele().lastModified()) && (ap == null))
+  	if ((_modele == getlnkControleurPresentation().getlnkPresentation().get_pathModele().lastModified()) && (ap == null))
   		return null;
 
 	_invaliderTAG();
@@ -690,13 +680,12 @@ public class Systeme {
 	return new FenetrePrincipale.TheTraitement("Synchro") {
 		public void traitement() {
 			if (ap == null)
-				Apes.loadModel(lnkControleurPresentation.get_pathModele());
+				Apes.loadModel(lnkControleurPresentation.getlnkPresentation().get_pathModele());
 			else
 				Apes.chargeProcessComponent(ap);
 			getLnkControleurPresenter().synchroniserApes(true);
-			lnkFenetrePrincipale.getLnkDebug().patienter("", 0, 0);
-//			lnkFenetrePrincipale.getLnkArbrePresentation().load();
-			_modele = lnkControleurPresentation.get_pathModele().lastModified();
+			fireEvenement(null, POGListener.INITIALISE);
+			lnkFenetrePrincipale.getLnkDebug().afficher("synchrotermine");
 		}
 	};
   }
@@ -777,4 +766,10 @@ public class Systeme {
 		lnkFenetrePrincipale.getLnkArbreExplorateur().load();
 		lnkFenetrePrincipale.jLabelPathBib.setText(lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().lnkBibliotheque.getAbsolutePath());
 	}
+	
+	public void changerProprietes(String auteur, String email, String version) {
+	  lnkControleurPresentation.changerProprietes(auteur, email, version);
+	  _invaliderTAG();
+	}
+
 }

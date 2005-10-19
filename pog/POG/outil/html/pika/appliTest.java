@@ -29,21 +29,16 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 
 import javax.swing.JFileChooser;
-
-import org.ipsquad.apes.model.extension.ApesWorkDefinition;
-import org.ipsquad.apes.model.spem.process.structure.Activity;
-import org.ipsquad.apes.model.spem.process.structure.ProcessRole;
-import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.interfaceGraphique.fenetre.PanneauxDetails.PanneauDetail;
 import POG.objetMetier.PresentationElementModele;
+import POG.utile.propriete.Preferences;
 
 /**
  *
@@ -310,13 +305,13 @@ public class appliTest extends javax.swing.JFrame {
     private void MenuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuAboutActionPerformed
         // Add your handling code here:
         DialogueAbout unDial=new DialogueAbout(this,true);
-        unDial.show();
+        unDial.setVisible(true);
     }//GEN-LAST:event_MenuAboutActionPerformed
 
     private void apercuboutonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apercuboutonActionPerformed
         // Add your handling code here:
         DialogueApercu unDialogue=new DialogueApercu(this, true,feuille.getText());
-        unDialogue.show();
+        unDialogue.setVisible(true);
     }//GEN-LAST:event_apercuboutonActionPerformed
 
 
@@ -324,7 +319,7 @@ public class appliTest extends javax.swing.JFrame {
     private void MenuApercuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuApercuActionPerformed
         // Add your handling code here:
         DialogueApercu unDialogue=new DialogueApercu(this, true,feuille.getText());
-        unDialogue.show();
+        unDialogue.setVisible(true);
     }//GEN-LAST:event_MenuApercuActionPerformed
 
     private void MenuSelectionnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuSelectionnerActionPerformed
@@ -485,28 +480,22 @@ public class appliTest extends javax.swing.JFrame {
     fichier = null;
     _panel = panel;
     this.setVisible(true);
-    this.show();
+    this.setVisible(true);
     NouveauDocument();
     if (panel.get_elementCourant() instanceof PresentationElementModele) {
     	PresentationElementModele pel = (PresentationElementModele) panel.get_elementCourant();
-    	InputStream ips = null;
-    	
-    	if (pel.getLnkModelElement() instanceof Activity)
-    		ips = ClassLoader.getSystemResourceAsStream("POG/ac_type.html");
-		if (pel.getLnkModelElement() instanceof ApesWorkDefinition)
-			ips = ClassLoader.getSystemResourceAsStream("POG/dt_type.html");
-		if (pel.getLnkModelElement() instanceof WorkProduct)
-			ips = ClassLoader.getSystemResourceAsStream("POG/pr_type.html");
-		if (pel.getLnkModelElement() instanceof ProcessRole)
-			ips = ClassLoader.getSystemResourceAsStream("POG/ro_type.html");
+    	String leplan = (String) Preferences.MyInstance.get_plantypes().get(pel.getLnkModelElement().getClass().getName());
+    	if (leplan == null)
+    		return;
 		int c;
-		if (ips != null)
-			try {
+		try {
+			FileInputStream ips = new FileInputStream(leplan);
+			if (ips != null)
 				while ((c = ips.read()) != -1)
 					feuille.append((char)c + "");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
   }
 
@@ -514,7 +503,7 @@ public class appliTest extends javax.swing.JFrame {
     fichier = null;
     _panel = null;;
 	this.setVisible(true);
-	this.show();
+	this.setVisible(true);
   }
 
     public void NouveauDocument() {
@@ -522,7 +511,7 @@ public class appliTest extends javax.swing.JFrame {
         if (stateFeuille==true)
         {
         DialogueBox unDialogue=new DialogueBox(this,true);
-        unDialogue.show();
+        unDialogue.setVisible(true);
         if (unDialogue.getReturnStatus()==DialogueBox.RET_OK)
         {
             if (fichier!=null)
@@ -699,7 +688,7 @@ public class appliTest extends javax.swing.JFrame {
         if (stateFeuille==true)
         {
         DialogueBox unDialogue=new DialogueBox(this,true);
-        unDialogue.show();
+        unDialogue.setVisible(true);
         if (unDialogue.getReturnStatus()==DialogueBox.RET_OK)
         {
             //on enregistre en tenant compte des cas fichier connu ou non

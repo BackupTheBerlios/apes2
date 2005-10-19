@@ -61,41 +61,23 @@ import POG.utile.PogToolkit;
 import POG.utile.propriete.Langues;
 import POG.utile.propriete.Preferences;
 
+public class FenetrePreferences extends FenetrePOG {
 
-
-public class FenetrePreferences
-
-    extends FenetrePOG {
-
-  private JButton boutonAjouterAss;
-  private JButton boutonModifierAss;
-  private JButton boutonSupprimerAss;
-
-  private JButton boutonAjouterGui;
-  private JButton boutonModifierGui;
-  private JButton boutonSupprimerGui;
-
-  private JButton boutonAjouterPro;
-  private JButton boutonModifierPro;
-  private JButton boutonSupprimerPro;
-
-
-  private JList listeAssociations;
-  private JList listeGuides;
-  private JList listeProduits;
   private JPanel panneauAssociations;
   private JPanel panneauGuides;
-	private JPanel panneauProduits;
+  private JPanel panneauProduits;
+  private JPanel panneauPlantypes;
+  
   private JPanel panneauLookAndFeel;
   private JPanel panneauLangues;
   private JPanel panneauApplications;
   private JPanel panneauPresentation;
-  private JScrollPane panneauListeAssociations;
-  private JScrollPane panneauListeGuides;
-  private JScrollPane panneauListeProduits;
+  
   private AssociationsListModel modelAssociations ;
   private AssociationsListModel modelGuides;
   private AssociationsListModel modelProduits;
+  private AssociationsListModel modelPlantypes;
+  
   private JComboBox lafComboBox;
   private JComboBox languesComboBox;
   private JTextField champApplicationApes ;
@@ -111,7 +93,6 @@ public class FenetrePreferences
   
   private JCheckBox jcheckuse;
   private Preferences _prefs ;
-//  private HashMap _copieAssoc ;
   private FenetrePreferences _this ;
 
   public FenetrePreferences(FenetrePrincipale fp, Preferences p) throws HeadlessException {
@@ -126,6 +107,7 @@ public class FenetrePreferences
     this.modelAssociations = new AssociationsListModel(_prefs.getAssociations()) ;
 	this.modelGuides = new AssociationsListModel(_prefs.get_guide());
 	this.modelProduits = new AssociationsListModel(_prefs.get_produit());
+	this.modelPlantypes = new AssociationsListModel(_prefs.get_plantypes());
 
     try {
       jbInit();
@@ -141,273 +123,33 @@ public class FenetrePreferences
   private void jbInit() throws Exception {
 	JTabbedPane lestab = new JTabbedPane();
 
-
-// Associations
-
-    panneauAssociations = new JPanel();
-    panneauAssociations.setLayout(new BorderLayout());
-    panneauAssociations.setBorder(new TitledBorder(lnkFenetrePrincipale.getLnkLangues().valeurDe("associations")));
-    listeAssociations = new JList(this.modelAssociations);
-    listeAssociations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    listeAssociations.setCellRenderer(new DefaultListCellRenderer()
-      {
-        public Component getListCellRendererComponent(JList list,
-              Object value,
-              int index,
-              boolean isSelected,
-              boolean cellHasFocus)
-          {
-            Vector tableau = (Vector) value ;
-            return super.getListCellRendererComponent(list, tableau.get(0) + " = " + tableau.get(1), index, isSelected, cellHasFocus);
-          }
-      });
-    panneauListeAssociations = new JScrollPane(listeAssociations);
-    JViewport vp = panneauListeAssociations.getViewport();
-    Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
-    vp.setPreferredSize(new Dimension(tailleEcran.width / 4, tailleEcran.height / 5));
-    JPanel panneauBoutonsAssociations = new JPanel();
-
-    panneauAssociations.add(panneauListeAssociations, BorderLayout.CENTER);
-
-    JPanel panneauBoutons = new JPanel(new GridLayout(3,1));
-   boutonAjouterAss = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter"))
-      {
-        public void actionPerformed(ActionEvent e)
-        {
-          modifierAssociation(-1);
-        }
-      });
-    panneauBoutons.add(boutonAjouterAss);
-
-    boutonModifierAss = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier"))
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        modifierAssociation(listeAssociations.getSelectedIndex());
-      }
-    });
-	boutonModifierAss.setEnabled(false);
-    panneauBoutons.add(boutonModifierAss);
-
-   boutonSupprimerAss = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("supprimer"))
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        if (!listeAssociations.isSelectionEmpty())
-        {
-          int index = listeAssociations.getSelectedIndex();
-          modelAssociations.remove(index);
-          int nbIndex = modelAssociations.getSize();
-          if (nbIndex <= 0)
-          {
-            listeAssociations.clearSelection();
-          }
-          else
-          {
-            if (index == nbIndex)
-              index--;
-            listeAssociations.setSelectedIndex(index);
-          }
-        }
-      }
-    });
-	boutonSupprimerAss.setEnabled(false);
-    panneauBoutons.add(boutonSupprimerAss);
-
-    Box boiteBoutons = Box.createVerticalBox();
-    boiteBoutons.add(Box.createVerticalGlue());
-    boiteBoutons.add(panneauBoutons);
-    boiteBoutons.add(Box.createVerticalGlue());
-    panneauAssociations.add(boiteBoutons, BorderLayout.EAST);
-
-    listeAssociations.addListSelectionListener(new ListSelectionListener()
-     {
-       public void valueChanged(ListSelectionEvent e)
-       {
-         boutonModifierAss.setEnabled(!listeAssociations.isSelectionEmpty());
-         boutonSupprimerAss.setEnabled(!listeAssociations.isSelectionEmpty());
-       }
-     });
-
+	panneauAssociations = new MaPreference(lnkFenetrePrincipale, modelAssociations) {
+		String getTitleKey() { return "extensionaajouter"; }
+		String getTitleValue() { return "applicationaassociera"; }
+		boolean isFileChooser() { return true; }
+		String getTitleBorder() { return "associations"; }};
 	lestab.addTab("Associations", panneauAssociations);
 
-
-// Guides
-
-	panneauGuides= new JPanel();
-	panneauGuides.setLayout(new BorderLayout());
-	panneauGuides.setBorder(new TitledBorder(lnkFenetrePrincipale.getLnkLangues().valeurDe("associationsguide")));
-	listeGuides = new JList(this.modelGuides);
-	listeGuides.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	listeGuides.setCellRenderer(new DefaultListCellRenderer()
-	  {
-		public Component getListCellRendererComponent(JList list,
-			  Object value,
-			  int index,
-			  boolean isSelected,
-			  boolean cellHasFocus)
-		  {
-			Vector tableau = (Vector) value ;
-			return super.getListCellRendererComponent(list, tableau.get(0) + " = " + tableau.get(1), index, isSelected, cellHasFocus);
-		  }
-	  });
-	panneauListeGuides = new JScrollPane(listeGuides);
-	JViewport vp2 = panneauListeGuides.getViewport();
-	vp2.setPreferredSize(new Dimension(tailleEcran.width / 4, tailleEcran.height / 5));
-	panneauBoutonsAssociations = new JPanel();
-
-	panneauGuides.add(panneauListeGuides, BorderLayout.CENTER);
-
-	panneauBoutons = new JPanel(new GridLayout(3,1));
-	boutonAjouterGui = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter"))
-	  {
-		public void actionPerformed(ActionEvent e)
-		{
-		  modifierGuide(-1);
-		}
-	  });
-	panneauBoutons.add(boutonAjouterGui);
-
-	boutonModifierGui = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier"))
-	{
-	  public void actionPerformed(ActionEvent e)
-	  {
-		modifierGuide(listeGuides.getSelectedIndex());
-	  }
-	});
-	boutonModifierGui.setEnabled(false);
-	panneauBoutons.add(boutonModifierGui);
-
-	boutonSupprimerGui = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("supprimer"))
-	{
-	  public void actionPerformed(ActionEvent e)
-	  {
-		if (!listeGuides.isSelectionEmpty())
-		{
-		  int index = listeGuides.getSelectedIndex();
-		  modelGuides.remove(index);
-		  int nbIndex = modelGuides.getSize();
-		  if (nbIndex <= 0)
-		  {
-			listeGuides.clearSelection();
-		  }
-		  else
-		  {
-			if (index == nbIndex)
-			  index--;
-			listeGuides.setSelectedIndex(index);
-		  }
-		}
-	  }
-	});
-	boutonSupprimerGui.setEnabled(false);
-	panneauBoutons.add(boutonSupprimerGui);
-
-	boiteBoutons = Box.createVerticalBox();
-	boiteBoutons.add(Box.createVerticalGlue());
-	boiteBoutons.add(panneauBoutons);
-	boiteBoutons.add(Box.createVerticalGlue());
-	panneauGuides.add(boiteBoutons, BorderLayout.EAST);
-
-	listeGuides.addListSelectionListener(new ListSelectionListener()
-	 {
-	   public void valueChanged(ListSelectionEvent e)
-	   {
-		 boutonModifierGui.setEnabled(!listeGuides.isSelectionEmpty());
-		 boutonSupprimerGui.setEnabled(!listeGuides.isSelectionEmpty());
-	   }
-	 });
-
+	panneauGuides = new MaPreference(lnkFenetrePrincipale, modelGuides) {
+		String getTitleBorder() { return "associationsguide"; }
+		String getTitleKey() { return "nomguide"; }
+		String getTitleValue() { return null; }
+		boolean isFileChooser() { return false; }};
 	lestab.addTab("Guides", panneauGuides);
 
+	panneauProduits = new MaPreference(lnkFenetrePrincipale, modelProduits) {
+		String getTitleBorder() { return "associationsproduit"; }
+		String getTitleKey() { return "nomproduit"; }
+		String getTitleValue() { return null; }
+		boolean isFileChooser() { return false; }};
+	lestab.addTab("Produit", panneauProduits);
 
-//	Produits
-
-	 panneauProduits= new JPanel();
-	panneauProduits.setLayout(new BorderLayout());
-	panneauProduits.setBorder(new TitledBorder(lnkFenetrePrincipale.getLnkLangues().valeurDe("associationsproduit")));
-	listeProduits = new JList(this.modelProduits);
-	listeProduits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	listeProduits.setCellRenderer(new DefaultListCellRenderer()
-	   {
-		 public Component getListCellRendererComponent(JList list,
-			   Object value,
-			   int index,
-			   boolean isSelected,
-			   boolean cellHasFocus)
-		   {
-			 Vector tableau = (Vector) value ;
-			 return super.getListCellRendererComponent(list, tableau.get(0) + " = " + tableau.get(1), index, isSelected, cellHasFocus);
-		   }
-	   });
-	panneauListeProduits = new JScrollPane(listeProduits);
-	 JViewport vp3 = panneauListeProduits.getViewport();
-	 vp3.setPreferredSize(new Dimension(tailleEcran.width / 4, tailleEcran.height / 5));
-	 panneauBoutonsAssociations = new JPanel();
-
-	panneauProduits.add(panneauListeProduits, BorderLayout.CENTER);
-
-	 panneauBoutons = new JPanel(new GridLayout(3,1));
-	 boutonAjouterPro = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter"))
-	   {
-		 public void actionPerformed(ActionEvent e)
-		 {
-		   modifierProduit(-1);
-		 }
-	   });
-	 panneauBoutons.add(boutonAjouterPro);
-
-	 boutonModifierPro = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier"))
-	 {
-	   public void actionPerformed(ActionEvent e)
-	   {
-		 modifierProduit(listeProduits.getSelectedIndex());
-	   }
-	 });
-	 boutonModifierPro.setEnabled(false);
-	 panneauBoutons.add(boutonModifierPro);
-
-	 boutonSupprimerPro = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("supprimer"))
-	 {
-	   public void actionPerformed(ActionEvent e)
-	   {
-		 if (!listeProduits.isSelectionEmpty())
-		 {
-		   int index = listeProduits.getSelectedIndex();
-		   modelProduits.remove(index);
-		   int nbIndex = modelProduits.getSize();
-		   if (nbIndex <= 0)
-		   {
-			listeProduits.clearSelection();
-		   }
-		   else
-		   {
-			 if (index == nbIndex)
-			   index--;
-			listeProduits.setSelectedIndex(index);
-		   }
-		 }
-	   }
-	 });
-	 boutonSupprimerPro.setEnabled(false);
-	 panneauBoutons.add(boutonSupprimerPro);
-
-	 boiteBoutons = Box.createVerticalBox();
-	 boiteBoutons.add(Box.createVerticalGlue());
-	 boiteBoutons.add(panneauBoutons);
-	 boiteBoutons.add(Box.createVerticalGlue());
-	panneauProduits.add(boiteBoutons, BorderLayout.EAST);
-
-	listeProduits.addListSelectionListener(new ListSelectionListener()
-	  {
-		public void valueChanged(ListSelectionEvent e)
-		{
-		  boutonModifierPro.setEnabled(!listeProduits.isSelectionEmpty());
-		  boutonSupprimerPro.setEnabled(!listeProduits.isSelectionEmpty());
-		}
-	  });
-
-	 lestab.addTab("Produit", panneauProduits);
+	panneauPlantypes = new MaPreference(lnkFenetrePrincipale, modelPlantypes) {
+		String getTitleBorder() { return "associationsplantype"; }
+		String getTitleKey() { return "classeelement"; }
+		String getTitleValue() { return "fichierplantype"; }
+		boolean isFileChooser() { return true; }};
+	lestab.addTab("Plan Types", panneauPlantypes);
 
 	
 // Apparences
@@ -655,6 +397,7 @@ public class FenetrePreferences
     this._prefs.setAssociations(modelAssociations.getElements());
 	this._prefs.set_guide(modelGuides.getElements());
 	this._prefs.set_produit(modelProduits.getElements());
+	this._prefs.set_plantype(modelPlantypes.getElements());
     if (!this._prefs.get_langue().equals(((Locale)this.languesComboBox.getSelectedItem()).getLanguage()))
         PogToolkit.showMsg(lnkFenetrePrincipale.getLnkLangues().valeurDe("msgredemarrerlangue"), this.lnkFenetrePrincipale);
     this._prefs.set_langue(((Locale)this.languesComboBox.getSelectedItem()).getLanguage());
@@ -678,149 +421,167 @@ public class FenetrePreferences
   public void actionAnnuler() {
     this.dispose();
   }
+}
 
-  private void modifierAssociation(int i) {
-    String titre ;
-    String ext ;
-    String appli;
-
-    JFileChooser fc ;
-    if (i == -1)
-    {
-      titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter") ;
-      ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("extensionaajouter"), titre, "") ;
-      if (ext == null)
-        return;
-      fc  = new JFileChooser() ;
-    }
-    else
-    {
-      titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier") ;
-      Vector v = (Vector)modelAssociations.getElementAt(i);
-      ext = v.get(0).toString() ;
-      File file = new File(v.get(1).toString());
-      fc = new JFileChooser(file) ;
-      fc.setSelectedFile(file);
-    }
-    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-    fc.setDialogTitle(lnkFenetrePrincipale.getLnkLangues().valeurDe("applicationaassociera") + " " + ext);
-    int result = fc.showOpenDialog(this);
-    if (result == JFileChooser.APPROVE_OPTION)
-    {
-      modelAssociations.put(ext, fc.getSelectedFile().getAbsolutePath());
-    }
-  }
-
-  private void modifierGuide(int i) {
-	String titre ;
-	String ext ;
-	String appli;
-	String ico;
-
-	if (i == -1)
-	{
-	  titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter") ;
-	  ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("nomguide"), titre, "") ;
-	  if (ext == null)
-		return;
-		ico = null;
-	}
-	else
-	{
-	  titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier") ;
-	  Vector v = (Vector)modelGuides.getElementAt(i);
-	  ext = v.get(0).toString() ;
-	  ico = v.get(1).toString();
-	}
-	File ff = lnkFenetrePrincipale.iconeChooser(ico);
-	if (ff != null) {
-		if (ff.getAbsolutePath().startsWith(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut()))
-	  		modelGuides.put(ext, ff.getAbsolutePath().substring(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut().length() + 1));
-	  	else
-			modelGuides.put(ext, ff.getAbsolutePath());
-	}
-  }
-
-  private void modifierProduit(int i) {
-	String titre ;
-	String ext ;
-	String appli;
-	String ico;
-
-	if (i == -1)
-	{
-	  titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter") ;
-	  ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe("nomproduit"), titre, "") ;
-	  if (ext == null)
-		return;
-		ico = null;
-	}
-	else
-	{
-	  titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier") ;
-	  Vector v = (Vector)modelProduits.getElementAt(i);
-	  ext = v.get(0).toString() ;
-	  ico = v.get(1).toString();
-	}
-	File ff = lnkFenetrePrincipale.iconeChooser(ico);
-	if (ff != null) {
-		if (ff.getAbsolutePath().startsWith(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut()))
-			modelProduits.put(ext, ff.getAbsolutePath().substring(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut().length() + 1));
-		else
-			modelProduits.put(ext, ff.getAbsolutePath());
-	}
-  }
-
-
-  private class AssociationsListModel extends AbstractListModel
-  {
-    Object [] keys ;
-    HashMap _copieAssoc;
-
+class AssociationsListModel extends AbstractListModel {
+	Object [] keys ;
+	HashMap _copieAssoc;
+	
 	public HashMap getElements() {
 		return _copieAssoc;
 	}
+	
+	public AssociationsListModel(HashMap valeurs) {
+		super();
+		_copieAssoc = valeurs;
+		this.majKeys();
+	}
+	
+	private void majKeys() {
+		keys = _copieAssoc.keySet().toArray();
+		Arrays.sort(keys);
+	}
+	
+	public int getSize() {
+		return _copieAssoc.size();
+	}
+	
+	public Object getElementAt(int index) {
+		if (_copieAssoc == null)
+			return null;
+		Vector result = new Vector(2);
+		result.add(0, keys[index]);
+		result.add(1, _copieAssoc.get(keys [index]));
+		return result;
+	}
+	
+	public void remove(int index) {
+		_copieAssoc.remove(keys[index]);
+		this.fireContentsChanged(this, index, index);
+		this.majKeys();
+	}
+	
+	public void put(Object obj1, Object obj2) {
+		_copieAssoc.put(obj1, obj2);
+		this.fireContentsChanged(this, 0, this.getSize() - 1);
+		this.majKeys();
+	}
+}
 
-    public AssociationsListModel(HashMap valeurs)
-    {
-      super();
-      _copieAssoc = valeurs;
-      this.majKeys();
-    }
-    private void majKeys()
-    {
-      keys = _copieAssoc.keySet().toArray();
-      Arrays.sort(keys);
-    }
-    public int getSize()
-    {
-      return _copieAssoc.size();
-    }
 
-    public Object getElementAt(int index)
-    {
-      if (_copieAssoc != null)
-      {
-        Vector result = new Vector(2);
-        result.add(0, keys[index]);
-        result.add(1, _copieAssoc.get(keys [index]));
-        return result;
-      }
-      return null;
-    }
+abstract class MaPreference extends JPanel {
 
-    public void remove(int index)
-    {
-      _copieAssoc.remove(keys[index]);
-      this.fireContentsChanged(this, index, index);
-      this.majKeys();
-    }
+	public MaPreference(final FenetrePrincipale lnkFenetrePrincipale, final AssociationsListModel themodel) {
+		super();
+		this.setLayout(new BorderLayout());
+		this.setBorder(new TitledBorder(lnkFenetrePrincipale.getLnkLangues().valeurDe(getTitleBorder())));
+		final JList theliste = new JList(themodel);
+		theliste.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		theliste.setCellRenderer(new DefaultListCellRenderer() {
+			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+				Vector tableau = (Vector) value ;
+				return super.getListCellRendererComponent(list, tableau.get(0) + " = " + tableau.get(1), index, isSelected, cellHasFocus);
+			}
+		});
+		JScrollPane panneauListe = new JScrollPane(theliste);
+		JViewport vp = panneauListe.getViewport();
+		Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
+		vp.setPreferredSize(new Dimension(tailleEcran.width / 4, tailleEcran.height / 5));
+		this.add(panneauListe, BorderLayout.CENTER);
+		JPanel panneauBoutons = new JPanel(new GridLayout(3,1));
+		JButton boutonAjouter = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter")) {
+			public void actionPerformed(ActionEvent e) {
+				modifier(-1, lnkFenetrePrincipale, themodel);
+			}
+		});
+		panneauBoutons.add(boutonAjouter);
+		final JButton boutonModifier = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier")) {
+			public void actionPerformed(ActionEvent e) {
+				modifier(theliste.getSelectedIndex(), lnkFenetrePrincipale, themodel);
+			}
+		});
+		boutonModifier.setEnabled(false);
+		panneauBoutons.add(boutonModifier);
+		final JButton boutonSupprimer = new JButton(new AbstractAction(lnkFenetrePrincipale.getLnkLangues().valeurDe("supprimer")) {
+			public void actionPerformed(ActionEvent e) {
+				if (!theliste.isSelectionEmpty()) {
+					int index = theliste.getSelectedIndex();
+					themodel.remove(index);
+					int nbIndex = themodel.getSize();
+					if (nbIndex <= 0)
+						theliste.clearSelection();
+					else {
+						if (index == nbIndex)
+							index--;
+						theliste.setSelectedIndex(index);
+					}
+				}
+			}
+		});
+		boutonSupprimer.setEnabled(false);
+		panneauBoutons.add(boutonSupprimer);
+		Box boiteBoutons = Box.createVerticalBox();
+		boiteBoutons.add(Box.createVerticalGlue());
+		boiteBoutons.add(panneauBoutons);
+		boiteBoutons.add(Box.createVerticalGlue());
+		this.add(boiteBoutons, BorderLayout.EAST);
+		theliste.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				boutonModifier.setEnabled(!theliste.isSelectionEmpty());
+				boutonSupprimer.setEnabled(!theliste.isSelectionEmpty());
+			}
+		});
+	}
 
-    public void put(Object obj1, Object obj2)
-    {
-      _copieAssoc.put(obj1, obj2);
-      this.fireContentsChanged(this, 0, this.getSize() - 1);
-      this.majKeys();
-    }
-  }
+	private void modifier(int i, FenetrePrincipale lnkFenetrePrincipale, AssociationsListModel themodel) {
+		String titre ;
+		String ext ;
+		String appli;
+		String ico;
+		JFileChooser fc = null;
+		if (i == -1) {
+			titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("ajouter") ;
+			ext = PogToolkit.askForString(lnkFenetrePrincipale.getLnkLangues().valeurDe(getTitleKey()), titre, "") ;
+			if (ext == null)
+				return;
+			fc  = new JFileChooser();
+			ico = null;
+		}
+		else {
+			titre = lnkFenetrePrincipale.getLnkLangues().valeurDe("modifier") ;
+			Vector v = (Vector)themodel.getElementAt(i);
+			ext = v.get(0).toString();
+			ico = v.get(1).toString();
+			if (isFileChooser()) {
+				File file = new File(ico);
+				fc = new JFileChooser(file) ;
+				fc.setSelectedFile(file);
+			}
+		}
+		if (isFileChooser()) {
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.setDialogTitle(lnkFenetrePrincipale.getLnkLangues().valeurDe(getTitleValue()) + " " + ext);
+			int result = fc.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION)
+				themodel.put(ext, fc.getSelectedFile().getAbsolutePath());
+		}
+		else {
+			File ff = lnkFenetrePrincipale.iconeChooser(ico);
+			if (ff != null) {
+				if (ff.getAbsolutePath().startsWith(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut()))
+					themodel.put(ext, ff.getAbsolutePath().substring(lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathIconeDefaut().length() + 1));
+				else
+					themodel.put(ext, ff.getAbsolutePath());
+			}
+		}
+	}
+	
+	abstract String getTitleBorder();
+
+	abstract String getTitleKey();
+
+	abstract String getTitleValue();
+
+	abstract boolean isFileChooser();
+
 }

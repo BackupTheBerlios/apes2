@@ -79,8 +79,8 @@ public class MenuListener implements ActionListener {
 			public void traitement() {
 				String argvApes = new String("");
 				if ((pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation() != null)
-					&& (pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() != null))
-				argvApes = pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele().getPath();
+					&& (pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathModele() != null))
+				argvApes = pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathModele().getPath();
 				String str = pgm.lnkFenetrePrincipale.getLnkSysteme().getLnkPreferences().get_pathApes();
 				str = "java -jar \"" + str + "\" \"" + argvApes + "\"";
 				System.out.println(str);
@@ -165,7 +165,7 @@ public class MenuListener implements ActionListener {
    }
    else if (evt.getActionCommand().equals(getLangue("syncapes")))
      {
-       if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().get_pathModele() == null)
+       if (this.pgm.lnkFenetrePrincipale.getLnkSysteme().getlnkControleurPresentation().getlnkPresentation().get_pathModele() == null)
        {
          this.pgm.lnkFenetrePrincipale.getLnkDebug().afficher("presnonlier");
        }

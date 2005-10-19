@@ -92,13 +92,13 @@ public class ControleurExporter extends ControleurSemantique {
 			}
 		}
 
-        if (lnkControleurPresentation.get_pathModele() != null) {
+        if (lnkControleurPresentation.getlnkPresentation().get_pathModele() != null) {
           //copie le modele la ou on veut l'exporter
           //lnkDebug.patienter("Copie du modèle...");
           //PogToolkit.copyFile(lnkControleurPresentation.get_pathModele().getAbsolutePath(), ff.getAbsolutePath() + File.separator + lnkControleurPresentation.getlnkPresentation().get_nomPresentation());
 
 		  lnkDebug.patienter("dezipmo", 0, 0);
-          ZIP archive2 = new ZIP(lnkControleurPresentation.get_pathModele().getAbsolutePath());
+          ZIP archive2 = new ZIP(lnkControleurPresentation.getlnkPresentation().get_pathModele().getAbsolutePath());
           Vector vv = archive2.contenu();
           archive2.deziper(ff);
 

@@ -57,7 +57,7 @@ public class PresentationElementModele extends ElementPresentation {
 
   /** @directed
    * @supplierCardinality 0..**/
-  private Vector lnkGuide1;
+//  private Vector lnkGuide1;
 
   /**
 
@@ -68,6 +68,8 @@ public class PresentationElementModele extends ElementPresentation {
    */
 
 	private void askChangeNom() {
+		if (_nominmodel.equals(_nomPresentation))
+			return;
 		String quest = FenetrePrincipale.langue("questouinonchangernommodele");
 		quest = quest.replaceFirst("ARG0", _nomPresentation);
 		quest = quest.replaceFirst("ARG1", _nominmodel);

@@ -105,7 +105,7 @@ public class ElementPresentation implements Sauvegarde {
     return _id;
   }
 
-  public void set_id(String newId){
+  void set_id(String newId){
     this._id = newId;
   }
 

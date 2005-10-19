@@ -109,6 +109,15 @@ public class Apes {
 			}
 			return false;
 		}
+		
+		public boolean contains(Object arg0) {
+			try {
+				return super.contains(arg0);
+			} catch (Exception e) {
+				System.out.println("Bug Apes in equals into ProcessRole");
+			}
+			return false;
+		}
     };
     _lstElement.add(pp);
     Stack st = new Stack();

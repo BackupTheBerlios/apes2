@@ -18,65 +18,75 @@
  */
 
 
-/*
- * OuvrirFiltre.java
- *
- * Created on 11 avril 2002, 17:38
- */
+/*
+ * OuvrirFiltre.java
+ *
+ * Created on 11 avril 2002, 17:38
+ */
+
+package POG.outil.html.pika;
+import java.io.IOException;
 
-package POG.outil.html.pika;
+
+/**
+ *
+ * @author  Administrateur
+ * @version
+ */
+public class OuvrirFiltre extends javax.swing.filechooser.FileFilter {
+
+    /** Creates new OuvrirFiltre */
+    public OuvrirFiltre() {
+        super();
+    }
+
+    public boolean accept(java.io.File fichier) {
+        if (fichier.isDirectory()) {
+		return true;
+	}
+	else
+	{
+		String uneString=fichier.getName();
+		char[] a=uneString.toCharArray();
+		StringBuffer extension=new StringBuffer("");
+                StringBuffer extension2=new StringBuffer("");		String extensionString = "";
+			extension.append(a[a.length-3]);
 
-/**
- *
- * @author  Administrateur
- * @version
- */
-public class OuvrirFiltre extends javax.swing.filechooser.FileFilter {
+			extension.append(a[a.length-2]);
 
-    /** Creates new OuvrirFiltre */
-    public OuvrirFiltre() {
-        super();
-    }
+			extension.append(a[a.length-1]);
 
-    public boolean accept(java.io.File fichier) {
-        if (fichier.isDirectory()) {
-		return true;
-	}
-	else
-	{
-		String uneString=fichier.getName();
-		char[] a=uneString.toCharArray();
-		StringBuffer extension=new StringBuffer("");
-                StringBuffer extension2=new StringBuffer("");
-		extension.append(a[a.length-3]);
-		extension.append(a[a.length-2]);
-		extension.append(a[a.length-1]);
-		String extensionString=extension.toString();
-                extension2.append(a[a.length-4]);
-                extension2.append(a[a.length-3]);
-		extension2.append(a[a.length-2]);
-		extension2.append(a[a.length-1]);
-                String extensionString2=extension2.toString();
-		if (extensionString.trim().equalsIgnoreCase("HTM"))
-		{
-			return true;
-		}
-		else
-		{
-                    if (extensionString2.trim().equalsIgnoreCase("HTML"))
-                    {
-			return true;
-                    }
-                    else
-                    {
-			return false;
-                    }
-		}
-	}
-    }
+			extensionString=extension.toString();
 
-    public String getDescription() {
-        return "Fichiers HTML (*.HTM, *.HTML)";
-    }
+					extension2.append(a[a.length-4]);
 
-}
+					extension2.append(a[a.length-3]);
+
+			extension2.append(a[a.length-2]);
+
+			extension2.append(a[a.length-1]);
+
+                String extensionString2=extension2.toString();
+		if (extensionString.trim().equalsIgnoreCase("HTM"))
+		{
+			return true;
+		}
+		else
+		{
+                    if (extensionString2.trim().equalsIgnoreCase("HTML"))
+                    {
+			return true;
+                    }
+                    else
+                    {
+			return false;
+                    }
+		}
+	}
+    }
+
+    public String getDescription() {
+        return "Fichiers HTML (*.HTM, *.HTML)";
+    }
+
+}

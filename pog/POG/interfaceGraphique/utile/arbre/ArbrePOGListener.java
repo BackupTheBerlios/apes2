@@ -106,12 +106,14 @@ public abstract class ArbrePOGListener implements POGListener, TreeModel {
 		ElementPresentation el = (ElementPresentation) arg0;
 		ElementPresentation[] alls = thePresentation().listeElementPresentation();
 		for (int i = 0; i < alls.length; i++)
-			if (alls[i].get_id().startsWith(el.get_id()) && (alls[i].get_id().split("-").length == el.get_id().split("-").length + 1))
+			if (alls[i].get_id().startsWith(el.get_id() + "-") && (alls[i].get_id().split("-").length == el.get_id().split("-").length + 1))
 				total++;
 		return total;
 	}
 
 	public static Object [] thePath(Object o, Presentation thePresentation) {
+		if (o == null)
+			return new Object[] {thePresentation.getElementPresentation(thePresentation.getIdRacine())};
 		if (!(o instanceof ElementPresentation))
 			return null;
 		ElementPresentation el = (ElementPresentation) o;
@@ -122,21 +124,6 @@ public abstract class ArbrePOGListener implements POGListener, TreeModel {
 		}
 		return vect.toArray();
 	}
-
-	/*private ElementPresentation [] thechilds(ElementPresentation el) {
-		ElementPresentation[] alls = _presentation.listeElementPresentation();
-		Vector vect = new Vector();
-		for (int i = 0; i < alls.length; i++)
-			if (alls[i].get_id().startsWith(el.get_id()))
-				vect.add(alls);
-		ElementPresentation[] ret = (ElementPresentation[]) vect.toArray(new ElementPresentation[0]);
-		Arrays.sort(ret, new Comparator() {
-			public int compare(Object arg0, Object arg1) {
-				return ((ElementPresentation)arg0).get_id().compareTo(((ElementPresentation)arg1).get_id());
-			}
-		});
-		return ret;
-	}*/
 
 	public boolean isLeaf(Object arg0) {
 		return getChildCount(arg0) == 0;

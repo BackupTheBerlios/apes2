@@ -53,6 +53,7 @@ import org.ipsquad.apes.model.spem.process.structure.WorkProduct;
 import org.ipsquad.utils.IconManager;
 
 import POG.application.controleurMetier.ControleurExporter;
+import POG.interfaceGraphique.fenetre.FenetreAPropos;
 import POG.interfaceGraphique.fenetre.FenetrePrincipale;
 import POG.utile.MyMultiFileFilter;
 import POG.utile.PogToolkit;
@@ -69,12 +70,15 @@ public class Preferences {
 	private static java.util.prefs.Preferences prefExt = java.util.prefs.Preferences.userNodeForPackage(java.util.HashMap.class);
 	private static java.util.prefs.Preferences prefGuide = java.util.prefs.Preferences.userNodeForPackage(ZIP.class);
 	private static java.util.prefs.Preferences prefProduit = java.util.prefs.Preferences.userNodeForPackage(ControleurExporter.class);
+	private static java.util.prefs.Preferences prefPlanType = java.util.prefs.Preferences.userNodeForPackage(FenetreAPropos.class);
 	
 	private HashMap _preferences = new HashMap();
 
 	private HashMap _associationDocExe = new HashMap();
 	private HashMap _associationGuide = new HashMap();
 	private HashMap _associationProduit = new HashMap();
+	private HashMap _associationPlanTypes = new HashMap();
+	
 	private HashMap _icoFile = new HashMap();
 
 	private FenetrePrincipale _lnkFenetrePrincipale ;
@@ -109,15 +113,24 @@ public class Preferences {
       	System.out.println("Erreur création préférences.");
         //PogToolkit.showErrorMsg(fp.getLnkLangues().valeurDe("errcreationreppref"), fp);
 
-    String fichierLangueDefaut = REPPREF + File.separatorChar + Langues.NOMBASE + "_" + Langues.LANGUEDEFAUT + ".properties";
+    String fichierLangueDefaut = REPPREF + Langues.NOMBASE + "_" + Langues.LANGUEDEFAUT + ".properties";
     if (!PogToolkit.fileExists(fichierLangueDefaut))
-      extractLangue(fichierLangueDefaut);
-
+      extractLangue();      
+     
+	if (!PogToolkit.fileExists(REPPREF + "plantypes" + File.separatorChar + "ac_type.html"))
+		extractFichier("plantypes", "ac_type.html");
+	if (!PogToolkit.fileExists(REPPREF + "plantypes" + File.separatorChar + "dt_type.html"))
+		extractFichier("plantypes", "dt_type.html");
+	if (!PogToolkit.fileExists(REPPREF + "plantypes" + File.separatorChar + "pr_type.html"))
+		extractFichier("plantypes", "pr_type.html");
+	if (!PogToolkit.fileExists(REPPREF + "plantypes" + File.separatorChar + "ro_type.html"))
+		extractFichier("plantypes", "ro_type.html");
+    
     chargerPrefs();
 
     // Prise en compte des versions des langues
 	if (!Langues.versionLangue(Langues.LANGUEDEFAUT))
-		extractLangue(fichierLangueDefaut);
+		extractLangue();
 
     try {
       ClassLoader.getSystemClassLoader().loadClass("org.ipsquad.utils.IconManager");
@@ -148,29 +161,32 @@ public class Preferences {
     _im = IconManager.getInstance();
   }
 
-  private void extractLangue(String fichierLangueDefaut) {
-    System.out.println("Extraction des langues (Mise à jour)");
-    try
-    {
-      InputStream in = ClassLoader.getSystemResourceAsStream("POG/" + Langues.NOMBASE + "_" + Langues.LANGUEDEFAUT + ".properties");
-      File ff = new File(fichierLangueDefaut);
-      if (!ff.exists()) {
-              ff.getParentFile().mkdirs();
-              ff.createNewFile();
-      }
-
-      FileOutputStream fo = new FileOutputStream(fichierLangueDefaut);
-      int c;
-      while ((c = in.read()) != -1)
-            fo.write(c);
-      fo.close();
-      in.close();
-    }
-    catch (Exception e) {
-            e.printStackTrace();
-    }
+  private void extractLangue() {
+    System.out.println("Mise à jour des langues");
+    extractFichier("", Langues.NOMBASE + "_" + Langues.LANGUEDEFAUT + ".properties");
   }
 
+  private void extractFichier(String rep, String nomfich) {
+	System.out.println("...Extraction de " + nomfich);
+	try
+	{
+	  InputStream in = ClassLoader.getSystemResourceAsStream("POG/" + nomfich);
+	  File ff = new File(REPPREF + rep + File.separatorChar + nomfich);
+	  if (!ff.exists()) {
+			  ff.getParentFile().mkdirs();
+			  ff.createNewFile();
+	  }
+	  FileOutputStream fo = new FileOutputStream(REPPREF + rep + File.separatorChar + nomfich);
+	  int c;
+	  while ((c = in.read()) != -1)
+			fo.write(c);
+	  fo.close();
+	  in.close();
+	}
+	catch (Exception e) {
+			e.printStackTrace();
+	}
+  }
 
 
   public static Preferences charger(FenetrePrincipale fp) throws ClassNotFoundException {
@@ -325,10 +341,12 @@ public class Preferences {
     InputStream isUser = null;
     InputStream isExt = null;
 	InputStream isGuide = null;
+	InputStream isPlan = null;
     try {
         isUser = new BufferedInputStream(new FileInputStream(REPPREF+"POGPreferencesUser.xml"));
         isExt = new BufferedInputStream(new FileInputStream(REPPREF+"POGPreferencesExt.xml"));
 		isGuide = new BufferedInputStream(new FileInputStream(REPPREF+"POGPreferencesGuide.xml"));
+		isPlan = new BufferedInputStream(new FileInputStream(REPPREF+"POGPreferencesPlanType.xml"));
     } catch (FileNotFoundException e) {}
 
     // Importe les preferences
@@ -336,6 +354,7 @@ public class Preferences {
         java.util.prefs.Preferences.importPreferences(isUser);
         java.util.prefs.Preferences.importPreferences(isExt);
 		java.util.prefs.Preferences.importPreferences(isGuide);
+		java.util.prefs.Preferences.importPreferences(isPlan);
     } catch (Exception e) {}
 
 
@@ -398,6 +417,23 @@ public class Preferences {
 	}
 	// Pour remettre un produit à type vide
 	_associationProduit.put(" ", "TreeWorkProduct.gif");
+	
+	try
+	{
+	  keys = Preferences.prefPlanType.keys();
+	}
+	catch(BackingStoreException e){}
+	for (int i=0; i < keys.length; i++)
+	{
+		this._associationPlanTypes.put( (String) keys[i], prefPlanType.get( (String) keys[i], "type plan"));
+	}
+	if (_associationPlanTypes.size() == 0) {
+		_associationPlanTypes.put("org.ipsquad.apes.model.spem.process.structure.Activity", REPPREF + "plantypes" + File.separatorChar + "ac_type.html");
+		_associationPlanTypes.put("org.ipsquad.apes.model.extension.ApesWorkDefinition", REPPREF + "plantypes" + File.separatorChar + "dt_type.html");
+		_associationPlanTypes.put("org.ipsquad.apes.model.spem.process.structure.WorkProduct", REPPREF + "plantypes" + File.separatorChar + "pr_type.html");
+		_associationPlanTypes.put("org.ipsquad.apes.model.spem.process.structure.ProcessRole", REPPREF + "plantypes" + File.separatorChar + "ro_type.html");
+	}
+
   }
 
   public void sauverPrefs()
@@ -408,6 +444,7 @@ public class Preferences {
       Preferences.prefExt.clear();
 	  Preferences.prefGuide.clear();
 	  Preferences.prefProduit.clear();
+	  Preferences.prefPlanType.clear();
     }
     catch(Exception e){}
     
@@ -432,12 +469,18 @@ public class Preferences {
 	  Map.Entry entry = (Map.Entry)it.next();
 	  Preferences.prefProduit.put((String)entry.getKey(), (String)entry.getValue());
 	}
+	for(Iterator it = _associationPlanTypes.entrySet().iterator(); it.hasNext();)
+	{
+	  Map.Entry entry = (Map.Entry)it.next();
+	  Preferences.prefPlanType.put((String)entry.getKey(), (String)entry.getValue());
+	}
     try {
         // Exporte le node dans un fichier
         prefUser.exportNode(new FileOutputStream(REPPREF+"POGPreferencesUser.xml"));
         prefExt.exportNode(new FileOutputStream(REPPREF+"POGPreferencesExt.xml"));
 		prefGuide.exportNode(new FileOutputStream(REPPREF+"POGPreferencesGuide.xml"));
 		prefProduit.exportNode(new FileOutputStream(REPPREF+"POGPreferencesProduit.xml"));
+		prefPlanType.exportNode(new FileOutputStream(REPPREF+"POGPreferencesPlanType.xml"));
     } catch (Exception e) {}
   }
 
@@ -530,7 +573,13 @@ public class Preferences {
 			return null;
 		return getIconeDefaut(_associationProduit.get(typeprod));
 	}
-
+	
+	public String getPathPlanType(String classeelement) {
+		if (classeelement.equals(""))
+			return null;
+		return (String) _associationPlanTypes.get(classeelement);
+	}
+	
 	public ImageIcon getIconeTypeGuide(String typeguide) {
 		if (typeguide.equals(""))
 			return null;
@@ -553,6 +602,13 @@ public class Preferences {
 		_preferences.put("_defIcoPack", iconeDefaut);
 	}
 
+	public HashMap get_plantypes() {
+		return _associationPlanTypes;
+	}
 
+	public void set_plantype(HashMap m)
+	  {
+		this._associationPlanTypes = m ;
+	  }
 
 }

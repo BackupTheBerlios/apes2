@@ -104,7 +104,7 @@ public class PanneauDiagram extends PanneauDetail {
 
 		js.getViewport().add(_graph);
 		this.add(js, BorderLayout.CENTER);
-		this.show();
+		this.setVisible(true);
 	}
 
 	public void afficherMenuGuides(Component compo, int x, int y) {

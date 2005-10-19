@@ -34,6 +34,7 @@ import javax.swing.JPopupMenu;
 import org.ipsquad.apes.model.extension.SpemDiagram;
 import org.ipsquad.apes.model.spem.core.ModelElement;
 
+import POG.interfaceGraphique.fenetre.FenetrePropriete;
 import POG.objetMetier.ElementPresentation;
 import POG.objetMetier.Guide;
 import POG.objetMetier.PresentationElementModele;
@@ -132,6 +133,7 @@ public class ArbrePresentationListener
 	private JMenuItem _mnucontenu;
 	private	JMenuItem _mnuicone;
 	private JMenuItem _mnurenommer;
+	private JMenuItem _mnupropriete;
 	private JMenu _mnuguide;
 
 	
@@ -142,7 +144,15 @@ public class ArbrePresentationListener
 		_mnuicone = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("ChangerIcone"));
 		_mnurenommer = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("Renommer"));
 		_mnuguide = new JMenu(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterGuide"));
-
+		_mnupropriete = new JMenuItem(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("Propriete"));
+		
+		_mnupropriete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				FenetrePropriete lnkFenetrePropriete = new FenetrePropriete(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale);
+				lnkFenetrePropriete.setVisible(true);
+			}
+		});
+		
 		_mnuajouterelem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				lnkArbrePresentation.lnkSysteme.ajouterElementPre();
@@ -179,6 +189,7 @@ public class ArbrePresentationListener
 		_leclickdroit.add(_mnuicone);
 		_leclickdroit.add(_mnurenommer);
 		_leclickdroit.add(_mnuguide);
+		_leclickdroit.add(_mnupropriete);
 	}
 	
 	private void rempliPopupGuide(String typeg) {
@@ -192,7 +203,6 @@ public class ArbrePresentationListener
 		}
 	}
 
-
 	private void afficherPopup(MouseEvent e) {
 		_mnuajouterelem.setVisible(false);
 		_mnusupprimer.setVisible(true);
@@ -200,12 +210,13 @@ public class ArbrePresentationListener
 		_mnuicone.setVisible(true);
 		_mnurenommer.setVisible(true);
 		_mnuguide.setVisible(true);
+		_mnupropriete.setVisible(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().getlnkPresentation().getIdRacine().equals(_objetCourantSelectionne.get_id()));
 		_mnucontenu.setText(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("AjouterContenu"));
-		if (((ElementPresentation)_objetCourantSelectionne).getContenu() != null)
+		if (_objetCourantSelectionne.getContenu() != null)
 			_mnucontenu.setText(lnkArbrePresentation.lnkSysteme.lnkFenetrePrincipale.getLnkLangues().valeurDe("changerdecontenu"));
-		if (((ElementPresentation)_objetCourantSelectionne).get_id().equals(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().getlnkPresentation().getIdRacine())) {
+		if (_objetCourantSelectionne.get_id().equals(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().getlnkPresentation().getIdRacine())) {
 			_mnusupprimer.setVisible(false);
-			_mnuajouterelem.setVisible(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().get_pathModele() == null);
+			_mnuajouterelem.setVisible(lnkArbrePresentation.lnkSysteme.getlnkControleurPresentation().getlnkPresentation().get_pathModele() == null);
 			rempliPopupGuide("ALL");
 		}
 		else if (_objetCourantSelectionne instanceof Guide)

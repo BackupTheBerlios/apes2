@@ -24,6 +24,7 @@ package POG.objetMetier;
 import java.io.File;
 import java.io.OutputStreamWriter;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -47,11 +48,18 @@ import POG.utile.propriete.Preferences;
 public class Presentation
     implements Sauvegarde {
 
-  public String _pathModele = null;
+  private File _pathModele = null;
+  private File _pathExport = null;
+  
   private List _idElements = null;
 //  private String _nomPresentation = new String();
   private String _IdRacine;
-  private ImageIcon _icone;
+  
+	private String _auteur;
+	private String _email;
+	private String _version;
+
+	private ImageIcon _icone;
 
   public ElementPresentation _chargement_element;
   
@@ -104,6 +112,9 @@ public class Presentation
 //    elementRacine.set_nomPresentation(name);
     this.ajouterElementPresentation(elementRacine);
     lnkProcessComponent = ap;
+    _version = "";
+    _auteur = "";
+    _email = "";
   }
 
   public ElementPresentation getElementPresentation(String idElem) {
@@ -320,7 +331,8 @@ public class Presentation
     lnkElementPresentation.put(elmt.get_id(), elmt);
     this._idElements.add(elmt.get_id());
     if (elmt instanceof PresentationElementModele)
-    	_modelElemPres.put(new Integer(((PresentationElementModele)elmt).getLnkModelElement().getID()), elmt);
+    	if (((PresentationElementModele)elmt).getLnkModelElement() != null)
+    		_modelElemPres.put(new Integer(((PresentationElementModele)elmt).getLnkModelElement().getID()), elmt);
   }
   
   public PresentationElementModele getElementPresentation(ModelElement md) {
@@ -395,6 +407,18 @@ public class Presentation
 
       }
       out.write("</chemin_icones>\n");
+      
+      if (!FlagExporter) {
+      	out.write("<auteur>" + _auteur + "</auteur>");
+		out.write("<email>" + _email + "</email>");
+		out.write("<version>" + _version + "</version>");
+		// Sert à rien dans la sauvegarde
+		if (_pathExport != null) {
+			out.write("<lastexport>" + _pathExport.lastModified() + "</lastexport>");
+			// A ne pas faire dans l'export
+			out.write("<export>" + _pathExport.getAbsolutePath() + "</export>");
+		}
+      }
 
       out.write("</proprietes>\n");
 
@@ -482,7 +506,7 @@ public class Presentation
 
   private boolean _flagcharge = true;
   public boolean DEJADEMANDE = false;
-  public HashMap DEJASYNCHRO = null;
+//  public HashMap DEJASYNCHRO = null;
 
   public void finirChargement(String valeur) {
     if (valeur.equals(".exportation_presentation.element.guide")) {
@@ -504,16 +528,17 @@ public class Presentation
         _chargement_element.set_description(_tmp_charger_element.description);
       }
 		else {
+//			System.out.println(_tmp_charger_element.identificateur_externe + " / " + _tmp_charger_element.identificateur_interne + " / " + _tmp_charger_element.nominmodel);
 		    _tmp_charger_element.contenu = _tmp_charger_element.contenu.replace('/', File.separatorChar);
 		    _tmp_charger_element.contenu = _tmp_charger_element.contenu.replace('\\', File.separatorChar);
 		    _tmp_charger_element.icone = _tmp_charger_element.icone.replace('/', File.separatorChar);
 		    _tmp_charger_element.icone = _tmp_charger_element.icone.replace('\\', File.separatorChar);
 			if (this.lnkProcessComponent != null) {
 				ModelElement mm = Apes.getElementByID(Integer.parseInt(_tmp_charger_element.identificateur_externe));
-				if ((mm != null) && (DEJASYNCHRO == null))
+//				if ((mm != null))// && (DEJASYNCHRO == null))
 					_chargement_element = new PresentationElementModele(_tmp_charger_element.identificateur_interne, Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone), mm);
-				else {
-					if (DEJASYNCHRO == null) {
+//				else {
+/*					if (DEJASYNCHRO == null) {
 						DEJASYNCHRO = new HashMap();
 						FenetrePrincipale.INSTANCE.getLnkSysteme().getLnkControleurPresenter().synchroniserApes(true);
 						Object[] tpog = listeElementPresentation();
@@ -525,15 +550,20 @@ public class Presentation
 						}
 					}
 					_chargement_element = (ElementPresentation) DEJASYNCHRO.get(_tmp_charger_element.nominmodel + _tmp_charger_element.placearbre);
-					_chargement_element.set_id(_tmp_charger_element.identificateur_interne);
-					_chargement_element.set_icone(Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone));
-				}
+					if (_chargement_element != null) {
+						_chargement_element.set_id(_tmp_charger_element.identificateur_interne);
+						_chargement_element.set_icone(Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone));
+					}*/
+//				}
 			}
 			else
 				_chargement_element = new ElementPresentation(_tmp_charger_element.identificateur_interne, Preferences.MyInstance.getIconeDefaut(_tmp_charger_element.icone));
 		
-			if (_chargement_element == null)
+			if (_chargement_element == null) {
+				_tmp_charger_element = new tmp_charger_element();
 				return;
+			}
+			
 			ajouterElementPresentation(_chargement_element);
 		}
       _chargement_element.set_nomPresentation(_tmp_charger_element.nom_presentation);
@@ -565,11 +595,13 @@ public class Presentation
       _chargement_element.set_description(_tmp_charger_element.description);
 		if (_chargement_element instanceof PresentationElementModele) {
 			((PresentationElementModele)_chargement_element).set_typeProduit(_tmp_charger_element.typeproduit);
-			if (DEJASYNCHRO == null) {
+//			if (DEJASYNCHRO == null) {
 				PresentationElementModele toto = (PresentationElementModele)_chargement_element;
-				toto.set_nominmodel(_tmp_charger_element.nominmodel);
-				toto.set_placearbre(_tmp_charger_element.placearbre);
-			}
+				if (toto.getLnkModelElement() != null) {
+					toto.set_nominmodel(_tmp_charger_element.nominmodel);
+					toto.set_placearbre(_tmp_charger_element.placearbre);
+				}
+//			}
 		}
       _tmp_charger_element = new tmp_charger_element();
     }
@@ -612,4 +644,58 @@ public class Presentation
 	public void setBibliotheque(String newBib) {
 		lnkBibliotheque = new Bibliotheque(newBib);
 	}
+	
+	public String showArbre() {
+		String ret = "";
+		String [] tab = (String[]) lnkElementPresentation.keySet().toArray(new String[lnkElementPresentation.size()]);
+		Arrays.sort(tab);
+		for (int i = 0; i < tab.length; i++)
+			ret = ret + tab[i] + " -> " + lnkElementPresentation.get(tab[i]) + "\n";
+		return ret;
+	}
+	
+	public String get_auteur() {
+		return _auteur;
+	}
+
+	public String get_email() {
+		return _email;
+	}
+
+	public String get_version() {
+		return _version;
+	}
+	
+	public void changerProprietes(String auteur, String email, String version) {
+		_auteur = auteur;
+		_version = version;
+		_email = email;
+	}
+
+	public void changeId(ElementPresentation elem, String newId) {
+		elem.set_id(newId);	
+		for (int i = 0; i < elem.getGuides().size(); i++) {
+			Guide gg = (Guide) elem.getGuides().get(i);
+			lnkElementPresentation.remove(gg.get_id());
+			gg.set_id(makeId(elem.get_id()));
+			ajouterElementPresentation(gg);
+		}
+	}
+	
+	public File get_pathExport() {
+		return _pathExport;
+	}
+	
+	public void set_pathExport(File export) {
+		_pathExport = export;
+	}
+
+	public File get_pathModele() {
+		return _pathModele;
+	}
+	
+	public void set_pathModele(File modele) {
+		_pathModele = modele;
+	}
+
 }
